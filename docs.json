@@ -130,12 +130,16 @@
       {
         "label": "Support",
         "href": "mailto:support@autosend.com"
+      },
+      {
+        "label": "Login",
+        "href": "https://autosend.com/login"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Sign up",
+      "href": "https://autosend.com/signup"
     }
   },
   "contextual": {
