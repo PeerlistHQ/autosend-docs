@@ -23,14 +23,14 @@
             ]
           },
           {
-            "group": "Customization",
+            "group": "Transactional Emails",
             "pages": [
               "essentials/settings",
               "essentials/navigation"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Marketing Emails",
             "pages": [
               "essentials/markdown",
               "essentials/code",
@@ -39,7 +39,7 @@
             ]
           },
           {
-            "group": "AI tools",
+            "group": "Others",
             "pages": [
               "ai-tools/cursor",
               "ai-tools/claude-code",
