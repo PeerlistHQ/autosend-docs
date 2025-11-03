@@ -1,4 +1,6 @@
-# Mintlify Starter Kit
+# AutoSend Documentation
+
+## Mintlify Starter Kit
 
 Use the starter kit to get your docs deployed and ready to customize.
 
@@ -40,4 +42,5 @@ Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/sett
 - If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
 
 ### Resources
+
 - [Mintlify documentation](https://mintlify.com/docs)
