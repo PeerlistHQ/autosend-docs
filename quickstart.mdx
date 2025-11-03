@@ -1,78 +1,440 @@
 ---
 title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+description: "Send your first emails with AutoSend email API in less than 10 minutes."
 ---
 
-## Get started in three steps
+## 1. Add Sending Domain
 
-Get your documentation site running locally and make your first customization.
+Before sending emails, you need to verify ownership of your sending domain by adding DNS records. This ensures high deliverability and authenticates your emails.
 
-### Step 1: Set up your local environment
+- Add your domain or subdomain (we recommend using a subdomain like [mail.yourdomain.com](http://mail.yourdomain.com))
+- Configure DNS records (DKIM, SPF, DMARC)
+- Verify domain ownership
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+[Learn how to add a domain](https://autosend-pre-staging.up.railway.app/domain-configuration)
 
-### Step 2: Deploy your changes
+## 2. Generate API Keys
 
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+Create secure API keys to authenticate your requests to the AutoSend API. Each key can be named for easy management (e.g., “Production”, “Staging”, “Marketing”).
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+- Generate API keys from your dashboard
+- Copy and securely store your secret key
+- Use the key in your API requests
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+[See authentication guide](https://autosend-pre-staging.up.railway.app/api-key)
 
-### Step 3: Go live
+## 3. Send Your First Email
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+With your domain verified and API key ready, you can start sending emails immediately using our REST API.
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://api.autosend.com/v1/mails/send \
+ -H "Authorization: Bearer YOUR_API_KEY" \
+ -H "Content-Type: application/json" \
+ -d '{
+"to": {
+"email": "customer@example.com",
+"name": "Jane Doe"
+},
+"from": {
+"email": "hello@mail.yourdomain.com",
+"name": "Your Company"
+},
+"subject": "Welcome to Our Platform!",
+"html": "<h1>Welcome!</h1><p>Thanks for signing up.</p>"
+}'
+```
+
+
+```javascript NodeJS
+fetch("https://api.autosend.com/v1/mails/send", {
+  method: "POST",
+  headers: {
+    "Authorization": "Bearer YOUR_API_KEY", // Replace with your API key
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    from: {
+      email: "no-reply@example.com",
+      name: "AutoSend",
+    },
+    to: {
+      email: "user@example.com",
+      name: "Test User",
+    },
+    subject: "Welcome to AutoSend 🎉",
+
+    // Option 1: Send using template
+    templateId: "your_template_id",
+
+    // Option 2: Send using raw HTML or text
+    html: "<h1>Hello User</h1><p>Thanks for joining AutoSend!</p>",
+    text: "Hello User, Thanks for joining AutoSend!",
+
+    // Optional: Unsubscribe group for compliance
+    unsubscribeGroupId: "12345",
+  }),
+})
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(" Email sent successfully: ", data);
+  })
+  .catch((error) => {
+    console.error("Error sending email:", error);
+  });
+```
+
+
+```rust Rust
+use reqwest::header::{AUTHORIZATION, CONTENT_TYPE};
+use serde_json::json;
+use tokio;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // API endpoint
+    let url = "https://api.autosend.com/v1/mails/send";
+
+    // Build request JSON payload
+    let payload = json!({
+        "from": {
+            "email": "no-reply@example.com",
+            "name": "AutoSend"
+        },
+        "to": {
+            "email": "user@example.com",
+            "name": "Test User"
+        },
+        "subject": "Welcome to AutoSend 🎉",
+        // Option 1: template
+        "templateId": "your_template_id",
+        // Option 2: raw HTML / text
+        "html": "<h1>Hello User</h1><p>Thanks for joining AutoSend!</p>",
+        "text": "Hello User,
+Thanks for joining AutoSend!",
+        // Optional: unsubscribe group
+        "unsubscribeGroupId": "12345"
+    });
+
+    // Create HTTP client
+    let client = reqwest::Client::new();
+
+    // Send POST request
+    let res = client
+        .post(url)
+        .header(AUTHORIZATION, "Bearer YOUR_API_KEY") // replace with your key
+        .header(CONTENT_TYPE, "application/json")
+        .json(&payload)
+        .send()
+        .await?;
+
+    // Print response
+    let status = res.status();
+    let body = res.text().await?;
+    println!("Status: {}", status);
+    println!("Body: {}", body);
+
+    Ok(())
+}
+```
+
+
+```go Go
+package main
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+)
+
+func main() {
+	url := "https://api.autosend.com/v1/mails/send"
+
+	// Build request body
+	payload := map[string]interface{}{
+		"from": map[string]string{
+			"email": "no-reply@example.com",
+			"name":  "AutoSend",
+		},
+		"to": map[string]string{
+			"email": "user@example.com",
+			"name":  "Test User",
+		},
+		"subject": "Welcome to AutoSend 🎉",
+
+		// Option 1: Send using template
+		"templateId": "your_template_id",
+
+		// Option 2: Send using raw HTML or text
+		"html": "<h1>Hello User</h1><p>Thanks for joining AutoSend!</p>",
+		"text": "Hello User,
+Thanks for joining AutoSend!",
+
+		// Optional: Unsubscribe group for compliance
+		"unsubscribeGroupId": "12345",
+	}
+
+	jsonData, err := json.Marshal(payload)
+	if err != nil {
+		fmt.Println("Error marshalling JSON:", err)
+		return
+	}
+
+	// Create request
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+	if err != nil {
+		fmt.Println("Error creating request:", err)
+		return
+	}
+
+	req.Header.Set("Authorization", "Bearer YOUR_API_KEY") // Replace with real API key
+	req.Header.Set("Content-Type", "application/json")
+
+	// Send request
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println("Error sending request:", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	// Read response
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading response:", err)
+		return
+	}
+
+	fmt.Println("Response status:", resp.Status)
+	fmt.Println("Response body:", string(body))
+}
+```
+
+
+```php PHP
+<?php
+
+$url = "https://api.autosend.com/v1/mails/send";
+
+$data = [
+    "from" => [
+        "email" => "no-reply@example.com",
+        "name"  => "AutoSend"
+    ],
+    "to" => [
+        "email" => "user@example.com",
+        "name"  => "Test User"
+    ],
+    "subject" => "Welcome to AutoSend 🎉",
+
+    // Option 1: Send using template
+    "templateId" => "your_template_id",
+
+    // Option 2: Send using raw HTML or text
+    "html" => "<h1>Hello User</h1><p>Thanks for joining AutoSend!</p>",
+    "text" => "Hello User,
+Thanks for joining AutoSend!",
+
+    // Optional: Unsubscribe group for compliance
+    "unsubscribeGroupId" => "12345"
+];
+
+$ch = curl_init($url);
+
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    "Authorization: Bearer YOUR_API_KEY", // replace with your API key
+    "Content-Type: application/json"
+]);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+$response = curl_exec($ch);
+
+if(curl_errno($ch)){
+    echo "Curl error: " . curl_error($ch);
+} else {
+    echo "Response: " . $response;
+}
+
+curl_close($ch);
+```
+
+
+```c# C#
+using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json; // Install Newtonsoft.Json via NuGet
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        var url = "https://api.autosend.com/v1/mails/send";
+
+        var payload = new
+        {
+            from = new { email = "no-reply@example.com", name = "AutoSend" },
+            to = new { email = "user@example.com", name = "Test User" },
+            subject = "Welcome to AutoSend 🎉",
+
+            // Option 1: Template
+            templateId = "your_template_id",
+
+            // Option 2: Raw HTML / text
+            html = "<h1>Hello User</h1><p>Thanks for joining AutoSend!</p>",
+            text = "Hello User,
+Thanks for joining AutoSend!",
+
+            // Optional unsubscribe group
+            unsubscribeGroupId = "12345"
+        };
+
+        using (var client = new HttpClient())
+        {
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer YOUR_API_KEY");  // Replace with your API key
+
+            var json = JsonConvert.SerializeObject(payload);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync(url, content);
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            Console.WriteLine($"Status: {response.StatusCode}");
+            Console.WriteLine($"Response: {responseBody}");
+        }
+    }
+}
+```
+
+
+```java Java
+import java.io.OutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class SendEmail {
+    public static void main(String[] args) {
+        try {
+            String url = "https://api.autosend.com/v1/mails/send";
+            URL obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+            // Set request method and headers
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Authorization", "Bearer YOUR_API_KEY"); // Replace with your API key
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+
+            // JSON payload
+            String jsonPayload = """
+            {
+                "from": {"email": "no-reply@example.com", "name": "AutoSend"},
+                "to": {"email": "user@example.com", "name": "Test User"},
+                "subject": "Welcome to AutoSend 🎉",
+                
+                "templateId": "your_template_id",
+                
+                "html": "<h1>Hello User</h1><p>Thanks for joining AutoSend!</p>",
+                "text": "Hello User,\nThanks for joining AutoSend!",
+                
+                "unsubscribeGroupId": "12345"
+            }
+            """;
+
+            // Send request
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonPayload.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            // Read response
+            int status = con.getResponseCode();
+            InputStream responseStream = (status < HttpURLConnection.HTTP_BAD_REQUEST)
+                    ? con.getInputStream()
+                    : con.getErrorStream();
+
+            String response = new String(responseStream.readAllBytes(), StandardCharsets.UTF_8);
+            System.out.println("Status: " + status);
+            System.out.println("Response: " + response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/mails/send"
+
+payload = {
+    "from": {
+        "email": "no-reply@example.com",
+        "name": "AutoSend"
+    },
+    "to": {
+        "email": "user@example.com",
+        "name": "Test User"
+    },
+    "subject": "Welcome to AutoSend 🎉",
+
+    # Option 1: Send using template
+    "templateId": "your_template_id",
+
+    # Option 2: Send using raw HTML or text
+    "html": "<h1>Hello User</h1><p>Thanks for joining AutoSend!</p>",
+    "text": "Hello User,
+Thanks for joining AutoSend!",
+
+    # Optional: Unsubscribe group for compliance
+    "unsubscribeGroupId": "12345"
+}
+
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",  # Replace with your API key
+    "Content-Type": "application/json"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+
+print("Status Code:", response.status_code)
+print("Response:", response.text)
+```
+
+</CodeGroup>
 
 ## Next steps
 
 Now that you have your docs running, explore these key features:
 
 <CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
+  <Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
+    Learn MDX syntax and start writing your documentation.
+  </Card>
+  <Card title="Customize style" icon="palette" href="/essentials/settings">
+    Make your docs match your brand perfectly.
+  </Card>
+  <Card title="Add code examples" icon="square-code" href="/essentials/code">
+    Include syntax-highlighted code blocks.
+  </Card>
+  <Card title="API documentation" icon="code" href="/api-reference/introduction">
+    Auto-generate API docs from OpenAPI specs.
+  </Card>
 </CardGroup>
 
 <Note>
