@@ -17,7 +17,8 @@ Before you can send emails through AutoSend, you need to verify ownership of you
   transactional emails separate from your main domain's reputation.
 </Note>
 
-## **Step 1: Add Your Domain**
+<Steps>
+<Step title="Add Your Domain">
 
 <ol>
   <li>
@@ -47,8 +48,9 @@ The region you select will be used to send your emails and should be chosen base
     .
   </p>
 </Note>
+</Step>
 
-## **Step 2: Configure DNS Records**
+<Step title="Configure DNS Records">
 
 Once your domain is added, AutoSend will generate the required DNS records. You’ll need to add these records to your domain’s DNS settings. AutoSend requires two types of DNS records:
 
@@ -100,9 +102,9 @@ DMARC (Domain-based Message Authentication, Reporting & Conformance) adds an ext
     </li>
   </ul>
 </Note>
+</Step>
 
-
-## **Step 3: Verify Your Domain**
+<Step title="Verify Your Domain">
 
 After adding all DNS records to your DNS provider:
 
@@ -126,3 +128,5 @@ Your domain will progress through these statuses:
 | **Pending**             | Orange          | DNS records found, verification in progress | Wait for DNS propagation (5 mins - 2 hours) |
 | **Verified**            | Green           | Domain fully verified and ready to use      | None - you can start sending!               |
 | **Verification Failed** | Red             | DNS records incorrect or missing            | Check your DNS records and try again        |
+</Step>
+</Steps>

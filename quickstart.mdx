@@ -2,8 +2,8 @@
 title: "Quickstart"
 description: "Send your first emails with AutoSend email API in less than 10 minutes."
 ---
-
-## 1. Add Sending Domain
+<Steps>
+<Step title="Add Sending Domain">
 
 Before sending emails, you need to verify ownership of your sending domain by adding DNS records. This ensures high deliverability and authenticates your emails.
 
@@ -12,8 +12,8 @@ Before sending emails, you need to verify ownership of your sending domain by ad
 - Verify domain ownership
 
 [Learn how to add a domain](https://autosend-pre-staging.up.railway.app/domain-configuration)
-
-## 2. Generate API Keys
+</Step>
+<Step title="Generate API Keys">
 
 Create secure API keys to authenticate your requests to the AutoSend API. Each key can be named for easy management (e.g., “Production”, “Staging”, “Marketing”).
 
@@ -22,8 +22,8 @@ Create secure API keys to authenticate your requests to the AutoSend API. Each k
 - Use the key in your API requests
 
 [See authentication guide](https://autosend-pre-staging.up.railway.app/api-key)
-
-## 3. Send Your First Email
+</Step>
+<Step title="Send Your First Email">
 
 With your domain verified and API key ready, you can start sending emails immediately using our REST API.
 
@@ -417,26 +417,5 @@ print("Response:", response.text)
 ```
 
 </CodeGroup>
-
-## Next steps
-
-Now that you have your docs running, explore these key features:
-
-<CardGroup cols={2}>
-  <Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-    Learn MDX syntax and start writing your documentation.
-  </Card>
-  <Card title="Customize style" icon="palette" href="/essentials/settings">
-    Make your docs match your brand perfectly.
-  </Card>
-  <Card title="Add code examples" icon="square-code" href="/essentials/code">
-    Include syntax-highlighted code blocks.
-  </Card>
-  <Card title="API documentation" icon="code" href="/api-reference/introduction">
-    Auto-generate API docs from OpenAPI specs.
-  </Card>
-</CardGroup>
-
-<Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
-</Note>
+</Step>
+</Steps>

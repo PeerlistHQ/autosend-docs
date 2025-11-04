@@ -2,6 +2,9 @@
 title: 'Introduction'
 description: 'Example section for showcasing API endpoints'
 ---
+
+import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx'
+
 # API Reference
 
 Send transactional emails programmatically using the AutoSend REST API. This guide covers the email sending endpoint, request/response formats, and best practices.
@@ -471,10 +474,5 @@ For marketing emails, always include unsubscribe links to comply with regulation
 
 ## Need Help?
 
-If you're experiencing issues with the API, please contact support.
-
-## Next Steps
-
-- [Email Templates →](/dynamic-templates)
-- [Verify Your Domain →](/domain-configuration)
-- [Create an API Key →](/api-key)
+If you're experiencing issues with the API, please contact support  <a  href={`mailto:${SUPPORT_EMAIL}`}> {SUPPORT_EMAIL}
+</a> .

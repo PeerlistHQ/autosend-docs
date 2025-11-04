@@ -15,13 +15,14 @@
         "tab": "Documentation",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Getting Started",
             "pages": [
               "index",
               "quickstart",
               {
                 "group": "Domain Configuration",
                 "pages": [
+                 
                   "domain-configuration/introduction",
                   "domain-configuration/troubleshooting"
                  
@@ -34,6 +35,7 @@
             "pages": [
               "transactional-emails/email-templates",
               "transactional-emails/email-activity",
+              "transactional-emails/email-using-api",
               "transactional-emails/troubleshooting"
             ]
           },
@@ -47,8 +49,8 @@
                 "pages": [
                   "marketing-emails/contacts/introduction",
                   "marketing-emails/contacts/import-csv",
-                  "marketing-emails/contacts/list",
-                  "marketing-emails/contacts/segment",
+                  "marketing-emails/contacts/lists",
+                  "marketing-emails/contacts/segments",
                   "marketing-emails/contacts/custom-fields"
                 ]
               }
@@ -60,27 +62,19 @@
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "API Reference",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "API Documentation",
             "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference"
             ]
           }
         ]
       },
       {
         "tab": "Guides",
+        "hidden": true,
         "groups": [
           {
             "group": "Getting started",
@@ -104,19 +98,12 @@
               "essentials/images",
               "essentials/reusable-snippets"
             ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
-            ]
           }
         ]
       },
       {
         "tab": "Changelog",
+        "hidden": true,
         "groups": [
           {
             "group": "November",
