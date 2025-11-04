@@ -19,23 +19,41 @@
             "pages": [
               "index",
               "quickstart",
-              "development"
+              {
+                "group": "Domain Configuration",
+                "pages": [
+                  "domain-configuration/introduction",
+                  "domain-configuration/troubleshooting"
+                 
+                ]
+              }
             ]
           },
           {
             "group": "Transactional Emails",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "transactional-emails/email-templates",
+              "transactional-emails/email-activity",
+              "transactional-emails/troubleshooting"
             ]
           },
           {
             "group": "Marketing Emails",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+               "marketing-emails/campaigns",
+               "marketing-emails/sender",
+              {
+                "group": "Contacts",
+                "pages": [
+                  "marketing-emails/contacts/introduction",
+                  "marketing-emails/contacts/import-csv",
+                  "marketing-emails/contacts/list",
+                  "marketing-emails/contacts/segment",
+                  "marketing-emails/contacts/custom-fields"
+                ]
+              }
+              
+              
             ]
           },
           {
@@ -118,21 +136,8 @@
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://autosend.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://autosend.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
+    ]
+   
   },
   "logo": {
     "light": "/logo/light.svg",
