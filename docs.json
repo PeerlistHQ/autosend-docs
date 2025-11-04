@@ -55,15 +55,8 @@
               
               
             ]
-          },
-          {
-            "group": "Others",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
-            ]
           }
+          
         ]
       },
       {
