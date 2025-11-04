@@ -35,6 +35,7 @@
             "pages": [
               "transactional-emails/email-templates",
               "transactional-emails/email-activity",
+              "transactional-emails/email-using-api",
               "transactional-emails/troubleshooting"
             ]
           },
@@ -49,7 +50,7 @@
                   "marketing-emails/contacts/introduction",
                   "marketing-emails/contacts/import-csv",
                   "marketing-emails/contacts/lists",
-                  "marketing-emails/contacts/segment",
+                  "marketing-emails/contacts/segments",
                   "marketing-emails/contacts/custom-fields"
                 ]
               }

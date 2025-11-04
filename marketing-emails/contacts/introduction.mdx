@@ -1,6 +1,6 @@
-import { IMAGES } from '/snippets/images.mdx';
 
-# Introduction
+import { IMAGES } from '/snippets/images.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
 
 Contacts are the people you send emails to in AutoSend. Each contact has a unique email address and associated data like name, location, or any other information you’ve added through fields.
 
@@ -17,6 +17,7 @@ Contacts can be organized using **Lists** or **Segments** for better targeting.
 
 ## All Contacts
 
+The **All Contacts** list shows every contact you’ve ever added to your account.
 <Frame>
   <img 
   src={IMAGES.allContacts}
@@ -24,10 +25,9 @@ Contacts can be organized using **Lists** or **Segments** for better targeting.
  
 />
 </Frame>
-The **All Contacts** list shows every contact you’ve ever added to your account.
+
 
 Contacts can come from:
-
 - Manual additions
 - Imported via CSV
 - API integrations
@@ -38,6 +38,8 @@ You can filter and search contacts, and view detailed insights for each.
 
 ## Contact Details
 
+Clicking on any contact opens their **Contact Details** page, where you can view:
+
 <Frame>
   <img 
   src={IMAGES.contactDetails}
@@ -45,7 +47,7 @@ You can filter and search contacts, and view detailed insights for each.
   
 />
 </Frame>
-Clicking on any contact opens their **Contact Details** page, where you can view:
+
 
 - **Details**: Basic information (email, name, etc.), Reserved and Custom Fields.
 - **Lists & Segments**: All the lists and segments the contact belongs to
@@ -85,7 +87,7 @@ Reserved fields are system-defined fields that AutoSend uses to store core conta
 
 ### Custom Fields
 
-Custom fields let you store additional information beyond the reserved ones — for example, “Company,” “Plan Type,” or “Signup Date.”
+<a href={APP_PATHS.customFields} title='Custom fields'>Custom fields</a> let you store additional information beyond the reserved ones — for example, “Company,” “Plan Type,” or “Signup Date.”
 
 They can be text, number, or date fields
 

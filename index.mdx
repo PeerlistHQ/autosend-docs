@@ -3,12 +3,10 @@ title: "Introduction"
 description: "Welcome to AutoSend documentation."
 ---
 
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
 ## What is AutoSend?
 AutoSend is an email platform for developers and marketers to send and track transactional and marketing emails.
-
-<Card title="FAQs" icon="command" href="/transactional-emails/email-using-api">
-    Send transactional email using AutoSend email API.
-</Card>
 
 ## Transactional Emails
 
@@ -16,13 +14,13 @@ Transactional emails are system-generated messages triggered via API by user act
 
 
 <Columns cols={2}>
-<Card title="Email Templates" icon="key" href="/transactional-emails/email-template">
+<Card title="Email Templates" icon="envelope"   href={APP_PATHS.emailTemplates}>
     Creating transactional email templates in AutoSend.
   </Card>
-  <Card title="Email Activity" icon="envelope" href="/transactional-emails/email-activity">
+  <Card title="Email Activity" icon="wave-triangle" href={APP_PATHS.emailActivity}>
     Track every email sent via AutoSend.
   </Card>
-  <Card title="Sending emails with API" icon="envelope" href="/transactional-emails/email-using-api">
+  <Card title="Sending emails with API" icon="send" href={APP_PATHS.sendingEmail}>
     Send transactional email using AutoSend email API.
   </Card>
 </Columns>
@@ -32,19 +30,13 @@ Transactional emails are system-generated messages triggered via API by user act
 Marketing emails are emails sent to your contacts, lists, or segments. These are typically newsletters, announcements, or promotional emails designed to engage your audience.
 
 <Columns cols={2}>
-<Card title="Campaigns" icon="key" href="/transactional-emails/email-template">
-    Creating transactional email templates in AutoSend.
+<Card title="Campaigns" icon="megaphone" href={APP_PATHS.campaigns}>
+    Send marketing campaigns via AutoSend.
   </Card>
-  <Card title="Contact" icon="envelope" href="/transactional-emails/email-activity">
-    Track every email sent via AutoSend.
+  <Card title="Contacts" icon="book-user" href={APP_PATHS.contacts}>
+    Learn about Contacts in AutoSend.
   </Card>
-  <Card title="Sender" icon="envelope" href="/transactional-emails/email-using-api">
-    Send transactional email using AutoSend email API.
+  <Card title="Sender" icon="circle-user" href={APP_PATHS.senders}>
+   Learn about sender emails in AutoSend.
   </Card>
 </Columns>
-
-## Need inspiration?
-
-<Card title="See complete examples" icon="stars" href="https://mintlify.com/customers">
-  Browse our showcase of exceptional documentation sites.
-</Card>
