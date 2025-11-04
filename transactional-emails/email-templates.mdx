@@ -1,0 +1,143 @@
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { IMAGES } from '/snippets/images.mdx';
+
+# Email Templates
+
+Email templates in AutoSend let you create reusable, personalized designs for **transactional emails** like password resets, order confirmations, or account notifications that are sent programmatically through the **Email API**.
+
+## Creating an Email Template in AutoSend
+
+<Frame>
+  <img src={IMAGES.emailTemplate.creatingEmailTemplate} alt="Create email template"  />
+</Frame>
+
+
+1. Under **Transactional Emails** in the sidebar, go to **Email Templates** and click **New Template**.
+2. Enter a name for your email template (max **60 characters**). This name is for internal reference only and isn’t visible to recipients.
+3. In the editor’s right panel, add a **Subject** for your email. Subject lines support variables,
+   for example: `Welcome to {{company_name}}, {{first_name}}!`
+
+<Tip>
+  Keep transactional email subject lines under 50 characters. Aim for 6–8 words
+  that clearly state the core action and purpose to improve deliverability and
+  user trust.
+</Tip>
+
+
+
+## Email Composer
+
+Create your email using HTML with inline CSS for styling. AutoSend's email templates support responsive design, so make sure to write HTML that renders well across different email clients and devices.
+
+- Write responsive HTML with inline CSS for maximum compatibility
+- Use variables anywhere in the HTML to personalize content dynamically, for example: `{{first_name}}`, `{{company_name}}`, `{{email}}`, etc.
+- Variables are wrapped in double curly braces and will be replaced with actual values when the email is sent
+- Keep your HTML clean and well-structured to ensure consistent rendering across email clients
+- Test your template thoroughly in both desktop and mobile views before deployment
+
+**Example template (HTML)**
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+      }
+      .container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 12px 24px;
+        text-decoration: none;
+        border-radius: 4px;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Welcome to {{company_name}}, {{first_name}}!</h1>
+      <p>Thank you for signing up. We're excited to have you on board.</p>
+      <p>Your account email: <strong>{{email}}</strong></p>
+      <a href="{{verification_link}}" class="button">Verify Your Email</a>
+      <p>If you have any questions, just reply to this email.</p>
+      <p>Best regards,<br />The {{company_name}} Team</p>
+    </div>
+  </body>
+</html>
+```
+
+
+
+## Email Preview
+
+
+<Frame>
+  <img src={IMAGES.emailTemplate.emailPreview} alt="Email preview"  />
+</Frame>
+
+
+The right side of your screen is the Email Preview. Any changes you make in the composer will be reflected in the preview.
+
+You can easily switch between **Desktop** and **Mobile** views using the device icons at the top of the email preview. This allows you to confirm that your design adapts well to different screen sizes and remains visually consistent.
+
+Links are disabled in the preview to prevent accidental navigation while testing.
+
+
+
+## Test Data
+
+<Frame>
+  <img src={IMAGES.emailTemplate.testData} alt="Test data"  />
+</Frame>
+
+
+
+To see how your personalized email will look, you can use the **Test Data** panel to add sample data in JSON format. This helps you verify that all variables are correctly replaced and the final layout looks as expected.
+
+For example:
+
+```json
+{
+  "first_name": "John",
+  "company_name": "AutoSend",
+  "email": "john@example.com",
+  "verification_link": "https://app.autosend.com/verify?token=abc123"
+}
+```
+
+
+
+## Sending a test email
+
+<Frame>
+  <img src={IMAGES.emailTemplate.sendingTestEmail} alt="Send test email"  />
+</Frame>
+
+
+Once your design looks good, you can send yourself a test email. This allows you and your team to review the email across multiple inboxes and clients.
+
+Click **Send Test** above the **Email Preview**, then enter up to 10 comma-separated addresses and click **Send Test.**
+
+<Note >
+  You must <a href={APP_PATHS.domainConfiguration} title="Domain configuration">verify your domain</a>
+  before you can send test emails. Test emails are sent from `test@yourdomain.com`.
+</Note>
+
+
+
+## Using your template
+
+Once saved, AutoSend will generate a unique **Template ID** for your email. You can use this ID in your API calls to send transactional emails.
+
+After saving, you can continue editing your template at any time. You can also duplicate it to create variations useful for A/B testing or different use cases.
