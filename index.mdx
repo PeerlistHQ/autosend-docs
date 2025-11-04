@@ -3,54 +3,46 @@ title: "Introduction"
 description: "Welcome to AutoSend documentation."
 ---
 
-## Setting up
+import { APP_PATHS } from '/snippets/appPaths.mdx';
 
-Get your documentation site up and running in minutes.
+## What is AutoSend?
+AutoSend is an email platform for developers and marketers to send and track transactional and marketing emails.
 
-<Card title="Start here" icon="rocket" horizontal href="/quickstart">
-  Follow our three step quickstart guide.
-</Card>
+<Columns cols={2}>
+<Card title="FAQs" icon="question"   href='https://autosend.com/faq'>
+    Frequently asked questions about AutoSend.
+  </Card>
+  </Columns>
 
 ## Transactional Emails
 
-With AutoSend email API, you can send transactional emails like verification code/link, signup confirmation, etc.
+Transactional emails are system-generated messages triggered via API by user actions such as signups, password resets, purchase confirmations, etc.
+
 
 <Columns cols={2}>
-  <Card title="Add Sending Domain" icon="globe" href="/development">
-    Add and authenticate sending domain.
+<Card title="Email Templates" icon="envelope"   href={APP_PATHS.emailTemplates}>
+    Creating transactional email templates in AutoSend.
   </Card>
-  <Card title="Generate API Key" icon="key" href="/essentials/settings">
-    Generate a secret API key.
+  <Card title="Email Activity" icon="wave-triangle" href={APP_PATHS.emailActivity}>
+    Track every email sent via AutoSend.
   </Card>
-  <Card title="Send Email" icon="envelope" href="/essentials/navigation">
-    Send email using email API.
-  </Card>
-  <Card title="Email Activity" icon="wave-triangle" href="/api-reference/introduction">
-    Track every email you send.
+  <Card title="Sending emails with API" icon="send" href={APP_PATHS.sendingEmail}>
+    Send transactional email using AutoSend email API.
   </Card>
 </Columns>
 
 ## Marketing Emails
 
-Everything you need to create world-class documentation.
+Marketing emails are emails sent to your contacts, lists, or segments. These are typically newsletters, announcements, or promotional emails designed to engage your audience.
 
 <Columns cols={2}>
-  <Card title="Write with MDX" icon="pen-fancy" href="/essentials/markdown">
-    Use MDX to style your docs pages.
+<Card title="Campaigns" icon="megaphone" href={APP_PATHS.campaigns}>
+    Send marketing campaigns via AutoSend.
   </Card>
-  <Card title="Code samples" icon="code" href="/essentials/code">
-    Add sample code to demonstrate how to use your product.
+  <Card title="Contacts" icon="book-user" href={APP_PATHS.contacts}>
+    Learn about Contacts in AutoSend.
   </Card>
-  <Card title="Images" icon="image" href="/essentials/images">
-    Display images and other media.
-  </Card>
-  <Card title="Reusable snippets" icon="recycle" href="/essentials/reusable-snippets">
-    Write once and reuse across your docs.
+  <Card title="Sender" icon="circle-user" href={APP_PATHS.senders}>
+   Learn about sender emails in AutoSend.
   </Card>
 </Columns>
-
-## Need inspiration?
-
-<Card title="See complete examples" icon="stars" href="https://mintlify.com/customers">
-  Browse our showcase of exceptional documentation sites.
-</Card>

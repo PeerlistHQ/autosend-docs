@@ -1,0 +1,35 @@
+export const REF_NAME = "autosend-docs";
+
+export function urlFormatter(url, options = {}) {
+    if (!url || typeof url !== "string") return "";
+    const opts = { ...options };
+  
+    let hyperlink = url;
+    if (!/^(http|https):\/\//i.test(hyperlink.toLowerCase())) {
+      hyperlink = `https://${hyperlink}`;
+    }
+  
+    try {
+      const urlObj = new URL(hyperlink);
+  
+      const queryParams = {
+        ...Object.fromEntries(urlObj.searchParams),
+      };
+      if (opts.addRef) {
+        queryParams.ref = REF_NAME;
+      }
+      if (opts.ref) {
+        queryParams.ref = opts.ref;
+      }
+      if (opts.additionalQueryParams) {
+        Object.entries(opts.additionalQueryParams).forEach(([key, value]) => {
+          queryParams[key] = value;
+        });
+      }
+      urlObj.search = new URLSearchParams(queryParams);
+      return urlObj.toString();
+    } catch (e) {
+      return hyperlink;
+    }
+}
+

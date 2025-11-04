@@ -1,0 +1,106 @@
+import { DNS_CHECKER_LINK, WHATS_MY_DNS_LINK, AUTOSEND_DOCS_DOMAIN } from '/snippets/custom-variables.mdx'
+import { urlFormatter } from '/snippets/utils.mdx'
+
+
+### **Domain Verification Not Working?**
+
+If your domain verification is stuck or failing, try these steps:
+
+### **Check DNS Propagation**
+
+DNS changes can take time to propagate globally. Use a DNS checker tool to verify your records are visible:
+
+- <a
+        href={urlFormatter(DNS_CHECKER_LINK, {
+          addRef: true,
+          additionalQueryParams: {
+            utm_source: AUTOSEND_DOCS_DOMAIN,
+            utm_content: "troubleshooting",
+          },
+        })}
+        title="DNS Checker"
+        target='_blank'
+      >
+        <span className="text-brand-500">DNS Checker</span>
+      </a>
+-  <a
+        href={urlFormatter(WHATS_MY_DNS_LINK, {
+          addRef: true,
+          additionalQueryParams: {
+            utm_source: AUTOSEND_DOCS_DOMAIN,
+            utm_content: "troubleshooting",
+          },
+        })}
+        title="WhatsMyDNS"
+         target='_blank'
+      >
+        <span className="text-brand-500">WhatsMyDNS</span>
+      </a>
+
+Enter your domain and check if the records appear globally.
+
+### **Verify Record Values**
+
+- Ensure you copied the **exact** values from AutoSend (including any underscores or periods)
+- Check for extra spaces or hidden characters
+- Verify the record **Type** is correct (CNAME vs TXT)
+
+### **Check Domain Name Format**
+
+Some DNS providers automatically append your domain name to records. For example:
+
+- AutoSend shows: `_amazonses.mail.yourdomain.com`
+- Your provider might only need: `_amazonses.mail` or `_amazonses`
+
+Check your provider’s documentation for the correct format.
+
+### **Wait Longer for Propagation**
+
+DNS propagation typically takes:
+
+- **5-30 minutes** for most providers
+- **Up to 2 hours** for some providers
+- **Up to 48 hours** in rare cases
+
+Be patient and try verifying again after waiting.
+
+### **Delete and Re-add Records**
+
+If records still aren’t working:
+
+1. Delete all AutoSend-related DNS records
+2. Wait 10-15 minutes
+3. Re-add all records carefully
+4. Wait for propagation
+5. Try verification again
+
+## **Common DNS Provider Instructions**
+
+### **Cloudflare**
+
+- Log in to Cloudflare dashboard
+- Select your domain
+- Go to **DNS** > **Records**
+- Click **Add record**
+- Set **Proxy status** to “DNS only” (gray cloud)
+
+### **GoDaddy**
+
+- Log in to GoDaddy
+- Go to **My Products** > **DNS**
+- Click **Add** to create new records
+- Note: GoDaddy auto-appends your domain
+
+### **Namecheap**
+
+- Log in to Namecheap
+- Go to **Domain List** > **Manage**
+- Go to **Advanced DNS** tab
+- Click **Add New Record**
+
+### **AWS Route53**
+
+- Open Route53 console
+- Select your hosted zone
+- Click **Create Record**
+- Use simple routing
