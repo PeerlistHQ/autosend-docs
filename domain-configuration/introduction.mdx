@@ -1,7 +1,4 @@
-import { SUPPORT_EMAIL } from "@/utils/constants";
-import Typography from "@/components/ui/Typography";
-import List from "@/components/ui/List";
-import HighlightBox from "@/components/HighlightBox";
+import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx'
 
 # Domain Configuration
 
@@ -19,10 +16,10 @@ Before you can send emails through AutoSend, you need to verify ownership of you
   root domain. This provides better email deliverability and keeps your
   transactional emails separate from your main domain's reputation.
 </Note>
-{/* <Separator /> */}
+
 ## **Step 1: Add Your Domain**
 
-<List.Ordered>
+<ol>
   <li>
     Navigate to **Settings > Domains** in your AutoSend dashboard and click the
     **Add Domain** button.
@@ -32,25 +29,25 @@ Before you can send emails through AutoSend, you need to verify ownership of you
     Choose the AWS region closest to your users for optimal email delivery
     performance. <br />
     Available regions include:
-    <List.Disc>
+    <ul>
       <li>**US East (N. Virginia)** - `us-east-1`</li>
       <li>**US East (Ohio)** - `us-east-2`</li>
-    </List.Disc>
+    </ul>
   </li>
-</List.Ordered>
+</ol>
 
 The region you select will be used to send your emails and should be chosen based on where most of your recipients are located.
 
 <Note orange title="Please Note">
   <p className="flex">
     If you want support for other regions, please contact us at &nbsp;
-    <a className="as-a" href={`mailto:${SUPPORT_EMAIL}`}>
+    <a  href={`mailto:${SUPPORT_EMAIL}`}>
       {SUPPORT_EMAIL}
     </a>
     .
   </p>
 </Note>
-<Separator />
+
 ## **Step 2: Configure DNS Records**
 
 Once your domain is added, AutoSend will generate the required DNS records. You’ll need to add these records to your domain’s DNS settings. AutoSend requires two types of DNS records:
@@ -59,7 +56,7 @@ Once your domain is added, AutoSend will generate the required DNS records. You�
 
 These records enable email authentication and prevent email spoofing. You'll typically see 3-4 records:
 
-<List.Ordered>
+<ol>
   <li>**Ownership Verification Record**: Verifies you own the domain</li>
   <li>
     **DKIM Record(s)**: Cryptographic signatures that prove email authenticity
@@ -67,7 +64,7 @@ These records enable email authentication and prevent email spoofing. You'll typ
   <li>
     **Mail-From Record**: Specifies authorized email sending servers (SPF)
   </li>
-</List.Ordered>
+</ol>
 
 Each record will have the following fields:
 
@@ -79,13 +76,13 @@ Each record will have the following fields:
 | **Priority**      | Used for MX records (usually not applicable) |
 | **TTL**           | Time To Live - set to “Auto” or 3600         |
 
-{/* <Separator /> */}
+
 ### **DMARC Record (Optional but Recommended)**
 
 DMARC (Domain-based Message Authentication, Reporting & Conformance) adds an extra layer of email authentication and provides reporting on email authentication status.
 
 <Note orange title="Important Notes">
-  <List.Disc className="space-y-1 ml-4">
+  <ul className="space-y-1 ml-4">
     <li>
       Copy the exact values from AutoSend - even small typos can cause
       verification to fail
@@ -101,24 +98,23 @@ DMARC (Domain-based Message Authentication, Reporting & Conformance) adds an ext
       {" "}
       All DKIM and SPF records must be added for successful verification{" "}
     </li>
-  </List.Disc>
+  </ul>
 </Note>
 
-{/* <Separator /> */}
+
 ## **Step 3: Verify Your Domain**
 
 After adding all DNS records to your DNS provider:
 
-<List.Ordered>
+<ol>
   <li>
     **Wait for DNS propagation** (typically 5-30 minutes, but can take up to 48
     hours)
   </li>
   <li>Navigate back to your domain details page in AutoSend</li>
   <li>Click the **"Verify Ownership"** or **"Check Verification"** button</li>
-</List.Ordered>
+</ol>
 
-<Separator />
 
 ### **Verification Statuses**
 
