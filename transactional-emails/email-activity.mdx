@@ -1,0 +1,44 @@
+import { IMAGES } from '/snippets/images.mdx';
+
+**Email Activity** gives you a complete view of all transactional emails sent through your AutoSend account. It helps you track delivery, performance, and troubleshoot issues related to your transactional email workflows.
+
+<Frame>
+  <img src={IMAGES.emailActivityHome}
+  alt="Email Activity Home"  />
+</Frame>
+
+
+Every time a transactional email is sent from your AutoSend account, whether it’s a password reset, order confirmation, or notification, it appears in your **Email Activity** view.
+
+You can monitor each message’s status, delivery details, and engagement (if applicable).
+
+The **Email Activity** section acts as your go-to audit log for transactional messages, helping you ensure reliable email delivery and visibility across your system.
+
+
+### What You Can See
+
+Each entry in the Email Activity list includes:
+
+- **Status:** The delivery state of the email — _Processed, Queued, Sent, Delivered, or Bounced._
+- **Recipient:** The email address the message was sent to.
+- **Subject:** The subject line of the email.
+- **Timestamp:** When the email was sent.
+- **Opens:** How many times the email was opened by the recipient. (This is only available if tracking is turned on.)
+- **Clicks:** How many times the links in the email were clicked by the recipient. (This is only available if tracking is turned on.)
+
+You can click on an individual email record to view the Event History and Details like activity logs, including SMTP response codes, bounce reasons, or event timelines (send → delivery → open → click, etc., depending on available tracking).
+
+
+<Frame>
+  <img src={IMAGES.emailActivityClicks}
+  alt="Email activity clicks" />
+</Frame>
+
+### Why It’s Useful
+
+Monitoring your **Email Activity** helps you:
+
+- **Diagnose delivery issues:** Identify bounces, failures, or deferrals quickly.
+- **Track engagement:** See when recipients open or click transactional emails (if tracking is enabled).
+- **Verify email behavior:** Confirm if an email was triggered and sent successfully from your application.
+- **Optimize deliverability:** Spot patterns that might affect your sending reputation and take corrective steps (e.g., cleaning invalid contacts).
