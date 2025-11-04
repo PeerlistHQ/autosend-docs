@@ -1,0 +1,134 @@
+import { IMAGES } from '/snippets/images.mdx';
+
+## What are Campaigns in AutoSend?
+
+Campaigns in **AutoSend** are one-time or scheduled marketing emails that you send to your contacts, lists, or segments. These are typically newsletters, announcements, or promotional emails designed to engage your audience.
+
+<Frame>
+  <img 
+  src={IMAGES.campaignsList}
+  alt="Campaigns List"
+   />
+</Frame>
+
+
+
+## Creating a Campaign in AutoSend
+
+Click on the **Campaigns** tab and click on “**New campaign”**.
+
+<Frame>
+  <img 
+ src={IMAGES.designCampaign}
+  alt="Design Campaign"
+   />
+</Frame>
+
+
+
+
+### Designing the campaign
+
+<Frame>
+  <img 
+  src={IMAGES.designCampaign}
+  alt="Design Campaign"
+   />
+</Frame>
+
+
+
+Create your email using HTML with inline CSS for styling. AutoSend's email designer supports responsive design, so make sure to write HTML that renders well across different email clients and devices.
+
+- Write responsive HTML with inline CSS for maximum compatibility.
+- Use variables anywhere in the HTML to personalize content dynamically, for example: `{{first_name}}`, `{{company_name}}`, `{{email}}`, etc.
+- Variables are wrapped in double curly braces and will be replaced with actual values when the email is sent.
+- Keep your HTML clean and well-structured to ensure consistent rendering across email clients.
+- Test your template thoroughly in both desktop and mobile views before deployment.
+
+**Preview and Devices**
+
+The **Email Preview** on the right reflects changes from the composer in real time. Switch between **Desktop** and **Mobile** via the device icons to confirm responsive behavior and visual consistency. Links are disabled in preview to avoid accidental navigation.
+
+
+### Email and Sending Details
+
+After designing your email, fill in the campaign details. The mandatory fields are marked with a red asterisk (\*).
+
+
+<Frame>
+  <img 
+ src={IMAGES.campaignDetails}
+  alt="Campaign Details"
+   />
+</Frame>
+
+
+| **Field**            | **Description**                                                                                                                                  | Mandatory |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------- |
+| Subject \*           | The subject line of your email. This is what your recipients will see in their inbox.                                                            | Yes       |
+| Preview Text         | The short snippet that appears next to the subject line. (If left blank, AutoSend will automatically display the first few lines of your email.) | No        |
+| From Sender \*       | The sender name and email address your recipients will see.                                                                                      | Yes       |
+| Reply To             | The email address where replies will be sent.                                                                                                    | No        |
+| To \*                | Select who will receive the campaign — this can be All Contacts, a specific List, or a Segment.                                                  | Yes       |
+| Exclude              | Select lists or segments you’d like to exclude from receiving this campaign.                                                                     | No        |
+| Unsubscribe Group \* | Choose the group contacts will be added to when they unsubscribe from this campaign.                                                             | Yes       |
+
+
+### When to send?
+
+Once the campaign details are filled, select when you want to send the campaign.
+
+- Click **Send Now** to send the campaign immediately.
+- Or, **Schedule** for later to pick a specific date and time.
+
+
+### Review Details
+
+Review all the details of your campaign. Make sure everything is accurate.
+
+<Frame>
+  <img 
+   src={IMAGES.reviewCampaign}
+  alt="Review Campaign"
+   />
+</Frame>
+
+
+
+Once reviewed, Click on **Send Now** or **Schedule Campaign** to send or schedule for later respectively.
+
+Your campaign will be made live accordingly.
+
+
+
+<Frame>
+  <img 
+   src={IMAGES.campaignSuccess}
+  alt="Campaign Success"
+   />
+</Frame>
+
+
+
+# Testing your Campaign
+
+You can send a test email to check how your campaign appears across devices.
+
+
+<Frame>
+  <img 
+  src={IMAGES.testCampaign}
+  alt="Test Campaign"
+   />
+</Frame>
+
+In the modal, add up to 10 comma separated emails and click **Send Test.**
+
+
+<Frame>
+  <img 
+ src={IMAGES.sendTestCampaign}
+  alt="Send Test Campaign"
+   />
+</Frame>

@@ -1,0 +1,92 @@
+import { IMAGES } from '/snippets/images.mdx';
+
+# Introduction
+
+Contacts are the people you send emails to in AutoSend. Each contact has a unique email address and associated data like name, location, or any other information you’ve added through fields.
+
+Contacts can be organized using **Lists** or **Segments** for better targeting.
+
+<Frame>
+  <img 
+  src={IMAGES.contacts}
+  alt="Contacts"
+  
+/>
+</Frame>
+
+
+## All Contacts
+
+<Frame>
+  <img 
+  src={IMAGES.allContacts}
+  alt="All Contacts"
+ 
+/>
+</Frame>
+The **All Contacts** list shows every contact you’ve ever added to your account.
+
+Contacts can come from:
+
+- Manual additions
+- Imported via CSV
+- API integrations
+- Sign-ups or form submissions
+
+You can filter and search contacts, and view detailed insights for each.
+
+
+## Contact Details
+
+<Frame>
+  <img 
+  src={IMAGES.contactDetails}
+  alt="Contact Details"
+  
+/>
+</Frame>
+Clicking on any contact opens their **Contact Details** page, where you can view:
+
+- **Details**: Basic information (email, name, etc.), Reserved and Custom Fields.
+- **Lists & Segments**: All the lists and segments the contact belongs to
+- **Unsubscribes:** The kind of emails a particular user has unsubscribed from.
+- **Email Activity**: The email history of a particular user.
+
+
+### Reserved Fields
+
+Reserved fields are system-defined fields that AutoSend uses to store core contact information. You can’t rename or delete them.
+
+| **Field**               | **Description**                                                                            |
+| ----------------------- | ------------------------------------------------------------------------------------------ |
+| email                   | The contact's primary email address. This field is required and unique for each contact.   |
+| firstName               | The contact's first name. Often used for personalizing emails (e.g., Hey `{{firstName}}`). |
+| first_name              | The contact's first name. Often used for personalizing emails (e.g., Hey `{{firstName}}`). |
+| lastName                | The contact's last name.                                                                   |
+| last_name               | The contact's last name.                                                                   |
+| mobile                  | The contact's mobile phone number.                                                         |
+| unsubscribe             | Boolean indicating if the contact has unsubscribed from all emails.                        |
+| unsubscribed            | Boolean indicating if the contact has unsubscribed from all emails.                        |
+| unsubscribe_groups      | Array of specific email groups/categories the contact has unsubscribed from.               |
+| unsubscribe_preferences | Object containing detailed unsubscribe preferences for different email types.              |
+| userId                  | Your internal user ID for tracking contacts across your systems.                           |
+| externalId              | External identifier from third-party integrations or CRM systems.                          |
+| createdAt               | Timestamp when the contact was first added to AutoSend.                                    |
+| updatedAt               | Timestamp when the contact was last modified.                                              |
+| contactLists            | Array of list IDs that this contact belongs to.                                            |
+| address                 | The contact's full address (single field).                                                 |
+| address_line_1          | First line of the contact's address (street address).                                      |
+| address_line_2          | Second line of the contact's address (apartment, suite, etc.).                             |
+| city                    | The contact's city.                                                                        |
+| state                   | The contact's state or province.                                                           |
+| zip                     | The contact's postal or ZIP code.                                                          |
+| country                 | The contact's country.                                                                     |
+
+
+### Custom Fields
+
+Custom fields let you store additional information beyond the reserved ones — for example, “Company,” “Plan Type,” or “Signup Date.”
+
+They can be text, number, or date fields
+
+You can use these in both **marketing campaigns** and **transactional emails** to personalize your content using variables like `{{custom_field_name}}`.

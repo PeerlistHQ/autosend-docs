@@ -15,7 +15,7 @@
         "tab": "Documentation",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Getting Started",
             "pages": [
               "index",
               "quickstart",
@@ -47,7 +47,7 @@
                 "pages": [
                   "marketing-emails/contacts/introduction",
                   "marketing-emails/contacts/import-csv",
-                  "marketing-emails/contacts/list",
+                  "marketing-emails/contacts/lists",
                   "marketing-emails/contacts/segment",
                   "marketing-emails/contacts/custom-fields"
                 ]
@@ -60,10 +60,10 @@
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "API Reference",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "API Documentation",
             "pages": [
               "api-reference/introduction"
             ]
