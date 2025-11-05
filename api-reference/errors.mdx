@@ -18,6 +18,7 @@ The AutoSend API uses standard HTTP status codes to indicate the success or fail
 | `402` | Payment Required | Payment required | Payment issues, subscription expired |
 | `403` | Forbidden | Insufficient permissions or limits | Plan limits exceeded, insufficient access |
 | `404` | Not Found | Resource doesn't exist | Requesting non-existent resources |
+| `429` | Too Many Requests | Rate limit exceeded | Too many requests in a time period |
 | `500` | Internal Server Error | Server error | Unexpected server-side errors |
 
 ## Success Responses
@@ -381,6 +382,43 @@ if (response.status === 409) {
 }
 ```
 
+### 429 Too Many Requests
+
+The rate limit has been exceeded. You've made too many requests in a given time period.
+
+**Error Response:**
+
+```json
+{
+  "success": false,
+  "message": "Rate limit exceeded",
+  "retryAfter": 30
+}
+```
+
+**Common Causes:**
+- Too many requests sent in a short time period
+- Rate limit exceeded for your API key
+- Burst of requests exceeding allowed threshold
+
+**Solution:**
+1. Implement exponential backoff when receiving 429 errors
+2. Wait for the `retryAfter` seconds before retrying
+3. Reduce the frequency of your API requests
+4. Implement request queuing for bulk operations
+
+**Handling 429 Errors:**
+
+```javascript
+if (response.status === 429) {
+  const error = await response.json();
+  const waitTime = error.retryAfter ? error.retryAfter * 1000 : 30000; // Default 30 seconds
+  console.log(`Rate limited. Waiting ${waitTime}ms before retry...`);
+  await new Promise(resolve => setTimeout(resolve, waitTime));
+  // Retry the request
+}
+```
+
 ## Server Errors (5xx)
 
 ### 500 Internal Server Error
@@ -494,6 +532,9 @@ async function handleApiRequest(url, options) {
         case 409:
           handleConflictError(data);
           break;
+        case 429:
+          await handleRateLimitError(data);
+          break;
         case 500:
           await handleServerError(response.status);
           break;
@@ -528,7 +569,7 @@ async function retryRequest(requestFn, maxRetries = 3) {
       if (i === maxRetries - 1) throw error;
       
       // Only retry on certain errors
-      const shouldRetry = error.status === 500;
+      const shouldRetry = error.status === 429 || error.status === 500;
       
       if (shouldRetry) {
         const delay = error.retryAfter 
@@ -573,6 +614,8 @@ function getUserFriendlyError(error) {
       return 'You have reached your plan limit. Please upgrade your plan.';
     case 404:
       return 'The requested resource was not found.';
+    case 429:
+      return 'Too many requests. Please wait a moment and try again.';
     case 500:
       return 'Service temporarily unavailable. Please try again later.';
     default:
@@ -655,6 +698,7 @@ const errorStats = {
   402: 0,
   403: 0,
   404: 0,
+  429: 0,
   500: 0
 };
 
