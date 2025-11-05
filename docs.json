@@ -68,7 +68,9 @@
             "group": "API Reference",
             "pages": [
               "api-reference/introduction",
-              "api-reference/errors"
+              "api-reference/errors",
+              "api-reference/rate-limit",
+              "api-reference/best-practices"
             ]
           },
           {

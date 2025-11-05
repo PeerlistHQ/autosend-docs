@@ -1,0 +1,41 @@
+
+## Rate Limits
+
+API keys are subject to the following rate limits:
+
+- **2 requests per second** per API key
+- **120 requests per minute** per API key
+
+When you exceed the rate limit, you'll receive a `429 Too Many Requests` response with a `retryAfter` field indicating how many seconds to wait.
+
+### Rate Limit Headers
+
+Each API response includes rate limit information:
+
+```
+X-RateLimit-Limit: 120
+X-RateLimit-Remaining: 115
+X-RateLimit-Reset: 1696075200
+```
+
+### Handling Rate Limits
+
+Implement exponential backoff when receiving 429 errors:
+
+```javascript
+async function sendEmailWithRetry(data, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const response = await sendEmail(data);
+      return response;
+    } catch (error) {
+      if (error.status === 429 && i < maxRetries - 1) {
+        const waitTime = Math.pow(2, i) * 1000; // Exponential backoff
+        await new Promise((resolve) => setTimeout(resolve, waitTime));
+      } else {
+        throw error;
+      }
+    }
+  }
+}
+```
