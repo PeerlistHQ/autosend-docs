@@ -22,8 +22,8 @@
                 "group": "Domains",
                 "pages": [
                  
-                  "domain-configuration/configuration",
-                  "domain-configuration/troubleshooting"
+                  "domains/configuration",
+                  "domains/troubleshooting"
                  
                 ]
               },
