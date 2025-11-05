@@ -1,14 +1,8 @@
 ---
 title: "Supabase Edge Functions"
 sidebarTitle: "Supabase Edge Functions"
+description: "Learn how to send transactional emails from Supabase Edge Functions using AutoSend."
 ---
-
-
-
-import {AUTOSEND_BASE_URL,SUPABASE,SUPABASE_DOCS_CLI} from '/snippets/custom-variables.mdx'
-
-
-Learn how to send transactional emails from Supabase Edge Functions using AutoSend.
 
 ## Overview
 
@@ -18,9 +12,16 @@ This guide shows you how to integrate AutoSend with Supabase Edge Functions to s
 
 Before you begin, make sure you have:
 
-- An <a href={AUTOSEND_BASE_URL} title='AutoSend'> AutoSend account</a> with an API key
-- A <a href={SUPABASE} title='Supabase'>Supabase project</a>
-- <a href={SUPABASE_DOCS_CLI} title='Supabase docs'>Supabase CLI</a> installed (v1.0 or later)
+- An <a href={{ type:"mdxJsxAttributeValueExpression",value:"AUTOSEND_BASE_URL",data:{estree:{type:"Program",start:630,end:647,body:[{type:"ExpressionStatement",expression:{type:"Identifier",start:630,end:647,loc:{start:{line:21,column:14,offset:630},end:{line:21,column:31,offset:647}},name:"AUTOSEND_BASE_URL",range:[630,647]},start:630,end:647,loc:{start:{line:21,column:14,offset:630},end:{line:21,column:31,offset:647}},range:[630,647]}],sourceType:"module",comments:[],loc:{start:{line:21,column:14,offset:630},end:{line:21,column:31,offset:647}},range:[630,647]}} }} title="AutoSend">
+   AutoSend account</a>
+
+   with an API key
+- A <a href={{ type:"mdxJsxAttributeValueExpression",value:"SUPABASE",data:{estree:{type:"Program",start:717,end:725,body:[{type:"ExpressionStatement",expression:{type:"Identifier",start:717,end:725,loc:{start:{line:22,column:13,offset:717},end:{line:22,column:21,offset:725}},name:"SUPABASE",range:[717,725]},start:717,end:725,loc:{start:{line:22,column:13,offset:717},end:{line:22,column:21,offset:725}},range:[717,725]}],sourceType:"module",comments:[],loc:{start:{line:22,column:13,offset:717},end:{line:22,column:21,offset:725}},range:[717,725]}} }} title="Supabase">
+  Supabase project</a>
+- <a href={{ type:"mdxJsxAttributeValueExpression",value:"SUPABASE_DOCS_CLI",data:{estree:{type:"Program",start:776,end:793,body:[{type:"ExpressionStatement",expression:{type:"Identifier",start:776,end:793,loc:{start:{line:23,column:11,offset:776},end:{line:23,column:28,offset:793}},name:"SUPABASE_DOCS_CLI",range:[776,793]},start:776,end:793,loc:{start:{line:23,column:11,offset:776},end:{line:23,column:28,offset:793}},range:[776,793]}],sourceType:"module",comments:[],loc:{start:{line:23,column:11,offset:776},end:{line:23,column:28,offset:793}},range:[776,793]}} }} title="Supabase docs">
+  Supabase CLI</a>
+
+   installed (v1.0 or later)
 - Node.js 18+ installed locally
 
 ## Quick Start
@@ -38,7 +39,6 @@ supabase init
 
 # Create a new Edge Function
 supabase functions new autosend
-
 ```
 
 This creates a new function in `supabase/functions/autosend/index.ts`.
@@ -134,7 +134,6 @@ serve(async (req) => {
     )
   }
 })
-
 ```
 
 ### 4. Create Shared CORS Configuration
@@ -146,7 +145,6 @@ export const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
-
 ```
 
 ### 5. Set Environment Variables
@@ -155,14 +153,12 @@ Create a `.env` file in your project root (for local development):
 
 ```bash
 AUTOSEND_API_KEY=your_autosend_api_key_here
-
 ```
 
 For production, set secrets using the Supabase CLI:
 
 ```bash
 supabase secrets set AUTOSEND_API_KEY=your_autosend_api_key_here
-
 ```
 
 ### 6. Run Locally
@@ -171,7 +167,6 @@ Test your function locally before deploying:
 
 ```bash
 supabase functions serve autosend --env-file .env --no-verify-jwt
-
 ```
 
 The function will be available at: `http://localhost:54321/functions/v1/autosend`
@@ -196,7 +191,6 @@ curl -i --location --request POST 'http://localhost:54321/functions/v1/autosend'
     "subject": "Welcome to our platform!",
     "html": "<h1>Hello John!</h1><p>Welcome aboard!</p>"
   }'
-
 ```
 
 ### 8. Deploy to Production
@@ -205,14 +199,12 @@ Once tested, deploy your function:
 
 ```bash
 supabase functions deploy autosend
-
 ```
 
 Your function will be available at:
 
 ```
 https://YOUR_PROJECT_REF.supabase.co/functions/v1/autosend
-
 ```
 
 ## Usage Examples
@@ -240,7 +232,6 @@ if (error) {
 } else {
   console.log('Email sent:', data)
 }
-
 ```
 
 ### Send Using AutoSend Template
@@ -263,7 +254,6 @@ const { data, error } = await supabase.functions.invoke('autosend', {
     }
   }
 })
-
 ```
 
 ### Send from React/Next.js
@@ -296,7 +286,6 @@ const sendEmail = async () => {
   const data = await response.json()
   return data
 }
-
 ```
 
 ## Integration with Supabase Auth
@@ -309,7 +298,6 @@ Create a new function for auth emails:
 
 ```bash
 supabase functions new send-auth-email
-
 ```
 
 ### 2. Implement Auth Hook Handler
@@ -400,20 +388,18 @@ serve(async (req) => {
     )
   }
 })
-
 ```
 
 ### 3. Configure Auth Hook in Supabase
 
-1. Go to **Authentication > Hooks** in your Supabase dashboard
+1. Go to **Authentication \> Hooks** in your Supabase dashboard
 2. Enable the "Send Email" hook
 3. Set the hook URL to your deployed function:
-    
-    ```
-    https://YOUR_PROJECT_REF.supabase.co/functions/v1/send-auth-email
-    
-    ```
-    
+
+   ```
+   https://YOUR_PROJECT_REF.supabase.co/functions/v1/send-auth-email
+   
+   ```
 4. Configure the secret (optional but recommended)
 
 Now all Supabase Auth emails will be sent through AutoSend!
@@ -499,7 +485,6 @@ serve(async (req) => {
     )
   }
 })
-
 ```
 
 ## Best Practices
@@ -514,7 +499,6 @@ const apiKey = Deno.env.get('AUTOSEND_API_KEY')
 
 // ❌ Bad - Never hardcode
 const apiKey = 'as_123456789'
-
 ```
 
 ### 2. Validate Email Addresses
@@ -530,7 +514,6 @@ function isValidEmail(email: string): boolean {
 if (!isValidEmail(payload.to.email)) {
   throw new Error('Invalid email address')
 }
-
 ```
 
 ### 3. Use Templates
@@ -551,7 +534,6 @@ const userRateLimit = await checkUserRateLimit(userId)
 if (!userRateLimit.allowed) {
   throw new Error('Rate limit exceeded')
 }
-
 ```
 
 ### 6. Use Verified Domains
@@ -576,5 +558,4 @@ curl -i --location --request POST 'http://localhost:54321/functions/v1/send-emai
     "subject": "Test Email",
     "html": "<p>This is a test</p>"
   }'
-
 ```
