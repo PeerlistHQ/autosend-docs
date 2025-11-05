@@ -867,6 +867,95 @@
         }
       }
     },
+    "/contacts/remove": {
+      "post": {
+        "summary": "Remove Contacts by Emails",
+        "description": "Removes one or more contacts by their email addresses. Returns the IDs of the contacts that were successfully removed.",
+        "tags": ["Contacts"],
+        "requestBody": {
+          "description": "Array of email addresses to remove",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoveContactsRequest"
+              },
+              "example": {
+                "emails": ["email1@gmail.com"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contacts removed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemoveContactsResponse"
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "contactIds": ["507f1f77bcf86cd799439011"]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed - Invalid email format or empty array",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - One or more contacts not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests - Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/contacts/{id}/unsubscribe-groups": {
       "get": {
         "summary": "Get Contact's Unsubscribe Groups",
@@ -1546,6 +1635,44 @@
                   "type": "string"
                 },
                 "description": "Array of deleted contact IDs",
+                "example": ["507f1f77bcf86cd799439011"]
+              }
+            }
+          }
+        }
+      },
+      "RemoveContactsRequest": {
+        "type": "object",
+        "required": ["emails"],
+        "properties": {
+          "emails": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "email"
+            },
+            "description": "Array of email addresses to remove (minimum 1, automatically normalized)",
+            "minItems": 1,
+            "example": ["email1@gmail.com"]
+          }
+        }
+      },
+      "RemoveContactsResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "contactIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Array of removed contact IDs",
                 "example": ["507f1f77bcf86cd799439011"]
               }
             }

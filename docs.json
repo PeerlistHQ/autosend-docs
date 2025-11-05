@@ -84,6 +84,7 @@
             "pages": [
               "api-reference/contacts/create-contacts",
               "api-reference/contacts/upsert-contact",
+              "api-reference/contacts/remove",
               "api-reference/contacts/get-contact-by-id",
               "api-reference/contacts/search-contacts-by-emails",
               "api-reference/contacts/bulk-update-contacts",
