@@ -69,6 +69,12 @@
             "pages": [
               "api-reference"
             ]
+          },
+          {
+            "group": "Contacts",
+            "pages": [
+              "api-reference/endpoint/create"
+            ]
           }
         ]
       },

@@ -1,106 +1,109 @@
 import { DNS_CHECKER_LINK, WHATS_MY_DNS_LINK, AUTOSEND_DOCS_DOMAIN } from '/snippets/custom-variables.mdx'
 import { urlFormatter } from '/snippets/utils.mdx'
 
-
-### **Domain Verification Not Working?**
+## Domain Not verifying?
 
 If your domain verification is stuck or failing, try these steps:
 
-### **Check DNS Propagation**
+<AccordionGroup>
+  <Accordion title="Check DNS Propagation">
+    DNS changes can take time to propagate globally. Use a DNS checker tool to verify your records are visible:
 
-DNS changes can take time to propagate globally. Use a DNS checker tool to verify your records are visible:
+    - <a
+            href={urlFormatter(DNS_CHECKER_LINK, {
+              addRef: true,
+              additionalQueryParams: {
+                utm_source: AUTOSEND_DOCS_DOMAIN,
+                utm_content: "troubleshooting",
+              },
+            })}
+            title="DNS Checker"
+            target='_blank'
+          >
+            <span className="text-brand-500">DNS Checker</span>
+          </a>
+    -  <a
+            href={urlFormatter(WHATS_MY_DNS_LINK, {
+              addRef: true,
+              additionalQueryParams: {
+                utm_source: AUTOSEND_DOCS_DOMAIN,
+                utm_content: "troubleshooting",
+              },
+            })}
+            title="WhatsMyDNS"
+             target='_blank'
+          >
+            <span className="text-brand-500">WhatsMyDNS</span>
+          </a>
 
-- <a
-        href={urlFormatter(DNS_CHECKER_LINK, {
-          addRef: true,
-          additionalQueryParams: {
-            utm_source: AUTOSEND_DOCS_DOMAIN,
-            utm_content: "troubleshooting",
-          },
-        })}
-        title="DNS Checker"
-        target='_blank'
-      >
-        <span className="text-brand-500">DNS Checker</span>
-      </a>
--  <a
-        href={urlFormatter(WHATS_MY_DNS_LINK, {
-          addRef: true,
-          additionalQueryParams: {
-            utm_source: AUTOSEND_DOCS_DOMAIN,
-            utm_content: "troubleshooting",
-          },
-        })}
-        title="WhatsMyDNS"
-         target='_blank'
-      >
-        <span className="text-brand-500">WhatsMyDNS</span>
-      </a>
+    Enter your domain and check if the records appear globally.
+  </Accordion>
 
-Enter your domain and check if the records appear globally.
+  <Accordion title="Verify Record Values">
+    - Ensure you copied the **exact** values from AutoSend (including any underscores or periods)
+    - Check for extra spaces or hidden characters
+    - Verify the record **Type** is correct (CNAME vs TXT)
+  </Accordion>
 
-### **Verify Record Values**
+  <Accordion title="Check Domain Name Format">
+    Some DNS providers automatically append your domain name to records. For example:
 
-- Ensure you copied the **exact** values from AutoSend (including any underscores or periods)
-- Check for extra spaces or hidden characters
-- Verify the record **Type** is correct (CNAME vs TXT)
+    - AutoSend shows: `_amazonses.mail.yourdomain.com`
+    - Your provider might only need: `_amazonses.mail` or `_amazonses`
 
-### **Check Domain Name Format**
+    Check your provider's documentation for the correct format.
+  </Accordion>
 
-Some DNS providers automatically append your domain name to records. For example:
+  <Accordion title="Wait Longer for Propagation">
+    DNS propagation typically takes:
 
-- AutoSend shows: `_amazonses.mail.yourdomain.com`
-- Your provider might only need: `_amazonses.mail` or `_amazonses`
+    - **5-30 minutes** for most providers
+    - **Up to 2 hours** for some providers
+    - **Up to 48 hours** in rare cases
 
-Check your provider’s documentation for the correct format.
+    Be patient and try verifying again after waiting.
+  </Accordion>
 
-### **Wait Longer for Propagation**
+  <Accordion title="Delete and Re-add Records">
+    If records still aren't working:
 
-DNS propagation typically takes:
+    1. Delete all AutoSend-related DNS records
+    2. Wait 10-15 minutes
+    3. Re-add all records carefully
+    4. Wait for propagation
+    5. Try verification again
+  </Accordion>
+</AccordionGroup>
 
-- **5-30 minutes** for most providers
-- **Up to 2 hours** for some providers
-- **Up to 48 hours** in rare cases
+## Common DNS Provider Instructions
 
-Be patient and try verifying again after waiting.
+<AccordionGroup>
+  <Accordion title="Cloudflare">
+    - Log in to Cloudflare dashboard
+    - Select your domain
+    - Go to **DNS** > **Records**
+    - Click **Add record**
+    - Set **Proxy status** to "DNS only" (gray cloud)
+  </Accordion>
 
-### **Delete and Re-add Records**
+  <Accordion title="GoDaddy">
+    - Log in to GoDaddy
+    - Go to **My Products** > **DNS**
+    - Click **Add** to create new records
+    - Note: GoDaddy auto-appends your domain
+  </Accordion>
 
-If records still aren’t working:
+  <Accordion title="Namecheap">
+    - Log in to Namecheap
+    - Go to **Domain List** > **Manage**
+    - Go to **Advanced DNS** tab
+    - Click **Add New Record**
+  </Accordion>
 
-1. Delete all AutoSend-related DNS records
-2. Wait 10-15 minutes
-3. Re-add all records carefully
-4. Wait for propagation
-5. Try verification again
-
-## **Common DNS Provider Instructions**
-
-### **Cloudflare**
-
-- Log in to Cloudflare dashboard
-- Select your domain
-- Go to **DNS** > **Records**
-- Click **Add record**
-- Set **Proxy status** to “DNS only” (gray cloud)
-
-### **GoDaddy**
-
-- Log in to GoDaddy
-- Go to **My Products** > **DNS**
-- Click **Add** to create new records
-- Note: GoDaddy auto-appends your domain
-
-### **Namecheap**
-
-- Log in to Namecheap
-- Go to **Domain List** > **Manage**
-- Go to **Advanced DNS** tab
-- Click **Add New Record**
-
-### **AWS Route53**
-
-- Open Route53 console
-- Select your hosted zone
-- Click **Create Record**
-- Use simple routing
+  <Accordion title="AWS Route53">
+    - Open Route53 console
+    - Select your hosted zone
+    - Click **Create Record**
+    - Use simple routing
+  </Accordion>
+</AccordionGroup>
