@@ -62,7 +62,7 @@
             {
             "group": "Others",
             "pages": [
-              "others/suppresions",
+              "others/suppressions",
               "others/unsubscribe-groups"
             ]
           }
