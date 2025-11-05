@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://api.autosend.io"
+      "url": "https://api.autosend.com/v1"
     }
   ],
   "security": [
