@@ -30,6 +30,7 @@
               }
             ]
           },
+          
           {
             "group": "Transactional Emails",
             "pages": [
@@ -39,6 +40,8 @@
               "transactional-emails/troubleshooting"
             ]
           },
+        
+          
           {
             "group": "Marketing Emails",
             "pages": [
@@ -54,13 +57,18 @@
                   "marketing-emails/contacts/custom-fields"
                 ]
               }
-              
-              
+            ]
+          },
+            {
+            "group": "Others",
+            "pages": [
+              "others/suppresions",
+              "others/unsubscribe-groups"
             ]
           }
-          
         ]
       },
+         
       {
         "tab": "API Reference",
         "groups": [
