@@ -18,7 +18,6 @@
             "group": "Getting Started",
             "pages": [
               "index",
-              "quickstart",
               {
                 "group": "Domain Configuration",
                 "pages": [
@@ -33,11 +32,17 @@
           },
           
           {
+            "group": "Quickstart",
+            "pages": [
+              "quickstart/email-using-api",
+              "quickstart/supabase-edge-functions"
+            ]
+          },
+          {
             "group": "Transactional Emails",
             "pages": [
               "transactional-emails/email-templates",
               "transactional-emails/email-activity",
-              "transactional-emails/email-using-api",
               "transactional-emails/troubleshooting"
             ]
           },
