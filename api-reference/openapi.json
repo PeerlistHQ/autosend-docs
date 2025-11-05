@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://api.autosend.com/v1"
+      "url": "https:/api.autosend.com/v1"
     }
   ],
   "security": [
@@ -17,7 +17,7 @@
   ],
   "paths": {
    
-    "/api/contacts": {
+    "/contacts": {
       "post": {
         "summary": "Create Contact",
         "description": "Creates a new contact in your AutoSend project. If a contact with the same email already exists, this endpoint will return an error. Use the Upsert Contact endpoint if you want to update existing contacts.",
@@ -131,7 +131,7 @@
         }
       }
     },
-    "/api/contacts/email": {
+    "/contacts/email": {
       "post": {
         "summary": "Upsert Contact",
         "description": "Creates a new contact or updates an existing contact if the email already exists. This is the recommended endpoint for most contact synchronization scenarios.",
@@ -201,7 +201,7 @@
         }
       }
     },
-    "/api/contacts/{id}": {
+    "/contacts/{id}": {
       "get": {
         "summary": "Get Contact by ID",
         "description": "Retrieves a single contact by its unique identifier (MongoDB ObjectId).",
@@ -360,7 +360,7 @@
         }
       }
     },
-    "/api/contacts/search/emails": {
+    "/contacts/search/emails": {
       "post": {
         "summary": "Search Contacts by Emails",
         "description": "Searches for multiple contacts by their email addresses in a single request. Returns all matching contacts found in your project.",
@@ -430,7 +430,7 @@
         }
       }
     },
-    "/api/contacts/email/duplicate": {
+    "/contacts/email/duplicate": {
       "post": {
         "summary": "Duplicate Contact",
         "description": "Creates a duplicate of an existing contact with a new email address. Copies all data from the source contact including custom fields, tags, and other attributes.",
@@ -520,7 +520,7 @@
         }
       }
     },
-    "/api/contacts/email/{email}/custom-fields": {
+    "/contacts/email/{email}/custom-fields": {
       "patch": {
         "summary": "Update Custom Fields",
         "description": "Updates or adds custom fields for a contact identified by email address. Custom fields are merged - new fields are added, existing fields are updated, and fields not mentioned remain unchanged.",
@@ -618,7 +618,7 @@
         }
       }
     },
-    "/api/contacts/email/userId/{userId}": {
+    "/contacts/email/userId/{userId}": {
       "delete": {
         "summary": "Delete Contact by User ID",
         "description": "Permanently deletes a contact identified by the userId field (your application's user identifier).",
@@ -698,7 +698,7 @@
         }
       }
     },
-    "/api/contacts/bulk-update": {
+    "/contacts/bulk-update": {
       "post": {
         "summary": "Bulk Update Contacts",
         "description": "Updates or creates multiple contacts in a single API request. Each contact is either created (if it doesn't exist) or updated (if it does) based on the email address. Maximum limit: 100 contacts per request.",
@@ -768,7 +768,7 @@
         }
       }
     },
-    "/api/contacts/{id}/unsubscribe-groups": {
+    "/contacts/{id}/unsubscribe-groups": {
       "get": {
         "summary": "Get Contact's Unsubscribe Groups",
         "description": "Returns an array of unsubscribe group IDs that the contact has unsubscribed from.",
@@ -849,7 +849,7 @@
         }
       }
     },
-    "/api/mails/send": {
+    "/mails/send": {
       "post": {
         "summary": "Send Email",
         "description": "Sends a transactional or marketing email. Either templateId OR html/text content must be provided. If using a template, subject is optional.",
