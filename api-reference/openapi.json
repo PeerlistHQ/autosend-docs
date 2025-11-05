@@ -56,6 +56,24 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CreateContactResponse"
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "507f1f77bcf86cd799439011",
+                    "email": "john.doe@example.com",
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "userId": "user_12345",
+                    "customFields": {
+                      "company": "Acme Corp",
+                      "role": "Developer",
+                      "plan": "premium"
+                    },
+                    "updatedAt": "2024-01-15T10:30:00.000Z",
+                    "createdAt": "2024-01-15T10:30:00.000Z",
+                    "projectId": "229f1f77bcf86cd9273048038"
+                  }
                 }
               }
             }
@@ -154,6 +172,24 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ContactResponse"
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "507f1f77bcf86cd799439011",
+                    "email": "john.doe@example.com",
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "userId": "user_12345",
+                    "customFields": {
+                      "company": "Acme Corp",
+                      "role": "Developer",
+                      "plan": "premium"
+                    },
+                    "updatedAt": "2024-01-15T10:30:00.000Z",
+                    "createdAt": "2024-01-15T10:30:00.000Z",
+                    "projectId": "229f1f77bcf86cd9273048038"
+                  }
                 }
               }
             }
@@ -225,6 +261,24 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ContactResponse"
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "507f1f77bcf86cd799439011",
+                    "email": "john.doe@example.com",
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "userId": "user_12345",
+                    "customFields": {
+                      "company": "Acme Corp",
+                      "role": "Developer",
+                      "plan": "premium"
+                    },
+                    "updatedAt": "2024-01-15T10:30:00.000Z",
+                    "createdAt": "2024-01-15T10:30:00.000Z",
+                    "projectId": "229f1f77bcf86cd9273048038"
+                  }
                 }
               }
             }
@@ -383,6 +437,24 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SearchContactsResponse"
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "507f1f77bcf86cd799439011",
+                    "email": "john.doe@example.com",
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "userId": "user_12345",
+                    "customFields": {
+                      "company": "Acme Corp",
+                      "role": "Developer",
+                      "plan": "premium"
+                    },
+                    "updatedAt": "2024-01-15T10:30:00.000Z",
+                    "createdAt": "2024-01-15T10:30:00.000Z",
+                    "projectId": "229f1f77bcf86cd9273048038"
+                  }
                 }
               }
             }
@@ -640,7 +712,16 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ContactResponse"
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "example": {
+                  "success": true
                 }
               }
             }
@@ -721,6 +802,24 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BulkUpdateResponse"
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "507f1f77bcf86cd799439011",
+                    "email": "john.doe@example.com",
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "userId": "user_12345",
+                    "customFields": {
+                      "company": "Acme Corp",
+                      "role": "Developer",
+                      "plan": "premium"
+                    },
+                    "updatedAt": "2024-01-15T10:30:00.000Z",
+                    "createdAt": "2024-01-15T10:30:00.000Z",
+                    "projectId": "229f1f77bcf86cd9273048038"
+                  }
                 }
               }
             }
@@ -792,6 +891,17 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnsubscribeGroupsResponse"
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "groups": [
+                      {
+                        "groupId": "20XWO",
+                        "name": "Our blog"
+                      }
+                    ]
+                  }
                 }
               }
             }
@@ -1455,10 +1565,19 @@
               "groups": {
                 "type": "array",
                 "items": {
-                  "type": "string"
+                  "type": "object",
+                  "properties": {
+                    "groupId": {
+                      "type": "string",
+                      "example": "20XWO"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Our blog"
+                    }
+                  }
                 },
-                "description": "Array of unsubscribe group IDs",
-                "example": ["newsletter", "promotional", "product_updates"]
+                "description": "Array of unsubscribe groups with groupId and name"
               }
             }
           }
