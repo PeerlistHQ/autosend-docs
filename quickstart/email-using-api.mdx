@@ -1,35 +1,28 @@
 ---
-title: "Quickstart"
-description: "Send your first emails with AutoSend email API in less than 10 minutes."
+title: 'Sending Emails using API'
+sidebarTitle: 'Sending Emails with API'
 ---
 
-import { APP_PATHS } from '/snippets/appPaths.mdx'
+Once you’ve created a transactional email template, you can use it in your application via the AutoSend API.
 
-<Steps>
-  <Step title="Add Sending Domain" titleSize="h2">
-    Before sending emails, you need to verify ownership of your sending domain by adding DNS records. This ensures high deliverability and authenticates your emails.
+### API Endpoint
 
-    - Add your domain or subdomain (we recommend using a subdomain like `mail.yourdomain.com`)
-    - Configure DNS records (DKIM, SPF, DMARC)
-    - Verify domain ownership
+```jsx
+POST https://api.autosend.com/v1/mails/send
+```
 
-<a href={APP_PATHS.domainConfiguration} title='Domain Configuration '>Learn how to add a domain</a>
+### Authentication
 
-  </Step>
-  <Step title="Generate API Keys" titleSize="h2">
-    Create secure API keys to authenticate your requests to the AutoSend API. Each key can be named for easy management (e.g., “Production”, “Staging”, “Marketing”).
+Include your API key in the Authorization header:
 
-    - Generate API keys from your dashboard.
-    - Copy and securely store your secret key.
-    - Use the key in your API requests.
+```jsx
+Authorization: Bearer YOUR_API_KEY
+```
 
-<a href={APP_PATHS.apiKey} title='Domain Configuration '>See authentication guide</a>
+### Single Email with Template
 
-  </Step>
-  <Step title="Send Your First Email" titleSize="h2">
-    With your domain verified and API key ready, you can start sending emails immediately using our REST API.
-
-    <CodeGroup>
+**Request:**
+ <CodeGroup>
 
     ```bash cURL
     curl -X POST https://api.autosend.com/v1/mails/send \
@@ -419,5 +412,14 @@ import { APP_PATHS } from '/snippets/appPaths.mdx'
     ```
 
     </CodeGroup>
-  </Step>
-</Steps>
+ 
+**Response:**
+
+```jsx
+{  
+"success": true,  "message": "Email queued successfully", 
+ "data":{    
+            "emailId": "email_xyz789",    "status": "queued"  
+  }
+ }
+```

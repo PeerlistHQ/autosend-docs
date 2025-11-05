@@ -1,0 +1,77 @@
+---
+title: "Suppressions"
+description: "Suppressions in AutoSend help ensure that your emails are only sent to valid, consenting recipients."
+sidebarTitle: "Suppressions "
+---
+
+Suppressions in AutoSend help ensure that your emails are only sent to valid, consenting recipients. By automatically maintaining these suppression lists, AutoSend improves your deliverability, protects your sender reputation, and ensures compliance with email regulations.
+
+You can access all suppression records from the **Suppressions** tab in the side-panel.\
+Each record includes:
+
+- **Email address**
+- **Suppression reason**
+- **Date added**
+
+You can filter, export, or manually remove suppressions if necessary.
+
+---
+
+## Types of Suppressions
+
+### Global Unsubscribes
+
+Global unsubscribes apply across your entire AutoSend account.
+
+When a contact globally unsubscribes, they are removed from all future sends—both marketing campaigns and transactional emails (unless explicitly required by law, such as password resets or receipts).
+
+**Example:** If someone unsubscribes from your newsletter and it’s a global unsubscribe, they won’t receive any further emails from your domain, regardless of list or segment.
+
+---
+
+### Group Unsubscribes
+
+Group unsubscribes apply only to a specific email list or category.
+
+They give recipients more control over the kind of emails they receive, rather than unsubscribing from everything.
+
+**Example:** A contact may unsubscribe from _promotional offers_ but stay subscribed to _product updates_ or _security alerts._
+
+---
+
+### Reported Spam
+
+If a recipient marks your email as spam, AutoSend automatically adds them to your suppression list.
+
+This ensures you don’t email them again, protecting your sender reputation and reducing spam complaints.
+
+<Warning>
+  **Note:**
+
+  Multiple spam complaints can lead to domain or IP blacklisting, so monitoring this suppression type is essential.
+</Warning>
+
+---
+
+### Bounces
+
+A bounce occurs when an email cannot be delivered to a recipient’s inbox.
+
+**Types of Bounces:**
+
+- **Hard Bounce:** Permanent delivery failure (invalid or non-existent address). The address is automatically suppressed.
+- **Soft Bounce:** Temporary issue (like a full inbox or server problem). AutoSend retries for a short period before suppressing if the issue persists.
+
+---
+
+### Blocks
+
+A block occurs when a recipient’s email server rejects your email before delivery.
+
+Blocks usually happen due to:
+
+- IP or domain reputation issues
+- Spam filtering rules
+- Authentication failures (SPF, DKIM, DMARC)
+
+Blocked addresses are temporarily suppressed until the issue is resolved.

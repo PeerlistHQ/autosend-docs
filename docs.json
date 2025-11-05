@@ -18,16 +18,24 @@
             "group": "Getting Started",
             "pages": [
               "index",
-              "quickstart",
               {
-                "group": "Domain Configuration",
+                "group": "Domains",
                 "pages": [
                  
-                  "domain-configuration/introduction",
-                  "domain-configuration/troubleshooting"
+                  "domains/configuration",
+                  "domains/troubleshooting"
                  
                 ]
-              }
+              },
+              "/api-keys"
+            ]
+          },
+          
+          {
+            "group": "Quickstart",
+            "pages": [
+              "quickstart/email-using-api",
+              "quickstart/supabase-edge-functions"
             ]
           },
           {
@@ -35,10 +43,11 @@
             "pages": [
               "transactional-emails/email-templates",
               "transactional-emails/email-activity",
-              "transactional-emails/email-using-api",
               "transactional-emails/troubleshooting"
             ]
           },
+        
+          
           {
             "group": "Marketing Emails",
             "pages": [
@@ -54,13 +63,18 @@
                   "marketing-emails/contacts/custom-fields"
                 ]
               }
-              
-              
+            ]
+          },
+            {
+            "group": "Others",
+            "pages": [
+              "others/suppressions",
+              "others/unsubscribe-groups"
             ]
           }
-          
         ]
       },
+         
       {
         "tab": "API Reference",
         "groups": [

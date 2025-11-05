@@ -1,48 +1,46 @@
 ---
-title: "Introduction"
-description: "Welcome to AutoSend documentation."
+title: "What is AutoSend?"
+description: "AutoSend is an email platform for developers and marketers to send and track transactional and marketing emails."
+sidebarTitle: "Introduction"
 ---
 
-import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx'
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx'
 
-## What is AutoSend?
-AutoSend is an email platform for developers and marketers to send and track transactional and marketing emails.
-
-<Columns cols={2}>
-<Card title="FAQs" icon="question"   href='https://autosend.com/faq'>
-    Frequently asked questions about AutoSend.
+<Columns cols={1}>
+  <Card title="FAQs" icon="question" iconType="duotone" horizontal href={AUTOSEND_PATHS.faqs}>
+    Frequently asked questions about transactional emails, marketing emails, pricing, and everything else.
   </Card>
-  </Columns>
+</Columns>
 
 ## Transactional Emails
 
-Transactional emails are system-generated messages triggered via API by user actions such as signups, password resets, purchase confirmations, etc.
-
+Learn how to send transactional emails like magic links, verification codes, and signup confirmations using the AutoSend Email API.
 
 <Columns cols={2}>
-<Card title="Email Templates" icon="envelope"   href={APP_PATHS.emailTemplates}>
-    Creating transactional email templates in AutoSend.
+  <Card title="Email Templates" icon="envelope" iconType="duotone" href={APP_PATHS.emailTemplates}>
+    Learn how to create and use resuable transactional email templates in AutoSend.
   </Card>
-  <Card title="Email Activity" icon="wave-triangle" href={APP_PATHS.emailActivity}>
-    Track every email sent via AutoSend.
+  <Card title="Email Activity" icon="wave-triangle" iconType="duotone" href={APP_PATHS.emailActivity}>
+    Monitor the status, delivery details, and engagement for all the emails that you send.
   </Card>
-  <Card title="Sending emails with API" icon="send" href={APP_PATHS.sendingEmail}>
-    Send transactional email using AutoSend email API.
+  <Card title="Sending emails with API" icon="send" iconType="duotone" href={APP_PATHS.sendingEmail}>
+    Learn how to send Transactional emails using the AutoSend email API.
   </Card>
 </Columns>
 
 ## Marketing Emails
 
-Marketing emails are emails sent to your contacts, lists, or segments. These are typically newsletters, announcements, or promotional emails designed to engage your audience.
+Learn how to send marketing emails like newsletters, product updates, and announcements using AutoSend’s campaign tools
 
 <Columns cols={2}>
-<Card title="Campaigns" icon="megaphone" href={APP_PATHS.campaigns}>
-    Send marketing campaigns via AutoSend.
+  <Card title="Campaigns" icon="megaphone" iconType="duotone" href={APP_PATHS.campaigns}>
+    Learn how to create and send marketing campaigns using AutoSend.
   </Card>
-  <Card title="Contacts" icon="book-user" href={APP_PATHS.contacts}>
-    Learn about Contacts in AutoSend.
+  <Card title="Contacts" icon="book-user" iconType="duotone" href={APP_PATHS.contacts}>
+    Learn about contact lists and dynamic segments in Autosend.
   </Card>
-  <Card title="Sender" icon="circle-user" href={APP_PATHS.sender}>
-   Learn about sender emails in AutoSend.
+  <Card title="Sender" icon="circle-user" iconType="duotone" href={APP_PATHS.sender}>
+    Learn how to add and manage senders for sending marketing campaigns.
   </Card>
 </Columns>

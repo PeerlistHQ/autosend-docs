@@ -1,0 +1,24 @@
+---
+title: "How to Add Sending Domain in AutoSend?"
+description: "Here's a step-by-step guide on how to verify and authenticate domain on AutoSend for sending emails."
+sidebarTitle: "Configuration"
+---
+
+import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx'
+
+Before you can send emails through AutoSend, you need to verify ownership of your sending domain. This ensures:
+
+- **Email deliverability**: Verified domains have better inbox placement rates
+- **Authentication**: Proves you own the domain you’re sending from
+- **Security**: Prevents unauthorized use of your domain for sending emails
+- **Compliance**: Meets industry standards for email authentication (SPF, DKIM, DMARC)
+
+<Note>
+  We recommend using a subdomain (like" " <code className="nextra-code">
+   mail.yourdomain.com</code>
+
+  or" " <code className="nextra-code">
+   emails.yourdomain.com</code>
+
+  ) instead of your root domain. This provides better email deliverability and keeps your transactional emails separate from your main domain's reputation.
+</Note>
