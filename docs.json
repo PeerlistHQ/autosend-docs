@@ -86,8 +86,6 @@
               "api-reference/contacts/upsert-contact",
               "api-reference/contacts/get-contact-by-id",
               "api-reference/contacts/search-contacts-by-emails",
-              "api-reference/contacts/duplicate-contact",
-              "api-reference/contacts/update-custom-fields",
               "api-reference/contacts/bulk-update-contacts",
               "api-reference/contacts/delete-contact-by-user-id",
               "api-reference/contacts/delete-contact-by-ids",
@@ -148,7 +146,8 @@
   },
   "api": {
     "playground": {
-      "display": "interactive"
+      "display": "interactive",
+      "proxy": false
     }
   },
   "navbar": {

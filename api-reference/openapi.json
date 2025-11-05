@@ -204,13 +204,13 @@
     "/contacts/{id}": {
       "get": {
         "summary": "Get Contact by ID",
-        "description": "Retrieves a single contact by its unique identifier (MongoDB ObjectId).",
+        "description": "Retrieves a single contact by its unique identifier.",
         "tags": ["Contacts"],
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "MongoDB ObjectId of the contact (24 hex characters)",
+            "description": "Unique contact ID",
             "required": true,
             "schema": {
               "type": "string",
@@ -1167,7 +1167,7 @@
           },
           "userId": {
             "type": "string",
-            "description": "Application's user identifier",
+            "description": "You can store userId used in your application",
             "example": "user_12345"
           },
           "customFields": {
