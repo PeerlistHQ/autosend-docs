@@ -1,10 +1,8 @@
---- 
-sidebarTitle : 'API Keys'
 ---
-
-import {AUTOSEND_PATHS} from '/snippets/autosendPaths.mdx'
-
-All API requests to AutoSend must be authenticated using an API key. This guide covers how to create API keys and authenticate your requests.
+sidebarTitle: "API Keys"
+title: "API Keys"
+description: "All API requests to AutoSend must be authenticated using an API key. This guide covers how to create API keys and authenticate your requests."
+---
 
 ## Overview
 
@@ -16,9 +14,10 @@ Follow these steps to generate a new API key from your AutoSend dashboard:
 
 ### Step 1: Navigate to API Keys Settings
 
-1. Log in to your <a href={AUTOSEND_PATHS.dashboard} title='AutoSend dashboard'>AutoSend dashboard</a>
+1. Log in to your <a href={{ type:"mdxJsxAttributeValueExpression",value:"AUTOSEND_PATHS.dashboard",data:{estree:{type:"Program",start:656,end:680,body:[{type:"ExpressionStatement",expression:{type:"MemberExpression",start:656,end:680,loc:{start:{line:19,column:27,offset:656},end:{line:19,column:51,offset:680}},object:{type:"Identifier",start:656,end:670,loc:{start:{line:19,column:27,offset:656},end:{line:19,column:41,offset:670}},name:"AUTOSEND_PATHS",range:[656,670]},property:{type:"Identifier",start:671,end:680,loc:{start:{line:19,column:42,offset:671},end:{line:19,column:51,offset:680}},name:"dashboard",range:[671,680]},computed:false,optional:false,range:[656,680]},start:656,end:680,loc:{start:{line:19,column:27,offset:656},end:{line:19,column:51,offset:680}},range:[656,680]}],sourceType:"module",comments:[],loc:{start:{line:19,column:27,offset:656},end:{line:19,column:51,offset:680}},range:[656,680]}} }} title="AutoSend dashboard">
+   AutoSend dashboard</a>
 2. Select your project from the project dropdown (if you have multiple projects)
-3. Go to **Settings > <a href={AUTOSEND_PATHS.apiKey} title='API Keys'>API Keys</a>** in the sidebar
+3. Go to **Settings \> API Keys** in the sidebar
 
 ### Step 2: Generate New API Key
 
@@ -33,17 +32,26 @@ Follow these steps to generate a new API key from your AutoSend dashboard:
 After generation, you'll see your **API Key Secret** displayed once:
 
 <Note>
-  For security reasons, the API key secret is only shown once during creation.
-  You will NOT be able to view it again.
+  For security reasons, the API key secret is only shown once during creation. You will NOT be able to view it again.
+
   <ul className="space-y-1 ml-4 mt-2">
-    <li>Copy the key immediately to your clipboard</li>
-    <li>
-      Store it securely (password manager, environment variables, secrets
-      management system)
-    </li>
-    <li>Download the .txt file as a backup</li>
-    <li>Never commit API keys to version control (Git, SVN, etc.)</li>
-    <li>Never share your API key publicly or in client-side code</li>
+  <li>
+  Copy the key immediately to your clipboard</li>
+
+  <li>
+  Store it securely (password manager, environment variables, secrets management system)
+
+  </li>
+
+  <li>
+  Download the .txt file as a backup</li>
+
+   <li>
+  Never commit API keys to version control (Git, SVN, etc.)</li>
+
+   <li>
+  Never share your API key publicly or in client-side code</li>
+
   </ul>
 </Note>
 
@@ -73,8 +81,8 @@ Include your API key in the `Authorization` header of every request using the Be
 ```
 Authorization: Bearer YOUR_API_KEY
 ```
-    <CodeGroup>
 
+<CodeGroup>
 
 ```bash cURL
 curl -X POST https://api.autosend.com/v1/mails/send \
@@ -125,7 +133,6 @@ sendEmail();
 ```
 
 
-
 ```python Python
 import requests
 import os
@@ -154,7 +161,6 @@ def send_email():
 
 send_email()
 ```
-
 
 
 ```php PHP
@@ -188,7 +194,6 @@ curl_close($ch);
 echo $response;
 ?>
 ```
-
 
 
 ```go Go
@@ -233,7 +238,6 @@ func main() {
 ```
 
 
-
 ```ruby Ruby
 require 'net/http'
 require 'json'
@@ -262,12 +266,13 @@ response = http.request(request)
 puts response.body
 ```
 
-    </CodeGroup>
+</CodeGroup>
+
 ## Managing API Keys
 
 ### Viewing API Keys
 
-In your dashboard under **Settings > API Keys**, you can see:
+In your dashboard under **Settings \> API Keys**, you can see:
 
 - **API Key Name** - The label you assigned
 - **API Key ID** - A unique identifier for the key
@@ -279,16 +284,14 @@ Note: You cannot view the secret after creation. Only the key ID is visible.
 
 To delete an API key:
 
-1. Go to **Settings > API Keys**
+1. Go to **Settings \> API Keys**
 2. Find the API key you want to delete
 3. Click the three-dot menu icon
 4. Select **"Delete"**
 5. Confirm the deletion
 
 <Warning>
-  When you delete an API key, it stops working immediately. Any applications or
-  services using that key will start receiving authentication errors. Make sure
-  to update your applications before deleting keys.
+  When you delete an API key, it stops working immediately. Any applications or services using that key will start receiving authentication errors. Make sure to update your applications before deleting keys.
 </Warning>
 
 ### Best Practices for API Key Management
@@ -301,22 +304,20 @@ To delete an API key:
    ```
 
    Never hardcode API keys in your source code.
-
 2. **Separate Keys for Different Environments**
    - Create separate keys for development, staging, and production
    - Use descriptive names: "Production API Key", "Staging API Key"
    - This allows you to rotate keys without affecting other environments
-
 3. **Rotate Keys Regularly**
    - Generate new keys periodically (every 90 days recommended)
    - Update your applications with the new key
    - Delete the old key after confirming the new one works
-
 4. **Limit Key Exposure**
    - Never commit keys to version control
    - Don't include keys in client-side JavaScript
    - Use secrets management services (AWS Secrets Manager, HashiCorp Vault, etc.)
    - Add API keys to `.gitignore`:
+
      ```
      .env
      .env.local
