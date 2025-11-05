@@ -3,6 +3,8 @@ title: "Quickstart"
 description: "Send your first emails with AutoSend email API in less than 10 minutes."
 ---
 
+import { APP_PATHS } from '/snippets/appPaths.mdx'
+
 <Steps>
   <Step title="Add Sending Domain" titleSize="h2">
     Before sending emails, you need to verify ownership of your sending domain by adding DNS records. This ensures high deliverability and authenticates your emails.
@@ -11,7 +13,8 @@ description: "Send your first emails with AutoSend email API in less than 10 min
     - Configure DNS records (DKIM, SPF, DMARC)
     - Verify domain ownership
 
-    [Learn how to add a domain](https://autosend-pre-staging.up.railway.app/domain-configuration)
+<a href={APP_PATHS.domainConfiguration} title='Domain Configuration '>Learn how to add a domain</a>
+
   </Step>
   <Step title="Generate API Keys" titleSize="h2">
     Create secure API keys to authenticate your requests to the AutoSend API. Each key can be named for easy management (e.g., “Production”, “Staging”, “Marketing”).
@@ -20,7 +23,8 @@ description: "Send your first emails with AutoSend email API in less than 10 min
     - Copy and securely store your secret key.
     - Use the key in your API requests.
 
-    [See authentication guide](https://autosend-pre-staging.up.railway.app/api-key)
+<a href={APP_PATHS.apiKey} title='Domain Configuration '>See authentication guide</a>
+
   </Step>
   <Step title="Send Your First Email" titleSize="h2">
     With your domain verified and API key ready, you can start sending emails immediately using our REST API.
