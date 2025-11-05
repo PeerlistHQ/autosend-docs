@@ -854,17 +854,6 @@
         "summary": "Send Email",
         "description": "Sends a transactional or marketing email. Either templateId OR html/text content must be provided. If using a template, subject is optional.",
         "tags": ["Mails"],
-        "parameters": [
-          {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "description": "Unique request ID for idempotency (optional)",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "description": "Email data to send",
           "required": true,
@@ -890,7 +879,6 @@
                     "dynamicData": {
                       "name": "Jane"
                     },
-                    "categories": ["welcome", "onboarding"],
                     "replyTo": {
                       "email": "support@yourdomain.com"
                     }
@@ -1535,14 +1523,6 @@
             "description": "ID of the unsubscribe group",
             "example": "unsub_group_123"
           },
-          "categories": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Array of category strings for tracking",
-            "example": ["welcome", "onboarding"]
-          },
           "dynamicData": {
             "type": "object",
             "description": "Key-value pairs for template variable substitution (Handlebars syntax)",
@@ -1553,23 +1533,6 @@
               "orderNumber": "ORD-12345",
               "orderTotal": "$99.99"
             }
-          },
-          "scheduledAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "ISO 8601 timestamp to schedule email delivery",
-            "example": "2025-09-30T10:30:00.000Z"
-          },
-          "campaignName": {
-            "type": "string",
-            "description": "Campaign name for tracking purposes",
-            "example": "Welcome Campaign"
-          },
-          "test": {
-            "type": "boolean",
-            "description": "Set to true to send a test email (default: false)",
-            "default": false,
-            "example": false
           }
         }
       },

@@ -15,12 +15,11 @@ The AutoSend API uses standard HTTP status codes to indicate the success or fail
 | `201` | Created | Resource created successfully | Successful POST requests that create new resources |
 | `400` | Bad Request | Invalid request parameters | Validation errors, malformed requests |
 | `401` | Unauthorized | Missing or invalid API key | Authentication failures |
+| `402` | Payment Required | Payment required | Payment issues, subscription expired |
 | `403` | Forbidden | Insufficient permissions or limits | Plan limits exceeded, insufficient access |
 | `404` | Not Found | Resource doesn't exist | Requesting non-existent resources |
 | `409` | Conflict | Resource conflict | Duplicate resources, conflicting state |
-| `429` | Too Many Requests | Rate limit exceeded | Too many requests in a time period |
 | `500` | Internal Server Error | Server error | Unexpected server-side errors |
-| `503` | Service Unavailable | Temporary service outage | Maintenance or temporary unavailability |
 
 ## Success Responses
 
@@ -242,6 +241,41 @@ if (response.status === 401) {
 }
 ```
 
+### 402 Payment Required
+
+Payment is required to complete the request. This typically occurs when there are payment issues or the subscription has expired.
+
+**Error Response:**
+
+```json
+{
+  "success": false,
+  "error": "Payment Required",
+  "message": "Payment required"
+}
+```
+
+**Common Causes:**
+- Subscription expired
+- Payment method declined
+- Account requires payment
+- Billing issues
+
+**Solution:**
+1. Check your account billing status
+2. Update your payment method if needed
+3. Ensure your subscription is active
+4. Contact support if you believe this is an error
+
+**Handling 402 Errors:**
+
+```javascript
+if (response.status === 402) {
+  console.error('Payment required. Please update your payment method.');
+  // Redirect user to billing page or prompt for payment
+}
+```
+
 ### 403 Forbidden
 
 The API key is valid but doesn't have permission to perform the requested action, or a plan limit has been exceeded.
@@ -348,91 +382,6 @@ if (response.status === 409) {
 }
 ```
 
-### 429 Too Many Requests
-
-The rate limit has been exceeded. You've made too many requests in a given time period.
-
-**Error Response:**
-
-```json
-{
-  "success": false,
-  "message": "Rate limit exceeded",
-  "retryAfter": 30
-}
-```
-
-**Rate Limits:**
-- **2 requests per second** per API key
-- **50 requests per minute** per API key
-
-**Rate Limit Headers:**
-
-Each API response includes rate limit information:
-
-```
-X-RateLimit-Limit: 50
-X-RateLimit-Remaining: 45
-X-RateLimit-Reset: 1696075200
-```
-
-**Solution:**
-1. Implement exponential backoff when receiving 429 errors
-2. Wait for the `retryAfter` seconds before retrying
-3. Monitor rate limit headers to prevent exceeding limits
-4. Implement request queuing for bulk operations
-
-**Handling 429 Errors with Exponential Backoff:**
-
-```javascript
-async function makeRequestWithRetry(url, options, maxRetries = 3) {
-  for (let i = 0; i < maxRetries; i++) {
-    try {
-      const response = await fetch(url, options);
-      
-      if (response.status === 429) {
-        const error = await response.json();
-        const waitTime = error.retryAfter 
-          ? error.retryAfter * 1000 
-          : Math.pow(2, i) * 1000; // Exponential backoff
-        
-        if (i < maxRetries - 1) {
-          console.log(`Rate limited. Waiting ${waitTime}ms before retry...`);
-          await new Promise(resolve => setTimeout(resolve, waitTime));
-          continue;
-        }
-      }
-      
-      return response;
-    } catch (error) {
-      if (i === maxRetries - 1) throw error;
-      await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
-    }
-  }
-}
-```
-
-**Monitoring Rate Limits:**
-
-```javascript
-function checkRateLimit(response) {
-  const limit = response.headers.get('X-RateLimit-Limit');
-  const remaining = response.headers.get('X-RateLimit-Remaining');
-  const reset = response.headers.get('X-RateLimit-Reset');
-  
-  if (remaining && parseInt(remaining) < 10) {
-    console.warn(`Rate limit warning: ${remaining}/${limit} requests remaining`);
-    // Implement throttling
-  }
-  
-  return {
-    limit: parseInt(limit),
-    remaining: parseInt(remaining),
-    resetAt: new Date(parseInt(reset) * 1000)
-  };
-}
-```
-
 ## Server Errors (5xx)
 
 ### 500 Internal Server Error
@@ -473,42 +422,6 @@ if (response.status === 500) {
 }
 ```
 
-### 503 Service Unavailable
-
-The service is temporarily unavailable, usually due to maintenance or overload.
-
-**Error Response:**
-
-```json
-{
-  "success": false,
-  "error": "Service Unavailable",
-  "message": "Temporary service outage"
-}
-```
-
-**Common Causes:**
-- Scheduled maintenance
-- Temporary overload
-- Dependency service outage
-- System updates in progress
-
-**Solution:**
-1. Wait for the service to become available
-2. Check the AutoSend status page
-3. Implement retry logic with longer delays
-4. Monitor for service restoration
-
-**Handling 503 Errors:**
-
-```javascript
-if (response.status === 503) {
-  // Service unavailable - wait longer before retrying
-  const waitTime = 60 * 1000; // Wait 1 minute
-  setTimeout(() => retryRequest(), waitTime);
-}
-```
-
 ## Error Response Formats
 
 The API uses different error response formats depending on the endpoint and error type:
@@ -542,18 +455,6 @@ Used for 400 Bad Request errors with field-specific validation issues:
 }
 ```
 
-### Rate Limit Error Response
-
-Used for 429 Too Many Requests errors:
-
-```json
-{
-  "success": false,
-  "message": "Rate limit exceeded",
-  "retryAfter": 30
-}
-```
-
 ## Best Practices for Error Handling
 
 ### 1. Always Check Response Status
@@ -582,6 +483,9 @@ async function handleApiRequest(url, options) {
         case 401:
           handleAuthenticationError();
           break;
+        case 402:
+          handlePaymentError(data);
+          break;
         case 403:
           handlePermissionError(data);
           break;
@@ -591,11 +495,7 @@ async function handleApiRequest(url, options) {
         case 409:
           handleConflictError(data);
           break;
-        case 429:
-          await handleRateLimitError(data);
-          break;
         case 500:
-        case 503:
           await handleServerError(response.status);
           break;
         default:
@@ -629,9 +529,7 @@ async function retryRequest(requestFn, maxRetries = 3) {
       if (i === maxRetries - 1) throw error;
       
       // Only retry on certain errors
-      const shouldRetry = error.status === 429 || 
-                         error.status === 500 || 
-                         error.status === 503;
+      const shouldRetry = error.status === 500;
       
       if (shouldRetry) {
         const delay = error.retryAfter 
@@ -670,14 +568,13 @@ function getUserFriendlyError(error) {
       return 'Please check your input and try again.';
     case 401:
       return 'Please check your API key and try again.';
+    case 402:
+      return 'Payment required. Please update your payment method.';
     case 403:
       return 'You have reached your plan limit. Please upgrade your plan.';
     case 404:
       return 'The requested resource was not found.';
-    case 429:
-      return 'Too many requests. Please wait a moment and try again.';
     case 500:
-    case 503:
       return 'Service temporarily unavailable. Please try again later.';
     default:
       return 'An unexpected error occurred. Please try again.';
@@ -727,10 +624,6 @@ function getUserFriendlyError(error) {
 
 **Solution:** Verify the template ID exists in your project and is accessible with your API key.
 
-### Idempotency Key Conflict
-
-If you send the same idempotency key within 24 hours, you'll receive the same response as the original request without processing a duplicate operation.
-
 ## Error Monitoring and Debugging
 
 ### 1. Enable Request/Response Logging
@@ -760,11 +653,10 @@ Monitor the frequency of different error types to identify issues early:
 const errorStats = {
   400: 0,
   401: 0,
+  402: 0,
   403: 0,
   404: 0,
-  429: 0,
-  500: 0,
-  503: 0
+  500: 0
 };
 
 function trackError(status) {

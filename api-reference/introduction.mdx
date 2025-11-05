@@ -1,13 +1,11 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: 'API Reference'
+description: 'Send transactional emails programmatically using the AutoSend REST API. This guide covers the email sending endpoint, request/response formats, and best practices.'
+sidebarTitle: 'Introduction'
 ---
 
 import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx'
 
-# API Reference
-
-Send transactional emails programmatically using the AutoSend REST API. This guide covers the email sending endpoint, request/response formats, and best practices.
 
 ## Base URL
 
@@ -33,11 +31,35 @@ Authorization: Bearer YOUR_API_KEY
 | `200` | OK                    | Request succeeded                    |
 | `400` | Bad Request           | Invalid request parameters           |
 | `401` | Unauthorized          | Missing or invalid API key           |
+| `402` | Payment Required      | Payment required                     |
 | `403` | Forbidden             | API key doesn't have required access |
 | `404` | Not Found             | Resource doesn't exist               |
-| `429` | Too Many Requests     | Rate limit exceeded                  |
 | `500` | Internal Server Error | Something went wrong on our end      |
-| `503` | Service Unavailable   | Temporary service outage             |
+
+
+## Dynamic Data & Personalization
+
+Use Handlebars syntax for template variables:
+
+```html
+<h1>Hello {{firstName}}!</h1>
+<p>Your order #{{orderNumber}} has been shipped.</p>
+<p>Total: {{orderTotal}}</p>
+```
+
+Provide values in the `dynamicData` object:
+
+```json
+{
+  "html": "<h1>Hello {{firstName}}!</h1>",
+  "dynamicData": {
+    "firstName": "Jane",
+    "orderNumber": "12345",
+    "orderTotal": "$99.99"
+  }
+}
+```
+
 
 ## Need Help?
 
