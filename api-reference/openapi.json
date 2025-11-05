@@ -1,16 +1,13 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
+    "title": "AutoSend API",
+    "description": "AutoSend REST API for managing contacts and sending emails",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "https://api.autosend.io"
     }
   ],
   "security": [
@@ -19,76 +16,114 @@
     }
   ],
   "paths": {
-    "/plants": {
-      "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
+   
+    "/api/contacts": {
+      "post": {
+        "summary": "Create Contact",
+        "description": "Creates a new contact in your AutoSend project. If a contact with the same email already exists, this endpoint will return an error. Use the Upsert Contact endpoint if you want to update existing contacts.",
+        "tags": ["Contacts"],
+        "requestBody": {
+          "description": "Contact information to create",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateContactRequest"
+              },
+              "examples": {
+                "example1": {
+                  "summary": "Create contact with all fields",
+                  "value": {
+                    "email": "john.doe@example.com",
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "userId": "user_12345",
+                    "customFields": {
+                      "company": "Acme Corp",
+                      "role": "Developer",
+                      "plan": "premium"
+                    }
+                  }
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
-          "200": {
-            "description": "Plant response",
+          "201": {
+            "description": "Contact created successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
+                  "$ref": "#/components/schemas/CreateContactResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed or contact already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "validationError": {
+                    "summary": "Validation failed",
+                    "value": {
+                      "success": false,
+                      "error": "Validation failed",
+                      "message": "Invalid email format or missing required fields"
+                    }
+                  },
+                  "duplicateError": {
+                    "summary": "Contact already exists",
+                    "value": {
+                      "success": false,
+                      "error": "Contact already exists",
+                      "message": "A contact with this email already exists in the project"
+                    }
                   }
                 }
               }
             }
           },
-          "400": {
-            "description": "Unexpected error",
+          "401": {
+            "description": "Unauthorized - Invalid or missing API key",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
           },
-          "400": {
-            "description": "unexpected error",
+          "403": {
+            "description": "Forbidden - Contact limit exceeded for your plan",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests - Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -96,32 +131,717 @@
         }
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
+    "/api/contacts/email": {
+      "post": {
+        "summary": "Upsert Contact",
+        "description": "Creates a new contact or updates an existing contact if the email already exists. This is the recommended endpoint for most contact synchronization scenarios.",
+        "tags": ["Contacts"],
+        "requestBody": {
+          "description": "Contact information to create or update",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateContactRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contact created or updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/contacts/{id}": {
+      "get": {
+        "summary": "Get Contact by ID",
+        "description": "Retrieves a single contact by its unique identifier (MongoDB ObjectId).",
+        "tags": ["Contacts"],
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of plant to delete",
+            "description": "MongoDB ObjectId of the contact (24 hex characters)",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{24}$"
             }
           }
         ],
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
+          "200": {
+            "description": "Contact retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ContactResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed - Invalid ObjectId format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Contact does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Contact by ID(s)",
+        "description": "Deletes one or more contacts by their MongoDB ObjectId. Supports comma-separated IDs for bulk deletion.",
+        "tags": ["Contacts"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Single MongoDB ObjectId or comma-separated list of ObjectIds",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact(s) deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteContactResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed - Invalid ObjectId format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - One or more contacts not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/contacts/search/emails": {
+      "post": {
+        "summary": "Search Contacts by Emails",
+        "description": "Searches for multiple contacts by their email addresses in a single request. Returns all matching contacts found in your project.",
+        "tags": ["Contacts"],
+        "requestBody": {
+          "description": "Array of email addresses to search",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchContactsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contacts retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchContactsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed - Invalid email format or empty array",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/contacts/email/duplicate": {
+      "post": {
+        "summary": "Duplicate Contact",
+        "description": "Creates a duplicate of an existing contact with a new email address. Copies all data from the source contact including custom fields, tags, and other attributes.",
+        "tags": ["Contacts"],
+        "requestBody": {
+          "description": "Source and new email addresses",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DuplicateContactRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Contact duplicated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DuplicateContactResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed - Invalid email format or missing required fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Source contact does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - New email already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/contacts/email/{email}/custom-fields": {
+      "patch": {
+        "summary": "Update Custom Fields",
+        "description": "Updates or adds custom fields for a contact identified by email address. Custom fields are merged - new fields are added, existing fields are updated, and fields not mentioned remain unchanged.",
+        "tags": ["Contacts"],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "description": "Email address of the contact (URL encoded, automatically normalized)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "email"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Custom fields to update or add",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "example": {
+                "lastPurchase": "2024-01-20",
+                "totalSpent": 499.99,
+                "loyaltyTier": "gold"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Custom fields updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed - Invalid email format or invalid custom fields object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Contact with specified email does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/contacts/email/userId/{userId}": {
+      "delete": {
+        "summary": "Delete Contact by User ID",
+        "description": "Permanently deletes a contact identified by the userId field (your application's user identifier).",
+        "tags": ["Contacts"],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "Your application's user identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed - Invalid userId parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Contact with specified userId does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/contacts/bulk-update": {
+      "post": {
+        "summary": "Bulk Update Contacts",
+        "description": "Updates or creates multiple contacts in a single API request. Each contact is either created (if it doesn't exist) or updated (if it does) based on the email address. Maximum limit: 100 contacts per request.",
+        "tags": ["Contacts"],
+        "requestBody": {
+          "description": "Array of contacts to update or create",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Bulk update completed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkUpdateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed - Invalid request format or exceeds 100 contacts limit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/contacts/{id}/unsubscribe-groups": {
+      "get": {
+        "summary": "Get Contact's Unsubscribe Groups",
+        "description": "Returns an array of unsubscribe group IDs that the contact has unsubscribed from.",
+        "tags": ["Contacts"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "MongoDB ObjectId of the contact",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{24}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unsubscribe groups retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnsubscribeGroupsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed - Invalid ObjectId format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Contact does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -203,6 +923,368 @@
           },
           "message": {
             "type": "string"
+          }
+        }
+      },
+      "CreateContactRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Valid email address (automatically normalized to lowercase)",
+            "example": "john.doe@example.com"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "Contact's first name",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Contact's last name",
+            "example": "Doe"
+          },
+          "userId": {
+            "type": "string",
+            "description": "Your application's user identifier",
+            "example": "user_12345"
+          },
+          "customFields": {
+            "type": "object",
+            "description": "Key-value pairs for custom contact attributes",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "example": {
+              "company": "Acme Corp",
+              "role": "Developer",
+              "plan": "premium"
+            }
+          }
+        }
+      },
+      "Contact": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Contact ID",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Contact email address",
+            "example": "john.doe@example.com"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "Contact's first name",
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Contact's last name",
+            "example": "Doe"
+          },
+          "userId": {
+            "type": "string",
+            "description": "Application's user identifier",
+            "example": "user_12345"
+          },
+          "customFields": {
+            "type": "object",
+            "description": "Custom contact attributes",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "example": {
+              "company": "Acme Corp",
+              "role": "Developer",
+              "plan": "premium"
+            }
+          },
+          "status": {
+            "type": "string",
+            "description": "Contact status",
+            "enum": ["active", "inactive", "unsubscribed"],
+            "example": "active"
+          },
+          "unsubscribeGroups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of unsubscribe group IDs",
+            "example": []
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Contact tags",
+            "example": []
+          },
+          "contactLists": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of contact list IDs",
+            "example": []
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Additional metadata",
+            "additionalProperties": true,
+            "example": {}
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Contact creation timestamp",
+            "example": "2024-01-15T10:30:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Contact last update timestamp",
+            "example": "2024-01-15T10:30:00.000Z"
+          }
+        }
+      },
+      "CreateContactResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Indicates if the request was successful",
+            "example": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/Contact"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message",
+            "example": "Contact created successfully"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Indicates if the request was successful",
+            "example": false
+          },
+          "error": {
+            "type": "string",
+            "description": "Error type or code",
+            "example": "Validation failed"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "Invalid email format or missing required fields"
+          }
+        }
+      },
+      "ContactResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Indicates if the request was successful",
+            "example": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/Contact"
+          }
+        }
+      },
+      "SearchContactsRequest": {
+        "type": "object",
+        "required": ["emails"],
+        "properties": {
+          "emails": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "email"
+            },
+            "description": "Array of email addresses (minimum 1, automatically normalized)",
+            "minItems": 1,
+            "example": ["john.doe@example.com", "jane.smith@example.com"]
+          }
+        }
+      },
+      "SearchContactsResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "contacts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Contact"
+                }
+              }
+            }
+          }
+        }
+      },
+      "DuplicateContactRequest": {
+        "type": "object",
+        "required": ["sourceEmail", "newEmail"],
+        "properties": {
+          "sourceEmail": {
+            "type": "string",
+            "format": "email",
+            "description": "Email of the existing contact to duplicate",
+            "example": "old-email@example.com"
+          },
+          "newEmail": {
+            "type": "string",
+            "format": "email",
+            "description": "Email address for the new duplicated contact",
+            "example": "new-email@example.com"
+          }
+        }
+      },
+      "DuplicateContactResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "sourceContact": {
+                "$ref": "#/components/schemas/Contact"
+              },
+              "newContact": {
+                "$ref": "#/components/schemas/Contact"
+              }
+            }
+          }
+        }
+      },
+      "BulkUpdateRequest": {
+        "type": "object",
+        "required": ["contacts"],
+        "properties": {
+          "contacts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateContactRequest"
+            },
+            "description": "Array of contact objects (minimum 1, maximum 100)",
+            "minItems": 1,
+            "maxItems": 100
+          },
+          "runWorkflow": {
+            "type": "boolean",
+            "description": "Whether to trigger workflows for updated contacts",
+            "default": false,
+            "example": false
+          }
+        }
+      },
+      "BulkUpdateResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "results": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/BulkUpdateResult"
+                }
+              }
+            }
+          }
+        }
+      },
+      "BulkUpdateResult": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user1@example.com"
+          },
+          "contact": {
+            "$ref": "#/components/schemas/Contact"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if success is false",
+            "example": "Invalid email format"
+          }
+        }
+      },
+      "DeleteContactResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "contactIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Array of deleted contact IDs",
+                "example": ["507f1f77bcf86cd799439011"]
+              }
+            }
+          }
+        }
+      },
+      "UnsubscribeGroupsResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "groups": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Array of unsubscribe group IDs",
+                "example": ["newsletter", "promotional", "product_updates"]
+              }
+            }
           }
         }
       }
