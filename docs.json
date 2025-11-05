@@ -146,6 +146,11 @@
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
   },
+  "api": {
+    "playground": {
+      "display": "interactive"
+    }
+  },
   "navbar": {
     "links": [
       {
