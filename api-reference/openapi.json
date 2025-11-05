@@ -848,6 +848,194 @@
           }
         }
       }
+    },
+    "/api/mails/send": {
+      "post": {
+        "summary": "Send Email",
+        "description": "Sends a transactional or marketing email. Either templateId OR html/text content must be provided. If using a template, subject is optional.",
+        "tags": ["Mails"],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "description": "Unique request ID for idempotency (optional)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Email data to send",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendEmailRequest"
+              },
+              "examples": {
+                "withHtml": {
+                  "summary": "Send email with HTML content",
+                  "value": {
+                    "to": {
+                      "email": "customer@example.com",
+                      "name": "Jane Smith"
+                    },
+                    "from": {
+                      "email": "hello@mail.yourdomain.com",
+                      "name": "Your Company"
+                    },
+                    "subject": "Welcome to Our Platform!",
+                    "html": "<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>",
+                    "dynamicData": {
+                      "name": "Jane"
+                    },
+                    "categories": ["welcome", "onboarding"],
+                    "replyTo": {
+                      "email": "support@yourdomain.com"
+                    }
+                  }
+                },
+                "withTemplate": {
+                  "summary": "Send email with template",
+                  "value": {
+                    "to": {
+                      "email": "customer@example.com",
+                      "name": "Jane Smith"
+                    },
+                    "from": {
+                      "email": "hello@mail.yourdomain.com",
+                      "name": "Your Company"
+                    },
+                    "templateId": "tmpl_abc123",
+                    "dynamicData": {
+                      "firstName": "Jane",
+                      "orderNumber": "ORD-12345",
+                      "orderTotal": "$99.99"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email queued successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SendEmailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SendEmailErrorResponse"
+                },
+                "examples": {
+                  "validationError": {
+                    "summary": "Validation failed",
+                    "value": {
+                      "success": false,
+                      "message": "Validation failed",
+                      "errors": [
+                        {
+                          "field": "to.email",
+                          "message": "Invalid email format"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "unauthorized": {
+                    "summary": "Unauthorized",
+                    "value": {
+                      "success": false,
+                      "message": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - API key doesn't have required access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Resource doesn't exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests - Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitErrorResponse"
+                },
+                "examples": {
+                  "rateLimit": {
+                    "summary": "Rate limit exceeded",
+                    "value": {
+                      "success": false,
+                      "message": "Rate limit exceeded",
+                      "retryAfter": 30
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable - Temporary service outage",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "webhooks": {
@@ -1285,6 +1473,200 @@
                 "example": ["newsletter", "promotional", "product_updates"]
               }
             }
+          }
+        }
+      },
+      "EmailAddress": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email address",
+            "example": "customer@example.com"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name",
+            "example": "John Doe"
+          }
+        }
+      },
+      "SendEmailRequest": {
+        "type": "object",
+        "required": ["to", "from"],
+        "properties": {
+          "to": {
+            "$ref": "#/components/schemas/EmailAddress",
+            "description": "Recipient email address and name"
+          },
+          "from": {
+            "$ref": "#/components/schemas/EmailAddress",
+            "description": "Sender email address (must be from a verified domain) and name"
+          },
+          "subject": {
+            "type": "string",
+            "description": "Email subject line (max 998 characters). Required if not using templateId.",
+            "maxLength": 998,
+            "example": "Welcome to Our Platform!"
+          },
+          "html": {
+            "type": "string",
+            "description": "HTML content of the email. Required if not using templateId.",
+            "example": "<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>"
+          },
+          "text": {
+            "type": "string",
+            "description": "Plain text version of the email",
+            "example": "Welcome! Thanks for signing up."
+          },
+          "templateId": {
+            "type": "string",
+            "description": "ID of the email template to use. Required if not providing html/text.",
+            "example": "tmpl_abc123"
+          },
+          "replyTo": {
+            "$ref": "#/components/schemas/EmailAddress",
+            "description": "Reply-to email address and name"
+          },
+          "unsubscribeGroupId": {
+            "type": "string",
+            "description": "ID of the unsubscribe group",
+            "example": "unsub_group_123"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of category strings for tracking",
+            "example": ["welcome", "onboarding"]
+          },
+          "dynamicData": {
+            "type": "object",
+            "description": "Key-value pairs for template variable substitution (Handlebars syntax)",
+            "additionalProperties": true,
+            "example": {
+              "name": "Jane",
+              "firstName": "Jane",
+              "orderNumber": "ORD-12345",
+              "orderTotal": "$99.99"
+            }
+          },
+          "scheduledAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp to schedule email delivery",
+            "example": "2025-09-30T10:30:00.000Z"
+          },
+          "campaignName": {
+            "type": "string",
+            "description": "Campaign name for tracking purposes",
+            "example": "Welcome Campaign"
+          },
+          "test": {
+            "type": "boolean",
+            "description": "Set to true to send a test email (default: false)",
+            "default": false,
+            "example": false
+          }
+        }
+      },
+      "SendEmailResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Indicates if the request was successful",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message",
+            "example": "Email queued successfully"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "emailId": {
+                "type": "string",
+                "description": "Unique identifier for the queued email",
+                "example": "email_xyz789"
+              },
+              "status": {
+                "type": "string",
+                "description": "Email status",
+                "enum": ["queued", "sent", "failed"],
+                "example": "queued"
+              },
+              "queuedAt": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Timestamp when email was queued",
+                "example": "2025-09-30T10:30:00.000Z"
+              }
+            }
+          }
+        }
+      },
+      "SendEmailErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Indicates if the request was successful",
+            "example": false
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "Validation failed"
+          },
+          "errors": {
+            "type": "array",
+            "description": "Array of validation errors",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "description": "Field name that failed validation",
+                  "example": "to.email"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Error message for this field",
+                  "example": "Invalid email format"
+                }
+              }
+            },
+            "example": [
+              {
+                "field": "to.email",
+                "message": "Invalid email format"
+              }
+            ]
+          }
+        }
+      },
+      "RateLimitErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Indicates if the request was successful",
+            "example": false
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "Rate limit exceeded"
+          },
+          "retryAfter": {
+            "type": "integer",
+            "description": "Number of seconds to wait before retrying",
+            "example": 30
           }
         }
       }

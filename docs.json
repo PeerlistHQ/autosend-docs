@@ -65,9 +65,15 @@
         "tab": "API Reference",
         "groups": [
           {
-            "group": "API Documentation",
+            "group": "API Reference",
             "pages": [
-              "api-reference"
+              "api-reference/introduction"
+            ]
+          },
+          {
+            "group": "Sending",
+            "pages": [
+              "api-reference/mails/send"
             ]
           },
           {
