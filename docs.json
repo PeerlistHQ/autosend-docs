@@ -32,7 +32,7 @@
           },
           
           {
-            "group": "Quick Start",
+            "group": "Quickstart",
             "pages": [
               "quickstart/email-using-api",
               "quickstart/supabase-edge-functions"
