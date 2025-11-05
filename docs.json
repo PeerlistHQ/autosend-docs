@@ -19,10 +19,10 @@
             "pages": [
               "index",
               {
-                "group": "Domain Configuration",
+                "group": "Domains",
                 "pages": [
                  
-                  "domain-configuration/introduction",
+                  "domain-configuration/configuration",
                   "domain-configuration/troubleshooting"
                  
                 ]
