@@ -1256,9 +1256,9 @@
       },
       "BulkSendEmailRequest": {
         "type": "object",
-        "required": ["to", "from"],
+        "required": ["recipients", "from"],
         "properties": {
-          "to": {
+          "recipients": {
             "type": "array",
             "description": "Array of recipient email addresses and names (maximum 100 recipients)",
             "items": {
