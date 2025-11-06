@@ -1,6 +1,6 @@
 ---
-title: 'API Errors'
-description: 'This guide provides a comprehensive breakdown of all possible API errors, HTTP status codes, and how to handle them effectively.'
+title: "API Errors"
+description: "This guide provides a comprehensive breakdown of all possible API errors, HTTP status codes, and how to handle them effectively."
 ---
 
 import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx'
@@ -9,67 +9,24 @@ import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx'
 
 The AutoSend API uses standard HTTP status codes to indicate the success or failure of your requests:
 
-| Code | Status | Description | When It Occurs |
-|------|--------|-------------|----------------|
-| `200` | OK | Request succeeded | Successful GET, PUT, PATCH, or DELETE requests |
-| `201` | Created | Resource created successfully | Successful POST requests that create new resources |
-| `400` | Bad Request | Invalid request parameters | Validation errors, malformed requests |
-| `401` | Unauthorized | Missing or invalid API key | Authentication failures |
-| `402` | Payment Required | Payment required | Payment issues, subscription expired |
-| `403` | Forbidden | Insufficient permissions or limits | Plan limits exceeded, insufficient access |
-| `404` | Not Found | Resource doesn't exist | Requesting non-existent resources |
-| `429` | Too Many Requests | Rate limit exceeded | Too many requests in a time period |
-| `500` | Internal Server Error | Server error | Unexpected server-side errors |
-
-## Success Responses
-
-### 200 OK
-
-The request was successful. This is typically returned for:
-- GET requests retrieving resources
-- PUT/PATCH requests updating resources
-- DELETE requests removing resources
-- POST requests that update existing resources (upsert operations)
-
-**Example Response:**
-
-```json
-{
-  "success": true,
-  "data": {
-    "id": "507f1f77bcf86cd799439011",
-    "email": "john.doe@example.com",
-    "firstName": "John",
-    "lastName": "Doe"
-  }
-}
-```
-
-### 201 Created
-
-The resource was successfully created. This is returned for POST requests that create new resources.
-
-**Example Response:**
-
-```json
-{
-  "success": true,
-  "message": "Contact created successfully",
-  "data": {
-    "id": "507f1f77bcf86cd799439011",
-    "email": "john.doe@example.com",
-    "createdAt": "2024-01-15T10:30:00.000Z"
-  }
-}
-```
+| Code  | Status                | Description                        | When It Occurs                            |
+| ----- | --------------------- | ---------------------------------- | ----------------------------------------- |
+| `400` | Bad Request           | Invalid request parameters         | Validation errors, malformed requests     |
+| `401` | Unauthorized          | Missing or invalid API key         | Authentication failures                   |
+| `402` | Payment Required      | Payment required                   | Payment issues, subscription expired      |
+| `403` | Forbidden             | Insufficient permissions or limits | Plan limits exceeded, insufficient access |
+| `404` | Not Found             | Resource doesn't exist             | Requesting non-existent resources         |
+| `429` | Too Many Requests     | Rate limit exceeded                | Too many requests in a time period        |
+| `500` | Internal Server Error | Server error                       | Unexpected server-side errors             |
 
 ## Client Errors (4xx)
 
-### 400 Bad Request
+### 400 Bad Request - Invalid Payload
 
 The request was malformed or contains invalid data. This is the most common error code for validation issues.
 
 **Common Causes:**
+
 - Invalid email format
 - Missing required fields
 - Invalid data types
@@ -221,12 +178,14 @@ The API key is missing, invalid, or expired.
 ```
 
 **Common Causes:**
+
 - Missing `Authorization` header
 - Invalid API key
 - Expired API key
 - Incorrect API key format
 
 **Solution:**
+
 1. Verify your API key is correct
 2. Ensure the `Authorization` header is included: `Authorization: Bearer YOUR_API_KEY`
 3. Check that your API key hasn't been revoked or expired
@@ -256,12 +215,14 @@ Payment is required to complete the request. This typically occurs when there ar
 ```
 
 **Common Causes:**
+
 - Subscription expired
 - Payment method declined
 - Account requires payment
 - Billing issues
 
 **Solution:**
+
 1. Check your account billing status
 2. Update your payment method if needed
 3. Ensure your subscription is active
@@ -291,12 +252,14 @@ The API key is valid but doesn't have permission to perform the requested action
 ```
 
 **Common Causes:**
+
 - Contact limit exceeded for your plan
 - Feature not available in your plan tier
 - API key doesn't have required permissions
 - Account suspended or restricted
 
 **Solution:**
+
 1. Check your plan limits in the dashboard
 2. Upgrade your plan if you need higher limits
 3. Contact support if you believe this is an error
@@ -326,12 +289,14 @@ The requested resource doesn't exist.
 ```
 
 **Common Causes:**
+
 - Invalid resource ID
 - Resource was deleted
 - Resource belongs to a different project
 - Incorrect endpoint path
 
 **Solution:**
+
 1. Verify the resource ID is correct
 2. Check that the resource hasn't been deleted
 3. Ensure you're using the correct endpoint
@@ -345,6 +310,7 @@ if (response.status === 404) {
   // Handle gracefully - resource may have been deleted
 }
 ```
+
 ### 429 Too Many Requests
 
 The rate limit has been exceeded. You've made too many requests in a given time period.
@@ -360,11 +326,13 @@ The rate limit has been exceeded. You've made too many requests in a given time 
 ```
 
 **Common Causes:**
+
 - Too many requests sent in a short time period
 - Rate limit exceeded for your API key
 - Burst of requests exceeding allowed threshold
 
 **Solution:**
+
 1. Implement exponential backoff when receiving 429 errors
 2. Wait for the `retryAfter` seconds before retrying
 3. Reduce the frequency of your API requests
@@ -399,12 +367,14 @@ An unexpected error occurred on the server side.
 ```
 
 **Common Causes:**
+
 - Unexpected server-side exception
 - Database connection issues
 - Third-party service failures
 - Temporary system issues
 
 **Solution:**
+
 1. Retry the request after a short delay (with exponential backoff)
 2. Check the AutoSend status page for known issues
 3. If the error persists, contact support with the request details
@@ -600,7 +570,7 @@ function getUserFriendlyError(error) {
 }
 ```
 
-**Solution:** Verify your sending domain in Settings > Domains. [Domain verification guide →](/domain-configuration)
+**Solution:** Verify your sending domain in Settings \> Domains. [Domain verification guide →](/domain-configuration)
 
 ### Contact Already Exists
 
@@ -675,6 +645,7 @@ function trackError(status) {
 ### 3. Include Request IDs in Support Requests
 
 When contacting support, include:
+
 - Request URL
 - Request method and headers
 - Request body
@@ -684,11 +655,14 @@ When contacting support, include:
 
 ## Need Help?
 
-If you're experiencing persistent errors or need assistance with error handling, please contact support at <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
+If you're experiencing persistent errors or need assistance with error handling, please contact support at <a href={{ type:"mdxJsxAttributeValueExpression",value:"`mailto:${SUPPORT_EMAIL}`",data:{estree:{type:"Program",start:15437,end:15462,body:[{type:"ExpressionStatement",expression:{type:"TemplateLiteral",start:15437,end:15462,loc:{start:{line:687,column:116,offset:15437},end:{line:687,column:141,offset:15462}},expressions:[{type:"Identifier",start:15447,end:15460,loc:{start:{line:687,column:126,offset:15447},end:{line:687,column:139,offset:15460}},name:"SUPPORT_EMAIL",range:[15447,15460]}],quasis:[{type:"TemplateElement",start:15438,end:15445,loc:{start:{line:687,column:117,offset:15438},end:{line:687,column:124,offset:15445}},value:{raw:"mailto:",cooked:"mailto:"},tail:false,range:[15438,15445]},{type:"TemplateElement",start:15461,end:15461,loc:{start:{line:687,column:140,offset:15461},end:{line:687,column:140,offset:15461}},value:{raw:"",cooked:""},tail:true,range:[15461,15461]}],range:[15437,15462]},start:15437,end:15462,loc:{start:{line:687,column:116,offset:15437},end:{line:687,column:141,offset:15462}},range:[15437,15462]}],sourceType:"module",comments:[],loc:{start:{line:687,column:116,offset:15437},end:{line:687,column:141,offset:15462}},range:[15437,15462]}} }}>
+SUPPORT_EMAIL</a>
+
+.
 
 When reporting errors, please include:
+
 - The endpoint you're calling
 - The request payload
 - The full error response
 - Steps to reproduce the issue
-
