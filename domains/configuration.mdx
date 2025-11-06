@@ -14,11 +14,78 @@ Before you can send emails through AutoSend, you need to verify ownership of you
 - **Compliance**: Meets industry standards for email authentication (SPF, DKIM, DMARC)
 
 <Note>
-  We recommend using a subdomain (like" " <code className="nextra-code">
-   mail.yourdomain.com</code>
+**Pro Tip: Use a Subdomain**
 
-  or" " <code className="nextra-code">
-   emails.yourdomain.com</code>
+We recommend using a subdomain (like `mail.yourdomain.com` or `emails.yourdomain.com`) instead of your root domain. This provides better email deliverability and keeps your transactional emails separate from your main domain’s reputation.
 
-  ) instead of your root domain. This provides better email deliverability and keeps your transactional emails separate from your main domain's reputation.
 </Note>
+
+<Steps>
+<Step title="Add Your Domain">
+1. Navigate to **Settings > Domains** in your AutoSend dashboard and click the **Add Domain** button.
+2. Enter your sending domain **without** `http://` or `https://`
+3. Choose the AWS region closest to your users for optimal email delivery performance. Available regions include:
+    - **US East (N. Virginia)** - `us-east-1`
+    - **US East (Ohio)** - `us-east-2`
+    
+The region you select will be used to send your emails and should be chosen based on where most of your recipients are located.
+    
+<Note> If you want support for other regions, please contact us at <a href={`mailto:${SUPPORT_EMAIL}`} title={SUPPORT_EMAIL}>{SUPPORT_EMAIL}</a> </Note>
+    
+</Step>
+<Step title="Configure DNS Records">
+
+Once your domain is added, AutoSend will generate the required DNS records. You’ll need to add these records to your domain’s DNS settings. AutoSend requires two types of DNS records:
+
+### **DKIM and SPF Records (Required)**
+
+These records enable email authentication and prevent email spoofing. You’ll typically see 3-4 records:
+
+1. **Ownership Verification Record**: Verifies you own the domain
+2. **DKIM Record(s)**: Cryptographic signatures that prove email authenticity
+3. **Mail-From Record**: Specifies authorized email sending servers (SPF)
+
+Each record will have the following fields:
+
+| **Field** | **Description** |
+| --- | --- |
+| **Type** | DNS record type (CNAME or TXT) |
+| **Name** | The subdomain or host record |
+| **Content/Value** | The record value to add |
+| **Priority** | Used for MX records (usually not applicable) |
+| **TTL** | Time To Live - set to “Auto” or 3600 |
+
+### **DMARC Record (Optional but Recommended)**
+
+DMARC (Domain-based Message Authentication, Reporting & Conformance) adds an extra layer of email authentication and provides reporting on email authentication status.
+
+<Note>
+- Copy the exact values from AutoSend - even small typos can cause verification to fail
+- Some DNS providers add your domain name automatically - check your provider’s documentation
+- Use the copy button next to each record value in AutoSend to avoid errors
+- All DKIM and SPF records must be added for successful verification
+</Note>
+
+</Step>
+<Step title="Verify Your Domain">
+After adding all DNS records to your DNS provider:
+
+1. **Wait for DNS propagation** (typically 5-30 minutes, but can take up to 48 hours)
+2. Navigate back to your domain details page in AutoSend
+3. Click the **“Verify Ownership”** or **“Check Verification”** button
+
+### **Verification Statuses**
+
+Your domain will progress through these statuses:
+
+| **Status** | **Badge Color** | **Description** | **Action Required** |
+| --- | --- | --- | --- |
+| **Unverified** | Red | No DNS records found | Add DNS records to your provider |
+| **Pending** | Orange | DNS records found, verification in progress | Wait for DNS propagation (5 mins - 2 hours) |
+| **Verified** | Green | Domain fully verified and ready to use | None - you can start sending! |
+| **Verification Failed** | Red | DNS records incorrect or missing | Check your DNS records and try again |
+
+<Check> When your domain shows a green “Verified” badge, you’re all set! You can now use this domain to send emails through AutoSend’s API.</Check>
+
+</Step>
+</Steps>
