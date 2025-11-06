@@ -582,7 +582,7 @@
                 "withHtml": {
                   "summary": "Bulk send email with HTML content",
                   "value": {
-                    "to": [
+                    "recipients": [
                       {
                         "email": "customer1@example.com",
                         "name": "Jane Smith"
@@ -609,7 +609,7 @@
                 "withTemplate": {
                   "summary": "Bulk send email with template",
                   "value": {
-                    "to": [
+                    "recipients": [
                       {
                         "email": "customer1@example.com",
                         "name": "Jane Smith"
