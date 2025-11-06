@@ -565,7 +565,7 @@
         }
       }
     },
-    "/mails/bulk-send": {
+    "/mails/bulk": {
       "post": {
         "summary": "Bulk Send Email",
         "description": "Sends the same email to multiple recipients in a single API request. This endpoint is identical to the send email endpoint, with the only difference being that `to` is an array of recipients instead of a single recipient. Maximum limit: 100 recipients per request.",
@@ -642,110 +642,15 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BulkSendEmailResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SendEmailErrorResponse"
                 },
-                "examples": {
-                  "validationError": {
-                    "summary": "Validation failed",
-                    "value": {
-                      "success": false,
-                      "message": "Validation failed",
-                      "errors": [
-                        {
-                          "field": "to[0].email",
-                          "message": "Invalid email format"
-                        }
-                      ]
-                    }
+                "example": {
+                  "success": true,
+                  "data": {
+                    "batchId": "ae22c1e0-2022-4f6b-bdca-ce94901fbc6e",
+                    "totalRecipients": 1,
+                    "successCount": 1,
+                    "failedCount": 0
                   }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized - Missing or invalid API key",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "examples": {
-                  "unauthorized": {
-                    "summary": "Unauthorized",
-                    "value": {
-                      "success": false,
-                      "message": "Unauthorized"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden - API key doesn't have required access",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found - Resource doesn't exist",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Too Many Requests - Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RateLimitErrorResponse"
-                },
-                "examples": {
-                  "rateLimit": {
-                    "summary": "Rate limit exceeded",
-                    "value": {
-                      "success": false,
-                      "message": "Rate limit exceeded",
-                      "retryAfter": 30
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Service Unavailable - Temporary service outage",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1417,41 +1322,28 @@
             "description": "Indicates if the request was successful",
             "example": true
           },
-          "message": {
-            "type": "string",
-            "description": "Response message",
-            "example": "Bulk send completed"
-          },
           "data": {
             "type": "object",
             "properties": {
-              "results": {
-                "type": "array",
-                "description": "Array of results for each recipient",
-                "items": {
-                  "$ref": "#/components/schemas/BulkSendEmailResult"
-                }
+              "batchId": {
+                "type": "string",
+                "description": "Unique identifier for the batch",
+                "example": "ae22c1e0-2022-4f6b-bdca-ce94901fbc6e"
               },
-              "summary": {
-                "type": "object",
-                "description": "Summary of the bulk send operation",
-                "properties": {
-                  "total": {
-                    "type": "integer",
-                    "description": "Total number of recipients",
-                    "example": 3
-                  },
-                  "successful": {
-                    "type": "integer",
-                    "description": "Number of successfully queued emails",
-                    "example": 2
-                  },
-                  "failed": {
-                    "type": "integer",
-                    "description": "Number of failed emails",
-                    "example": 1
-                  }
-                }
+              "totalRecipients": {
+                "type": "integer",
+                "description": "Total number of recipients",
+                "example": 1
+              },
+              "successCount": {
+                "type": "integer",
+                "description": "Number of successfully queued emails",
+                "example": 1
+              },
+              "failedCount": {
+                "type": "integer",
+                "description": "Number of failed emails",
+                "example": 0
               }
             }
           }
