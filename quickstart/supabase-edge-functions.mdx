@@ -42,7 +42,7 @@ Before you begin, make sure you have:
   <Step title="Write the Edge Function" titleSize="h3">
     Replace the content of `supabase/functions/autosend/index.ts` with:
 
-    ```tsx
+    ```tsx expandable
     import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
     import { corsHeaders } from '../_shared/cors.ts'
     
@@ -287,7 +287,7 @@ You can use AutoSend to send custom authentication emails by integrating with Su
     ```
   </Step>
   <Step title="Implement Auth Hook Handler" titleSize="h3">
-    ```tsx
+    ```tsx expandable
     import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
     
     serve(async (req) => {
@@ -394,7 +394,7 @@ You can use AutoSend to send custom authentication emails by integrating with Su
 
 Implement robust error handling for production:
 
-```tsx
+```tsx expandable
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 
 serve(async (req) => {
