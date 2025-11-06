@@ -568,7 +568,7 @@
     "/mails/bulk": {
       "post": {
         "summary": "Bulk Send Email",
-        "description": "Sends the same email to multiple recipients in a single API request. This endpoint is identical to the send email endpoint, with the only difference being that `to` is an array of recipients instead of a single recipient. Maximum limit: 100 recipients per request.",
+        "description": "Sends the same email to multiple recipients in a single API request. This endpoint is identical to the send email endpoint, with the only difference being that `recipients` is an array of recipients instead of a single recipient. Maximum limit: 100 recipients per request.",
         "tags": ["Mails"],
         "requestBody": {
           "description": "Email data to send to multiple recipients",
