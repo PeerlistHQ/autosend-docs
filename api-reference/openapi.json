@@ -562,6 +562,12 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SendEmailResponse"
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "emailId": "507f1f77bcf86cd799439011"
+                  }
                 }
               }
             }
@@ -1092,6 +1098,16 @@
             "type": "boolean",
             "description": "Indicates if the request was successful",
             "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "emailId": {
+                "type": "string",
+                "description": "Unique identifier for the sent email",
+                "example": "507f1f77bcf86cd799439011"
+              }
+            }
           }
         }
       },
