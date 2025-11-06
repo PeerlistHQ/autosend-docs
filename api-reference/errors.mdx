@@ -345,43 +345,6 @@ if (response.status === 404) {
   // Handle gracefully - resource may have been deleted
 }
 ```
-
-### 409 Conflict
-
-The request conflicts with the current state of the resource.
-
-**Error Response:**
-
-```json
-{
-  "success": false,
-  "error": "Conflict",
-  "message": "A contact with this email already exists in the project"
-}
-```
-
-**Common Causes:**
-- Duplicate contact email (when using Create Contact endpoint)
-- Resource already exists with conflicting unique identifier
-- Concurrent modification conflicts
-
-**Solution:**
-1. Use the Upsert Contact endpoint instead of Create Contact if you want to update existing contacts
-2. Check for existing resources before creating new ones
-3. Implement proper conflict resolution in your application
-
-**Handling 409 Errors:**
-
-```javascript
-if (response.status === 409) {
-  // Use upsert endpoint instead
-  const upsertResponse = await fetch('https://api.autosend.com/v1/api/contacts/email', {
-    method: 'POST',
-    // ... same data
-  });
-}
-```
-
 ### 429 Too Many Requests
 
 The rate limit has been exceeded. You've made too many requests in a given time period.
