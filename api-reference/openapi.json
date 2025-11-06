@@ -397,7 +397,9 @@
                 "example": {
                   "success": true,
                   "data": {
-                    "id": "507f1f77bcf86cd799439011",
+                    "contacts": [
+                      {
+                        "id": "507f1f77bcf86cd799439011",
                     "email": "john.doe@example.com",
                     "firstName": "John",
                     "lastName": "Doe",
@@ -410,6 +412,8 @@
                     "updatedAt": "2024-01-15T10:30:00.000Z",
                     "createdAt": "2024-01-15T10:30:00.000Z",
                     "projectId": "229f1f77bcf86cd9273048038"
+                      }
+                    ]
                   }
                 }
               }
@@ -444,12 +448,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/RemoveContactsResponse"
-                },
-                "example": {
-                  "success": true,
-                  "data": {
-                    "contactIds": ["507f1f77bcf86cd799439011"]
-                  }
                 }
               }
             }
@@ -956,19 +954,6 @@
           "success": {
             "type": "boolean",
             "example": true
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "contactIds": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "description": "Array of deleted contact IDs",
-                "example": ["507f1f77bcf86cd799439011"]
-              }
-            }
           }
         }
       },
@@ -994,19 +979,6 @@
           "success": {
             "type": "boolean",
             "example": true
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "contactIds": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "description": "Array of removed contact IDs",
-                "example": ["507f1f77bcf86cd799439011"]
-              }
-            }
           }
         }
       },
@@ -1120,11 +1092,6 @@
             "type": "boolean",
             "description": "Indicates if the request was successful",
             "example": true
-          },
-          "message": {
-            "type": "string",
-            "description": "Response message",
-            "example": "Email queued successfully"
           }
         }
       },
