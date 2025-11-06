@@ -16,7 +16,6 @@
     }
   ],
   "paths": {
-   
     "/contacts": {
       "post": {
         "summary": "Create Contact",
@@ -336,14 +335,14 @@
         }
       },
       "delete": {
-        "summary": "Delete Contact by ID(s)",
-        "description": "Deletes one or more contacts by their MongoDB ObjectId. Supports comma-separated IDs for bulk deletion.",
+        "summary": "Delete Contact by Id",
+        "description": "Deletes a contact by its id.",
         "tags": ["Contacts"],
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Single MongoDB ObjectId or comma-separated list of ObjectIds",
+            "description": "Single contact id",
             "required": true,
             "schema": {
               "type": "string"
@@ -352,61 +351,11 @@
         ],
         "responses": {
           "200": {
-            "description": "Contact(s) deleted successfully",
+            "description": "Contact deleted successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DeleteContactResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation failed - Invalid ObjectId format",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found - One or more contacts not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Too Many Requests - Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -965,7 +914,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "MongoDB ObjectId of the contact",
+            "description": "Unique id of the contact",
             "required": true,
             "schema": {
               "type": "string",
@@ -1250,9 +1199,7 @@
   "components": {
     "schemas": {
       "Plant": {
-        "required": [
-          "name"
-        ],
+        "required": ["name"],
         "type": "object",
         "properties": {
           "name": {
@@ -1271,9 +1218,7 @@
             "$ref": "#/components/schemas/Plant"
           },
           {
-            "required": [
-              "id"
-            ],
+            "required": ["id"],
             "type": "object",
             "properties": {
               "id": {
@@ -1286,10 +1231,7 @@
         ]
       },
       "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
+        "required": ["error", "message"],
         "type": "object",
         "properties": {
           "error": {
