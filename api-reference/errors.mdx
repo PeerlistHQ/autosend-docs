@@ -27,7 +27,7 @@ The request was malformed or contains invalid data. This is the most common erro
 
 **Common Causes:**
 
-- Invalid email format
+- Invalid data format
 - Missing required fields
 - Invalid data types
 - Value constraints violated (e.g., max length exceeded)
@@ -39,16 +39,7 @@ The request was malformed or contains invalid data. This is the most common erro
 {
   "success": false,
   "message": "Validation failed",
-  "errors": [
-    {
-      "field": "to.email",
-      "message": "Invalid email format"
-    },
-    {
-      "field": "subject",
-      "message": "Subject is required when not using templateId"
-    }
-  ]
+  "error": 
 }
 ```
 
