@@ -232,20 +232,24 @@
                 "example": {
                   "success": true,
                   "data": {
-                    "id": "507f1f77bcf86cd799439011",
-                    "email": "john.doe@example.com",
-                    "firstName": "John",
-                    "lastName": "Doe",
-                    "userId": "user_12345",
-                    "customFields": {
-                      "company": "Acme Corp",
-                      "role": "Developer",
-                      "plan": "premium"
-                    },
-                    "updatedAt": "2024-01-15T10:30:00.000Z",
-                    "createdAt": "2024-01-15T10:30:00.000Z",
-                    "projectId": "229f1f77bcf86cd9273048038"
-                  }
+                  "contacts": [
+                    {
+                      "id": "507f1f77bcf86cd799439011",
+                      "email": "john.doe@example.com",
+                      "firstName": "John",
+                      "lastName": "Doe",
+                      "userId": "user_12345",
+                      "customFields": {
+                        "company": "Acme Corp",
+                        "role": "Developer",
+                        "plan": "premium"
+                      },
+                      "updatedAt": "2024-01-15T10:30:00.000Z",
+                      "createdAt": "2024-01-15T10:30:00.000Z",
+                      "projectId": "229f1f77bcf86cd9273048038"
+                    }
+                  ]  
+                }
                 }
               }
             }
@@ -397,23 +401,9 @@
                 "example": {
                   "success": true,
                   "data": {
-                    "contacts": [
-                      {
-                        "id": "507f1f77bcf86cd799439011",
-                    "email": "john.doe@example.com",
-                    "firstName": "John",
-                    "lastName": "Doe",
-                    "userId": "user_12345",
-                    "customFields": {
-                      "company": "Acme Corp",
-                      "role": "Developer",
-                      "plan": "premium"
-                    },
-                    "updatedAt": "2024-01-15T10:30:00.000Z",
-                    "createdAt": "2024-01-15T10:30:00.000Z",
-                    "projectId": "229f1f77bcf86cd9273048038"
-                      }
-                    ]
+                    "successCount": 1, 
+                    "failedCount": 0, 
+                    "totalCount": 1
                   }
                 }
               }
@@ -458,7 +448,7 @@
     "/contacts/{id}/unsubscribe-groups": {
       "get": {
         "summary": "Get Contact's Unsubscribe Groups",
-        "description": "Returns an array of unsubscribe group IDs that the contact has unsubscribed from.",
+        "description": "Returns an array of unsubscribe group",
         "tags": ["Contacts"],
         "parameters": [
           {
