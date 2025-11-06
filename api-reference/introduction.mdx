@@ -1,28 +1,26 @@
 ---
-title: 'API Reference'
-description: 'Send transactional emails programmatically using the AutoSend REST API. This guide covers the email sending endpoint, request/response formats, and best practices.'
-sidebarTitle: 'Introduction'
+title: "API Reference"
+description: "Send transactional emails programmatically using the AutoSend REST API. This guide covers details of all APIs, request/response formats, and best practices."
+sidebarTitle: "Introduction"
 ---
 
 import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx'
-
 
 ## Base URL
 
 All API requests should be made to:
 
 ```
-https://api.autosend.com/
+https://api.autosend.com
 ```
 
 ## Authentication
 
-All API requests require authentication using an API key. Include your API key in the `Authorization` header:
+All API requests require authentication using an API key. Include your (API key)[/api-keys] in the `Authorization` header:
 
 ```bash
-Authorization: Bearer YOUR_API_KEY
+Authorization: Bearer AS_xxxxxx
 ```
-
 
 ## HTTP Status Codes
 
@@ -39,5 +37,7 @@ Authorization: Bearer YOUR_API_KEY
 
 ## Need Help?
 
-If you're experiencing issues with the API, please contact support  <a  href={`mailto:${SUPPORT_EMAIL}`}> {SUPPORT_EMAIL}
-</a> .
+If you're experiencing issues with the API, please contact support  <a href={{ type:"mdxJsxAttributeValueExpression",value:"`mailto:${SUPPORT_EMAIL}`",data:{estree:{type:"Program",start:1415,end:1440,body:[{type:"ExpressionStatement",expression:{type:"TemplateLiteral",start:1415,end:1440,loc:{start:{line:42,column:78,offset:1415},end:{line:42,column:103,offset:1440}},expressions:[{type:"Identifier",start:1425,end:1438,loc:{start:{line:42,column:88,offset:1425},end:{line:42,column:101,offset:1438}},name:"SUPPORT_EMAIL",range:[1425,1438]}],quasis:[{type:"TemplateElement",start:1416,end:1423,loc:{start:{line:42,column:79,offset:1416},end:{line:42,column:86,offset:1423}},value:{raw:"mailto:",cooked:"mailto:"},tail:false,range:[1416,1423]},{type:"TemplateElement",start:1439,end:1439,loc:{start:{line:42,column:102,offset:1439},end:{line:42,column:102,offset:1439}},value:{raw:"",cooked:""},tail:true,range:[1439,1439]}],range:[1415,1440]},start:1415,end:1440,loc:{start:{line:42,column:78,offset:1415},end:{line:42,column:103,offset:1440}},range:[1415,1440]}],sourceType:"module",comments:[],loc:{start:{line:42,column:78,offset:1415},end:{line:42,column:103,offset:1440}},range:[1415,1440]}} }}>
+ SUPPORT_EMAIL </a>
+
+ .
