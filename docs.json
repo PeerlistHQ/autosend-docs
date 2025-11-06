@@ -161,8 +161,7 @@
   },
   "api": {
     "playground": {
-      "display": "interactive",
-      "proxy": false
+      "display": "simple"
     }
   },
   "navbar": {
