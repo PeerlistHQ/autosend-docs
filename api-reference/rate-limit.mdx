@@ -1,10 +1,10 @@
 ---
-sidebarTitle: 'Rate Limit'
+sidebarTitle: "Rate Limit"
 ---
 
 API keys are subject to the following rate limits:
 
-- **2 requests per second** per API key
+- **2 requests per second** per API key. This is a default limit and can be increased upon request.
 
 When you exceed the rate limit, you'll receive a `429 Too Many Requests` response with a `retryAfter` field indicating how many seconds to wait.
 
@@ -20,7 +20,7 @@ X-RateLimit-Reset: 1696075200
 
 ### Handling Rate Limits
 
-Implement exponential backoff when receiving 429 errors:
+To prevent overwhelming the API, you should implement exponential backoff when receiving 429 errors:
 
 ```javascript
 async function sendEmailWithRetry(data, maxRetries = 3) {
