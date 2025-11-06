@@ -16,7 +16,6 @@
     }
   ],
   "paths": {
-   
     "/contacts": {
       "post": {
         "summary": "Create Contact",
@@ -50,7 +49,7 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Contact created successfully",
             "content": {
               "application/json": {
@@ -74,74 +73,6 @@
                     "createdAt": "2024-01-15T10:30:00.000Z",
                     "projectId": "229f1f77bcf86cd9273048038"
                   }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation failed or contact already exists",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "examples": {
-                  "validationError": {
-                    "summary": "Validation failed",
-                    "value": {
-                      "success": false,
-                      "error": "Validation failed",
-                      "message": "Invalid email format or missing required fields"
-                    }
-                  },
-                  "duplicateError": {
-                    "summary": "Contact already exists",
-                    "value": {
-                      "success": false,
-                      "error": "Contact already exists",
-                      "message": "A contact with this email already exists in the project"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized - Invalid or missing API key",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden - Contact limit exceeded for your plan",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Too Many Requests - Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -190,46 +121,6 @@
                     "createdAt": "2024-01-15T10:30:00.000Z",
                     "projectId": "229f1f77bcf86cd9273048038"
                   }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Too Many Requests - Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -282,68 +173,18 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Validation failed - Invalid ObjectId format",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found - Contact does not exist",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Too Many Requests - Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         }
       },
       "delete": {
-        "summary": "Delete Contact by ID(s)",
-        "description": "Deletes one or more contacts by their MongoDB ObjectId. Supports comma-separated IDs for bulk deletion.",
+        "summary": "Delete Contact by Id",
+        "description": "Deletes a contact by its id.",
         "tags": ["Contacts"],
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "Single MongoDB ObjectId or comma-separated list of ObjectIds",
+            "description": "Single contact id",
             "required": true,
             "schema": {
               "type": "string"
@@ -352,61 +193,11 @@
         ],
         "responses": {
           "200": {
-            "description": "Contact(s) deleted successfully",
+            "description": "Contact deleted successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DeleteContactResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation failed - Invalid ObjectId format",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found - One or more contacts not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Too Many Requests - Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -441,60 +232,24 @@
                 "example": {
                   "success": true,
                   "data": {
-                    "id": "507f1f77bcf86cd799439011",
-                    "email": "john.doe@example.com",
-                    "firstName": "John",
-                    "lastName": "Doe",
-                    "userId": "user_12345",
-                    "customFields": {
-                      "company": "Acme Corp",
-                      "role": "Developer",
-                      "plan": "premium"
-                    },
-                    "updatedAt": "2024-01-15T10:30:00.000Z",
-                    "createdAt": "2024-01-15T10:30:00.000Z",
-                    "projectId": "229f1f77bcf86cd9273048038"
-                  }
+                  "contacts": [
+                    {
+                      "id": "507f1f77bcf86cd799439011",
+                      "email": "john.doe@example.com",
+                      "firstName": "John",
+                      "lastName": "Doe",
+                      "userId": "user_12345",
+                      "customFields": {
+                        "company": "Acme Corp",
+                        "role": "Developer",
+                        "plan": "premium"
+                      },
+                      "updatedAt": "2024-01-15T10:30:00.000Z",
+                      "createdAt": "2024-01-15T10:30:00.000Z",
+                      "projectId": "229f1f77bcf86cd9273048038"
+                    }
+                  ]  
                 }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation failed - Invalid email format or empty array",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Too Many Requests - Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -519,72 +274,12 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Contact duplicated successfully",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DuplicateContactResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation failed - Invalid email format or missing required fields",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found - Source contact does not exist",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict - New email already exists",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Too Many Requests - Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -636,56 +331,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Validation failed - Invalid email format or invalid custom fields object",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found - Contact with specified email does not exist",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Too Many Requests - Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         }
       }
@@ -725,56 +370,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Validation failed - Invalid userId parameter",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found - Contact with specified userId does not exist",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Too Many Requests - Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
           }
         }
       }
@@ -806,60 +401,10 @@
                 "example": {
                   "success": true,
                   "data": {
-                    "id": "507f1f77bcf86cd799439011",
-                    "email": "john.doe@example.com",
-                    "firstName": "John",
-                    "lastName": "Doe",
-                    "userId": "user_12345",
-                    "customFields": {
-                      "company": "Acme Corp",
-                      "role": "Developer",
-                      "plan": "premium"
-                    },
-                    "updatedAt": "2024-01-15T10:30:00.000Z",
-                    "createdAt": "2024-01-15T10:30:00.000Z",
-                    "projectId": "229f1f77bcf86cd9273048038"
+                    "successCount": 1, 
+                    "failedCount": 0, 
+                    "totalCount": 1
                   }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation failed - Invalid request format or exceeds 100 contacts limit",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Too Many Requests - Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -893,62 +438,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/RemoveContactsResponse"
-                },
-                "example": {
-                  "success": true,
-                  "data": {
-                    "contactIds": ["507f1f77bcf86cd799439011"]
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation failed - Invalid email format or empty array",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found - One or more contacts not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Too Many Requests - Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -959,13 +448,13 @@
     "/contacts/{id}/unsubscribe-groups": {
       "get": {
         "summary": "Get Contact's Unsubscribe Groups",
-        "description": "Returns an array of unsubscribe group IDs that the contact has unsubscribed from.",
+        "description": "Returns an array of unsubscribe group",
         "tags": ["Contacts"],
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "MongoDB ObjectId of the contact",
+            "description": "Unique id of the contact",
             "required": true,
             "schema": {
               "type": "string",
@@ -991,56 +480,6 @@
                       }
                     ]
                   }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation failed - Invalid ObjectId format",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found - Contact does not exist",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Too Many Requests - Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1113,110 +552,12 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SendEmailResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation failed",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SendEmailErrorResponse"
                 },
-                "examples": {
-                  "validationError": {
-                    "summary": "Validation failed",
-                    "value": {
-                      "success": false,
-                      "message": "Validation failed",
-                      "errors": [
-                        {
-                          "field": "to.email",
-                          "message": "Invalid email format"
-                        }
-                      ]
-                    }
+                "example": {
+                  "success": true,
+                  "data": {
+                    "emailId": "507f1f77bcf86cd799439011"
                   }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized - Missing or invalid API key",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "examples": {
-                  "unauthorized": {
-                    "summary": "Unauthorized",
-                    "value": {
-                      "success": false,
-                      "message": "Unauthorized"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden - API key doesn't have required access",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found - Resource doesn't exist",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "Too Many Requests - Rate limit exceeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RateLimitErrorResponse"
-                },
-                "examples": {
-                  "rateLimit": {
-                    "summary": "Rate limit exceeded",
-                    "value": {
-                      "success": false,
-                      "message": "Rate limit exceeded",
-                      "retryAfter": 30
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Service Unavailable - Temporary service outage",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1438,9 +779,7 @@
   "components": {
     "schemas": {
       "Plant": {
-        "required": [
-          "name"
-        ],
+        "required": ["name"],
         "type": "object",
         "properties": {
           "name": {
@@ -1459,9 +798,7 @@
             "$ref": "#/components/schemas/Plant"
           },
           {
-            "required": [
-              "id"
-            ],
+            "required": ["id"],
             "type": "object",
             "properties": {
               "id": {
@@ -1474,16 +811,9 @@
         ]
       },
       "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
+        "required": ["message"],
         "type": "object",
         "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
-          },
           "message": {
             "type": "string"
           }
@@ -1644,11 +974,6 @@
             "type": "boolean",
             "description": "Indicates if the request was successful",
             "example": false
-          },
-          "error": {
-            "type": "string",
-            "description": "Error type or code",
-            "example": "Validation failed"
           },
           "message": {
             "type": "string",
@@ -1813,19 +1138,6 @@
           "success": {
             "type": "boolean",
             "example": true
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "contactIds": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "description": "Array of deleted contact IDs",
-                "example": ["507f1f77bcf86cd799439011"]
-              }
-            }
           }
         }
       },
@@ -1851,19 +1163,6 @@
           "success": {
             "type": "boolean",
             "example": true
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "contactIds": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "description": "Array of removed contact IDs",
-                "example": ["507f1f77bcf86cd799439011"]
-              }
-            }
           }
         }
       },
@@ -1935,8 +1234,19 @@
           },
           "html": {
             "type": "string",
-            "description": "HTML content of the email. Required if not using templateId.",
-            "example": "<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>"
+            "description": "HTML content of the email. Required if not using templateId.\n\n**Handlebars Template Variables:**\n\nUse Handlebars syntax for template variables in your HTML. Variables are wrapped in double curly braces: `{{variableName}}`. Example:\n\n```html\n<h1>Hello {{firstName}}!</h1>\n\n<p>Your order #{{orderNumber}} has been shipped.</p>\n\n<p>Total: {{orderTotal}}</p>\n```\n\nProvide the values for these variables in the `dynamicData` field.",
+            "example": "<h1>Hello {{firstName}}!</h1>\n\n<p>Your order #{{orderNumber}} has been shipped.</p>\n\n<p>Total: {{orderTotal}}</p>"
+          },
+          "dynamicData": {
+            "type": "object",
+            "description": "Key-value pairs for template variable substitution (Handlebars syntax)",
+            "additionalProperties": true,
+            "example": {
+              "name": "Jane",
+              "firstName": "Jane",
+              "orderNumber": "ORD-12345",
+              "orderTotal": "$99.99"
+            }
           },
           "text": {
             "type": "string",
@@ -1956,17 +1266,6 @@
             "type": "string",
             "description": "ID of the unsubscribe group",
             "example": "unsub_group_123"
-          },
-          "dynamicData": {
-            "type": "object",
-            "description": "Key-value pairs for template variable substitution (Handlebars syntax)",
-            "additionalProperties": true,
-            "example": {
-              "name": "Jane",
-              "firstName": "Jane",
-              "orderNumber": "ORD-12345",
-              "orderTotal": "$99.99"
-            }
           }
         }
       },
@@ -1978,30 +1277,13 @@
             "description": "Indicates if the request was successful",
             "example": true
           },
-          "message": {
-            "type": "string",
-            "description": "Response message",
-            "example": "Email queued successfully"
-          },
           "data": {
             "type": "object",
             "properties": {
               "emailId": {
                 "type": "string",
-                "description": "Unique identifier for the queued email",
-                "example": "email_xyz789"
-              },
-              "status": {
-                "type": "string",
-                "description": "Email status",
-                "enum": ["queued", "sent", "failed"],
-                "example": "queued"
-              },
-              "queuedAt": {
-                "type": "string",
-                "format": "date-time",
-                "description": "Timestamp when email was queued",
-                "example": "2025-09-30T10:30:00.000Z"
+                "description": "Unique identifier for the sent email",
+                "example": "507f1f77bcf86cd799439011"
               }
             }
           }

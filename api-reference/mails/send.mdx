@@ -2,27 +2,3 @@
 title: 'Send Email'
 openapi: 'POST /mails/send'
 ---
-
-## Dynamic Data & Personalization
-
-Use Handlebars syntax for template variables:
-
-```html
-<h1>Hello {{firstName}}!</h1>
-<p>Your order #{{orderNumber}} has been shipped.</p>
-<p>Total: {{orderTotal}}</p>
-```
-
-Provide values in the `dynamicData` object:
-
-```json
-{
-  "html": "<h1>Hello {{firstName}}!</h1>",
-  "dynamicData": {
-    "firstName": "Jane",
-    "orderNumber": "12345",
-    "orderTotal": "$99.99"
-  }
-}
-```
-

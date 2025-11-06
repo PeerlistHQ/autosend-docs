@@ -1,28 +1,27 @@
 ---
-title: 'API Reference'
-description: 'Send transactional emails programmatically using the AutoSend REST API. This guide covers the email sending endpoint, request/response formats, and best practices.'
-sidebarTitle: 'Introduction'
+title: "API Reference"
+description: "Send transactional emails programmatically using the AutoSend REST API. This guide covers details of all APIs, request/response formats, and best practices."
+sidebarTitle: "Introduction"
 ---
 
 import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx'
-
+import { APP_PATHS } from '/snippets/appPaths.mdx'
 
 ## Base URL
 
 All API requests should be made to:
 
 ```
-https://api.autosend.com/
+https://api.autosend.com
 ```
 
 ## Authentication
 
-All API requests require authentication using an API key. Include your API key in the `Authorization` header:
+All API requests require authentication using an API key. Include your <a href={APP_PATHS.apiKey}>API Key</a> in the `Authorization` header:
 
 ```bash
-Authorization: Bearer YOUR_API_KEY
+Authorization: Bearer AS_xxxxxx
 ```
-
 
 ## HTTP Status Codes
 
@@ -39,5 +38,4 @@ Authorization: Bearer YOUR_API_KEY
 
 ## Need Help?
 
-If you're experiencing issues with the API, please contact support  <a  href={`mailto:${SUPPORT_EMAIL}`}> {SUPPORT_EMAIL}
-</a> .
+If you're experiencing issues with the API, please contact support <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
