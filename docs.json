@@ -90,7 +90,8 @@
           {
             "group": "Sending",
             "pages": [
-              "api-reference/mails/send"
+              "api-reference/mails/send",
+              "api-reference/mails/bulk-send"
             ]
           },
           {
