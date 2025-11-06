@@ -37,31 +37,6 @@ Authorization: Bearer YOUR_API_KEY
 | `429` | Too Many Requests     | Rate limit exceeded                  |
 | `500` | Internal Server Error | Something went wrong on our end      |
 
-
-## Dynamic Data & Personalization
-
-Use Handlebars syntax for template variables:
-
-```html
-<h1>Hello {{firstName}}!</h1>
-<p>Your order #{{orderNumber}} has been shipped.</p>
-<p>Total: {{orderTotal}}</p>
-```
-
-Provide values in the `dynamicData` object:
-
-```json
-{
-  "html": "<h1>Hello {{firstName}}!</h1>",
-  "dynamicData": {
-    "firstName": "Jane",
-    "orderNumber": "12345",
-    "orderTotal": "$99.99"
-  }
-}
-```
-
-
 ## Need Help?
 
 If you're experiencing issues with the API, please contact support  <a  href={`mailto:${SUPPORT_EMAIL}`}> {SUPPORT_EMAIL}
