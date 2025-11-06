@@ -79,9 +79,33 @@
         "tab": "API Reference",
         "groups": [
           {
-            "group": "API Documentation",
+            "group": "API Reference",
             "pages": [
-              "api-reference"
+              "api-reference/introduction",
+              "api-reference/errors",
+              "api-reference/rate-limit",
+              "api-reference/best-practices"
+            ]
+          },
+          {
+            "group": "Sending",
+            "pages": [
+              "api-reference/mails/send",
+              "api-reference/mails/bulk"
+            ]
+          },
+          {
+            "group": "Contacts",
+            "pages": [
+              "api-reference/contacts/create-contacts",
+              "api-reference/contacts/upsert-contact",
+              "api-reference/contacts/remove",
+              "api-reference/contacts/get-contact-by-id",
+              "api-reference/contacts/search-contacts-by-emails",
+              "api-reference/contacts/bulk-update-contacts",
+              "api-reference/contacts/delete-contact-by-user-id",
+              "api-reference/contacts/delete-contact-by-ids",
+              "api-reference/contacts/get-unsubscribe-groups"
             ]
           }
         ]
@@ -135,6 +159,11 @@
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
+  },
+  "api": {
+    "playground": {
+      "display": "simple"
+    }
   },
   "navbar": {
     "links": [

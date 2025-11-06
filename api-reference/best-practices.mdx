@@ -1,0 +1,49 @@
+---
+sidebarTitle: 'Best Practices'
+---
+
+### 1. Use Environment Variables
+
+Never hardcode API keys in your source code:
+
+```javascript
+const API_KEY = process.env.AUTOSEND_API_KEY;
+```
+
+### 2. Implement Error Handling
+
+Always handle errors appropriately:
+
+```javascript
+try {
+  const response = await sendEmail(data);
+  console.log("Email sent:", response.data.emailId);
+} catch (error) {
+  if (error.response?.status === 429) {
+    // Rate limit - retry later
+  } else if (error.response?.status === 400) {
+    // Validation error - fix the data
+  } else {
+    // Other error - log and alert
+  }
+}
+```
+
+### 3. Validate Email Addresses
+
+Validate email addresses before sending to reduce bounces:
+
+```javascript
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+```
+
+### 4. Use Verified Domains
+
+Always send from verified domains to ensure deliverability. [Learn how to verify domains →](/domain-configuration)
+
+### 5. Include Unsubscribe Links
+
+For marketing emails, always include unsubscribe links to comply with regulations and maintain good sender reputation.

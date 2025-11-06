@@ -1,0 +1,315 @@
+---
+title: "API Errors"
+description: "This guide provides a comprehensive breakdown of all possible API errors, HTTP status codes, and how to handle them effectively."
+---
+
+import { SUPPORT_EMAIL } from "/snippets/custom-variables.mdx";
+
+## HTTP Status Codes Overview
+
+The AutoSend API uses standard HTTP status codes to indicate the success or failure of your requests:
+
+| Code  | Status                | Description                        | When It Occurs                            |
+| ----- | --------------------- | ---------------------------------- | ----------------------------------------- |
+| `400` | Bad Request           | Invalid request parameters         | Validation errors, malformed requests     |
+| `401` | Unauthorized          | Missing or invalid API key         | Authentication failures                   |
+| `402` | Payment Required      | Payment required                   | Payment issues, subscription expired      |
+| `403` | Forbidden             | Insufficient permissions or limits | Plan limits exceeded, insufficient access |
+| `404` | Not Found             | Resource doesn't exist             | Requesting non-existent resources         |
+| `429` | Too Many Requests     | Rate limit exceeded                | Too many requests in a time period        |
+| `500` | Internal Server Error | Server error                       | Unexpected server-side errors             |
+
+## Client Errors (4xx)
+
+### 400 Bad Request - Invalid Payload
+
+The request was malformed or contains invalid data. This is the most common error code for validation issues.
+
+**Common Causes:**
+
+- Invalid data format
+- Missing required fields
+- Invalid data types
+- Value constraints violated (e.g., max length exceeded)
+- Malformed JSON
+
+**Error Response Format:**
+
+```json
+{
+  "success": false,
+  "error": {
+    "message": "Validation failed",
+    "code": "VALIDATION_FAILED",
+    "details": [
+      {
+        "field": "email",
+        "message": "Invalid email format"
+      }
+    ]
+  }
+}
+```
+
+### 401 Unauthorized
+
+The API key is missing, invalid, or expired.
+
+**Error Response:**
+
+```json
+{
+  "success": false,
+  "error": {
+    "message": "Unauthorized",
+    "code": "UNAUTHORIZED"
+  }
+}
+```
+
+**Common Causes:**
+
+- Missing `Authorization` header
+- Invalid API key
+- Expired API key
+- Incorrect API key format
+
+### 402 Payment Required
+
+Payment is required to complete the request. This typically occurs when there are payment issues or the subscription has expired.
+
+**Error Response:**
+
+```json
+{
+  "success": false,
+  "error": {
+    "message": "Please upgrade your plan to access these resources.",
+    "code": "PLAN_UPGRADE_REQUIRED"
+  }
+}
+```
+
+**Common Causes:**
+
+- Subscription expired
+- Payment method declined
+- Account requires payment
+- Billing issues
+
+### 403 Forbidden
+
+The API key is valid but doesn't have permission to perform the requested action.
+
+**Error Response:**
+
+```json
+{
+  "success": false,
+  "error": {
+    "message": "Insufficient permissions to access these resources.",
+    "code": "INSUFFICIENT_PERMISSIONS"
+  }
+}
+```
+
+### 404 Not Found
+
+The requested resource doesn't exist.
+
+**Error Response:**
+
+```json
+{
+  "success": false,
+  "error": {
+    "message": "The requested resource was not found.",
+    "code": "NOT_FOUND"
+  }
+}
+```
+
+**Common Causes:**
+
+- Invalid resource ID
+- Resource was deleted
+- Resource belongs to a different project
+- Incorrect endpoint path
+
+### 429 Too Many Requests
+
+The rate limit has been exceeded. You've made too many requests in a given time period.
+
+**Error Response:**
+
+```json
+{
+  "success": false,
+  "error": {
+    "message": "Rate limit exceeded",
+    "code": "RATE_LIMIT_EXCEEDED",
+    "retryAfter": 10 // epoch timestamp
+  }
+}
+```
+
+## Server Errors (5xx)
+
+### 500 Internal Server Error
+
+An unexpected error occurred on the server side.
+
+**Error Response:**
+
+```json
+{
+  "success": false,
+  "error": {
+    "message": "Something went wrong on our end",
+    "code": "INTERNAL_SERVER_ERROR"
+  }
+}
+```
+
+## Best Practices for Error Handling
+
+### 1. Always Check Response Status
+
+```javascript
+const response = await fetch(url, options);
+if (!response.ok) {
+  const error = await response.json();
+  // Handle error based on status code
+}
+```
+
+### 2. Implement Comprehensive Error Handling
+
+```javascript
+async function handleApiRequest(url, options) {
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+
+    if (!response.ok) {
+      switch (response.status) {
+        case 400:
+          handleValidationError(data);
+          break;
+        case 401:
+          handleAuthenticationError();
+          break;
+        case 402:
+          handlePaymentError(data);
+          break;
+        case 403:
+          handlePermissionError(data);
+          break;
+        case 404:
+          handleNotFoundError();
+          break;
+        case 409:
+          handleConflictError(data);
+          break;
+        case 429:
+          await handleRateLimitError(data);
+          break;
+        case 500:
+          await handleServerError(response.status);
+          break;
+        default:
+          handleUnknownError(response.status, data);
+      }
+      throw new Error(data.message || "Request failed");
+    }
+
+    return data;
+  } catch (error) {
+    if (error instanceof TypeError) {
+      // Network error
+      console.error("Network error:", error);
+    } else {
+      // API error
+      console.error("API error:", error);
+    }
+    throw error;
+  }
+}
+```
+
+### 3. Implement Retry Logic
+
+```javascript
+async function retryRequest(requestFn, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await requestFn();
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+
+      // Only retry on certain errors
+      const shouldRetry = error.status === 429 || error.status === 500;
+
+      if (shouldRetry) {
+        const delay = error.retryAfter
+          ? error.retryAfter * 1000
+          : Math.pow(2, i) * 1000;
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      } else {
+        throw error;
+      }
+    }
+  }
+}
+```
+
+### 4. Log Errors for Monitoring
+
+```javascript
+function logError(error, context) {
+  // Log to your error tracking service
+  console.error("API Error:", {
+    status: error.status,
+    message: error.message,
+    errors: error.errors,
+    context: context,
+    timestamp: new Date().toISOString(),
+  });
+}
+```
+
+### 5. Provide User-Friendly Error Messages
+
+```javascript
+function getUserFriendlyError(error) {
+  switch (error.status) {
+    case 400:
+      return "Please check your input and try again.";
+    case 401:
+      return "Please check your API key and try again.";
+    case 402:
+      return "Payment required. Please update your payment method.";
+    case 403:
+      return "You have reached your plan limit. Please upgrade your plan.";
+    case 404:
+      return "The requested resource was not found.";
+    case 429:
+      return "Too many requests. Please wait a moment and try again.";
+    case 500:
+      return "Service temporarily unavailable. Please try again later.";
+    default:
+      return "An unexpected error occurred. Please try again.";
+  }
+}
+```
+
+## Need Help?
+
+If you're experiencing persistent errors or need assistance with error handling, please contact support at <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
+
+When reporting errors, please include:
+
+- The endpoint you're calling
+- The request payload
+- The full error response
+- Steps to reproduce the issue
