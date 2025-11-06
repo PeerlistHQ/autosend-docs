@@ -1689,8 +1689,19 @@
           },
           "html": {
             "type": "string",
-            "description": "HTML content of the email. Required if not using templateId.",
-            "example": "<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>"
+            "description": "HTML content of the email. Required if not using templateId.\n\n**Handlebars Template Variables:**\n\nUse Handlebars syntax for template variables in your HTML. Variables are wrapped in double curly braces: `{{variableName}}`. Example:\n\n```html\n<h1>Hello {{firstName}}!</h1>\n\n<p>Your order #{{orderNumber}} has been shipped.</p>\n\n<p>Total: {{orderTotal}}</p>\n```\n\nProvide the values for these variables in the `dynamicData` field.",
+            "example": "<h1>Hello {{firstName}}!</h1>\n\n<p>Your order #{{orderNumber}} has been shipped.</p>\n\n<p>Total: {{orderTotal}}</p>"
+          },
+          "dynamicData": {
+            "type": "object",
+            "description": "Key-value pairs for template variable substitution (Handlebars syntax)",
+            "additionalProperties": true,
+            "example": {
+              "name": "Jane",
+              "firstName": "Jane",
+              "orderNumber": "ORD-12345",
+              "orderTotal": "$99.99"
+            }
           },
           "text": {
             "type": "string",
@@ -1710,17 +1721,6 @@
             "type": "string",
             "description": "ID of the unsubscribe group",
             "example": "unsub_group_123"
-          },
-          "dynamicData": {
-            "type": "object",
-            "description": "Key-value pairs for template variable substitution (Handlebars syntax)",
-            "additionalProperties": true,
-            "example": {
-              "name": "Jane",
-              "firstName": "Jane",
-              "orderNumber": "ORD-12345",
-              "orderTotal": "$99.99"
-            }
           }
         }
       },
@@ -1736,28 +1736,6 @@
             "type": "string",
             "description": "Response message",
             "example": "Email queued successfully"
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "emailId": {
-                "type": "string",
-                "description": "Unique identifier for the queued email",
-                "example": "email_xyz789"
-              },
-              "status": {
-                "type": "string",
-                "description": "Email status",
-                "enum": ["queued", "sent", "failed"],
-                "example": "queued"
-              },
-              "queuedAt": {
-                "type": "string",
-                "format": "date-time",
-                "description": "Timestamp when email was queued",
-                "example": "2025-09-30T10:30:00.000Z"
-              }
-            }
           }
         }
       },
