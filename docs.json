@@ -18,15 +18,7 @@
             "group": "Getting Started",
             "pages": [
               "index",
-              {
-                "group": "Domains",
-                "pages": [
-                 
-                  "domains/configuration",
-                  "domains/troubleshooting"
-                 
-                ]
-              },
+             "domain",
               "/api-keys"
             ]
           },
