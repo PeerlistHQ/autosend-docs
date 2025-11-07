@@ -2,6 +2,10 @@
 sidebarTitle: 'Best Practices'
 ---
 
+
+import {APP_PATHS} from "/snippets/appPaths.mdx"
+
+
 ### 1. Use Environment Variables
 
 Never hardcode API keys in your source code:
@@ -42,8 +46,9 @@ function isValidEmail(email) {
 
 ### 4. Use Verified Domains
 
-Always send from verified domains to ensure deliverability. [Learn how to verify domains →](/domain-configuration)
+Always send from verified domains to ensure deliverability. <a href={APP_PATHS.domainConfiguration} title="Domain configuration">Learn how to verify domains →</a>
 
 ### 5. Include Unsubscribe Links
 
-For marketing emails, always include unsubscribe links to comply with regulations and maintain good sender reputation.
+For marketing emails, always include unsubscribe links to comply with regulations and maintain good sender reputation. You can use `{{unsubscribe}}` and `{{unsubscribe_preference}}` variable tags in your email template to dynamically insert unsubscribe link.
+<Tip>Many people confuse transactional and marketing emails, especially when it comes to unsubscribe links. To clear things up, we’ve covered [whether transactional emails need an unsubscribe link](https://autosend.com/blog/do-transactional-emails-need-an-unsubscribe-link) in detail.</Tip>

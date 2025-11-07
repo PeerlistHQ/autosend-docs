@@ -7,12 +7,6 @@ sidebarTitle: "Introduction"
 import { APP_PATHS } from '/snippets/appPaths.mdx'
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx'
 
-<Columns cols={1}>
-  <Card title="FAQs" icon="question" iconType="duotone" horizontal href={AUTOSEND_PATHS.faqs}>
-    Frequently asked questions about transactional emails, marketing emails, pricing, and everything else.
-  </Card>
-</Columns>
-
 ## Transactional Emails
 
 Learn how to send transactional emails like magic links, verification codes, and signup confirmations using the AutoSend Email API.
@@ -42,5 +36,11 @@ Learn how to send marketing emails like newsletters, product updates, and announ
   </Card>
   <Card title="Sender" icon="circle-user" iconType="duotone" href={APP_PATHS.sender}>
     Learn how to add and manage senders for sending marketing campaigns.
+  </Card>
+</Columns>
+
+<Columns cols={1}>
+  <Card title="FAQs" icon="question" iconType="duotone" horizontal href={AUTOSEND_PATHS.faqs}>
+    Frequently asked questions about transactional emails, marketing emails, pricing, and everything else.
   </Card>
 </Columns>
