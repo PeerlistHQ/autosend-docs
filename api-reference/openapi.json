@@ -804,42 +804,6 @@
               "plan": "premium"
             }
           },
-          "status": {
-            "type": "string",
-            "description": "Contact status",
-            "enum": ["active", "inactive", "unsubscribed"],
-            "example": "active"
-          },
-          "unsubscribeGroups": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "List of unsubscribe group IDs",
-            "example": []
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Contact tags",
-            "example": []
-          },
-          "contactLists": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "List of contact list IDs",
-            "example": []
-          },
-          "metadata": {
-            "type": "object",
-            "description": "Additional metadata",
-            "additionalProperties": true,
-            "example": {}
-          },
           "createdAt": {
             "type": "string",
             "format": "date-time",
@@ -851,6 +815,11 @@
             "format": "date-time",
             "description": "Contact last update timestamp",
             "example": "2024-01-15T10:30:00.000Z"
+          },
+          "projectId": {
+            "type": "string",
+            "description": "Project ID that the contact belongs to",
+            "example": "229f1f77bcf86cd9273048038"
           }
         }
       },
@@ -864,11 +833,6 @@
           },
           "data": {
             "$ref": "#/components/schemas/Contact"
-          },
-          "message": {
-            "type": "string",
-            "description": "Response message",
-            "example": "Contact created successfully"
           }
         }
       },
@@ -1005,11 +969,20 @@
           "data": {
             "type": "object",
             "properties": {
-              "results": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/BulkUpdateResult"
-                }
+              "successCount": {
+                "type": "integer",
+                "description": "Number of successfully updated/created contacts",
+                "example": 1
+              },
+              "failedCount": {
+                "type": "integer",
+                "description": "Number of failed contacts",
+                "example": 0
+              },
+              "totalCount": {
+                "type": "integer",
+                "description": "Total number of contacts processed",
+                "example": 1
               }
             }
           }
