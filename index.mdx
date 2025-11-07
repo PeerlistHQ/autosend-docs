@@ -6,6 +6,7 @@ sidebarTitle: "Introduction"
 
 import { APP_PATHS } from '/snippets/appPaths.mdx'
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx'
+import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx'
 
 ## Transactional Emails
 
@@ -39,8 +40,21 @@ Learn how to send marketing emails like newsletters, product updates, and announ
   </Card>
 </Columns>
 
-<Columns cols={1}>
-  <Card title="FAQs" icon="question" iconType="duotone" horizontal href={AUTOSEND_PATHS.faqs}>
+
+## Need Help ?
+<Columns cols={2}>
+  {/* TODO: update guides url onces page up */}  
+
+  <Card title="Guides" icon="question" iconType="duotone" href={APP_PATHS.domainConfiguration}>
     Frequently asked questions about transactional emails, marketing emails, pricing, and everything else.
+  </Card>
+  <Card title="API Reference" icon="question" iconType="duotone" href={APP_PATHS.apiReference}>
+    Frequently asked questions about transactional emails, marketing emails, pricing, and everything else.
+  </Card>
+  <Card title="FAQs" icon="question" iconType="duotone" href={AUTOSEND_PATHS.faqs}>
+    Frequently asked questions about transactional emails, marketing emails, pricing, and everything else.
+  </Card>
+  <Card title="Contact Support" icon="question" iconType="duotone" href={`mailto:${SUPPORT_EMAIL}`}>
+    Get direct help from our support team
   </Card>
 </Columns>
