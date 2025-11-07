@@ -18,15 +18,7 @@
             "group": "Getting Started",
             "pages": [
               "index",
-              {
-                "group": "Domains",
-                "pages": [
-                 
-                  "domains/configuration",
-                  "domains/troubleshooting"
-                 
-                ]
-              },
+             "domain",
               "/api-keys"
             ]
           },
@@ -43,7 +35,9 @@
             "pages": [
               "transactional-emails/email-templates",
               "transactional-emails/email-activity",
+              "transactional-emails/variables",
               "transactional-emails/troubleshooting"
+              
             ]
           },
         

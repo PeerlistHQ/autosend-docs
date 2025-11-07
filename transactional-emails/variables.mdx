@@ -1,0 +1,148 @@
+---
+title: 'What are Variables in AutoSend?'
+description: 'Variables let you personalize your transactional emails by dynamically inserting data such as a recipient’s name, order details, or verification link into your email templates.'
+sidebarTitle: 'Variables'
+---
+
+Instead of hardcoding values, you can use placeholders that AutoSend replaces with actual data when sending the email via API.
+
+For example:
+
+```
+Hi {{firstName}}, your order {{order_id}} has been shipped!
+```
+
+When the email is sent, it becomes:
+
+```
+Hi Robert, your order #2341 has been shipped!
+```
+
+Variables make your emails more personalized, relevant, and engaging, all without manually editing each message.
+
+---
+
+## How Variables Work
+
+When you send a transactional email through the AutoSend Email API, you can include variables as key-value pairs in your request payload.
+
+AutoSend automatically replaces these placeholders with their corresponding values in the email template before delivery.
+
+### Example API Payload:
+
+```json
+{
+  "to": "robert@example.com",
+  "template_id": "welcome_email",
+  "variables": {
+    "name": "Robert,
+    "login_link": "https://app.autosend.io/login"
+  }
+}
+```
+
+### Example Template:
+
+```
+Hi {{firstName}},
+
+Welcome to AutoSend! You can log in to your account using the link below:
+{{login_link}}
+```
+
+### Resulting Email:
+
+```
+Hi Robert,
+
+Welcome to AutoSend! You can log in to your account using the link below:
+https://app.autosend.io/login
+
+```
+
+---
+
+## Supported Variable Syntax
+
+AutoSend uses **double curly braces `{{variable_name}}`** to identify variables inside email templates.
+
+<Info>Variable names can include letters, numbers, and underscores, but must start with a letter (e.g., `{{first_name}}`, `{{orderTotal}}`).</Info>
+
+---
+
+## Using Variables in Email Templates
+
+You can use variables anywhere in the email:
+
+- Subject line
+- Body text
+- Button URLs
+- Links or call-to-actions
+
+Example:
+
+```
+Subject: Welcome, {{first_name}}!
+
+Body:
+Hi {{first_name}},
+Your account was created on {{signup_date}}.
+Click below to verify your email:
+{{verification_link}}
+```
+
+---
+
+## Default and Custom Variables
+
+### Default Variables
+
+Some system-level variables are automatically available when sending emails through AutoSend.
+
+For example:
+
+- `{{email}}` — recipient’s email address
+- `{{date}}` — current date
+
+### Custom Variables
+
+You can define your own custom variables when sending emails via the API. These can be anything specific to your workflow. Eg. `{{order_id}}`, `{{invoice_amount}}`, or `{{reset_link}}`.
+
+---
+
+## Using Dynamic Variables with Conditions
+
+You can use simple `if/else` logic in your email templates to handle missing data. For example, if a user doesn’t have a `firstName`, you can fall back to a default like **“there”.**
+
+
+``` jsx
+Hello {{#if firstName}}{{firstName}}{{else}}there{{/if}}!
+```
+
+### What this does:
+ - If `firstName` exists → `Hello Akash!`
+ - If it’s missing/empty → `Hello there!`
+
+This works for any variable in AutoSend, just wrap it with `{{#if}}{{else}}{{/if}}` to make your messages feel natural even when some data is unavailable. 
+
+## Best Practices
+
+- **Always test your templates** before sending live emails to ensure variables are replaced correctly.
+- **Provide fallback values** in your system in case a variable is missing (e.g., “Hi there” if `{{name}}` is not provided).
+- **Keep variable names descriptive** for better clarity and maintainability.
+
+---
+
+## Troubleshooting
+
+<AccordionGroup>
+
+  <Accordion title="If a variable doesn’t render correctly:">
+
+  - Check that your variable name in the API payload exactly matches the placeholder in your template.
+  - Ensure that the variable is passed under the `"variables"` object in your API request.
+  - Preview the email in your AutoSend dashboard to confirm the replacement works as expected.
+
+  </Accordion>
+
+</AccordionGroup>
