@@ -43,7 +43,9 @@
             "pages": [
               "transactional-emails/email-templates",
               "transactional-emails/email-activity",
+              "transactional-emails/variables",
               "transactional-emails/troubleshooting"
+              
             ]
           },
         
