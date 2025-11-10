@@ -135,14 +135,12 @@
       },
       {
         "tab": "Changelog",
-        "hidden": true,
+        "hidden": false,
         "groups": [
           {
-            "group": "November",
+            "group": "November 2025",
             "pages": [
-              "changelog/2025/nov/3",
-              "changelog/2025/nov/5",
-              "changelog/2025/nov/7"
+              "changelog/2025/nov/1"
             ]
           }
         ]
