@@ -1,0 +1,110 @@
+---
+title: "Introducing Marketing Emails"
+description: "Now you can send marketing campaigns with AutoSend!"
+sidebarTitle: "01 November 2025"
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+
+We're excited to announce the launch of <a href={AUTOSEND_PATHS.marketingEmails} target='_blank' title='Marketing Emails'>Marketing Emails</a> in AutoSend! You can now create and send marketing campaigns, manage your contacts, and build engaged audiences—all from one platform.
+
+## What's New
+
+### Campaigns
+
+Create and send one-time or scheduled marketing emails to your contacts, lists, or segments. Perfect for newsletters, announcements, and promotional emails.
+
+**Key Features:**
+- **HTML Email Designer**: Build responsive emails with inline CSS support
+- **Variable Personalization**: Use variables like `{{first_name}}`, `{{company_name}}` to personalize content dynamically
+- **Real-time Preview**: See how your email looks on desktop and mobile devices before sending
+- **Send Now or Schedule**: Send campaigns immediately or schedule them for later
+- **Test Emails**: Send test emails to up to 10 recipients before launching your campaign
+- **Targeting Options**: Send to all contacts, specific lists, or dynamic segments
+- **Exclusion Lists**: Exclude specific lists or segments from receiving campaigns
+
+---
+
+### Contacts Management
+
+Organize and manage your audience with powerful contact management tools.
+
+**Features:**
+- **All Contacts View**: See every contact in your account in one place
+- **Contact Details**: View comprehensive information including reserved fields, custom fields, lists, segments, unsubscribe status, and email activity
+- **Reserved Fields**: System-defined fields like `email`, `firstName`, `lastName`, `mobile`, `address`, and more
+- **Custom Fields**: Create custom fields (text, number, or date) to store additional information about your contacts
+- **CSV Import**: Bulk import contacts via CSV with field mapping and automatic duplicate detection
+- **Contact Activity**: Track email history and engagement for each contact
+
+---
+
+### Lists & Segments
+
+Organize your contacts for better targeting and engagement.
+
+**Lists:**
+- Static collections of contacts grouped together
+- Perfect for fixed criteria like "Newsletter Subscribers" or "Event Attendees"
+- Add contacts manually or via CSV import
+
+**Segments:**
+- Dynamic groups that update automatically based on conditions
+- Target audiences based on real-time data (e.g., users who signed up last month)
+- Create segments from any list with custom criteria
+- Auto-updates as contacts meet or stop meeting your defined criteria
+
+---
+
+### Sender Management
+
+Add and manage sender emails for your marketing campaigns.
+
+**Features:**
+- Add sender names and email addresses
+- Set reply-to addresses
+- Only authenticated domains are allowed (ensures better deliverability)
+- Build trust with recipients by using verified sender addresses
+
+---
+
+### Unsubscribe Groups
+
+Categorize your emails so recipients can choose which types of emails they want to receive.
+
+**Benefits:**
+- **Better User Control**: Recipients can unsubscribe from specific email types without opting out of everything
+- **Improved Deliverability**: Keep your lists cleaner and engagement rates higher
+- **Compliance**: Supports CAN-SPAM, GDPR, and CASL regulations
+- **Visibility Control**: Toggle visibility of unsubscribe groups on your email preferences page
+
+**Use Cases:**
+- Product Updates
+- Newsletters
+- Promotions
+- Event Invites
+
+---
+
+## Learn More
+<Columns cols={2}> 
+<Card title="Creating Campaigns" icon="megaphone" iconType="duotone" href={APP_PATHS.campaigns}>
+    Learn how to create and send marketing campaigns using AutoSend.
+  </Card>
+  <Card title="Managing Contacts" icon="book-user" iconType="duotone" href={APP_PATHS.contactsIntroduction}>
+    Learn about contact management, custom fields, and contact details in AutoSend.
+  </Card>
+  <Card title="Working with Lists and Segments" icon="list" iconType="duotone" href={APP_PATHS.contactsLists}>
+    Organize your contacts with static lists and dynamic segments for better targeting.
+  </Card>
+  <Card title="Setting up Senders" icon="circle-user" iconType="duotone" href={APP_PATHS.sender}>
+    Learn how to add and manage authenticated sender emails for your campaigns.
+  </Card>
+  <Card title="Unsubscribe Groups" icon="ban" iconType="duotone" href={APP_PATHS.unsubscribeGroups}>
+    Categorize your emails so recipients can choose which types of emails they want to receive.
+  </Card>
+  <Card title="Import via CSV" icon="upload" iconType="duotone" href={APP_PATHS.contactsImportCsv}>
+    Bulk import contacts into AutoSend using a CSV file with field mapping.
+  </Card>
+</Columns>
