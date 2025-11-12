@@ -1,0 +1,579 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+      "title": "AutoSend API",
+      "description": "AutoSend REST API for managing contacts and sending emails",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "https:/api.autosend.com/v1"
+      }
+    ],
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ],
+    "paths": {
+      "/mails/send": {
+        "post": {
+          "summary": "Send Email",
+          "description": "Sends a transactional or marketing email. Either templateId OR html/text content must be provided. If using a template, subject is optional.",
+          "tags": ["Mails"],
+          "requestBody": {
+            "description": "Email data to send",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SendEmailRequest"
+                },
+                "examples": {
+                  "withHtml": {
+                    "summary": "Send email with HTML content",
+                    "value": {
+                      "to": {
+                        "email": "customer@example.com",
+                        "name": "Jane Smith"
+                      },
+                      "from": {
+                        "email": "hello@mail.yourdomain.com",
+                        "name": "Your Company"
+                      },
+                      "subject": "Welcome to Our Platform!",
+                      "html": "<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>",
+                      "dynamicData": {
+                        "name": "Jane"
+                      },
+                      "replyTo": {
+                        "email": "support@yourdomain.com"
+                      }
+                    }
+                  },
+                  "withAttachments": {
+                    "summary": "Send email with attachments",
+                    "value": {
+                      "to": {
+                        "email": "customer@example.com",
+                        "name": "Jane Smith"
+                      },
+                      "from": {
+                        "email": "hello@mail.yourdomain.com",
+                        "name": "Your Company"
+                      },
+                      "subject": "Welcome to Our Platform!",
+                      "html": "<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>",
+                      "dynamicData": {
+                        "name": "Jane"
+                      },
+                      "replyTo": {
+                        "email": "support@yourdomain.com"
+                      },
+                      "attachments": [
+                        {
+                          "filename": "attachment.pdf",
+                          "content": "base64-encoded-content",
+                          "contentType": "application/pdf"
+                        },
+                        {
+                          "filename": "smiley.png",
+                          "content": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII=",
+                          "contentType": "image/png"
+                        },
+                        {
+                          "fileUrl": "https://pdfobject.com/pdf/sample.pdf",
+                          "contentType": "application/pdf",
+                          "filename": "sample.pdf"
+                        }
+                      ]
+                    }  
+                  },
+                  "withTemplate": {
+                    "summary": "Send email with template",
+                    "value": {
+                      "to": {
+                        "email": "customer@example.com",
+                        "name": "Jane Smith"
+                      },
+                      "from": {
+                        "email": "hello@mail.yourdomain.com",
+                        "name": "Your Company"
+                      },
+                      "templateId": "tmpl_abc123",
+                      "dynamicData": {
+                        "firstName": "Jane",
+                        "orderNumber": "ORD-12345",
+                        "orderTotal": "$99.99"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Email queued successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/SendEmailResponse"
+                  },
+                  "example": {
+                    "success": true,
+                    "data": {
+                      "emailId": "507f1f77bcf86cd799439011"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/mails/bulk": {
+        "post": {
+          "summary": "Bulk Send Email",
+          "description": "Sends the same email to multiple recipients in a single API request. This endpoint is identical to the send email endpoint, with the only difference being that `recipients` is an array of recipients instead of a single recipient. Maximum limit: 100 recipients per request.",
+          "tags": ["Mails"],
+          "requestBody": {
+            "description": "Email data to send to multiple recipients",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkSendEmailRequest"
+                },
+                "examples": {
+                  "withHtml": {
+                    "summary": "Bulk send email with HTML content",
+                    "value": {
+                      "recipients": [
+                        {
+                          "email": "customer1@example.com",
+                          "name": "Jane Smith",
+                          "dynamicData": {
+                            "firstName": "Jane",
+                            "orderNumber": "ORD-123",
+                            "orderTotal": "$19.99"
+                          }
+                        },
+                        {
+                          "email": "customer2@example.com",
+                          "name": "John Doe",
+                          "dynamicData": {
+                            "firstName": "John",
+                            "orderNumber": "ORD-124",
+                            "orderTotal": "$29.99"
+                          }
+                        }
+                      ],
+                      "from": {
+                        "email": "hello@mail.yourdomain.com",
+                        "name": "Your Company"
+                      },
+                      "subject": "Welcome to Our Platform!",
+                      "html": "<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>",
+                      "replyTo": {
+                        "email": "support@yourdomain.com"
+                      }
+                    }
+                  },
+                  "withTemplate": {
+                    "summary": "Bulk send email with template",
+                    "value": {
+                      "recipients": [
+                        {
+                          "email": "customer1@example.com",
+                          "name": "Jane Smith"
+                        },
+                        {
+                          "email": "customer2@example.com",
+                          "name": "John Doe"
+                        }
+                      ],
+                      "from": {
+                        "email": "hello@mail.yourdomain.com",
+                        "name": "Your Company"
+                      },
+                      "templateId": "tmpl_abc123",
+                      "dynamicData": {
+                        "firstName": "Valued",
+                        "orderNumber": "ORD-12345",
+                        "orderTotal": "$99.99"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Bulk send completed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BulkSendEmailResponse"
+                  },
+                  "example": {
+                    "success": true,
+                    "data": {
+                      "batchId": "ae22c1e0-2022-4f6b-bdca-ce94901fbc6e",
+                      "totalRecipients": 1,
+                      "successCount": 1,
+                      "failedCount": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "EmailAddress": {
+          "type": "object",
+          "required": ["email"],
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "Email address",
+              "example": "customer@example.com"
+            },
+            "name": {
+              "type": "string",
+              "description": "Display name",
+              "example": "John Doe"
+            },
+            "dynamicData": {
+              "type": "object",
+              "description": "Key-value pairs for template variable substitution (Handlebars syntax)",
+              "additionalProperties": true,
+              "example": {
+                "name": "Jane",
+                "firstName": "Jane",
+                "orderNumber": "ORD-12345",
+                "orderTotal": "$99.99"
+              }
+            }
+          }
+        },
+        "SendEmailRequest": {
+          "type": "object",
+          "required": ["to", "from"],
+          "properties": {
+            "to": {
+              "$ref": "#/components/schemas/EmailAddress",
+              "description": "Recipient email address and name"
+            },
+            "from": {
+              "$ref": "#/components/schemas/EmailAddress",
+              "description": "Sender email address (must be from a verified domain) and name"
+            },
+            "subject": {
+              "type": "string",
+              "description": "Email subject line (max 998 characters). Required if not using templateId.",
+              "maxLength": 998,
+              "example": "Welcome to Our Platform!"
+            },
+            "html": {
+              "type": "string",
+              "description": "HTML content of the email. Required if not using templateId.\n\n**Handlebars Template Variables:**\n\nUse Handlebars syntax for template variables in your HTML. Variables are wrapped in double curly braces: `{{variableName}}`. Example:\n\n```html\n<h1>Hello {{firstName}}!</h1>\n\n<p>Your order #{{orderNumber}} has been shipped.</p>\n\n<p>Total: {{orderTotal}}</p>\n```\n\nProvide the values for these variables in the `dynamicData` field.",
+              "example": "<h1>Hello {{firstName}}!</h1>\n\n<p>Your order #{{orderNumber}} has been shipped.</p>\n\n<p>Total: {{orderTotal}}</p>"
+            },
+            "dynamicData": {
+              "type": "object",
+              "description": "Key-value pairs for template variable substitution (Handlebars syntax)",
+              "additionalProperties": true,
+              "example": {
+                "name": "Jane",
+                "firstName": "Jane",
+                "orderNumber": "ORD-12345",
+                "orderTotal": "$99.99"
+              }
+            },
+            "text": {
+              "type": "string",
+              "description": "Plain text version of the email",
+              "example": "Welcome! Thanks for signing up."
+            },
+            "templateId": {
+              "type": "string",
+              "description": "ID of the email template to use. Required if not providing html/text.",
+              "example": "tmpl_abc123"
+            },
+            "replyTo": {
+              "$ref": "#/components/schemas/EmailAddress",
+              "description": "Reply-to email address and name"
+            },
+            "unsubscribeGroupId": {
+              "type": "string",
+              "description": "ID of the unsubscribe group",
+              "example": "unsub_group_123"
+            },
+            "attachments": {
+              "type": "array",
+              "description": "Filename and content of attachments (max 40MB per email, after Base64 encoding of the attachments).",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "filename": {
+                    "type": "string",
+                    "description": "(Required) Filename of the attachment"
+                  },
+                  "content": {
+                    "type": "string",
+                    "description": "Base64-encoded content of the attachment (required if fileUrl is not provided)"
+                  },
+                  "contentType": {
+                    "type": "string",
+                    "description": "Content type of the attachment (e.g. application/pdf, image/png, image/jpeg)"
+                  },
+                  "fileUrl": {
+                    "type": "string",
+                    "description": "File URL where the attachment is hosted (required if content is not provided)"
+                  },
+                  "description":{
+                    "type": "string",
+                    "description": "Description of the attachment (optional)"
+                  }
+                }
+              },
+              "example": [
+                {
+                  "filename": "attachment.pdf",
+                  "content": "base64-encoded-content",
+                  "contentType": "application/pdf"
+                }
+              ]
+            }
+          }
+        },
+        "SendEmailResponse": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "description": "Indicates if the request was successful",
+              "example": true
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "emailId": {
+                  "type": "string",
+                  "description": "Unique identifier for the sent email",
+                  "example": "507f1f77bcf86cd799439011"
+                }
+              }
+            }
+          }
+        },
+        "SendEmailErrorResponse": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "description": "Indicates if the request was successful",
+              "example": false
+            },
+            "message": {
+              "type": "string",
+              "description": "Error message",
+              "example": "Validation failed"
+            },
+            "errors": {
+              "type": "array",
+              "description": "Array of validation errors",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "string",
+                    "description": "Field name that failed validation",
+                    "example": "to.email"
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "Error message for this field",
+                    "example": "Invalid email format"
+                  }
+                }
+              },
+              "example": [
+                {
+                  "field": "to.email",
+                  "message": "Invalid email format"
+                }
+              ]
+            }
+          }
+        },
+        "RateLimitErrorResponse": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "description": "Indicates if the request was successful",
+              "example": false
+            },
+            "message": {
+              "type": "string",
+              "description": "Error message",
+              "example": "Rate limit exceeded"
+            },
+            "retryAfter": {
+              "type": "integer",
+              "description": "Number of seconds to wait before retrying",
+              "example": 30
+            }
+          }
+        },
+        "BulkSendEmailRequest": {
+          "type": "object",
+          "required": ["recipients", "from"],
+          "properties": {
+            "recipients": {
+              "type": "array",
+              "description": "Array of recipient email addresses and names (maximum 100 recipients)",
+              "items": {
+                "$ref": "#/components/schemas/EmailAddress"
+              },
+              "minItems": 1,
+              "maxItems": 100
+            },
+            "from": {
+              "$ref": "#/components/schemas/EmailAddress",
+              "description": "Sender email address (must be from a verified domain) and name"
+            },
+            "subject": {
+              "type": "string",
+              "description": "Email subject line (max 998 characters). Required if not using templateId.",
+              "maxLength": 998,
+              "example": "Welcome to Our Platform!"
+            },
+            "html": {
+              "type": "string",
+              "description": "HTML content of the email. Required if not using templateId.",
+              "example": "<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>"
+            },
+            "text": {
+              "type": "string",
+              "description": "Plain text version of the email",
+              "example": "Welcome! Thanks for signing up."
+            },
+            "templateId": {
+              "type": "string",
+              "description": "ID of the email template to use. Required if not providing html/text.",
+              "example": "tmpl_abc123"
+            },
+            "replyTo": {
+              "$ref": "#/components/schemas/EmailAddress",
+              "description": "Reply-to email address and name"
+            },
+            "unsubscribeGroupId": {
+              "type": "string",
+              "description": "ID of the unsubscribe group",
+              "example": "unsub_group_123"
+            },
+            "dynamicData": {
+              "type": "object",
+              "description": "Key-value pairs for template variable substitution (Handlebars syntax). Same data will be used for all recipients.",
+              "additionalProperties": true,
+              "example": {
+                "name": "Valued Customer",
+                "firstName": "Valued",
+                "orderNumber": "ORD-12345",
+                "orderTotal": "$99.99"
+              }
+            }
+          }
+        },
+        "BulkSendEmailResponse": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "description": "Indicates if the request was successful",
+              "example": true
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "batchId": {
+                  "type": "string",
+                  "description": "Unique identifier for the batch",
+                  "example": "ae22c1e0-2022-4f6b-bdca-ce94901fbc6e"
+                },
+                "totalRecipients": {
+                  "type": "integer",
+                  "description": "Total number of recipients",
+                  "example": 1
+                },
+                "successCount": {
+                  "type": "integer",
+                  "description": "Number of successfully queued emails",
+                  "example": 1
+                },
+                "failedCount": {
+                  "type": "integer",
+                  "description": "Number of failed emails",
+                  "example": 0
+                }
+              }
+            }
+          }
+        },
+        "BulkSendEmailResult": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "description": "Indicates if the email was queued successfully",
+              "example": true
+            },
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "Recipient email address",
+              "example": "customer1@example.com"
+            },
+            "emailId": {
+              "type": "string",
+              "description": "Unique identifier for the queued email (only present if success is true)",
+              "example": "email_xyz789"
+            },
+            "status": {
+              "type": "string",
+              "description": "Email status (only present if success is true)",
+              "enum": ["queued", "sent", "failed"],
+              "example": "queued"
+            },
+            "queuedAt": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Timestamp when email was queued (only present if success is true)",
+              "example": "2025-09-30T10:30:00.000Z"
+            },
+            "error": {
+              "type": "string",
+              "description": "Error message (only present if success is false)",
+              "example": "Invalid email format"
+            }
+          }
+        }
+      },
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer"
+        }
+      }
+    }
+  }
+  
