@@ -4,6 +4,9 @@ description: "Use webhooks to notify your application about email and contact ev
 sidebarTitle: "Introduction"
 ---
 
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { NGROK_LINK, LOCALTUNNEL_LINK } from '/snippets/custom-variables.mdx';
+
 ## What is a webhook?
 
 Webhooks are HTTP callbacks that allow AutoSend to send real-time notifications to your application when specific events occur. Instead of continuously polling AutoSend's API to check for updates, webhooks push data to your application immediately when events happen.
@@ -157,7 +160,7 @@ On receiving an event, you should respond with an `HTTP 200 OK` status within 10
 </Step>
 <Step title="Register your development webhook endpoint">
 
-1. Navigate to the **Webhooks** section in your AutoSend dashboard
+1. Navigate to the **Webhooks** section in your <a href={AUTOSEND_PATHS.dashboard} title='AutoSend dashboard' target='_blank' rel='noopener noreferrer'>AutoSend dashboard</a>
 2. Click the **"New Webhook"** button
 3. Fill in the webhook details:
    - **Name**: A friendly name for identification (e.g., "Development Email Tracker")
@@ -191,7 +194,7 @@ app.post("/webhooks/autosend", (req, res) => {
 
 Test your webhook by performing actions in AutoSend that trigger events:
 
-1. **For Email Events**: Send a test campaign or transactional email through the AutoSend dashboard
+1. **For Email Events**: Send a test campaign or transactional email through the <a href={AUTOSEND_PATHS.dashboard} title='AutoSend dashboard' target='_blank' rel='noopener noreferrer'>AutoSend dashboard</a>
 2. **For Contact Events**: Create, update, or delete a test contact in your project
 3. **Watch your logs**: Your endpoint should receive webhook requests for these events
 
@@ -340,7 +343,7 @@ No, webhook URLs cannot be changed after creation for security reasons. If you n
 
 You can reveal your webhook secret:
 
-1. Go to Webhooks section
+1. Go to <a href={AUTOSEND_PATHS.webhooks} title='Webhooks section' target='_blank' rel='noopener noreferrer'>Webhooks section</a>
 2. Click the menu (⋮) on your webhook card
 3. Select "Edit"
 4. Click "Reveal Secret" button
@@ -362,7 +365,7 @@ Yes, webhook requests have a 10-second timeout. Ensure your endpoint responds wi
 <Accordion title="How do I test webhooks locally?">
 
 
-Yes! Use tools like [ngrok](https://ngrok.com) or [localtunnel](https://localtunnel.github.io) to expose your local server to the internet, then create a webhook in the dashboard with your ngrok URL. Trigger events by sending emails or managing contacts in AutoSend, and your local endpoint will receive the webhooks.
+Yes! Use tools like <a href={NGROK_LINK} target='_blank' title='ngrok'>ngrok</a> or <a href={LOCALTUNNEL_LINK} target='_blank' title='localtunnel'>localtunnel</a> to expose your local server to the internet, then create a webhook in the <a href={AUTOSEND_PATHS.webhooks} title='dashboard' target='_blank' rel='noopener noreferrer'>dashboard</a> with your ngrok URL. Trigger events by sending emails or managing contacts in AutoSend, and your local endpoint will receive the webhooks.
 </Accordion>
 <Accordion title="Are webhooks secure?">
 
