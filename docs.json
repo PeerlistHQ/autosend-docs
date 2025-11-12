@@ -65,12 +65,12 @@
               "others/suppressions",
               "others/unsubscribe-groups",
               {
-                "group": "Webhook",
+                "group": "Webhooks",
                 "pages": [
-                  "others/webhook/introduction",
-                  "others/webhook/event-type",
-                  "others/webhook/retries",
-                  "others/webhook/verify-requests"
+                  "others/webhooks/introduction",
+                  "others/webhooks/event-type",
+                  "others/webhooks/retries",
+                  "others/webhooks/verify-requests"
                 ]
               }
             ]
