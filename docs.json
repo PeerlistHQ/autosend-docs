@@ -63,7 +63,16 @@
             "group": "Others",
             "pages": [
               "others/suppressions",
-              "others/unsubscribe-groups"
+              "others/unsubscribe-groups",
+              {
+                "group": "Webhook",
+                "pages": [
+                  "others/webhook/introduction",
+                  "others/webhook/event-type",
+                  "others/webhook/retries",
+                  "others/webhook/verify-requests"
+                ]
+              }
             ]
           }
         ]
