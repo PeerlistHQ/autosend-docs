@@ -5,6 +5,7 @@ sidebarTitle: " Retries and Replays"
 ---
 
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
 
 ## Automatic Retries
 
@@ -362,7 +363,7 @@ time curl -X POST https://your-endpoint.com/webhooks/autosend \
 
 **Solutions**:
 
-See [Verify Webhook Requests](./WEBHOOKS_VERIFY_REQUESTS.md) for detailed troubleshooting.
+See <a href={APP_PATHS.webhookVerifyRequests} title='Verify Webhook Requests'>Verify Webhook Requests</a> for detailed troubleshooting.
 </Accordion>
 <Accordion title="Timeout Issues" >
 
@@ -408,13 +409,13 @@ webhookQueue.process(async (job) => {
 
 ## Related Resources
 <Columns cols={2}>
-  <Card title="Introduction" icon="book" iconType="duotone" href="/others/webhook/introduction">
+  <Card title="Introduction" icon="book" iconType="duotone" href={APP_PATHS.webhookIntroduction}>
    Getting started with webhooks
   </Card>
-  <Card title="Event Types" icon="list" iconType="duotone" href="/others/webhook/event-type">
+  <Card title="Event Types" icon="list" iconType="duotone" href={APP_PATHS.webhookEventType}>
     Complete list of webhook events
   </Card>
-  <Card title="Verify Webhook Requests" icon="shield-check" iconType="duotone" href="/others/webhook/verify-requests">
+  <Card title="Verify Webhook Requests" icon="shield-check" iconType="duotone" href={APP_PATHS.webhookVerifyRequests}>
    Security and signature verification
   </Card>
   <Card title="Webhooks Dashboard" icon="gear" iconType="duotone" href={AUTOSEND_PATHS.webhooks}>

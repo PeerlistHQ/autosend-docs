@@ -5,6 +5,7 @@ sidebarTitle: "Introduction"
 ---
 
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
 import { NGROK_LINK, LOCALTUNNEL_LINK } from '/snippets/custom-variables.mdx';
 
 ## What is a webhook?
@@ -367,13 +368,13 @@ Yes, all webhooks are sent over HTTPS and include an HMAC-SHA256 signature that 
 ## Related Resources
 
 <Columns cols={2}>
-  <Card title="Event Types" icon="list" iconType="duotone" href="/others/webhook/event-type">
+  <Card title="Event Types" icon="list" iconType="duotone" href={APP_PATHS.webhookEventType}>
    Complete list of webhook events and payloads
   </Card>
-  <Card title="Retries and Replays" icon="rotate" iconType="duotone" href="/others/webhook/retries">
+  <Card title="Retries and Replays" icon="rotate" iconType="duotone" href={APP_PATHS.webhookRetries}>
     Automatic retry logic and best practices
   </Card>
-  <Card title="Verify Webhook Requests" icon="shield-check" iconType="duotone" href="/others/webhook/verify-requests">
+  <Card title="Verify Webhook Requests" icon="shield-check" iconType="duotone" href={APP_PATHS.webhookVerifyRequests}>
    Security and signature verification
   </Card>
   <Card title="Webhooks Dashboard" icon="gear" iconType="duotone" href={AUTOSEND_PATHS.webhooks}>

@@ -5,6 +5,7 @@ sidebarTitle: "Verify Requests"
 ---
 
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
 
 ## Why Verify Webhooks?
 
@@ -1158,13 +1159,13 @@ func main() {
 ## Related Resources
 
 <Columns cols={2}>
-  <Card title="Introduction" icon="book" iconType="duotone" href="/others/webhook/introduction">
+  <Card title="Introduction" icon="book" iconType="duotone" href={APP_PATHS.webhookIntroduction}>
    Getting started with webhooks
   </Card>
-  <Card title="Event Types" icon="list" iconType="duotone" href="/others/webhook/event-type">
+  <Card title="Event Types" icon="list" iconType="duotone" href={APP_PATHS.webhookEventType}>
     Complete list of webhook events
   </Card>
-  <Card title="Retries and Replays" icon="rotate" iconType="duotone" href="/others/webhook/retries">
+  <Card title="Retries and Replays" icon="rotate" iconType="duotone" href={APP_PATHS.webhookRetries}>
     Automatic retry logic and best practices
   </Card>
   <Card title="Webhooks Dashboard" icon="gear" iconType="duotone" href={AUTOSEND_PATHS.webhooks}>
