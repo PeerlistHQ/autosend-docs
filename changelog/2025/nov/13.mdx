@@ -1,0 +1,159 @@
+---
+title: "Introducing Webhooks"
+description: "Get real-time notifications about email and contact events with AutoSend webhooks!"
+sidebarTitle: "12 November 2025"
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+
+We're excited to announce the launch of <a href={AUTOSEND_PATHS.webhooks} target='_blank' title='Webhooks'>Webhooks</a> in AutoSend! You can now receive real-time notifications about email events, contact changes, and engagement metrics—all delivered directly to your application via HTTP callbacks.
+
+## What's New
+
+### Real-Time Event Notifications
+
+Receive instant notifications when events occur in your AutoSend account. Instead of continuously polling our API, webhooks push data to your application immediately when events happen.
+
+**Key Benefits:**
+- **Real-Time Updates**: Get notified instantly when emails are sent, delivered, opened, clicked, or bounced
+- **Contact Sync**: Automatically sync contact changes (created, updated, deleted) to your CRM or database
+- **Engagement Tracking**: Track email opens, clicks, and unsubscribes in real-time
+- **Automated Workflows**: Trigger custom workflows based on specific events
+- **Compliance Logging**: Maintain audit logs for all email and contact activities
+
+---
+
+### Event Types
+
+AutoSend webhooks support three comprehensive categories of events:
+
+**Email Lifecycle Events:**
+- `email.sent` - Email successfully sent to the recipient's mail server
+- `email.delivered` - Email successfully delivered to the recipient
+- `email.bounced` - Email failed to deliver (with bounce type and reason)
+
+**Email Engagement Events:**
+- `email.opened` - Recipient opened the email
+- `email.clicked` - Recipient clicked a link in the email
+- `email.unsubscribed` - Recipient unsubscribed from your emails
+
+**Contact Events:**
+- `contact.created` - New contact created in your project
+- `contact.updated` - Contact information updated
+- `contact.deleted` - Contact deleted from your project
+
+Each webhook payload includes comprehensive event data including email IDs, contact information, timestamps, and event-specific details.
+
+---
+
+### Security & Signature Verification
+
+All webhooks are secured with HMAC-SHA256 signature verification to ensure requests are genuinely from AutoSend.
+
+**Security Features:**
+- **HMAC-SHA256 Signatures**: Every webhook includes an `X-Webhook-Signature` header for verification
+- **HTTPS Only**: All webhooks are delivered over secure HTTPS connections
+- **Secret Tokens**: Each webhook has a unique secret token for signature verification
+- **Constant-Time Comparison**: Built-in protection against timing attacks
+- **Timestamp Validation**: Optional timestamp validation to reject old requests
+
+**Headers Included:**
+- `X-Webhook-Signature` - HMAC-SHA256 signature of the request body
+- `X-Webhook-Event` - The event type (e.g., `email.opened`)
+- `X-Webhook-Delivery-Id` - Unique delivery identifier for tracking
+- `X-Webhook-Timestamp` - Unix timestamp when webhook was sent
+
+---
+
+### Automatic Retries
+
+AutoSend automatically handles failed webhook deliveries with intelligent retry logic.
+
+**Retry Schedule:**
+- **1st Retry**: 1 minute after initial failure
+- **2nd Retry**: 5 minutes after first retry
+- **3rd Retry**: 15 minutes after second retry
+- **Total Attempts**: 4 attempts (initial + 3 retries)
+
+**Retry Triggers:**
+- Non-2xx status codes (400, 401, 500, 503, etc.)
+- Network errors (connection refused, DNS failures)
+- Timeouts (no response within 10 seconds)
+- SSL/TLS errors
+
+**Best Practices:**
+- Respond with 2xx status codes within 10 seconds
+- Process webhooks asynchronously for better performance
+- Implement idempotency to handle duplicate deliveries
+- Log all delivery attempts for debugging
+
+---
+
+### Webhook Management
+
+Manage your webhooks easily through the AutoSend dashboard.
+
+**Features:**
+- **Create Multiple Webhooks**: Create up to 100 webhooks per project
+- **Event Selection**: Choose which events each webhook should receive
+- **Webhook Status**: View enabled/disabled status for each webhook
+- **Edit & Delete**: Update webhook settings or remove webhooks as needed
+- **Secret Management**: Reveal webhook secrets when needed
+- **Delivery Tracking**: Monitor webhook health and delivery status
+
+**Dashboard Capabilities:**
+- View all webhooks as cards with key details
+- Copy webhook IDs and URLs easily
+- Enable or disable webhooks with one click
+- Access webhook secrets securely
+
+---
+
+### Use Cases
+
+Webhooks enable powerful automation and integration scenarios:
+
+**Email Management:**
+- Automatically remove bounced email addresses from mailing lists
+- Track email engagement in real-time (opens, clicks, unsubscribes)
+- Create alerts in messaging tools based on event types
+- Store all events in your database for custom reporting
+
+**Contact Synchronization:**
+- Sync contact changes across multiple systems (CRM, databases)
+- Trigger welcome email sequences when contacts are created
+- Update analytics dashboards in real-time
+- Maintain data consistency across platforms
+
+**Workflow Automation:**
+- Trigger Slack notifications when emails bounce
+- Update customer records when engagement occurs
+- Send alerts for high-priority events
+- Build custom analytics and reporting systems
+
+**Compliance & Auditing:**
+- Maintain compliance logs for audit purposes
+- Track all email and contact activities
+- Generate custom reports from webhook data
+- Monitor email deliverability and engagement
+
+---
+
+## Learn More
+
+<Columns cols={2}>
+  <Card title="Webhook Introduction" icon="book" iconType="duotone" href="/others/webhook/introduction">
+    Learn how to get started with webhooks and set up your first webhook endpoint.
+  </Card>
+  <Card title="Event Types" icon="list" iconType="duotone" href="/others/webhook/event-type">
+    Complete list of supported webhook events and their payloads.
+  </Card>
+  <Card title="Verify Webhook Requests" icon="shield-check" iconType="duotone" href="/others/webhook/verify-requests">
+    Learn how to verify webhook signatures for security.
+  </Card>
+  <Card title="Retries and Replays" icon="rotate" iconType="duotone" href="/others/webhook/retries">
+    Understand automatic retry logic and best practices for handling webhooks.
+  </Card>
+</Columns>
+
