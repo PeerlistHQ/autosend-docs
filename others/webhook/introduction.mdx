@@ -222,35 +222,24 @@ After testing locally, deploy your webhook endpoint to your production environme
 
 Once deployed, create a new webhook in AutoSend with your production URL:
 
-### Create Production Webhook via Dashboard
-
-<Steps stepsNumber="false">
-<Step title="Go to Webhooks section in your AutoSend dashboard" />
-
-
-<Step title="Click New Webhook" />
-<Step title="Fill in the production details:">
+1. Navigate to the **Webhooks** section in your <a href={AUTOSEND_PATHS.dashboard} title='AutoSend dashboard' target='_blank' rel='noopener noreferrer'>AutoSend dashboard</a>
+2. Click the **"New Webhook"** button
+3. Fill in the production details:
    - **Name**: "Production Email Tracker" (or any descriptive name)
    - **Endpoint URL**: Your production webhook URL (e.g., `https://api.yourapp.com/webhooks/autosend`)
    - **Events**: Select the events you want to track:
      - Email engagement: opened, clicked, unsubscribed
      - Deliverability: delivered, bounced, deferred
      - Contact events: created, updated, deleted
+4. Click **"Create Webhook"**
+5. **Important**: Copy the secret token and save it securely - you'll need it to verify webhook requests
 
-</Step>
-<Step title="Click Create Webhook" />
-<Step title="Important">
 <Note>
 **Copy and securely store the webhook secret**
    - Store it as an environment variable: `WEBHOOK_SECRET=your_secret_here`
    - Never commit it to version control
    - Use a secret management service in production (AWS Secrets Manager, etc.)
-
 </Note>
-</Step>
-
-
-</Steps>
 
 </Step>
 </Steps>
