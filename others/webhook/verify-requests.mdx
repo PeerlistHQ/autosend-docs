@@ -572,11 +572,136 @@ If you've lost your webhook secret, you can retrieve it:
 
 ### Via API
 
-```bash
+<CodeGroup>
+
+```bash cURL
 curl -X GET https://api.autosend.io/api/v1/webhooks/YOUR_WEBHOOK_ID/reveal \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "x-project-id: YOUR_PROJECT_ID"
 ```
+
+```javascript Node.js expandable
+const fetch = require('node-fetch');
+
+const API_KEY = process.env.AUTOSEND_API_KEY;
+const PROJECT_ID = process.env.AUTOSEND_PROJECT_ID;
+const WEBHOOK_ID = 'YOUR_WEBHOOK_ID';
+
+async function getWebhookSecret() {
+  const response = await fetch(`https://api.autosend.io/api/v1/webhooks/${WEBHOOK_ID}/reveal`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${API_KEY}`,
+      'x-project-id': PROJECT_ID
+    }
+  });
+
+  const data = await response.json();
+  console.log('Webhook secret:', data.data.secret);
+  return data.data.secret;
+}
+
+getWebhookSecret();
+```
+
+```python Python expandable
+import requests
+import os
+
+API_KEY = os.environ.get('AUTOSEND_API_KEY')
+PROJECT_ID = os.environ.get('AUTOSEND_PROJECT_ID')
+WEBHOOK_ID = 'YOUR_WEBHOOK_ID'
+
+def get_webhook_secret():
+    url = f'https://api.autosend.io/api/v1/webhooks/{WEBHOOK_ID}/reveal'
+    headers = {
+        'Authorization': f'Bearer {API_KEY}',
+        'x-project-id': PROJECT_ID
+    }
+    
+    response = requests.get(url, headers=headers)
+    data = response.json()
+    print('Webhook secret:', data['data']['secret'])
+    return data['data']['secret']
+
+get_webhook_secret()
+```
+
+```php PHP expandable
+<?php
+
+$apiKey = getenv('AUTOSEND_API_KEY');
+$projectId = getenv('AUTOSEND_PROJECT_ID');
+$webhookId = 'YOUR_WEBHOOK_ID';
+
+$ch = curl_init("https://api.autosend.io/api/v1/webhooks/{$webhookId}/reveal");
+
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer ' . $apiKey,
+    'x-project-id: ' . $projectId
+]);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+$data = json_decode($response, true);
+curl_close($ch);
+
+echo 'Webhook secret: ' . $data['data']['secret'] . PHP_EOL;
+?>
+```
+
+```go Go expandable
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+    "os"
+)
+
+func main() {
+    apiKey := os.Getenv("AUTOSEND_API_KEY")
+    projectId := os.Getenv("AUTOSEND_PROJECT_ID")
+    webhookId := "YOUR_WEBHOOK_ID"
+
+    url := fmt.Sprintf("https://api.autosend.io/api/v1/webhooks/%s/reveal", webhookId)
+    req, _ := http.NewRequest("GET", url, nil)
+    req.Header.Set("Authorization", "Bearer "+apiKey)
+    req.Header.Set("x-project-id", projectId)
+
+    client := &http.Client{}
+    resp, _ := client.Do(req)
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```ruby Ruby expandable
+require 'net/http'
+require 'json'
+require 'uri'
+
+api_key = ENV['AUTOSEND_API_KEY']
+project_id = ENV['AUTOSEND_PROJECT_ID']
+webhook_id = 'YOUR_WEBHOOK_ID'
+
+uri = URI("https://api.autosend.io/api/v1/webhooks/#{webhook_id}/reveal")
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Get.new(uri)
+request['Authorization'] = "Bearer #{api_key}"
+request['x-project-id'] = project_id
+
+response = http.request(request)
+data = JSON.parse(response.body)
+puts "Webhook secret: #{data['data']['secret']}"
+```
+
+</CodeGroup>
 
 **Response:**
 
@@ -595,7 +720,9 @@ curl -X GET https://api.autosend.io/api/v1/webhooks/YOUR_WEBHOOK_ID/reveal \
 
 Here's a complete, production-ready webhook endpoint with signature verification:
 
-```javascript NodeJs expandable
+<CodeGroup>
+
+```javascript Node.js expandable
 const express = require("express");
 const crypto = require("crypto");
 const app = express();
@@ -683,6 +810,348 @@ app.listen(3000, () => {
   console.log("Webhook server listening on port 3000");
 });
 ```
+
+```python Python expandable
+from flask import Flask, request, jsonify
+import hmac
+import hashlib
+import os
+import time
+import json
+
+app = Flask(__name__)
+WEBHOOK_SECRET = os.getenv('WEBHOOK_SECRET')
+
+if not WEBHOOK_SECRET:
+    raise ValueError("WEBHOOK_SECRET environment variable is required")
+
+def verify_webhook_signature(payload, signature, secret):
+    """Verify webhook signature using HMAC-SHA256"""
+    if not signature:
+        return False
+
+    expected = hmac.new(
+        secret.encode('utf-8'),
+        payload.encode('utf-8'),
+        hashlib.sha256
+    ).hexdigest()
+
+    return hmac.compare_digest(expected, signature)
+
+def is_timestamp_valid(timestamp, max_age_seconds=300):
+    """Validate webhook timestamp"""
+    if not timestamp:
+        return False
+    
+    now = int(time.time())
+    age = now - int(timestamp)
+    return age < max_age_seconds and age > -60
+
+@app.route('/webhooks/autosend', methods=['POST'])
+def webhook():
+    # Get headers
+    delivery_id = request.headers.get('X-Webhook-Delivery-Id')
+    timestamp = request.headers.get('X-Webhook-Timestamp')
+    signature = request.headers.get('X-Webhook-Signature')
+
+    # Get raw payload
+    payload = request.get_data(as_text=True)
+
+    # Validate timestamp
+    if not is_timestamp_valid(timestamp):
+        app.logger.error(f"Invalid timestamp: {delivery_id}, {timestamp}")
+        return jsonify({'error': 'Invalid timestamp'}), 401
+
+    # Verify signature
+    if not verify_webhook_signature(payload, signature, WEBHOOK_SECRET):
+        app.logger.error(f"Invalid signature: {delivery_id}")
+        return jsonify({'error': 'Invalid signature'}), 401
+
+    # Parse and process webhook
+    data = request.json
+    event = data.get('event')
+
+    app.logger.info(f"Webhook received and verified: {delivery_id}, {event}")
+
+    try:
+        # Process webhook asynchronously
+        process_webhook_async(event, data)
+        return jsonify({'received': True}), 200
+    except Exception as error:
+        app.logger.error(f"Error processing webhook: {delivery_id}, {error}")
+        return jsonify({'error': 'Internal error'}), 500
+
+def process_webhook_async(event, data):
+    """Process webhook in background"""
+    # Implement your webhook processing logic here
+    pass
+
+if __name__ == '__main__':
+    app.run(port=3000)
+```
+
+```php PHP expandable
+<?php
+
+$webhookSecret = getenv('WEBHOOK_SECRET');
+
+if (!$webhookSecret) {
+    throw new Exception("WEBHOOK_SECRET environment variable is required");
+}
+
+function verifyWebhookSignature($payload, $receivedSignature, $secret) {
+    if (empty($receivedSignature)) {
+        return false;
+    }
+
+    $expectedSignature = hash_hmac('sha256', $payload, $secret);
+    return hash_equals($expectedSignature, $receivedSignature);
+}
+
+function isTimestampValid($timestamp, $maxAgeSeconds = 300) {
+    if (empty($timestamp)) {
+        return false;
+    }
+
+    $now = time();
+    $age = $now - (int)$timestamp;
+    return $age < $maxAgeSeconds && $age > -60;
+}
+
+// Get raw POST body
+$payload = file_get_contents('php://input');
+
+// Get headers
+$deliveryId = $_SERVER['HTTP_X_WEBHOOK_DELIVERY_ID'] ?? '';
+$timestamp = $_SERVER['HTTP_X_WEBHOOK_TIMESTAMP'] ?? '';
+$signature = $_SERVER['HTTP_X_WEBHOOK_SIGNATURE'] ?? '';
+
+// Validate timestamp
+if (!isTimestampValid($timestamp)) {
+    error_log("Invalid timestamp: {$deliveryId}, {$timestamp}");
+    http_response_code(401);
+    echo json_encode(['error' => 'Invalid timestamp']);
+    exit;
+}
+
+// Verify signature
+if (!verifyWebhookSignature($payload, $signature, $webhookSecret)) {
+    error_log("Invalid signature: {$deliveryId}");
+    http_response_code(401);
+    echo json_encode(['error' => 'Invalid signature']);
+    exit;
+}
+
+// Parse and process webhook
+$data = json_decode($payload, true);
+$event = $data['event'] ?? '';
+
+error_log("Webhook received and verified: {$deliveryId}, {$event}");
+
+try {
+    // Process webhook
+    processWebhookAsync($event, $data);
+
+    http_response_code(200);
+    echo json_encode(['received' => true]);
+} catch (Exception $error) {
+    error_log("Error processing webhook: {$deliveryId}, {$error->getMessage()}");
+    http_response_code(500);
+    echo json_encode(['error' => 'Internal error']);
+}
+
+function processWebhookAsync($event, $data) {
+    // Implement your webhook processing logic here
+}
+?>
+```
+
+```ruby Ruby expandable
+require 'sinatra'
+require 'json'
+require 'openssl'
+require 'time'
+
+WEBHOOK_SECRET = ENV['WEBHOOK_SECRET']
+
+if WEBHOOK_SECRET.nil? || WEBHOOK_SECRET.empty?
+  raise "WEBHOOK_SECRET environment variable is required"
+end
+
+def verify_webhook_signature(payload, signature, secret)
+  return false if signature.nil? || signature.empty?
+
+  expected = OpenSSL::HMAC.hexdigest('sha256', secret, payload)
+  Rack::Utils.secure_compare(expected, signature)
+end
+
+def is_timestamp_valid(timestamp, max_age_seconds = 300)
+  return false if timestamp.nil? || timestamp.empty?
+
+  now = Time.now.to_i
+  age = now - timestamp.to_i
+  age < max_age_seconds && age > -60
+end
+
+post '/webhooks/autosend' do
+  # Get headers
+  delivery_id = request.env['HTTP_X_WEBHOOK_DELIVERY_ID']
+  timestamp = request.env['HTTP_X_WEBHOOK_TIMESTAMP']
+  signature = request.env['HTTP_X_WEBHOOK_SIGNATURE']
+
+  # Get raw body
+  payload = request.body.read
+
+  # Validate timestamp
+  unless is_timestamp_valid(timestamp)
+    logger.error("Invalid timestamp: #{delivery_id}, #{timestamp}")
+    status 401
+    return { error: 'Invalid timestamp' }.to_json
+  end
+
+  # Verify signature
+  unless verify_webhook_signature(payload, signature, WEBHOOK_SECRET)
+    logger.error("Invalid signature: #{delivery_id}")
+    status 401
+    return { error: 'Invalid signature' }.to_json
+  end
+
+  # Parse and process webhook
+  data = JSON.parse(payload)
+  event = data['event']
+
+  logger.info("Webhook received and verified: #{delivery_id}, #{event}")
+
+  begin
+    # Process webhook asynchronously
+    process_webhook_async(event, data)
+    status 200
+    { received: true }.to_json
+  rescue => error
+    logger.error("Error processing webhook: #{delivery_id}, #{error.message}")
+    status 500
+    { error: 'Internal error' }.to_json
+  end
+end
+
+def process_webhook_async(event, data)
+  # Implement your webhook processing logic here
+end
+```
+
+```go Go expandable
+package main
+
+import (
+    "crypto/hmac"
+    "crypto/sha256"
+    "encoding/hex"
+    "encoding/json"
+    "io/ioutil"
+    "log"
+    "net/http"
+    "os"
+    "strconv"
+    "time"
+)
+
+var webhookSecret string
+
+func init() {
+    webhookSecret = os.Getenv("WEBHOOK_SECRET")
+    if webhookSecret == "" {
+        log.Fatal("WEBHOOK_SECRET environment variable is required")
+    }
+}
+
+func verifyWebhookSignature(payload []byte, signature string, secret string) bool {
+    if signature == "" {
+        return false
+    }
+
+    mac := hmac.New(sha256.New, []byte(secret))
+    mac.Write(payload)
+    expected := hex.EncodeToString(mac.Sum(nil))
+
+    return hmac.Equal([]byte(expected), []byte(signature))
+}
+
+func isTimestampValid(timestamp string, maxAgeSeconds int) bool {
+    if timestamp == "" {
+        return false
+    }
+
+    ts, err := strconv.ParseInt(timestamp, 10, 64)
+    if err != nil {
+        return false
+    }
+
+    now := time.Now().Unix()
+    age := now - ts
+    return age < int64(maxAgeSeconds) && age > -60
+}
+
+func webhookHandler(w http.ResponseWriter, r *http.Request) {
+    // Read raw body
+    payload, err := ioutil.ReadAll(r.Body)
+    if err != nil {
+        http.Error(w, "Error reading body", http.StatusBadRequest)
+        return
+    }
+
+    // Get headers
+    deliveryId := r.Header.Get("X-Webhook-Delivery-Id")
+    timestamp := r.Header.Get("X-Webhook-Timestamp")
+    signature := r.Header.Get("X-Webhook-Signature")
+
+    // Validate timestamp
+    if !isTimestampValid(timestamp, 300) {
+        log.Printf("Invalid timestamp: %s, %s", deliveryId, timestamp)
+        http.Error(w, "Invalid timestamp", http.StatusUnauthorized)
+        return
+    }
+
+    // Verify signature
+    if !verifyWebhookSignature(payload, signature, webhookSecret) {
+        log.Printf("Invalid signature: %s", deliveryId)
+        http.Error(w, "Invalid signature", http.StatusUnauthorized)
+        return
+    }
+
+    // Parse webhook
+    var data map[string]interface{}
+    if err := json.Unmarshal(payload, &data); err != nil {
+        http.Error(w, "Invalid JSON", http.StatusBadRequest)
+        return
+    }
+
+    event, _ := data["event"].(string)
+    log.Printf("Webhook received and verified: %s, %s", deliveryId, event)
+
+    // Process webhook
+    if err := processWebhookAsync(event, data); err != nil {
+        log.Printf("Error processing webhook: %s, %v", deliveryId, err)
+        http.Error(w, "Internal error", http.StatusInternalServerError)
+        return
+    }
+
+    w.WriteHeader(http.StatusOK)
+    json.NewEncoder(w).Encode(map[string]bool{"received": true})
+}
+
+func processWebhookAsync(event string, data map[string]interface{}) error {
+    // Implement your webhook processing logic here
+    return nil
+}
+
+func main() {
+    http.HandleFunc("/webhooks/autosend", webhookHandler)
+    log.Println("Webhook server listening on port 3000")
+    log.Fatal(http.ListenAndServe(":3000", nil))
+}
+```
+
+</CodeGroup>
 
 ---
 

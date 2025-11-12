@@ -540,15 +540,134 @@ async function handleContactDeleted(data) {
 
 You can programmatically fetch the list of available events:
 
-```bash
+<CodeGroup>
+
+```bash cURL 
 curl -X GET https://api.autosend.io/v1/webhooks/events/available \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "x-project-id: YOUR_PROJECT_ID"
 ```
 
+```javascript Node.js expandable
+const fetch = require('node-fetch');
+
+const API_KEY = process.env.AUTOSEND_API_KEY;
+const PROJECT_ID = process.env.AUTOSEND_PROJECT_ID;
+
+async function getAvailableEvents() {
+  const response = await fetch('https://api.autosend.io/v1/webhooks/events/available', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${API_KEY}`,
+      'x-project-id': PROJECT_ID
+    }
+  });
+
+  const data = await response.json();
+  console.log(data);
+  return data;
+}
+
+getAvailableEvents();
+```
+
+```python Python expandable
+import requests
+import os
+
+API_KEY = os.environ.get('AUTOSEND_API_KEY')
+PROJECT_ID = os.environ.get('AUTOSEND_PROJECT_ID')
+
+def get_available_events():
+    url = 'https://api.autosend.io/v1/webhooks/events/available'
+    headers = {
+        'Authorization': f'Bearer {API_KEY}',
+        'x-project-id': PROJECT_ID
+    }
+    
+    response = requests.get(url, headers=headers)
+    data = response.json()
+    print(data)
+    return data
+
+get_available_events()
+```
+
+```php PHP expandable
+<?php
+
+$apiKey = getenv('AUTOSEND_API_KEY');
+$projectId = getenv('AUTOSEND_PROJECT_ID');
+
+$ch = curl_init('https://api.autosend.io/v1/webhooks/events/available');
+
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer ' . $apiKey,
+    'x-project-id: ' . $projectId
+]);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+$data = json_decode($response, true);
+curl_close($ch);
+
+print_r($data);
+?>
+```
+
+```go Go expandable
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+    "os"
+)
+
+func main() {
+    apiKey := os.Getenv("AUTOSEND_API_KEY")
+    projectId := os.Getenv("AUTOSEND_PROJECT_ID")
+
+    req, _ := http.NewRequest("GET", "https://api.autosend.io/v1/webhooks/events/available", nil)
+    req.Header.Set("Authorization", "Bearer "+apiKey)
+    req.Header.Set("x-project-id", projectId)
+
+    client := &http.Client{}
+    resp, _ := client.Do(req)
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```ruby Ruby expandable
+require 'net/http'
+require 'json'
+require 'uri'
+
+api_key = ENV['AUTOSEND_API_KEY']
+project_id = ENV['AUTOSEND_PROJECT_ID']
+
+uri = URI('https://api.autosend.io/v1/webhooks/events/available')
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Get.new(uri)
+request['Authorization'] = "Bearer #{api_key}"
+request['x-project-id'] = project_id
+
+response = http.request(request)
+data = JSON.parse(response.body)
+puts data
+```
+
+</CodeGroup>
+
 **Response:**
 
-```json
+```json expandable
 {
   "success": true,
   "data": {
