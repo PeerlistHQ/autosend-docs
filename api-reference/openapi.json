@@ -522,6 +522,44 @@
                     }
                   }
                 },
+                "withAttachments": {
+                  "summary": "Send email with attachments",
+                  "value": {
+                    "to": {
+                      "email": "customer@example.com",
+                      "name": "Jane Smith"
+                    },
+                    "from": {
+                      "email": "hello@mail.yourdomain.com",
+                      "name": "Your Company"
+                    },
+                    "subject": "Welcome to Our Platform!",
+                    "html": "<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>",
+                    "dynamicData": {
+                      "name": "Jane"
+                    },
+                    "replyTo": {
+                      "email": "support@yourdomain.com"
+                    },
+                    "attachments": [
+                      {
+                        "filename": "attachment.pdf",
+                        "content": "base64-encoded-content",
+                        "contentType": "application/pdf"
+                      },
+                      {
+                        "filename": "smiley.png",
+                        "content": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII=",
+                        "contentType": "image/png"
+                      },
+                      {
+                        "fileUrl": "https://pdfobject.com/pdf/sample.pdf",
+                        "contentType": "application/pdf",
+                        "filename": "sample.pdf"
+                      }
+                    ]
+                  }  
+                },
                 "withTemplate": {
                   "summary": "Send email with template",
                   "value": {
@@ -585,11 +623,21 @@
                     "recipients": [
                       {
                         "email": "customer1@example.com",
-                        "name": "Jane Smith"
+                        "name": "Jane Smith",
+                        "dynamicData": {
+                          "firstName": "Jane",
+                          "orderNumber": "ORD-123",
+                          "orderTotal": "$19.99"
+                        }
                       },
                       {
                         "email": "customer2@example.com",
-                        "name": "John Doe"
+                        "name": "John Doe",
+                        "dynamicData": {
+                          "firstName": "John",
+                          "orderNumber": "ORD-124",
+                          "orderTotal": "$29.99"
+                        }
                       }
                     ],
                     "from": {
@@ -598,9 +646,6 @@
                     },
                     "subject": "Welcome to Our Platform!",
                     "html": "<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>",
-                    "dynamicData": {
-                      "name": "Valued Customer"
-                    },
                     "replyTo": {
                       "email": "support@yourdomain.com"
                     }
@@ -1089,6 +1134,17 @@
             "type": "string",
             "description": "Display name",
             "example": "John Doe"
+          },
+          "dynamicData": {
+            "type": "object",
+            "description": "Key-value pairs for template variable substitution (Handlebars syntax)",
+            "additionalProperties": true,
+            "example": {
+              "name": "Jane",
+              "firstName": "Jane",
+              "orderNumber": "ORD-12345",
+              "orderTotal": "$99.99"
+            }
           }
         }
       },
@@ -1144,6 +1200,42 @@
             "type": "string",
             "description": "ID of the unsubscribe group",
             "example": "unsub_group_123"
+          },
+          "attachments": {
+            "type": "array",
+            "description": "Filename and content of attachments (max 40MB per email, after Base64 encoding of the attachments).",
+            "items": {
+              "type": "object",
+              "properties": {
+                "filename": {
+                  "type": "string",
+                  "description": "(Required) Filename of the attachment"
+                },
+                "content": {
+                  "type": "string",
+                  "description": "Base64-encoded content of the attachment (required if fileUrl is not provided)"
+                },
+                "contentType": {
+                  "type": "string",
+                  "description": "Content type of the attachment (e.g. application/pdf, image/png, image/jpeg)"
+                },
+                "fileUrl": {
+                  "type": "string",
+                  "description": "File URL where the attachment is hosted (required if content is not provided)"
+                },
+                "description":{
+                  "type": "string",
+                  "description": "Description of the attachment (optional)"
+                }
+              }
+            },
+            "example": [
+              {
+                "filename": "attachment.pdf",
+                "content": "base64-encoded-content",
+                "contentType": "application/pdf"
+              }
+            ]
           }
         }
       },
