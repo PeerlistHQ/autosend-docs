@@ -4,6 +4,8 @@ description: "Complete list of supported webhook event types and their payloads.
 sidebarTitle: "Event Types"
 ---
 
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+
 ## Overview
 
 AutoSend webhooks support three categories of events:
@@ -541,8 +543,18 @@ curl -X GET https://api.autosend.io/v1/webhooks/events/available \
 
 ## Related Resources
 
-- [Introduction](./WEBHOOKS_INTRODUCTION.md) - Getting started with webhooks
-- [Retries and Replays](./WEBHOOKS_RETRIES.md) - Retry logic and manual replay
-- [Verify Webhook Requests](./WEBHOOKS_VERIFY_REQUESTS.md) - Security and signature verification
-
+<Columns cols={2}>
+  <Card title="Introduction" icon="book" iconType="duotone" href="/others/webhook/introduction">
+   Getting started with webhooks
+  </Card>
+  <Card title="Retries and Replays" icon="rotate" iconType="duotone" href="/others/webhook/retries">
+    Automatic retry logic and best practices
+  </Card>
+  <Card title="Verify Webhook Requests" icon="shield-check" iconType="duotone" href="/others/webhook/verify-requests">
+   Security and signature verification
+  </Card>
+  <Card title="Webhooks Dashboard" icon="gear" iconType="duotone" href={AUTOSEND_PATHS.webhooks}>
+   Manage your webhooks in the AutoSend dashboard
+  </Card>
+</Columns>
 ---

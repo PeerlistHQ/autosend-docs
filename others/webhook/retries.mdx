@@ -4,6 +4,8 @@ description: "Learn how AutoSend automatically handles failed webhook deliveries
 sidebarTitle: " Retries and Replays"
 ---
 
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+
 ## Automatic Retries
 
 AutoSend automatically retries webhook deliveries that fail due to network errors, timeouts, or non-2xx status codes from your endpoint.
@@ -406,13 +408,16 @@ webhookQueue.process(async (job) => {
 
 ## Related Resources
 <Columns cols={2}>
-  <Card title="Introduction" icon="question" iconType="duotone">
+  <Card title="Introduction" icon="book" iconType="duotone" href="/others/webhook/introduction">
    Getting started with webhooks
   </Card>
-  <Card title="Retries and Replays" icon="star-of-life" iconType="duotone" >
-    Automatic retry logic and best practices
+  <Card title="Event Types" icon="list" iconType="duotone" href="/others/webhook/event-type">
+    Complete list of webhook events
   </Card>
-  <Card title="Verify Webhook Requests" icon="star-of-life" iconType="duotone" >
+  <Card title="Verify Webhook Requests" icon="shield-check" iconType="duotone" href="/others/webhook/verify-requests">
    Security and signature verification
+  </Card>
+  <Card title="Webhooks Dashboard" icon="gear" iconType="duotone" href={AUTOSEND_PATHS.webhooks}>
+   Manage your webhooks in the AutoSend dashboard
   </Card>
 </Columns>

@@ -4,6 +4,8 @@ description: "Learn how to verify that webhook requests are genuinely from AutoS
 sidebarTitle: "Verify Requests"
 ---
 
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+
 ## Why Verify Webhooks?
 
 **Security is critical.** Anyone can send a POST request to your webhook endpoint. Without verification, malicious actors could:
@@ -687,13 +689,16 @@ app.listen(3000, () => {
 ## Related Resources
 
 <Columns cols={2}>
-  <Card title="Introduction" icon="question" iconType="duotone">
+  <Card title="Introduction" icon="book" iconType="duotone" href="/others/webhook/introduction">
    Getting started with webhooks
   </Card>
-  <Card title="Event Types" icon="star-of-life" iconType="duotone" >
+  <Card title="Event Types" icon="list" iconType="duotone" href="/others/webhook/event-type">
     Complete list of webhook events
   </Card>
-  <Card title="Retries and Replays" icon="star-of-life" iconType="duotone" >
+  <Card title="Retries and Replays" icon="rotate" iconType="duotone" href="/others/webhook/retries">
     Automatic retry logic and best practices
+  </Card>
+  <Card title="Webhooks Dashboard" icon="gear" iconType="duotone" href={AUTOSEND_PATHS.webhooks}>
+   Manage your webhooks in the AutoSend dashboard
   </Card>
 </Columns>
