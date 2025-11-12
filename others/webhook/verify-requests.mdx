@@ -1,7 +1,7 @@
-# AutoSend Webhooks - Verify Webhook Requests
-
-Learn how to verify that webhook requests are genuinely from AutoSend using HMAC signature verification.
-
+---
+title: "Verify Requests"
+description: "Learn how to verify that webhook requests are genuinely from AutoSend using HMAC signature verification."
+sidebarTitle: "Verify Requests"
 ---
 
 ## Why Verify Webhooks?
@@ -59,14 +59,18 @@ Every webhook request includes these headers:
 
 ### Verification Steps
 
-1. **Extract the signature** from the `X-Webhook-Signature` header
-2. **Get the raw request body** as a string (before parsing)
-3. **Compute the expected signature** using your webhook secret
-4. **Compare signatures** using a constant-time comparison function
+<Steps>
 
-### Node.js Implementation
+<Step title='Extract the signature from the X-Webhook-Signature header' />
+<Step title="Get the raw request body as a string (before parsing)" />
 
-```javascript
+<Step title="Compute the expected signature using your webhook secret" />
+<Step title="Compare signatures using a constant-time comparison function" />
+</Steps>
+
+
+<CodeGroup>
+```javascript Nodejs expandable
 const express = require("express");
 const crypto = require("crypto");
 
@@ -118,9 +122,8 @@ app.post("/webhooks/autosend", (req, res) => {
 });
 ```
 
-### Python (Flask) Implementation
 
-```python
+```python Python expandable
 from flask import Flask, request, jsonify
 import hmac
 import hashlib
@@ -167,9 +170,8 @@ if __name__ == '__main__':
     app.run(port=3000)
 ```
 
-### PHP Implementation
 
-```php
+```php PHP expandable
 <?php
 function verifyWebhookSignature($payload, $receivedSignature, $secret) {
     if (empty($receivedSignature)) {
@@ -210,9 +212,7 @@ echo json_encode(['received' => true]);
 ?>
 ```
 
-### Ruby (Sinatra) Implementation
-
-```ruby
+```ruby Ruby expandable
 require 'sinatra'
 require 'json'
 require 'openssl'
@@ -251,9 +251,7 @@ post '/webhooks/autosend' do
 end
 ```
 
-### Go Implementation
-
-```go
+```go Go expandable
 package main
 
 import (
@@ -318,12 +316,14 @@ func main() {
 }
 ```
 
----
+
+</CodeGroup>
+
 
 ## Security Best Practices
 
-### 1. Always Use Constant-Time Comparison
-
+<AccordionGroup>
+<Accordion title="Always Use Constant-Time Comparison">
 **Never use `===` or `==` to compare signatures.** Use constant-time comparison functions to prevent timing attacks:
 
 ```javascript
@@ -342,8 +342,9 @@ if (
   // Process webhook
 }
 ```
+</Accordion>
+<Accordion title="Store Secrets Securely">
 
-### 2. Store Secrets Securely
 
 Never hardcode webhook secrets in your code:
 
@@ -371,7 +372,8 @@ if (!WEBHOOK_SECRET) {
 - Include secrets in client-side code
 - Share secrets in logs or error messages
 
-### 3. Use the Raw Request Body
+</Accordion>
+<Accordion title="Use the Raw Request Body">
 
 Compute signatures using the **raw, unparsed request body**:
 
@@ -397,7 +399,8 @@ const signature = crypto
   .digest("hex");
 ```
 
-### 4. Validate the Timestamp
+</Accordion>
+<Accordion title="Validate the Timestamp">
 
 Optionally, validate the `X-Webhook-Timestamp` header to reject old requests:
 
@@ -425,7 +428,8 @@ app.post("/webhooks/autosend", (req, res) => {
 });
 ```
 
-### 5. Use HTTPS
+</Accordion>
+<Accordion title="Use HTTPS">
 
 **Always use HTTPS** for your webhook endpoints in production:
 
@@ -443,7 +447,8 @@ HTTPS ensures:
 - Man-in-the-middle attacks are prevented
 - Webhook data remains confidential
 
-### 6. Rotate Secrets Periodically
+</Accordion>
+<Accordion title="Rotate Secrets Periodically">
 
 Regularly rotate your webhook secrets:
 
@@ -463,12 +468,16 @@ function verifyWithMultipleSecrets(req) {
   return WEBHOOK_SECRETS.some((secret) => verifyWebhookSignature(req, secret));
 }
 ```
+</Accordion>
+</AccordionGroup>
 
 ---
 
 ## Troubleshooting
 
-### Signature Verification Failing
+
+<AccordionGroup>
+<Accordion title="Signature Verification Failing">
 
 **Symptoms**: All webhook requests return 401 Unauthorized
 
@@ -476,14 +485,14 @@ function verifyWithMultipleSecrets(req) {
 
 1. **Using wrong secret**
 
-   ```javascript
+   ```javascript NodeJs
    // Check which secret you're using
    console.log("Using secret starting with:", webhookSecret.substring(0, 10));
    ```
 
 2. **Body parsing issues**
 
-   ```javascript
+   ```javascript NodeJs
    // Ensure you're using raw body
    console.log("Raw body:", req.rawBody);
    console.log("Parsed body:", JSON.stringify(req.body));
@@ -491,7 +500,7 @@ function verifyWithMultipleSecrets(req) {
 
 3. **String encoding issues**
 
-   ```javascript
+   ```javascript NodeJs
    // Ensure consistent encoding
    const expectedSignature = crypto
      .createHmac("sha256", webhookSecret)
@@ -500,18 +509,18 @@ function verifyWithMultipleSecrets(req) {
    ```
 
 4. **Comparing wrong values**
-   ```javascript
+   ```javascript NodeJs
    // Debug signature comparison
    console.log("Received signature:", receivedSignature);
    console.log("Expected signature:", expectedSignature);
    console.log("Match:", receivedSignature === expectedSignature);
    ```
-
-### Testing Signature Verification
+</Accordion>
+<Accordion title="Testing Signature Verification">
 
 Test your signature verification locally:
 
-```javascript
+```javascript NodeJs expandable
 const crypto = require("crypto");
 
 function testSignatureVerification() {
@@ -543,18 +552,21 @@ function testSignatureVerification() {
 testSignatureVerification();
 ```
 
----
+
+</Accordion>
+</AccordionGroup>
 
 ## Retrieving Your Webhook Secret
 
 If you've lost your webhook secret, you can retrieve it:
 
 ### Via Dashboard
-
-1. Navigate to **Webhooks** in your AutoSend dashboard
-2. Click on the webhook
-3. Click **"Reveal Secret"**
-4. Copy the secret and store it securely
+<Steps>
+<Step title="Navigate to Webhooks in your AutoSend dashboard" />
+<Step title="Click on the webhook" />
+<Step title="Click Reveal Secret" />
+<Step title="Copy the secret and store it securely" />
+</Steps>
 
 ### Via API
 
@@ -581,7 +593,7 @@ curl -X GET https://api.autosend.io/api/v1/webhooks/YOUR_WEBHOOK_ID/reveal \
 
 Here's a complete, production-ready webhook endpoint with signature verification:
 
-```javascript
+```javascript NodeJs expandable
 const express = require("express");
 const crypto = require("crypto");
 const app = express();
@@ -674,10 +686,14 @@ app.listen(3000, () => {
 
 ## Related Resources
 
-- [Introduction](./WEBHOOKS_INTRODUCTION.md) - Getting started with webhooks
-- [Event Types](./WEBHOOKS_EVENT_TYPES.md) - Complete list of webhook events
-- [Retries and Replays](./WEBHOOKS_RETRIES.md) - Retry logic and manual replay
-
----
-
-**Last Updated**: November 12, 2025
+<Columns cols={2}>
+  <Card title="Introduction" icon="question" iconType="duotone">
+   Getting started with webhooks
+  </Card>
+  <Card title="Event Types" icon="star-of-life" iconType="duotone" >
+    Complete list of webhook events
+  </Card>
+  <Card title="Retries and Replays" icon="star-of-life" iconType="duotone" >
+    Automatic retry logic and best practices
+  </Card>
+</Columns>

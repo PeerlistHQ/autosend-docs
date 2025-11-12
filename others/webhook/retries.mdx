@@ -1,7 +1,7 @@
-# AutoSend Webhooks - Retries and Replays
-
-Learn how AutoSend automatically handles failed webhook deliveries.
-
+---
+title: "Retries and Replays"
+description: "Learn how AutoSend automatically handles failed webhook deliveries."
+sidebarTitle: " Retries and Replays"
 ---
 
 ## Automatic Retries
@@ -72,11 +72,13 @@ Once a delivery is marked as failed after exhausting all retries, AutoSend will 
 
 ## Best Practices
 
-### 1. Return 2xx for Successful Processing
+<AccordionGroup>
+
+ <Accordion title="Return 2xx for Successful Processing">
 
 Always return a 2xx status code when your endpoint successfully receives and processes a webhook:
 
-```javascript
+```javascript Nodejs expandable
 app.post("/webhooks/autosend", async (req, res) => {
   try {
     // Verify signature
@@ -97,11 +99,12 @@ app.post("/webhooks/autosend", async (req, res) => {
 });
 ```
 
-### 2. Differentiate Between Temporary and Permanent Errors
+ </Accordion>
+  <Accordion title="Differentiate Between Temporary and Permanent Errors">
 
 Return appropriate status codes based on the type of error:
 
-```javascript
+```javascript Nodejs expandable
 app.post("/webhooks/autosend", async (req, res) => {
   try {
     // Verify signature
@@ -132,12 +135,11 @@ app.post("/webhooks/autosend", async (req, res) => {
   }
 });
 ```
-
-### 3. Handle Duplicate Deliveries
-
+ </Accordion>
+  <Accordion title="Handle Duplicate Deliveries">
 Since webhooks can be retried, implement idempotency to prevent duplicate processing:
 
-```javascript
+```javascript Nodejs expandable
 const processedDeliveries = new Set();
 
 app.post("/webhooks/autosend", async (req, res) => {
@@ -159,12 +161,11 @@ app.post("/webhooks/autosend", async (req, res) => {
   }
 });
 ```
-
-### 4. Log All Attempts
-
+ </Accordion>
+  <Accordion title="Log All Attempts">
 Keep detailed logs of all webhook delivery attempts for debugging:
 
-```javascript
+```javascript Nodejs expandable
 app.post("/webhooks/autosend", async (req, res) => {
   const deliveryId = req.headers["x-webhook-delivery-id"];
   const event = req.body.event;
@@ -199,12 +200,11 @@ app.post("/webhooks/autosend", async (req, res) => {
   }
 });
 ```
-
-### 5. Respond Quickly
-
+ </Accordion>
+  <Accordion title="Respond Quickly">
 Your endpoint should respond within 10 seconds. Process webhooks asynchronously:
 
-```javascript
+```javascript Nodejs expandable
 // ❌ Bad - Synchronous processing
 app.post("/webhooks/autosend", async (req, res) => {
   await updateDatabase(data);
@@ -222,12 +222,12 @@ app.post("/webhooks/autosend", async (req, res) => {
   res.status(200).json({ received: true });
 });
 ```
-
-### 6. Test Retry Behavior
-
+ </Accordion>
+  <Accordion title="Test Retry Behavior">
 Test how your endpoint handles retries:
+ 
+```javascript Nodejs expandable 
 
-```javascript
 // Simulate intermittent failures for testing
 let attemptCount = 0;
 
@@ -246,7 +246,8 @@ app.post("/webhooks/autosend", async (req, res) => {
 });
 ```
 
----
+ </Accordion>
+</AccordionGroup>
 
 ## Monitoring Your Webhook
 
@@ -254,10 +255,13 @@ app.post("/webhooks/autosend", async (req, res) => {
 
 Monitor your webhooks in the AutoSend dashboard:
 
-1. Navigate to **Webhooks** section
-2. View your webhooks with their current status:
+<Steps>
+<Step title="Navigate to Webhooks section" />
+<Step title="View your webhooks with their current status">
    - **Enabled** (green) - Webhook is active
    - **Disabled** (gray) - Webhook is inactive
+</Step>
+</Steps>
 
 ### Track Webhook Health
 
@@ -274,7 +278,7 @@ These metrics are updated automatically by the system.
 
 Set up your own monitoring for webhook health:
 
-```javascript
+```javascript Nodejs expandable
 // Example: Check webhook health periodically
 async function monitorWebhookHealth() {
   // Track webhook deliveries in your database
@@ -303,7 +307,8 @@ setInterval(monitorWebhookHealth, 5 * 60 * 1000);
 
 ## Troubleshooting
 
-### High Failure Rate
+<AccordionGroup>
+<Accordion title="High Failure Rate">
 
 **Symptoms**: Webhooks failing frequently
 
@@ -343,8 +348,8 @@ time curl -X POST https://your-endpoint.com/webhooks/autosend \
 
 5. **Review your code** for errors in webhook processing logic
 
-### Signature Verification Failures
-
+</Accordion>
+<Accordion title="Signature Verification Failures">
 **Symptoms**: All webhooks returning 401
 
 **Possible Causes**:
@@ -356,8 +361,8 @@ time curl -X POST https://your-endpoint.com/webhooks/autosend \
 **Solutions**:
 
 See [Verify Webhook Requests](./WEBHOOKS_VERIFY_REQUESTS.md) for detailed troubleshooting.
-
-### Timeout Issues
+</Accordion>
+<Accordion title="Timeout Issues" >
 
 **Symptoms**: Webhooks timing out
 
@@ -369,7 +374,7 @@ See [Verify Webhook Requests](./WEBHOOKS_VERIFY_REQUESTS.md) for detailed troubl
 
 **Solutions**:
 
-1. **Use background job queues**:
+1. Use background job queues:
 
 ```javascript
 // Use Bull, BullMQ, or similar
@@ -390,18 +395,24 @@ webhookQueue.process(async (job) => {
 });
 ```
 
-2. **Optimize database queries**
-3. **Add database indexes**
-4. **Cache frequently accessed data**
+2. Optimize database queries
+3. Add database indexes
+4. Cache frequently accessed data
+
+</Accordion>
+</AccordionGroup>
 
 ---
 
 ## Related Resources
-
-- [Introduction](./WEBHOOKS_INTRODUCTION.md) - Getting started with webhooks
-- [Event Types](./WEBHOOKS_EVENT_TYPES.md) - Complete list of webhook events
-- [Verify Webhook Requests](./WEBHOOKS_VERIFY_REQUESTS.md) - Security and signature verification
-
----
-
-**Last Updated**: November 12, 2025
+<Columns cols={2}>
+  <Card title="Introduction" icon="question" iconType="duotone">
+   Getting started with webhooks
+  </Card>
+  <Card title="Retries and Replays" icon="star-of-life" iconType="duotone" >
+    Automatic retry logic and best practices
+  </Card>
+  <Card title="Verify Webhook Requests" icon="star-of-life" iconType="duotone" >
+   Security and signature verification
+  </Card>
+</Columns>
