@@ -1,6 +1,6 @@
 ---
-title: "Email Attachments, Webhooks Management, and Enhanced Automation"
-description: "New webhooks management interface, email attachments support, bulk contact operations, and platform improvements"
+title: " Introducing Webhooks and Attachments"
+description: "This release introduces webhooks management and email attachments, along with improved user experience across the platform and some fixes."
 sidebarTitle: "12 November 2025"
 ---
 
@@ -8,11 +8,11 @@ import { APP_PATHS } from '/snippets/appPaths.mdx';
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
 import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx';
 
-We’ve been busy building here! This week we shipped two of the most requested features from our community - webhooks and email attachments. Both have been high on our roadmap, and we’re excited to finally get them into your hands. Let’s dive into more details.
+We’ve been busy building here! This week we shipped two of the most requested features from our community - <a href={APP_PATHS.webhookIntroduction} title='Webhooks'>Webhooks</a> and <a href={`${APP_PATHS.sendEmail}#body-attachments`} title='Email attachments'>Email Attachments</a>. Both have been on top of our roadmap, and we’re excited to finally get them into your hands. Let’s dive into more details.
 
 ## New features
 
-1. ###  Webhooks Support
+### Webhooks Support
     1. You can now listen to real-time email events directly in your app. Available on Pro 10k plans and above.
     2. We’ve added a dedicated Webhooks dashboard where you can create and manage all your webhook configs in one place.
     3. Here’s what you can track:
@@ -27,7 +27,7 @@ We’ve been busy building here! This week we shipped two of the most requested 
 
     No more polling APIs or checking dashboards manually. Get instant notifications when things happen. Check out the <a href={APP_PATHS.webhookIntroduction} title='Webhooks'>webhooks docs</a>.
 
-2. ###  Send Emails with Attachments
+### Send Emails with Attachments
     You can now attach files to your emails. Upload via base64, reference files from S3, or pass external URLs, we’ll handle the rest.
     
     Here’s what’s supported:
@@ -48,11 +48,11 @@ As always, let us know if you run into issues or have feedback at <a href={`mail
 ## Learn More
 
 <Columns cols={2}>
-  <Card title="Webhooks" icon="book" iconType="duotone" href={APP_PATHS.webhookIntroduction}>
+  <Card title="Webhooks" icon="webhook" iconType="duotone" href={APP_PATHS.webhookIntroduction}>
     Learn how to configure and manage webhooks in AutoSend.
   </Card>
   <Card title="Email Attachments" icon="paperclip" iconType="duotone" href={`${APP_PATHS.sendEmail}#body-attachments`}>
-    Learn how to send emails with file attachments using upload or URL methods, including size validation and security limits.
+    Learn how to send emails with file attachments.
   </Card>
 </Columns>
 
