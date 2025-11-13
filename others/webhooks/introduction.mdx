@@ -284,7 +284,7 @@ app.post("/webhooks/autosend", async (req, res) => {
 
 <Accordion title="Always Verify Signatures">
 
-Never trust incoming webhook requests without verification. See the [Verify Webhook Requests](./WEBHOOKS_VERIFY_REQUESTS.md) guide.
+Never trust incoming webhook requests without verification. See the <a href={APP_PATHS.webhookVerifyRequests} title='Verify Webhook Requests'>Verify Webhook Requests</a>guide.
 
 </Accordion>
 <Accordion title="Log Everything">
@@ -308,7 +308,7 @@ app.post("/webhooks/autosend", (req, res) => {
 </Accordion>
 <Accordion title="Monitor Webhook Health">
 
-Implement your own monitoring to track webhook delivery success/failure. The webhook model in AutoSend tracks `failureCount`, `lastSuccessAt`, and `lastFailedAt` which are updated automatically. See [Retries and Replays](./WEBHOOKS_RETRIES.md) for monitoring examples.
+Implement your own monitoring to track webhook delivery success/failure. The webhook model in AutoSend tracks `failureCount`, `lastSuccessAt`, and `lastFailedAt` which are updated automatically. See <a href={APP_PATHS.webhookRetries} title='Retries and Replays'>Retries and Replays</a> for monitoring examples.
 </Accordion>
 </AccordionGroup>
 ---
@@ -316,10 +316,10 @@ Implement your own monitoring to track webhook delivery success/failure. The web
 ## FAQ
 <AccordionGroup>
  <Accordion title="What events can I subscribe to?">
-AutoSend supports email engagement events (opened, clicked, bounced, delivered, etc.) and contact events (created, updated, deleted). See the [Event Types](./WEBHOOKS_EVENT_TYPES.md) guide for the complete list.
+AutoSend supports email engagement events (opened, clicked, bounced, delivered, etc.) and contact events (created, updated, deleted). See the <a href={APP_PATHS.webhookEventType} title='Event Types'>Event Types</a> guide for the complete list.
 </Accordion>
 <Accordion title="What is the retry schedule?">
-If AutoSend does not receive a 200 response from your webhook endpoint, we will automatically retry the delivery. See [Retries and Replays](./WEBHOOKS_RETRIES.md) for details.
+If AutoSend does not receive a 200 response from your webhook endpoint, we will automatically retry the delivery. See <a href={APP_PATHS.webhookRetries} title='Retries and Replays'>Retries and Replays</a> for details.
 </Accordion>
 <Accordion title="Can I have multiple webhooks?">
 Yes, you can create up to 100 webhooks per project. Each webhook can subscribe to different events and point to different endpoints.
@@ -342,7 +342,7 @@ You can reveal your webhook secret:
 
 <Accordion title="What happens if my endpoint is down?">
 
-AutoSend will retry failed deliveries up to 3 times with exponential backoff (1min, 5min, 15min). After all retries are exhausted, the delivery is marked as failed. See the [Retries and Replays](./WEBHOOKS_RETRIES.md) guide for details.
+AutoSend will retry failed deliveries up to 3 times with exponential backoff (1min, 5min, 15min). After all retries are exhausted, the delivery is marked as failed. See the <a href={APP_PATHS.webhookRetries} title='Retries and Replays'>Retries and Replays</a> guide for details.
 </Accordion>
 
 <Accordion title="Is there a request timeout?">
@@ -360,7 +360,7 @@ Yes! Use tools like <a href={NGROK_LINK} target='_blank' title='ngrok'>ngrok</a>
 <Accordion title="Are webhooks secure?">
 
 
-Yes, all webhooks are sent over HTTPS and include an HMAC-SHA256 signature that you should verify. See [Verify Webhook Requests](./WEBHOOKS_VERIFY_REQUESTS.md) for implementation details.
+Yes, all webhooks are sent over HTTPS and include an HMAC-SHA256 signature that you should verify. See <a href={APP_PATHS.webhookVerifyRequests} title='Verify Webhook Requests'>Verify Webhook Requests</a> for implementation details.
 </Accordion>
 </AccordionGroup>
 ---
