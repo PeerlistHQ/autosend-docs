@@ -5,12 +5,14 @@ openapi: 'POST /mails/send'
 
 <RequestExample>
 
+
+
 ```bash cURL
-  curl --request POST \
-    --url https://api.autosend.com/v1/mails/send \
-    --header 'Authorization: Bearer <token>' \
-    --header 'Content-Type: application/json' \
-    --data '{
+curl --request POST \
+  --url https://api.autosend.com/v1/mails/send \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
   "to": {
     "email": "[email protected]",
     "name": "Jane Smith"
@@ -30,6 +32,250 @@ openapi: 'POST /mails/send'
 }'
 ```
 
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/mails/send"
+
+headers = {
+    "Authorization": "Bearer <token>",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "to": {
+        "email": "[email protected]",
+        "name": "Jane Smith"
+    },
+    "from": {
+        "email": "[email protected]",
+        "name": "Your Company"
+    },
+    "subject": "Welcome to Our Platform!",
+    "html": "<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>",
+    "dynamicData": {
+        "name": "Jane"
+    },
+    "replyTo": {
+        "email": "[email protected]"
+    }
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/mails/send', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer <token>',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    to: {
+      email: '[email protected]',
+      name: 'Jane Smith'
+    },
+    from: {
+      email: '[email protected]',
+      name: 'Your Company'
+    },
+    subject: 'Welcome to Our Platform!',
+    html: '<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>',
+    dynamicData: {
+      name: 'Jane'
+    },
+    replyTo: {
+      email: '[email protected]'
+    }
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/mails/send';
+
+$data = [
+    'to' => [
+        'email' => '[email protected]',
+        'name' => 'Jane Smith'
+    ],
+    'from' => [
+        'email' => '[email protected]',
+        'name' => 'Your Company'
+    ],
+    'subject' => 'Welcome to Our Platform!',
+    'html' => '<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>',
+    'dynamicData' => [
+        'name' => 'Jane'
+    ],
+    'replyTo' => [
+        'email' => '[email protected]'
+    ]
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer <token>',
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/mails/send"
+    
+    payload := map[string]interface{}{
+        "to": map[string]string{
+            "email": "[email protected]",
+            "name":  "Jane Smith",
+        },
+        "from": map[string]string{
+            "email": "[email protected]",
+            "name":  "Your Company",
+        },
+        "subject": "Welcome to Our Platform!",
+        "html":     "<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>",
+        "dynamicData": map[string]string{
+            "name": "Jane",
+        },
+        "replyTo": map[string]string{
+            "email": "[email protected]",
+        },
+    }
+    
+    jsonData, _ := json.Marshal(payload)
+    
+    req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer <token>")
+    req.Header.Set("Content-Type", "application/json")
+    
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+    
+    fmt.Println("Response Status:", resp.Status)
+}
+```
+
+```java Java
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class SendEmail {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/mails/send");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Authorization", "Bearer <token>");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+            
+            String jsonInputString = "{\n" +
+                "  \"to\": {\n" +
+                "    \"email\": \"[email protected]\",\n" +
+                "    \"name\": \"Jane Smith\"\n" +
+                "  },\n" +
+                "  \"from\": {\n" +
+                "    \"email\": \"[email protected]\",\n" +
+                "    \"name\": \"Your Company\"\n" +
+                "  },\n" +
+                "  \"subject\": \"Welcome to Our Platform!\",\n" +
+                "  \"html\": \"<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>\",\n" +
+                "  \"dynamicData\": {\n" +
+                "    \"name\": \"Jane\"\n" +
+                "  },\n" +
+                "  \"replyTo\": {\n" +
+                "    \"email\": \"[email protected]\"\n" +
+                "  }\n" +
+                "}";
+            
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+            
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/mails/send')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(uri.path)
+request['Authorization'] = 'Bearer <token>'
+request['Content-Type'] = 'application/json'
+
+request.body = {
+  to: {
+    email: '[email protected]',
+    name: 'Jane Smith'
+  },
+  from: {
+    email: '[email protected]',
+    name: 'Your Company'
+  },
+  subject: 'Welcome to Our Platform!',
+  html: '<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>',
+  dynamicData: {
+    name: 'Jane'
+  },
+  replyTo: {
+    email: '[email protected]'
+  }
+}.to_json
+
+response = http.request(request)
+puts response.body
+```
+
+
+
 </RequestExample>
 
 <ResponseExample>
@@ -45,7 +291,7 @@ openapi: 'POST /mails/send'
 
 </ResponseExample>
 
-
+--- 
 #### Authorizations
 <ParamField path="Authorizations" type="string | header"  required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
