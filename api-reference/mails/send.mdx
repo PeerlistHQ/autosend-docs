@@ -314,6 +314,20 @@ Email data to send
 
   Example: `"Jane Smith"`
 </ParamField>
+  
+  <ParamField path="to.dynamically" type="string" >
+  Key-value pairs for template variable substitution (Handlebars syntax)
+
+  Example: 
+  ``` 
+  {
+  "name": "Jane",
+  "firstName": "Jane",
+  "orderNumber": "ORD-12345",
+  "orderTotal": "$99.99"
+}
+```
+</ParamField>
 
   </Accordion>
 </ParamField>
@@ -331,6 +345,22 @@ Email data to send
   Display name
 
   Example: `"Your Company"`
+</ParamField>
+
+
+  
+  <ParamField path="from.dynamically" type="string" >
+  Key-value pairs for template variable substitution (Handlebars syntax)
+
+  Example: 
+  ``` 
+  {
+  "name": "Jane",
+  "firstName": "Jane",
+  "orderNumber": "ORD-12345",
+  "orderTotal": "$99.99"
+}
+```
 </ParamField>
 
   </Accordion>

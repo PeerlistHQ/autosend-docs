@@ -403,21 +403,21 @@ Email data to send to multiple recipients
   </Note>
   
   <Accordion title="child attributes">
-  <ParamField path="recipients[].email" type="string<email>"  required>
+  <ParamField path="email" type="string<email>"  required>
   Email address
   
   Example: `"customer1@example.com"`
 </ParamField>
   
-  <ParamField path="recipients[].name" type="string" >
+  <ParamField path="name" type="string" >
   Display name
 
   Example: `"Jane Smith"`
 </ParamField>
 
-  <ParamField path="recipients[].dynamicData" type="object" >
-  Key-value pairs for template variable substitution (Handlebars syntax) specific to this recipient. This will override any values from the root-level dynamicData for this recipient.
-  
+  <ParamField path="dynamicData" type="object" >
+Key-value pairs for template variable substitution (Handlebars syntax)
+
   Example: 
   ```jsx
   {
@@ -429,30 +429,6 @@ Email data to send to multiple recipients
 </ParamField>
 
   </Accordion>
-  
-  Example:
-  ```jsx
-  [
-    {
-      "email": "customer1@example.com",
-      "name": "Jane Smith",
-      "dynamicData": {
-        "firstName": "Jane",
-        "orderNumber": "ORD-123",
-        "orderTotal": "$19.99"
-      }
-    },
-    {
-      "email": "customer2@example.com",
-      "name": "John Doe",
-      "dynamicData": {
-        "firstName": "John",
-        "orderNumber": "ORD-124",
-        "orderTotal": "$29.99"
-      }
-    }
-  ]
-  ```
 </ParamField>
 
 <ParamField path="from" type="object"  required>
@@ -469,6 +445,21 @@ Email data to send to multiple recipients
 
   Example: `"Your Company"`
 </ParamField>
+
+
+  <ParamField path="dynamicData" type="object" >
+  Key-value pairs for template variable substitution (Handlebars syntax)
+
+  Example: 
+  ```jsx
+  {
+  "firstName": "Jane",
+  "orderNumber": "ORD-123",
+  "orderTotal": "$19.99"
+}
+  ```
+</ParamField>
+
 
   </Accordion>
 </ParamField>
@@ -506,7 +497,7 @@ Email data to send to multiple recipients
 </ParamField>
 
 <ParamField path="dynamicData" type="object" >
-  Key-value pairs for template variable substitution (Handlebars syntax). Same data will be used for all recipients. Individual recipients can override these values by providing their own dynamicData.
+  Key-value pairs for template variable substitution (Handlebars syntax). Same data will be used for all recipients.
   
   Example: 
   ```jsx
