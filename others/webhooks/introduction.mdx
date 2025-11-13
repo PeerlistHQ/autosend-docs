@@ -25,8 +25,10 @@ AutoSend uses webhooks to push real-time notifications to your application about
 - **Maintain compliance logs** for audit purposes
 
 ---
+
+## Steps to receive webhooks
 <Steps>
-<Step title="Create a local endpoint to receive requests">
+<Step titleSize='h3' title="Create a local endpoint to receive requests">
 
 In your local application, create a new route that can accept POST requests.
 
@@ -159,7 +161,7 @@ On receiving an event, you should respond with an `HTTP 200 OK` status within 10
 </Info>
 
 </Step>
-<Step title="Register your development webhook endpoint">
+<Step titleSize='h3' title="Register your development webhook endpoint">
 
 1. Navigate to the **Webhooks** section in your <a href={AUTOSEND_PATHS.dashboard} title='AutoSend dashboard' target='_blank' rel='noopener noreferrer'>AutoSend dashboard</a>
 2. Click the **"New Webhook"** button
@@ -175,7 +177,7 @@ After creating your webhook, the secret token will be displayed. Make sure to co
 </Note>
 
 </Step>
-<Step title="Test that your webhook endpoint is working properly">
+<Step titleSize='h3' title="Test that your webhook endpoint is working properly">
 
 ### Monitor Your Endpoint
 
@@ -201,7 +203,7 @@ Test your webhook by performing actions in AutoSend that trigger events:
 
 ---
 </Step>
-<Step title="Deploy your webhook endpoint">
+<Step titleSize='h3' title="Deploy your webhook endpoint">
 
 After testing locally, deploy your webhook endpoint to your production environment:
 
@@ -219,7 +221,7 @@ After testing locally, deploy your webhook endpoint to your production environme
 
 ---
 </Step>
-<Step title="Register your production webhook endpoint">
+<Step titleSize='h3' title="Register your production webhook endpoint">
 
 Once deployed, create a new webhook in AutoSend with your production URL:
 

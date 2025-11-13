@@ -6,7 +6,7 @@ description: "Send your first emails with AutoSend email API in less than 10 min
 import { APP_PATHS } from '/snippets/appPaths.mdx'
 
 <Steps>
-  <Step title="Add Sending Domain" titleSize="h2">
+  <Step title="Add Sending Domain" titleSize="h3">
     Before sending emails, you need to verify ownership of your sending domain by adding DNS records. This ensures high deliverability and authenticates your emails.
 
     - Add your domain or subdomain (we recommend using a subdomain like `mail.yourdomain.com`)
@@ -16,8 +16,8 @@ import { APP_PATHS } from '/snippets/appPaths.mdx'
 <a href={APP_PATHS.domainConfiguration} title='Domain Configuration '>Learn how to add a domain</a>
 
   </Step>
-  <Step title="Generate API Keys" titleSize="h2">
-    Create secure API keys to authenticate your requests to the AutoSend API. Each key can be named for easy management (e.g., “Production”, “Staging”, “Marketing”).
+  <Step title="Generate API Keys" titleSize="h3">
+    Create secure API keys to authenticate your requests to the AutoSend API. Each key can be named for easy management (e.g., "Production", "Staging", "Marketing").
 
     - Generate API keys from your dashboard.
     - Copy and securely store your secret key.
@@ -26,7 +26,7 @@ import { APP_PATHS } from '/snippets/appPaths.mdx'
 <a href={APP_PATHS.apiKey} title='Domain Configuration '>See authentication guide</a>
 
   </Step>
-  <Step title="Send Your First Email" titleSize="h2">
+  <Step title="Send Your First Email" titleSize="h3">
     With your domain verified and API key ready, you can start sending emails immediately using our REST API.
 
     <CodeGroup>
