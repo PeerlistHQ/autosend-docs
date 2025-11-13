@@ -1,0 +1,383 @@
+---
+title: "Introduction"
+description: "Use webhooks to notify your application about email and contact events in real-time."
+sidebarTitle: "Introduction"
+---
+
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { NGROK_LINK, LOCALTUNNEL_LINK } from '/snippets/custom-variables.mdx';
+
+## What is a webhook?
+
+Webhooks are HTTP callbacks that allow AutoSend to send real-time notifications to your application when specific events occur. Instead of continuously polling AutoSend's API to check for updates, webhooks push data to your application immediately when events happen.
+
+AutoSend uses webhooks to push real-time notifications to your application about email and contact events. All webhooks use HTTPS and deliver a JSON payload that can be used by your application.
+
+### You can use webhooks to:
+
+- **Automatically remove bounced email addresses** from your mailing lists
+- **Track email engagement** in real-time (opens, clicks, unsubscribes)
+- **Sync contact changes** across multiple systems
+- **Create alerts** in your messaging or incident tools based on event types
+- **Store all events** in your own database for custom reporting/retention
+- **Trigger workflows** when specific events occur (e.g., send Slack notification when email bounces)
+- **Maintain compliance logs** for audit purposes
+
+---
+<Steps>
+<Step title="Create a local endpoint to receive requests">
+
+In your local application, create a new route that can accept POST requests.
+
+<CodeGroup>
+
+```javascript NodeJs expandable
+const express = require("express");
+const crypto = require("crypto");
+const app = express();
+
+app.use(express.json());
+
+app.post("/webhooks/autosend", (req, res) => {
+  // Verify signature (see Verify Webhook Requests section)
+  const signature = req.headers["x-webhook-signature"];
+  const isValid = verifySignature(
+    req.body,
+    signature,
+    process.env.WEBHOOK_SECRET
+  );
+
+  if (!isValid) {
+    return res.status(401).json({ error: "Invalid signature" });
+  }
+
+  // Process the webhook
+  const { event, data } = req.body;
+  console.log(`Received ${event} event:`, data);
+
+  // Process based on event type
+  switch (event) {
+    case "email.opened":
+      // Handle email opened
+      break;
+    case "email.clicked":
+      // Handle email clicked
+      break;
+    case "contact.created":
+      // Handle contact created
+      break;
+    // ... handle other events
+  }
+
+  // Always respond quickly with 2xx status
+  res.status(200).json({ received: true });
+});
+
+function verifySignature(body, signature, secret) {
+  const expectedSignature = crypto
+    .createHmac("sha256", secret)
+    .update(JSON.stringify(body))
+    .digest("hex");
+  return signature === expectedSignature;
+}
+
+app.listen(3000, () => {
+  console.log("Webhook endpoint listening on port 3000");
+});
+```
+
+
+```javascript NextJs expandable
+// pages/api/webhooks.js
+import crypto from "crypto";
+
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  // Verify signature
+  const signature = req.headers["x-webhook-signature"];
+  const webhookSecret = process.env.WEBHOOK_SECRET;
+
+  const expectedSignature = crypto
+    .createHmac("sha256", webhookSecret)
+    .update(JSON.stringify(req.body))
+    .digest("hex");
+
+  if (signature !== expectedSignature) {
+    return res.status(401).json({ error: "Invalid signature" });
+  }
+
+  // Process webhook
+  const { event, data } = req.body;
+  console.log(`Received ${event} event:`, data);
+
+  // Respond immediately
+  res.status(200).json({ received: true });
+}
+```
+
+
+```python Python expandable
+from flask import Flask, request, jsonify
+import hmac
+import hashlib
+import os
+
+app = Flask(__name__)
+WEBHOOK_SECRET = os.getenv('WEBHOOK_SECRET')
+
+def verify_signature(payload, signature):
+    expected = hmac.new(
+        WEBHOOK_SECRET.encode('utf-8'),
+        payload.encode('utf-8'),
+        hashlib.sha256
+    ).hexdigest()
+    return hmac.compare_digest(expected, signature)
+
+@app.route('/webhooks/autosend', methods=['POST'])
+def webhook():
+    signature = request.headers.get('X-Webhook-Signature')
+    payload = request.get_data(as_text=True)
+
+    if not signature or not verify_signature(payload, signature):
+        return jsonify({'error': 'Invalid signature'}), 401
+
+    data = request.json
+    event = data.get('event')
+
+    print(f'Received {event} event')
+
+    return jsonify({'received': True}), 200
+```
+</CodeGroup>
+
+<Info>
+On receiving an event, you should respond with an `HTTP 200 OK` status within 10 seconds to signal to AutoSend that the event was successfully delivered.
+</Info>
+
+</Step>
+<Step title="Register your development webhook endpoint">
+
+1. Navigate to the **Webhooks** section in your <a href={AUTOSEND_PATHS.dashboard} title='AutoSend dashboard' target='_blank' rel='noopener noreferrer'>AutoSend dashboard</a>
+2. Click the **"New Webhook"** button
+3. Fill in the webhook details:
+   - **Name**: A friendly name for identification (e.g., "Development Email Tracker")
+   - **Endpoint URL**: Your publicly accessible HTTPS URL (use your ngrok URL for development)
+   - **Events**: Select the events you want to receive notifications for
+4. Click **"Create Webhook"**
+5. **Important**: Copy the secret token and save it securely - you'll need it to verify webhook requests
+
+<Note> 
+After creating your webhook, the secret token will be displayed. Make sure to copy and save it securely. You can also reveal it later by editing the webhook and clicking "Reveal Secret".
+</Note>
+
+</Step>
+<Step title="Test that your webhook endpoint is working properly">
+
+### Monitor Your Endpoint
+
+Start monitoring your local endpoint to see incoming webhook requests:
+
+```javascript
+app.post("/webhooks/autosend", (req, res) => {
+  console.log("Webhook received!");
+  console.log("Event:", req.body.event);
+  console.log("Data:", JSON.stringify(req.body.data, null, 2));
+
+  res.status(200).json({ received: true });
+});
+```
+
+### Trigger Test Events
+
+Test your webhook by performing actions in AutoSend that trigger events:
+
+1. **For Email Events**: Send a test campaign or transactional email through the <a href={AUTOSEND_PATHS.dashboard} title='AutoSend dashboard' target='_blank' rel='noopener noreferrer'>AutoSend dashboard</a>
+2. **For Contact Events**: Create, update, or delete a test contact in your project
+3. **Watch your logs**: Your endpoint should receive webhook requests for these events
+
+---
+</Step>
+<Step title="Deploy your webhook endpoint">
+
+After testing locally, deploy your webhook endpoint to your production environment:
+
+- **Vercel/Netlify**: Deploy your API routes
+- **AWS Lambda**: Deploy as serverless function
+- **Heroku/Railway**: Deploy your application
+- **Docker**: Containerize and deploy to your infrastructure
+
+**Important**: Ensure your production endpoint:
+
+- Uses HTTPS (required)
+- Responds within 10 seconds
+- Implements proper error handling
+- Verifies webhook signatures
+
+---
+</Step>
+<Step title="Register your production webhook endpoint">
+
+Once deployed, create a new webhook in AutoSend with your production URL:
+
+1. Navigate to the **Webhooks** section in your <a href={AUTOSEND_PATHS.dashboard} title='AutoSend dashboard' target='_blank' rel='noopener noreferrer'>AutoSend dashboard</a>
+2. Click the **"New Webhook"** button
+3. Fill in the production details:
+   - **Name**: "Production Email Tracker" (or any descriptive name)
+   - **Endpoint URL**: Your production webhook URL (e.g., `https://api.yourapp.com/webhooks/autosend`)
+   - **Events**: Select the events you want to track:
+     - Email engagement: opened, clicked, unsubscribed
+     - Deliverability: delivered, bounced, deferred
+     - Contact events: created, updated, deleted
+4. Click **"Create Webhook"**
+5. **Important**: Copy the secret token and save it securely - you'll need it to verify webhook requests
+
+<Note>
+**Copy and securely store the webhook secret**
+   - Store it as an environment variable: `WEBHOOK_SECRET=your_secret_here`
+   - Never commit it to version control
+   - Use a secret management service in production (AWS Secrets Manager, etc.)
+</Note>
+
+</Step>
+</Steps>
+### Managing Your Webhooks
+
+From the Webhooks dashboard page, you can:
+
+- **View all webhooks** for your project - displayed as cards showing webhook details
+- **Edit webhooks** - Click the menu (⋮) on a webhook card and select "Edit"
+- **Delete webhooks** - Click the menu (⋮) and select "Delete"
+- **See webhook status** - Each webhook shows "Enabled" or "Disabled" status
+- **Copy webhook details** - Webhook ID and URL are copyable from the card
+
+---
+
+## Best Practices
+
+<AccordionGroup>
+<Accordion title="Respond Quickly">
+
+Process webhooks asynchronously to respond within 10 seconds:
+
+```javascript
+// ❌ Bad - Synchronous processing
+app.post("/webhooks/autosend", async (req, res) => {
+  await updateDatabase(data);
+  await sendToAnalytics(data);
+  res.status(200).json({ received: true });
+});
+
+// ✅ Good - Asynchronous processing
+app.post("/webhooks/autosend", async (req, res) => {
+  // Queue for background processing
+  await queue.add("process-webhook", { event, data });
+
+  // Respond immediately
+  res.status(200).json({ received: true });
+});
+```
+</Accordion>
+
+<Accordion title="Always Verify Signatures">
+
+Never trust incoming webhook requests without verification. See the <a href={APP_PATHS.webhookVerifyRequests} title='Verify Webhook Requests'>Verify Webhook Requests</a> guide.
+
+</Accordion>
+<Accordion title="Log Everything">
+
+Maintain detailed logs for debugging:
+
+```javascript
+app.post("/webhooks/autosend", (req, res) => {
+  logger.info(
+    {
+      deliveryId: req.headers["x-webhook-delivery-id"],
+      event: req.body.event,
+      timestamp: new Date().toISOString(),
+    },
+    "Webhook received"
+  );
+
+  // Process webhook
+});
+```
+</Accordion>
+<Accordion title="Monitor Webhook Health">
+
+Implement your own monitoring to track webhook delivery success/failure. The webhook model in AutoSend tracks `failureCount`, `lastSuccessAt`, and `lastFailedAt` which are updated automatically. See <a href={APP_PATHS.webhookRetries} title='Retries and Replays'>Retries and Replays</a> for monitoring examples.
+</Accordion>
+</AccordionGroup>
+---
+
+## FAQ
+<AccordionGroup>
+ <Accordion title="What events can I subscribe to?">
+AutoSend supports email engagement events (opened, clicked, bounced, delivered, etc.) and contact events (created, updated, deleted). See the <a href={APP_PATHS.webhookEventType} title='Event Types'>Event Types</a> guide for the complete list.
+</Accordion>
+<Accordion title="What is the retry schedule?">
+If AutoSend does not receive a 200 response from your webhook endpoint, we will automatically retry the delivery. See <a href={APP_PATHS.webhookRetries} title='Retries and Replays'>Retries and Replays</a> for details.
+</Accordion>
+<Accordion title="Can I have multiple webhooks?">
+Yes, you can create up to 100 webhooks per project. Each webhook can subscribe to different events and point to different endpoints.
+</Accordion>
+
+<Accordion title="Can I change the webhook URL?">
+No, webhook URLs cannot be changed after creation for security reasons. If you need to change the URL, delete the webhook and create a new one.
+</Accordion>
+
+<Accordion title="How do I get the secret if I lost it?">
+
+You can reveal your webhook secret:
+
+1. Go to <a href={AUTOSEND_PATHS.webhooks} title='Webhooks section' target='_blank' rel='noopener noreferrer'>Webhooks section</a>
+2. Click the menu (⋮) on your webhook card
+3. Select "Edit"
+4. Click "Reveal Secret" button
+5. Copy and store it securely
+</Accordion>
+
+<Accordion title="What happens if my endpoint is down?">
+
+AutoSend will retry failed deliveries up to 3 times with exponential backoff (1min, 5min, 15min). After all retries are exhausted, the delivery is marked as failed. See the <a href={APP_PATHS.webhookRetries} title='Retries and Replays'>Retries and Replays</a> guide for details.
+</Accordion>
+
+<Accordion title="Is there a request timeout?">
+
+
+Yes, webhook requests have a 10-second timeout. Ensure your endpoint responds within this time.
+
+</Accordion>
+
+<Accordion title="How do I test webhooks locally?">
+
+
+Yes! Use tools like <a href={NGROK_LINK} target='_blank' title='ngrok'>ngrok</a> or <a href={LOCALTUNNEL_LINK} target='_blank' title='localtunnel'>localtunnel</a> to expose your local server to the internet, then create a webhook in the <a href={AUTOSEND_PATHS.webhooks} title='dashboard' target='_blank' rel='noopener noreferrer'>dashboard</a> with your ngrok URL. Trigger events by sending emails or managing contacts in AutoSend, and your local endpoint will receive the webhooks.
+</Accordion>
+<Accordion title="Are webhooks secure?">
+
+
+Yes, all webhooks are sent over HTTPS and include an HMAC-SHA256 signature that you should verify. See <a href={APP_PATHS.webhookVerifyRequests} title='Verify Webhook Requests'>Verify Webhook Requests</a> for implementation details.
+</Accordion>
+</AccordionGroup>
+---
+
+## Related Resources
+
+<Columns cols={2}>
+  <Card title="Event Types" icon="list" iconType="duotone" href={APP_PATHS.webhookEventType}>
+   Complete list of webhook events and payloads
+  </Card>
+  <Card title="Retries and Replays" icon="rotate" iconType="duotone" href={APP_PATHS.webhookRetries}>
+    Automatic retry logic and best practices
+  </Card>
+  <Card title="Verify Webhook Requests" icon="shield-check" iconType="duotone" href={APP_PATHS.webhookVerifyRequests}>
+   Security and signature verification
+  </Card>
+  <Card title="Webhooks Dashboard" icon="gear" iconType="duotone" href={AUTOSEND_PATHS.webhooks}>
+   Manage your webhooks in the AutoSend dashboard
+  </Card>
+</Columns>

@@ -1,0 +1,1028 @@
+---
+title: "Verify Requests"
+description: "Learn how to verify that webhook requests are genuinely from AutoSend using HMAC signature verification."
+sidebarTitle: "Verify Requests"
+---
+
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+## Why Verify Webhooks?
+
+**Security is critical.** Anyone can send a POST request to your webhook endpoint. Without verification, malicious actors could:
+
+- Send fake events to corrupt your data
+- Trigger unwanted actions in your application
+- Cause your system to process fraudulent information
+- Launch denial-of-service attacks
+
+**Always verify webhook signatures** to ensure requests are genuinely from AutoSend.
+
+---
+
+## How AutoSend Signs Webhooks
+
+Every webhook request from AutoSend includes an `X-Webhook-Signature` header containing an HMAC-SHA256 signature.
+
+### Signature Generation
+
+AutoSend generates the signature using this process:
+
+1. **Take the raw request body** as a string (the JSON payload)
+2. **Compute HMAC-SHA256** using your webhook secret as the key
+3. **Convert to hexadecimal** format
+4. **Add as header**: `X-Webhook-Signature: <signature>`
+
+```javascript
+// Pseudocode for how AutoSend generates signatures
+const signature = crypto
+  .createHmac("sha256", webhookSecret)
+  .update(JSON.stringify(requestBody))
+  .digest("hex");
+```
+
+---
+
+## Webhook Request Headers
+
+Every webhook request includes these headers:
+
+| Header                  | Description                               | Example                 |
+| ----------------------- | ----------------------------------------- | ----------------------- |
+| `X-Webhook-Signature`   | HMAC-SHA256 signature of the request body | `a1b2c3d4e5f6...`       |
+| `X-Webhook-Event`       | The event type                            | `email.opened`          |
+| `X-Webhook-Delivery-Id` | Unique delivery identifier                | `delivery-123...`       |
+| `X-Webhook-Timestamp`   | Unix timestamp when webhook was sent      | `1699790400`            |
+| `Content-Type`          | Always `application/json`                 | `application/json`      |
+| `User-Agent`            | AutoSend user agent                       | `AutoSend-Webhooks/1.0` |
+
+---
+
+## Verifying Signatures
+
+### Verification Steps
+
+<Steps>
+
+<Step title='Extract the signature from the X-Webhook-Signature header' />
+<Step title="Get the raw request body as a string (before parsing)" />
+
+<Step title="Compute the expected signature using your webhook secret" />
+<Step title="Compare signatures using a constant-time comparison function" />
+</Steps>
+
+
+<CodeGroup>
+```javascript Nodejs expandable
+const express = require("express");
+const crypto = require("crypto");
+
+const app = express();
+
+// Important: Store raw body for signature verification
+app.use(
+  express.json({
+    verify: (req, res, buf) => {
+      req.rawBody = buf.toString("utf8");
+    },
+  })
+);
+
+function verifyWebhookSignature(req, webhookSecret) {
+  const receivedSignature = req.headers["x-webhook-signature"];
+
+  if (!receivedSignature) {
+    return false;
+  }
+
+  // Compute expected signature using raw body
+  const expectedSignature = crypto
+    .createHmac("sha256", webhookSecret)
+    .update(req.rawBody)
+    .digest("hex");
+
+  // Use constant-time comparison to prevent timing attacks
+  return crypto.timingSafeEqual(
+    Buffer.from(receivedSignature),
+    Buffer.from(expectedSignature)
+  );
+}
+
+app.post("/webhooks/autosend", (req, res) => {
+  const webhookSecret = process.env.WEBHOOK_SECRET;
+
+  // Verify signature
+  if (!verifyWebhookSignature(req, webhookSecret)) {
+    console.error("Invalid webhook signature");
+    return res.status(401).json({ error: "Invalid signature" });
+  }
+
+  // Process webhook
+  const { event, data } = req.body;
+  console.log(`Verified webhook: ${event}`);
+
+  res.status(200).json({ received: true });
+});
+```
+
+
+```python Python expandable
+from flask import Flask, request, jsonify
+import hmac
+import hashlib
+import os
+
+app = Flask(__name__)
+WEBHOOK_SECRET = os.getenv('WEBHOOK_SECRET')
+
+def verify_webhook_signature(payload, signature, secret):
+    """Verify webhook signature using HMAC-SHA256"""
+    if not signature:
+        return False
+
+    # Compute expected signature
+    expected = hmac.new(
+        secret.encode('utf-8'),
+        payload.encode('utf-8'),
+        hashlib.sha256
+    ).hexdigest()
+
+    # Constant-time comparison
+    return hmac.compare_digest(expected, signature)
+
+@app.route('/webhooks/autosend', methods=['POST'])
+def webhook():
+    # Get signature from header
+    signature = request.headers.get('X-Webhook-Signature')
+
+    # Get raw payload
+    payload = request.get_data(as_text=True)
+
+    # Verify signature
+    if not verify_webhook_signature(payload, signature, WEBHOOK_SECRET):
+        return jsonify({'error': 'Invalid signature'}), 401
+
+    # Parse and process webhook
+    data = request.json
+    event = data.get('event')
+    print(f'Verified webhook: {event}')
+
+    return jsonify({'received': True}), 200
+
+if __name__ == '__main__':
+    app.run(port=3000)
+```
+
+
+```php PHP expandable
+<?php
+function verifyWebhookSignature($payload, $receivedSignature, $secret) {
+    if (empty($receivedSignature)) {
+        return false;
+    }
+
+    // Compute expected signature
+    $expectedSignature = hash_hmac('sha256', $payload, $secret);
+
+    // Constant-time comparison
+    return hash_equals($expectedSignature, $receivedSignature);
+}
+
+// Get raw POST body
+$payload = file_get_contents('php://input');
+
+// Get signature from header
+$signature = $_SERVER['HTTP_X_WEBHOOK_SIGNATURE'] ?? '';
+
+// Get secret from environment
+$webhookSecret = getenv('WEBHOOK_SECRET');
+
+// Verify signature
+if (!verifyWebhookSignature($payload, $signature, $webhookSecret)) {
+    http_response_code(401);
+    echo json_encode(['error' => 'Invalid signature']);
+    exit;
+}
+
+// Parse and process webhook
+$data = json_decode($payload, true);
+$event = $data['event'];
+
+error_log("Verified webhook: $event");
+
+http_response_code(200);
+echo json_encode(['received' => true]);
+?>
+```
+
+```ruby Ruby expandable
+require 'sinatra'
+require 'json'
+require 'openssl'
+
+WEBHOOK_SECRET = ENV['WEBHOOK_SECRET']
+
+def verify_webhook_signature(payload, signature, secret)
+  return false if signature.nil? || signature.empty?
+
+  # Compute expected signature
+  expected = OpenSSL::HMAC.hexdigest('sha256', secret, payload)
+
+  # Constant-time comparison
+  Rack::Utils.secure_compare(expected, signature)
+end
+
+post '/webhooks/autosend' do
+  # Get raw body and signature
+  payload = request.body.read
+  signature = request.env['HTTP_X_WEBHOOK_SIGNATURE']
+
+  # Verify signature
+  unless verify_webhook_signature(payload, signature, WEBHOOK_SECRET)
+    status 401
+    return { error: 'Invalid signature' }.to_json
+  end
+
+  # Parse and process webhook
+  data = JSON.parse(payload)
+  event = data['event']
+
+  puts "Verified webhook: #{event}"
+
+  status 200
+  { received: true }.to_json
+end
+```
+
+```go Go expandable
+package main
+
+import (
+    "crypto/hmac"
+    "crypto/sha256"
+    "encoding/hex"
+    "encoding/json"
+    "io/ioutil"
+    "net/http"
+    "os"
+)
+
+func verifyWebhookSignature(payload []byte, signature string, secret string) bool {
+    if signature == "" {
+        return false
+    }
+
+    // Compute expected signature
+    mac := hmac.New(sha256.New, []byte(secret))
+    mac.Write(payload)
+    expected := hex.EncodeToString(mac.Sum(nil))
+
+    // Constant-time comparison
+    return hmac.Equal([]byte(expected), []byte(signature))
+}
+
+func webhookHandler(w http.ResponseWriter, r *http.Request) {
+    // Read raw body
+    payload, err := ioutil.ReadAll(r.Body)
+    if err != nil {
+        http.Error(w, "Error reading body", http.StatusBadRequest)
+        return
+    }
+
+    // Get signature from header
+    signature := r.Header.Get("X-Webhook-Signature")
+
+    // Get secret from environment
+    webhookSecret := os.Getenv("WEBHOOK_SECRET")
+
+    // Verify signature
+    if !verifyWebhookSignature(payload, signature, webhookSecret) {
+        http.Error(w, "Invalid signature", http.StatusUnauthorized)
+        return
+    }
+
+    // Parse webhook
+    var data map[string]interface{}
+    json.Unmarshal(payload, &data)
+
+    // Process webhook
+    event := data["event"].(string)
+    println("Verified webhook:", event)
+
+    w.WriteHeader(http.StatusOK)
+    json.NewEncoder(w).Encode(map[string]bool{"received": true})
+}
+
+func main() {
+    http.HandleFunc("/webhooks/autosend", webhookHandler)
+    http.ListenAndServe(":3000", nil)
+}
+```
+
+
+</CodeGroup>
+
+
+## Security Best Practices
+
+<AccordionGroup>
+<Accordion title="Always Use Constant-Time Comparison">
+**Never use `===` or `==` to compare signatures.** Use constant-time comparison functions to prevent timing attacks:
+
+```javascript
+// ❌ Bad - Vulnerable to timing attacks
+if (receivedSignature === expectedSignature) {
+  // Process webhook
+}
+
+// ✅ Good - Constant-time comparison
+if (
+  crypto.timingSafeEqual(
+    Buffer.from(receivedSignature),
+    Buffer.from(expectedSignature)
+  )
+) {
+  // Process webhook
+}
+```
+</Accordion>
+<Accordion title="Store Secrets Securely">
+
+
+Never hardcode webhook secrets in your code:
+
+```javascript
+// ❌ Bad
+const WEBHOOK_SECRET = "a1b2c3d4e5f6g7h8...";
+
+// ✅ Good
+const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+
+if (!WEBHOOK_SECRET) {
+  throw new Error("WEBHOOK_SECRET environment variable is required");
+}
+```
+
+**Store secrets in:**
+
+- Environment variables
+- Secure secret management services (AWS Secrets Manager, HashiCorp Vault, etc.)
+- Encrypted configuration files
+
+**Never:**
+
+- Commit secrets to version control
+- Include secrets in client-side code
+- Share secrets in logs or error messages
+
+</Accordion>
+<Accordion title="Use the Raw Request Body">
+
+Compute signatures using the **raw, unparsed request body**:
+
+```javascript
+// ✅ Good - Use raw body
+app.use(
+  express.json({
+    verify: (req, res, buf) => {
+      req.rawBody = buf.toString("utf8");
+    },
+  })
+);
+
+const signature = crypto
+  .createHmac("sha256", secret)
+  .update(req.rawBody) // Use raw body
+  .digest("hex");
+
+// ❌ Bad - Don't re-stringify parsed body
+const signature = crypto
+  .createHmac("sha256", secret)
+  .update(JSON.stringify(req.body)) // May not match original
+  .digest("hex");
+```
+
+</Accordion>
+<Accordion title="Validate the Timestamp">
+
+Optionally, validate the `X-Webhook-Timestamp` header to reject old requests:
+
+```javascript
+function isWebhookTimestampValid(timestamp, maxAgeSeconds = 300) {
+  const now = Math.floor(Date.now() / 1000);
+  const age = now - parseInt(timestamp);
+
+  // Reject if older than 5 minutes
+  return age < maxAgeSeconds && age > -60; // Allow 1 minute clock skew
+}
+
+app.post("/webhooks/autosend", (req, res) => {
+  const timestamp = req.headers["x-webhook-timestamp"];
+
+  if (!isWebhookTimestampValid(timestamp)) {
+    return res.status(401).json({ error: "Timestamp too old" });
+  }
+
+  if (!verifyWebhookSignature(req, webhookSecret)) {
+    return res.status(401).json({ error: "Invalid signature" });
+  }
+
+  // Process webhook
+});
+```
+
+</Accordion>
+<Accordion title="Use HTTPS">
+
+**Always use HTTPS** for your webhook endpoints in production:
+
+```javascript
+// ❌ Bad - HTTP in production
+const webhookUrl = "http://api.example.com/webhooks/autosend";
+
+// ✅ Good - HTTPS
+const webhookUrl = "https://api.example.com/webhooks/autosend";
+```
+
+HTTPS ensures:
+
+- Requests are encrypted in transit
+- Man-in-the-middle attacks are prevented
+- Webhook data remains confidential
+
+</Accordion>
+<Accordion title="Rotate Secrets Periodically">
+
+Regularly rotate your webhook secrets:
+
+1. Create a new webhook with a new secret
+2. Update your application to accept both old and new secrets temporarily
+3. Switch traffic to the new webhook
+4. Remove the old webhook
+
+```javascript
+// Support multiple secrets during rotation
+const WEBHOOK_SECRETS = [
+  process.env.WEBHOOK_SECRET,
+  process.env.WEBHOOK_SECRET_OLD, // Remove after rotation complete
+].filter(Boolean);
+
+function verifyWithMultipleSecrets(req) {
+  return WEBHOOK_SECRETS.some((secret) => verifyWebhookSignature(req, secret));
+}
+```
+</Accordion>
+</AccordionGroup>
+
+---
+
+## Troubleshooting
+
+
+<AccordionGroup>
+<Accordion title="Signature Verification Failing">
+
+**Symptoms**: All webhook requests return 401 Unauthorized
+
+**Common Causes:**
+
+1. **Using wrong secret**
+
+   ```javascript NodeJs
+   // Check which secret you're using
+   console.log("Using secret starting with:", webhookSecret.substring(0, 10));
+   ```
+
+2. **Body parsing issues**
+
+   ```javascript NodeJs
+   // Ensure you're using raw body
+   console.log("Raw body:", req.rawBody);
+   console.log("Parsed body:", JSON.stringify(req.body));
+   ```
+
+3. **String encoding issues**
+
+   ```javascript NodeJs
+   // Ensure consistent encoding
+   const expectedSignature = crypto
+     .createHmac("sha256", webhookSecret)
+     .update(req.rawBody, "utf8") // Explicit encoding
+     .digest("hex");
+   ```
+
+4. **Comparing wrong values**
+   ```javascript NodeJs
+   // Debug signature comparison
+   console.log("Received signature:", receivedSignature);
+   console.log("Expected signature:", expectedSignature);
+   console.log("Match:", receivedSignature === expectedSignature);
+   ```
+</Accordion>
+<Accordion title="Testing Signature Verification">
+
+Test your signature verification locally:
+
+```javascript NodeJs expandable
+const crypto = require("crypto");
+
+function testSignatureVerification() {
+  const webhookSecret = "test-secret-12345";
+  const payload = JSON.stringify({
+    event: "email.opened",
+    timestamp: "2025-11-12T10:30:00.000Z",
+    data: { emailId: "test-123" },
+  });
+
+  // Generate signature
+  const signature = crypto
+    .createHmac("sha256", webhookSecret)
+    .update(payload)
+    .digest("hex");
+
+  console.log("Test payload:", payload);
+  console.log("Test signature:", signature);
+
+  // Verify it works
+  const expectedSignature = crypto
+    .createHmac("sha256", webhookSecret)
+    .update(payload)
+    .digest("hex");
+
+  console.log("Verification:", signature === expectedSignature);
+}
+
+testSignatureVerification();
+```
+
+
+</Accordion>
+</AccordionGroup>
+
+## Retrieving Your Webhook Secret
+
+If you've lost your webhook secret, you can retrieve it:
+
+### Via Dashboard
+<Steps>
+<Step title="Navigate to Webhooks in your AutoSend dashboard" />
+<Step title="Click on the webhook" />
+<Step title="Click Reveal Secret" />
+<Step title="Copy the secret and store it securely" />
+</Steps>
+
+## Complete Example
+
+Here's a complete, production-ready webhook endpoint with signature verification:
+
+<CodeGroup>
+
+```javascript Node.js expandable
+const express = require("express");
+const crypto = require("crypto");
+const app = express();
+
+// Store raw body for signature verification
+app.use(
+  express.json({
+    verify: (req, res, buf) => {
+      req.rawBody = buf.toString("utf8");
+    },
+  })
+);
+
+// Webhook secret from environment
+const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+
+if (!WEBHOOK_SECRET) {
+  throw new Error("WEBHOOK_SECRET environment variable is required");
+}
+
+// Verify webhook signature
+function verifyWebhookSignature(req) {
+  const receivedSignature = req.headers["x-webhook-signature"];
+
+  if (!receivedSignature) {
+    return false;
+  }
+
+  const expectedSignature = crypto
+    .createHmac("sha256", WEBHOOK_SECRET)
+    .update(req.rawBody)
+    .digest("hex");
+
+  return crypto.timingSafeEqual(
+    Buffer.from(receivedSignature),
+    Buffer.from(expectedSignature)
+  );
+}
+
+// Validate timestamp (optional but recommended)
+function isTimestampValid(timestamp, maxAgeSeconds = 300) {
+  const now = Math.floor(Date.now() / 1000);
+  const age = now - parseInt(timestamp);
+  return age < maxAgeSeconds && age > -60;
+}
+
+// Webhook endpoint
+app.post("/webhooks/autosend", async (req, res) => {
+  const deliveryId = req.headers["x-webhook-delivery-id"];
+  const timestamp = req.headers["x-webhook-timestamp"];
+
+  // Validate timestamp
+  if (!isTimestampValid(timestamp)) {
+    console.error("Invalid timestamp", { deliveryId, timestamp });
+    return res.status(401).json({ error: "Invalid timestamp" });
+  }
+
+  // Verify signature
+  if (!verifyWebhookSignature(req)) {
+    console.error("Invalid signature", { deliveryId });
+    return res.status(401).json({ error: "Invalid signature" });
+  }
+
+  // Process webhook
+  const { event, data } = req.body;
+
+  console.log("Webhook received and verified", {
+    deliveryId,
+    event,
+    timestamp: new Date(parseInt(timestamp) * 1000).toISOString(),
+  });
+
+  try {
+    // Queue for background processing
+    await processWebhookAsync(event, data);
+
+    res.status(200).json({ received: true });
+  } catch (error) {
+    console.error("Error processing webhook", { deliveryId, error });
+    res.status(500).json({ error: "Internal error" });
+  }
+});
+
+app.listen(3000, () => {
+  console.log("Webhook server listening on port 3000");
+});
+```
+
+```python Python expandable
+from flask import Flask, request, jsonify
+import hmac
+import hashlib
+import os
+import time
+import json
+
+app = Flask(__name__)
+WEBHOOK_SECRET = os.getenv('WEBHOOK_SECRET')
+
+if not WEBHOOK_SECRET:
+    raise ValueError("WEBHOOK_SECRET environment variable is required")
+
+def verify_webhook_signature(payload, signature, secret):
+    """Verify webhook signature using HMAC-SHA256"""
+    if not signature:
+        return False
+
+    expected = hmac.new(
+        secret.encode('utf-8'),
+        payload.encode('utf-8'),
+        hashlib.sha256
+    ).hexdigest()
+
+    return hmac.compare_digest(expected, signature)
+
+def is_timestamp_valid(timestamp, max_age_seconds=300):
+    """Validate webhook timestamp"""
+    if not timestamp:
+        return False
+    
+    now = int(time.time())
+    age = now - int(timestamp)
+    return age < max_age_seconds and age > -60
+
+@app.route('/webhooks/autosend', methods=['POST'])
+def webhook():
+    # Get headers
+    delivery_id = request.headers.get('X-Webhook-Delivery-Id')
+    timestamp = request.headers.get('X-Webhook-Timestamp')
+    signature = request.headers.get('X-Webhook-Signature')
+
+    # Get raw payload
+    payload = request.get_data(as_text=True)
+
+    # Validate timestamp
+    if not is_timestamp_valid(timestamp):
+        app.logger.error(f"Invalid timestamp: {delivery_id}, {timestamp}")
+        return jsonify({'error': 'Invalid timestamp'}), 401
+
+    # Verify signature
+    if not verify_webhook_signature(payload, signature, WEBHOOK_SECRET):
+        app.logger.error(f"Invalid signature: {delivery_id}")
+        return jsonify({'error': 'Invalid signature'}), 401
+
+    # Parse and process webhook
+    data = request.json
+    event = data.get('event')
+
+    app.logger.info(f"Webhook received and verified: {delivery_id}, {event}")
+
+    try:
+        # Process webhook asynchronously
+        process_webhook_async(event, data)
+        return jsonify({'received': True}), 200
+    except Exception as error:
+        app.logger.error(f"Error processing webhook: {delivery_id}, {error}")
+        return jsonify({'error': 'Internal error'}), 500
+
+def process_webhook_async(event, data):
+    """Process webhook in background"""
+    # Implement your webhook processing logic here
+    pass
+
+if __name__ == '__main__':
+    app.run(port=3000)
+```
+
+```php PHP expandable
+<?php
+
+$webhookSecret = getenv('WEBHOOK_SECRET');
+
+if (!$webhookSecret) {
+    throw new Exception("WEBHOOK_SECRET environment variable is required");
+}
+
+function verifyWebhookSignature($payload, $receivedSignature, $secret) {
+    if (empty($receivedSignature)) {
+        return false;
+    }
+
+    $expectedSignature = hash_hmac('sha256', $payload, $secret);
+    return hash_equals($expectedSignature, $receivedSignature);
+}
+
+function isTimestampValid($timestamp, $maxAgeSeconds = 300) {
+    if (empty($timestamp)) {
+        return false;
+    }
+
+    $now = time();
+    $age = $now - (int)$timestamp;
+    return $age < $maxAgeSeconds && $age > -60;
+}
+
+// Get raw POST body
+$payload = file_get_contents('php://input');
+
+// Get headers
+$deliveryId = $_SERVER['HTTP_X_WEBHOOK_DELIVERY_ID'] ?? '';
+$timestamp = $_SERVER['HTTP_X_WEBHOOK_TIMESTAMP'] ?? '';
+$signature = $_SERVER['HTTP_X_WEBHOOK_SIGNATURE'] ?? '';
+
+// Validate timestamp
+if (!isTimestampValid($timestamp)) {
+    error_log("Invalid timestamp: {$deliveryId}, {$timestamp}");
+    http_response_code(401);
+    echo json_encode(['error' => 'Invalid timestamp']);
+    exit;
+}
+
+// Verify signature
+if (!verifyWebhookSignature($payload, $signature, $webhookSecret)) {
+    error_log("Invalid signature: {$deliveryId}");
+    http_response_code(401);
+    echo json_encode(['error' => 'Invalid signature']);
+    exit;
+}
+
+// Parse and process webhook
+$data = json_decode($payload, true);
+$event = $data['event'] ?? '';
+
+error_log("Webhook received and verified: {$deliveryId}, {$event}");
+
+try {
+    // Process webhook
+    processWebhookAsync($event, $data);
+
+    http_response_code(200);
+    echo json_encode(['received' => true]);
+} catch (Exception $error) {
+    error_log("Error processing webhook: {$deliveryId}, {$error->getMessage()}");
+    http_response_code(500);
+    echo json_encode(['error' => 'Internal error']);
+}
+
+function processWebhookAsync($event, $data) {
+    // Implement your webhook processing logic here
+}
+?>
+```
+
+```ruby Ruby expandable
+require 'sinatra'
+require 'json'
+require 'openssl'
+require 'time'
+
+WEBHOOK_SECRET = ENV['WEBHOOK_SECRET']
+
+if WEBHOOK_SECRET.nil? || WEBHOOK_SECRET.empty?
+  raise "WEBHOOK_SECRET environment variable is required"
+end
+
+def verify_webhook_signature(payload, signature, secret)
+  return false if signature.nil? || signature.empty?
+
+  expected = OpenSSL::HMAC.hexdigest('sha256', secret, payload)
+  Rack::Utils.secure_compare(expected, signature)
+end
+
+def is_timestamp_valid(timestamp, max_age_seconds = 300)
+  return false if timestamp.nil? || timestamp.empty?
+
+  now = Time.now.to_i
+  age = now - timestamp.to_i
+  age < max_age_seconds && age > -60
+end
+
+post '/webhooks/autosend' do
+  # Get headers
+  delivery_id = request.env['HTTP_X_WEBHOOK_DELIVERY_ID']
+  timestamp = request.env['HTTP_X_WEBHOOK_TIMESTAMP']
+  signature = request.env['HTTP_X_WEBHOOK_SIGNATURE']
+
+  # Get raw body
+  payload = request.body.read
+
+  # Validate timestamp
+  unless is_timestamp_valid(timestamp)
+    logger.error("Invalid timestamp: #{delivery_id}, #{timestamp}")
+    status 401
+    return { error: 'Invalid timestamp' }.to_json
+  end
+
+  # Verify signature
+  unless verify_webhook_signature(payload, signature, WEBHOOK_SECRET)
+    logger.error("Invalid signature: #{delivery_id}")
+    status 401
+    return { error: 'Invalid signature' }.to_json
+  end
+
+  # Parse and process webhook
+  data = JSON.parse(payload)
+  event = data['event']
+
+  logger.info("Webhook received and verified: #{delivery_id}, #{event}")
+
+  begin
+    # Process webhook asynchronously
+    process_webhook_async(event, data)
+    status 200
+    { received: true }.to_json
+  rescue => error
+    logger.error("Error processing webhook: #{delivery_id}, #{error.message}")
+    status 500
+    { error: 'Internal error' }.to_json
+  end
+end
+
+def process_webhook_async(event, data)
+  # Implement your webhook processing logic here
+end
+```
+
+```go Go expandable
+package main
+
+import (
+    "crypto/hmac"
+    "crypto/sha256"
+    "encoding/hex"
+    "encoding/json"
+    "io/ioutil"
+    "log"
+    "net/http"
+    "os"
+    "strconv"
+    "time"
+)
+
+var webhookSecret string
+
+func init() {
+    webhookSecret = os.Getenv("WEBHOOK_SECRET")
+    if webhookSecret == "" {
+        log.Fatal("WEBHOOK_SECRET environment variable is required")
+    }
+}
+
+func verifyWebhookSignature(payload []byte, signature string, secret string) bool {
+    if signature == "" {
+        return false
+    }
+
+    mac := hmac.New(sha256.New, []byte(secret))
+    mac.Write(payload)
+    expected := hex.EncodeToString(mac.Sum(nil))
+
+    return hmac.Equal([]byte(expected), []byte(signature))
+}
+
+func isTimestampValid(timestamp string, maxAgeSeconds int) bool {
+    if timestamp == "" {
+        return false
+    }
+
+    ts, err := strconv.ParseInt(timestamp, 10, 64)
+    if err != nil {
+        return false
+    }
+
+    now := time.Now().Unix()
+    age := now - ts
+    return age < int64(maxAgeSeconds) && age > -60
+}
+
+func webhookHandler(w http.ResponseWriter, r *http.Request) {
+    // Read raw body
+    payload, err := ioutil.ReadAll(r.Body)
+    if err != nil {
+        http.Error(w, "Error reading body", http.StatusBadRequest)
+        return
+    }
+
+    // Get headers
+    deliveryId := r.Header.Get("X-Webhook-Delivery-Id")
+    timestamp := r.Header.Get("X-Webhook-Timestamp")
+    signature := r.Header.Get("X-Webhook-Signature")
+
+    // Validate timestamp
+    if !isTimestampValid(timestamp, 300) {
+        log.Printf("Invalid timestamp: %s, %s", deliveryId, timestamp)
+        http.Error(w, "Invalid timestamp", http.StatusUnauthorized)
+        return
+    }
+
+    // Verify signature
+    if !verifyWebhookSignature(payload, signature, webhookSecret) {
+        log.Printf("Invalid signature: %s", deliveryId)
+        http.Error(w, "Invalid signature", http.StatusUnauthorized)
+        return
+    }
+
+    // Parse webhook
+    var data map[string]interface{}
+    if err := json.Unmarshal(payload, &data); err != nil {
+        http.Error(w, "Invalid JSON", http.StatusBadRequest)
+        return
+    }
+
+    event, _ := data["event"].(string)
+    log.Printf("Webhook received and verified: %s, %s", deliveryId, event)
+
+    // Process webhook
+    if err := processWebhookAsync(event, data); err != nil {
+        log.Printf("Error processing webhook: %s, %v", deliveryId, err)
+        http.Error(w, "Internal error", http.StatusInternalServerError)
+        return
+    }
+
+    w.WriteHeader(http.StatusOK)
+    json.NewEncoder(w).Encode(map[string]bool{"received": true})
+}
+
+func processWebhookAsync(event string, data map[string]interface{}) error {
+    // Implement your webhook processing logic here
+    return nil
+}
+
+func main() {
+    http.HandleFunc("/webhooks/autosend", webhookHandler)
+    log.Println("Webhook server listening on port 3000")
+    log.Fatal(http.ListenAndServe(":3000", nil))
+}
+```
+
+</CodeGroup>
+
+---
+
+## Related Resources
+
+<Columns cols={2}>
+  <Card title="Introduction" icon="book" iconType="duotone" href={APP_PATHS.webhookIntroduction}>
+   Getting started with webhooks
+  </Card>
+  <Card title="Event Types" icon="list" iconType="duotone" href={APP_PATHS.webhookEventType}>
+    Complete list of webhook events
+  </Card>
+  <Card title="Retries and Replays" icon="rotate" iconType="duotone" href={APP_PATHS.webhookRetries}>
+    Automatic retry logic and best practices
+  </Card>
+  <Card title="Webhooks Dashboard" icon="gear" iconType="duotone" href={AUTOSEND_PATHS.webhooks}>
+   Manage your webhooks in the AutoSend dashboard
+  </Card>
+</Columns>

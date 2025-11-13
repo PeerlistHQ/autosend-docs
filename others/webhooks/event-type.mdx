@@ -1,0 +1,712 @@
+---
+title: "Event Types"
+description: "Complete list of supported webhook event types and their payloads."
+sidebarTitle: "Event Types"
+---
+
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+## Overview
+
+AutoSend webhooks support three categories of events:
+
+1. **Email Lifecycle Events** - Track email sending and delivery
+2. **Email Engagement Events** - Track how recipients interact with your emails
+3. **Contact Events** - Track changes to your contact database
+
+All webhook payloads follow this structure:
+
+```json
+{
+  "event": "event.type",
+  "timestamp": "2025-11-12T10:30:00.000Z",
+  "data": {
+    // Event-specific data
+  }
+}
+```
+
+## Supported Event Types
+
+- `email.sent` - Email successfully sent to the recipient's mail server
+- `email.delivered` - Email successfully delivered
+- `email.opened` - Recipient opened the email
+- `email.clicked` - Recipient clicked a link in the email
+- `email.bounced` - Email failed to deliver
+- `email.unsubscribed` - Recipient unsubscribed
+- `contact.created` - New contact created
+- `contact.updated` - Contact information updated
+- `contact.deleted` - Contact deleted
+
+---
+
+## Email Lifecycle Events
+
+### `email.sent`
+
+Triggered when an email is successfully sent to the recipient's mail server via SES.
+
+<Accordion title="Payload and use case">
+
+**Sample Payload:**
+
+```json
+{
+  "event": "email.sent",
+  "timestamp": "2025-11-12T10:00:00.000Z",
+  "data": {
+    "createdAt": "2025-11-12T10:00:00.000Z",
+    "emailId": "64f1a2b3c4d5e6f7g8h9i0j1",
+    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
+    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
+    "timestamp": "2025-11-12T10:00:00.000Z",
+    "from": "sender@yourdomain.com",
+    "to": {
+      "email": "user@example.com",
+      "name": "John Doe"
+    },
+    "subject": "Welcome to AutoSend"
+  }
+}
+```
+
+**Use Cases:**
+
+- Track when emails are successfully accepted by SES
+- Monitor email sending activity
+- Trigger follow-up workflows after email dispatch
+
+</Accordion>
+
+---
+
+### `email.delivered`
+
+Triggered when AutoSend successfully delivers an email to the recipient's mail server.
+
+<Accordion title="Payload and use case">
+
+**Sample Payload:**
+
+```json
+{
+  "event": "email.delivered",
+  "timestamp": "2025-11-12T10:15:00.000Z",
+  "data": {
+    "createdAt": "2025-11-12T10:15:00.000Z",
+    "emailId": "64f1a2b3c4d5e6f7g8h9i0j1",
+    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
+    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
+    "timestamp": "2025-11-12T10:15:00.000Z",
+    "deliveredAt": "2025-11-12T10:15:00.000Z",
+    "from": "sender@yourdomain.com",
+    "to": {
+      "email": "user@example.com",
+      "name": "John Doe"
+    },
+    "subject": "Welcome to AutoSend"
+  }
+}
+```
+
+**Use Cases:**
+
+- Confirm successful email delivery
+- Update delivery status in your database
+- Track delivery times and patterns
+
+</Accordion>
+
+---
+
+### `email.bounced`
+
+Triggered when an email bounces (fails to deliver).
+
+<Accordion title="Payload and use case">
+
+**Sample Payload:**
+
+```json
+{
+  "event": "email.bounced",
+  "timestamp": "2025-11-12T10:20:00.000Z",
+  "data": {
+    "createdAt": "2025-11-12T10:20:00.000Z",
+    "emailId": "64f1a2b3c4d5e6f7g8h9i0j1",
+    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
+    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
+    "timestamp": "2025-11-12T10:20:00.000Z",
+    "bounceType": "Permanent",
+    "bounceSubType": "General",
+    "bounceReason": "Mailbox does not exist",
+    "bouncedAt": "2025-11-12T10:20:00.000Z",
+    "from": "sender@yourdomain.com",
+    "to": {
+      "email": "user@example.com",
+      "name": "John Doe"
+    },
+    "subject": "Welcome to AutoSend"
+  }
+}
+```
+
+**Bounce Types:**
+
+- `Permanent`: Hard bounce - invalid email address, domain doesn't exist
+- `Transient`: Soft bounce - mailbox full, server temporarily unavailable
+
+**Use Cases:**
+
+- Remove hard bounced emails from your list
+- Retry soft bounces later
+- Monitor bounce rates for sender reputation
+
+</Accordion>
+
+---
+
+## Email Engagement Events
+
+### `email.opened`
+
+Triggered when a recipient opens an email.
+
+<Accordion title="Payload and use case">
+
+**Sample Payload:**
+
+```json
+{
+  "event": "email.opened",
+  "timestamp": "2025-11-12T10:30:00.000Z",
+  "data": {
+    "createdAt": "2025-11-12T10:30:00.000Z",
+    "emailId": "64f1a2b3c4d5e6f7g8h9i0j1",
+    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
+    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
+    "timestamp": "2025-11-12T10:30:00.000Z",
+    "openedAt": "2025-11-12T10:30:00.000Z",
+
+    "from": "sender@yourdomain.com",
+    "to": {
+      "email": "user@example.com",
+      "name": "John Doe"
+    },
+    "subject": "Welcome to AutoSend"
+  }
+}
+```
+
+</Accordion>
+
+---
+
+### `email.clicked`
+
+Triggered when a recipient clicks a link in an email.
+
+<Accordion title="Payload and use case">
+
+**Sample Payload:**
+
+```json
+{
+  "event": "email.clicked",
+  "timestamp": "2025-11-12T10:35:00.000Z",
+  "data": {
+    "createdAt": "2025-11-12T10:35:00.000Z",
+    "emailId": "64f1a2b3c4d5e6f7g8h9i0j1",
+    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
+    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
+    "timestamp": "2025-11-12T10:35:00.000Z",
+    "from": "sender@yourdomain.com",
+    "to": {
+      "email": "user@example.com",
+      "name": "John Doe"
+    },
+    "subject": "Welcome to AutoSend"
+  }
+}
+```
+
+**Use Cases:**
+
+- Track which links are most popular
+- Identify highly engaged contacts
+- Trigger follow-up campaigns based on clicked links
+
+</Accordion>
+
+---
+
+### `email.unsubscribed`
+
+Triggered when a recipient unsubscribes from your emails.
+
+<Accordion title="Payload and use case">
+
+**Sample Payload:**
+
+```json
+{
+  "event": "email.unsubscribed",
+  "timestamp": "2025-11-12T10:40:00.000Z",
+  "data": {
+    "createdAt": "2025-11-12T10:40:00.000Z",
+    "emailId": "64f1a2b3c4d5e6f7g8h9i0j1",
+    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
+    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
+    "email": "user@example.com",
+    "suppressedAt": "2025-11-12T10:40:00.000Z",
+    "unsubscribeGroupId": "64f1a2b3c4d5e6f7g8h9i0j5"
+  }
+}
+```
+
+**Use Cases:**
+
+- Automatically remove contacts from mailing lists
+- Update contact preferences in your CRM
+- Track unsubscribe reasons for analytics
+
+</Accordion>
+
+---
+
+## Contact Events
+
+### `contact.created`
+
+Triggered when a new contact is created in your AutoSend project.
+
+<Accordion title="Payload and use case">
+
+**Sample Payload:**
+
+```json
+{
+  "event": "contact.created",
+  "timestamp": "2025-11-12T09:00:00.000Z",
+  "data": {
+    "createdAt": "2025-11-12T09:00:00.000Z",
+    "contactId": "64f1a2b3c4d5e6f7g8h9i0j3",
+    "email": "newuser@example.com",
+    "firstName": "John",
+    "lastName": "Doe",
+    "userId": "user_12345"
+  }
+}
+```
+
+**Use Cases:**
+
+- Sync new contacts to your CRM
+- Trigger welcome email sequences
+- Update analytics dashboards
+
+</Accordion>
+
+---
+
+### `contact.updated`
+
+Triggered when an existing contact is updated.
+
+<Accordion title="Payload and use case">
+
+**Sample Payload:**
+
+```json
+{
+  "event": "contact.updated",
+  "timestamp": "2025-11-12T09:30:00.000Z",
+  "data": {
+    "createdAt": "2025-11-12T09:00:00.000Z",
+    "contactId": "64f1a2b3c4d5e6f7g8h9i0j3",
+    "email": "user@example.com",
+    "userId": "user_12345",
+    "firstName": "Jonathan",
+    "lastName": "Doe",
+    "updatedAt": "2025-11-12T09:30:00.000Z"
+  }
+}
+```
+
+**Use Cases:**
+
+- Keep contact data synchronized across systems
+- Track contact lifecycle changes
+- Trigger workflows based on specific field changes
+
+</Accordion>
+
+---
+
+### `contact.deleted`
+
+Triggered when a contact is deleted from your AutoSend project.
+
+<Accordion title="Payload and use case">
+
+**Sample Payload:**
+
+```json
+{
+  "event": "contact.deleted",
+  "timestamp": "2025-11-12T09:45:00.000Z",
+  "data": {
+    "contactId": "64f1a2b3c4d5e6f7g8h9i0j3",
+    "email": "user@example.com",
+    "userId": "user_12345",
+    "deletedAt": "2025-11-12T09:45:00.000Z"
+  }
+}
+```
+
+**Use Cases:**
+
+- Remove contacts from external systems
+- Update contact counts and analytics
+- Maintain data consistency across platforms
+
+</Accordion>
+
+---
+
+## Event Handling Examples
+
+<CodeGroup>
+
+```javascript Handle Multiple Events expandable
+app.post("/webhooks/autosend", async (req, res) => {
+  const { event, data } = req.body;
+
+  switch (event) {
+    case "email.opened":
+      await handleEmailOpened(data);
+      break;
+
+    case "email.clicked":
+      await handleEmailClicked(data);
+      break;
+
+    case "email.bounced":
+      await handleEmailBounced(data);
+      break;
+
+    case "email.unsubscribed":
+      await handleUnsubscribe(data);
+      break;
+
+    case "contact.created":
+      await handleContactCreated(data);
+      break;
+
+    case "contact.updated":
+      await handleContactUpdated(data);
+      break;
+
+    case "contact.deleted":
+      await handleContactDeleted(data);
+      break;
+
+    default:
+      console.log(`Unhandled event: ${event}`);
+  }
+
+  res.status(200).json({ received: true });
+});
+```
+
+```javascript Track Email Engagement expandable
+async function handleEmailOpened(data) {
+  const { emailId, to, openedAt } = data;
+
+  await db.emails.update({
+    where: { id: emailId },
+    data: {
+      opened: true,
+      openedAt: openedAt,
+      opens: { increment: 1 },
+    },
+  });
+
+  await db.contacts.update({
+    where: { email: to.email },
+    data: {
+      lastEngagement: openedAt,
+      engagementScore: { increment: 1 },
+    },
+  });
+}
+
+async function handleEmailClicked(data) {
+  const { emailId, to, clickedUrl, clickedAt } = data;
+
+  await db.clicks.create({
+    data: {
+      emailId,
+      recipientEmail: to.email,
+      url: clickedUrl,
+      clickedAt,
+    },
+  });
+
+  await db.contacts.update({
+    where: { email: to.email },
+    data: {
+      lastEngagement: clickedAt,
+      engagementScore: { increment: 5 },
+    },
+  });
+}
+```
+
+```javascript Handle Bounces expandable
+async function handleEmailBounced(data) {
+  const { to, bounceType, bounceReason } = data;
+
+  if (bounceType === "Permanent") {
+    // Remove from active mailing lists
+    await db.contacts.update({
+      where: { email: to.email },
+      data: {
+        status: "bounced",
+        bouncedAt: new Date(),
+        bounceReason,
+      },
+    });
+
+    // Suppress future emails
+    await db.suppressions.create({
+      data: {
+        email: to.email,
+        type: "bounce",
+        reason: bounceReason,
+      },
+    });
+
+    // Alert team
+    await sendAlert(`Hard bounce for ${to.email}: ${bounceReason}`);
+  }
+}
+```
+
+```javascript Sync Contacts expandable
+async function handleContactCreated(data) {
+  const { contactId, email, firstName, lastName, userId } = data;
+
+  // Sync to CRM
+  await crm.contacts.create({
+    externalId: contactId,
+    email,
+    firstName,
+    lastName,
+    userId,
+  });
+}
+
+async function handleContactUpdated(data) {
+  const { contactId, email, firstName, lastName, userId } = data;
+
+  // Sync to CRM
+  await crm.contacts.update({
+    externalId: contactId,
+    email,
+    firstName,
+    lastName,
+    userId,
+  });
+}
+
+async function handleContactDeleted(data) {
+  const { contactId, email } = data;
+
+  // Remove from CRM
+  await crm.contacts.delete({
+    externalId: contactId,
+  });
+
+  console.log(`Contact ${email} removed from CRM`);
+}
+```
+
+</CodeGroup>
+
+---
+
+## Get Available Events via API
+
+You can programmatically fetch the list of available events:
+
+<CodeGroup>
+
+```bash cURL 
+curl -X GET https://api.autosend.io/v1/webhooks/events/available \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "x-project-id: YOUR_PROJECT_ID"
+```
+
+```javascript Node.js expandable
+const fetch = require('node-fetch');
+
+const API_KEY = process.env.AUTOSEND_API_KEY;
+const PROJECT_ID = process.env.AUTOSEND_PROJECT_ID;
+
+async function getAvailableEvents() {
+  const response = await fetch('https://api.autosend.io/v1/webhooks/events/available', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${API_KEY}`,
+      'x-project-id': PROJECT_ID
+    }
+  });
+
+  const data = await response.json();
+  console.log(data);
+  return data;
+}
+
+getAvailableEvents();
+```
+
+```python Python expandable
+import requests
+import os
+
+API_KEY = os.environ.get('AUTOSEND_API_KEY')
+PROJECT_ID = os.environ.get('AUTOSEND_PROJECT_ID')
+
+def get_available_events():
+    url = 'https://api.autosend.io/v1/webhooks/events/available'
+    headers = {
+        'Authorization': f'Bearer {API_KEY}',
+        'x-project-id': PROJECT_ID
+    }
+    
+    response = requests.get(url, headers=headers)
+    data = response.json()
+    print(data)
+    return data
+
+get_available_events()
+```
+
+```php PHP expandable
+<?php
+
+$apiKey = getenv('AUTOSEND_API_KEY');
+$projectId = getenv('AUTOSEND_PROJECT_ID');
+
+$ch = curl_init('https://api.autosend.io/v1/webhooks/events/available');
+
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer ' . $apiKey,
+    'x-project-id: ' . $projectId
+]);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+$data = json_decode($response, true);
+curl_close($ch);
+
+print_r($data);
+?>
+```
+
+```go Go expandable
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+    "os"
+)
+
+func main() {
+    apiKey := os.Getenv("AUTOSEND_API_KEY")
+    projectId := os.Getenv("AUTOSEND_PROJECT_ID")
+
+    req, _ := http.NewRequest("GET", "https://api.autosend.io/v1/webhooks/events/available", nil)
+    req.Header.Set("Authorization", "Bearer "+apiKey)
+    req.Header.Set("x-project-id", projectId)
+
+    client := &http.Client{}
+    resp, _ := client.Do(req)
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```ruby Ruby expandable
+require 'net/http'
+require 'json'
+require 'uri'
+
+api_key = ENV['AUTOSEND_API_KEY']
+project_id = ENV['AUTOSEND_PROJECT_ID']
+
+uri = URI('https://api.autosend.io/v1/webhooks/events/available')
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Get.new(uri)
+request['Authorization'] = "Bearer #{api_key}"
+request['x-project-id'] = project_id
+
+response = http.request(request)
+data = JSON.parse(response.body)
+puts data
+```
+
+</CodeGroup>
+
+**Response:**
+
+```json expandable
+{
+  "success": true,
+  "data": {
+    "events": [
+      "email.sent",
+      "email.delivered",
+      "email.opened",
+      "email.clicked",
+      "email.bounced",
+      "email.deferred",
+      "email.unsubscribed",
+      "email.spam_reported",
+      "email.group_unsubscribed",
+      "email.group_resubscribed",
+      "contact.created",
+      "contact.updated",
+      "contact.deleted"
+    ]
+  }
+}
+```
+
+---
+
+## Related Resources
+
+<Columns cols={2}>
+  <Card title="Introduction" icon="book" iconType="duotone" href={APP_PATHS.webhookIntroduction}>
+   Getting started with webhooks
+  </Card>
+  <Card title="Retries and Replays" icon="rotate" iconType="duotone" href={APP_PATHS.webhookRetries}>
+    Automatic retry logic and best practices
+  </Card>
+  <Card title="Verify Webhook Requests" icon="shield-check" iconType="duotone" href={APP_PATHS.webhookVerifyRequests}>
+   Security and signature verification
+  </Card>
+  <Card title="Webhooks Dashboard" icon="gear" iconType="duotone" href={AUTOSEND_PATHS.webhooks}>
+   Manage your webhooks in the AutoSend dashboard
+  </Card>
+</Columns>
+---

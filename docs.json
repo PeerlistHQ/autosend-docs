@@ -63,7 +63,16 @@
             "group": "Others",
             "pages": [
               "others/suppressions",
-              "others/unsubscribe-groups"
+              "others/unsubscribe-groups",
+              {
+                "group": "Webhooks",
+                "pages": [
+                  "others/webhooks/introduction",
+                  "others/webhooks/event-type",
+                  "others/webhooks/retries",
+                  "others/webhooks/verify-requests"
+                ]
+              }
             ]
           }
         ]
@@ -140,6 +149,7 @@
           {
             "group": "November 2025",
             "pages": [
+              "changelog/2025/nov/12",
               "changelog/2025/nov/1"
             ]
           }
