@@ -110,7 +110,7 @@
           {
             "group": "Getting started",
             "pages": [
-              "supabase-edge-functions"
+              "guides/supabase-edge-functions"
             ]
           }
         ]
