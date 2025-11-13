@@ -7,131 +7,41 @@ sidebarTitle: "12 November 2025"
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
 
-This release introduces email attachments functionality, a dedicated webhooks management interface, enhanced email automation controls, and significant platform improvements. We've expanded webhook event coverage and implemented stricter attachment security validations.
+We’ve been busy building here! This week we shipped two of the most requested features from our community - webhooks and email attachments. Both have been high on our roadmap, and we’re excited to finally get them into your hands. Let’s dive into more details.
 
-## New Features
+## New features
 
-1. ### Webhooks Management Interface
+1. ###  Webhooks Support
+    1. You can now listen to real-time email events directly in your app. Available on Pro 10k plans and above.
+    2. We’ve added a dedicated Webhooks dashboard where you can create and manage all your webhook configs in one place.
+    3. Here’s what you can track:
+        1. Email events:
+            - Delivery lifecycle: `email.sent`, `email.delivered`, `email.deferred`
+            - Engagement: `email.opened`, `email.clicked`
+            - Issues: `email.bounced`, `email.spam_reported`
+            - Preferences: `email.unsubscribed`, `email.group_unsubscribed`, `email.group_resubscribed`
     
-    A comprehensive webhooks management system with full CRUD operations and enhanced navigation.
+        2. Contact events:
+            - `contact.created`, `contact.updated`, `contact.deleted`
+
+    No more polling APIs or checking dashboards manually. Get instant notifications when things happen.Check out the webhooks docs.
+
+2. ###  Send Emails with Attachments
+    You can now attach files to your emails. Upload via base64, reference files from S3, or pass external URLs, we’ll handle the rest.
     
-    **Key Capabilities:**
-    - **List View**: Centralized dashboard displaying all configured webhooks with status indicators
-    - **Create/Edit Modal**: Streamlined interface for webhook configuration with URL validation and event selection
-    - **Delete Functionality**: Safe webhook removal with confirmation dialogs
-    - **Sidebar Navigation**: Improved navigation structure for webhook-related pages
-    - **Webhook Status Management**: Enable/disable webhooks with real-time status updates
+    Here’s what’s supported:
 
+    - Multiple input methods: Base64 uploads, S3 file paths, or external URLs
+    - Generous limits: Up to 20 attachments per email, 40MB per file
+    - Currently works with all transactional emails
 
-2. ### Email Attachments
-    
-    Send emails with file attachments using multiple upload methods with built-in validation and security controls.
-    
-    **Features:**
-      - **Dual Upload Methods**: Support for file uploads and URL-based attachments
-      - **Size Validation**: Automatic file size checks to ensure payload limits are respected
-      - **Extended Payload Support**: Enhanced infrastructure to handle larger email payloads
-      - **Attachment Limits**: Per-email attachment limit of 20 files enforced at the API level
-      
-      **Technical Implementation:**
-      - File size validation on upload
-      - URL attachment validation and fetching
-      - Secure attachment storage and delivery
-      - Enhanced email payload handling for larger attachments
-
-
-
-3. ### Bulk Contact Management
-    
-    New dedicated API endpoints for efficient bulk contact operations in email workflows.
-    
-    **Endpoints:**
-    - **Bulk Add Contacts**: Add multiple contacts by ID in a single API request
-    - **Bulk Remove Contacts**: Remove multiple contacts by ID through dedicated endpoint
-    - **Optimized Performance**: Batch operations reduce API calls and improve efficiency
-    
-    **Use Cases:**
-    - Mass contact list updates
-    - Automated contact synchronization
-    - Bulk contact management in email automation workflows
-
----
-
-## Improvements
-
-1. ### Email Templates Display
-    
-    Email template information is now displayed on pricing plan pages, providing transparency on template limits across all subscription tiers.
-    
-    **Changes:**
-    - Template limits visible on all pricing page
-    - All plans offer unlimited templates except the Hobby pla
-    - Clear template allocation information for each plan tier
-
-2. ### Email Automation Controls
-    Enhanced automation features with improved UI controls and external link handling.
-    
-    **Enhancements:**
-    - **Feature Flag Implementation**: Conditional rendering of automation features based on plan and settings
-    - **Footer/Navigation Hide Logic**: Dynamic UI element visibility based on automation configuration
-    - **External Link Indicators**: Visual indicators for external links that open in new tabs
-    - **Tab Management**: Improved handling of external links with proper tab indicators
-
-3. ### Webhook Events Expansion
-    Extended webhook event coverage to support additional email lifecycle and engagement events.
-    
-    **New Event Types:**
-    - `email.deferred` - Email delivery temporarily deferred by recipient server
-    - `email.complained` - Recipient marked email as spam or complaint
-    - `email.group_unsubscribed` - Recipient unsubscribed from a specific unsubscribe group
-    - `email.group_resubscribed` - Recipient resubscribed to a previously unsubscribed group
-    
-    **Benefits:**
-    - More granular event tracking
-    - Better compliance monitoring
-    - Enhanced unsubscribe group management
-    - Improved deliverability insights
-
-4. ### Attachment Security Enhancements
-    Strengthened security validations for email attachments to prevent abuse and ensure safe file handling.
-    
-    **Security Improvements:**
-    - **Stricter Validations**: Enhanced file type and content validation
-    - **Download Safety**: Improved security checks for attachment downloads
-    - **Upload Safety**: Additional validation layers for file uploads
-    - **Per-Email Limits**: Hard limit of 20 attachments per email enforced at API level
-    - **File Size Restrictions**: Enhanced size validation to prevent payload abuse
-
-5. ### User Interface Updates
-    Comprehensive UI refresh with improved messaging, layout, and visual consistency.
-    
-    **UI Changes:**
-    - **CTA Updates**: Changed primary CTA text from "Start Sending" to "Get Started" across the platform
-    - **Layout Spacing**: Improved spacing and padding for better visual hierarchy
-    - **Signup Flow**: Refined signup page text and messaging
-    - **Banner Text**: Updated banner content for clarity and consistency
-
-6. ### Content Formatting Improvements
-
-    Enhanced content display and formatting across documentation and UI elements.
-    
-    **Updates:**
-    - **Blog Title**: Updated blog section title for better clarity
-    - **Filter Labels**: Improved filter label formatting - hyphens now display as spaces for better readability
-    - **Text Consistency**: Standardized text formatting across platform
-
----
+    Whether you’re sending invoices, reports, or onboarding documents, attachments just work.
 
 ## Fixes
 
-1. ### Onboarding Flow
+The pricing page during onboarding were facing some data issues. No more squinting at plan details or wondering which tier includes what.
 
-    **Resolved Issues:**
-    - Fixed pricing display issue during user onboarding flow
-    - Corrected pricing information visibility at onboarding stage
-    - Ensured consistent pricing display across all onboarding steps
-
----
+As always, let us know if you run into issues or have feedback. We’re listening (and probably already working on the next thing you didn’t know you needed).
 
 ## Learn More
 
