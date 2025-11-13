@@ -15,39 +15,42 @@ AutoSend uses **API Key authentication** with Bearer tokens. Every API request m
 Follow these steps to generate a new API key from your AutoSend dashboard:
 
 <Steps>
-<Step title="Navigate to API Keys Settings">
-1. Log in to your <a href={AUTOSEND_PATHS.dashboard} title='AutoSend dashboard'>AutoSend dashboard</a>
-2. Select your project from the project dropdown (if you have multiple projects)
-3. Go to **Settings > <a href={AUTOSEND_PATHS.apiKey} title='API Keys'>API Keys</a>** in the sidebar
-</Step>
-<Step title="Generate New API Key">
-1. Click the **"Generate API Key"** button in the top-right corner
-2. Enter a descriptive name for your API key:
-   - Use names that describe the purpose or environment (e.g., "Production", "Staging", "Development", "Marketing Automation")
-   - This helps you identify and manage multiple keys
-3. Click **"Generate"**
-</Step>
-<Step title=" Save Your API Key Secret">
-After generation, you'll see your **API Key Secret** displayed once:
+  <Step title="Navigate to API Keys Settings">
+    Go to **Settings \> API Keys** from the sidebar
 
-<Note>
-  For security reasons, the API key secret is only shown once during creation. You will NOT be able to view it again.
+    ![Api Keys Pn](/images/api-keys.png)
+  </Step>
+  <Step title="Generate New API Key">
+    1. Click the **"Generate API Key"** button in the top-right corner
+    2. Enter a descriptive name for your API key:
+       - Use names that describe the purpose or environment (e.g., "Production", "Staging", "Development", "Marketing Automation")
+       - This helps you identify and manage multiple keys
+    3. Click **"Generate"**
 
-  - Copy the key immediately to your clipboard
-  - Store it securely (password manager, environment variables, secrets management system)
-  - Download the .txt file as a backup
-  - Never commit API keys to version control (Git, SVN, etc.)
-  - Never share your API key publicly or in client-side code
+       ![Create Api Key Pn](/images/create-api-key.png)
+  </Step>
+  <Step title=" Save Your API Key Secret">
+    After generation, you'll see your **API Key Secret** displayed once:
 
-</Note>
+    ![Api Key Created Pn](/images/api-key-created.png)
 
-Your API key will look like this:
+    <Note>
+      For security reasons, the API key secret is only shown once during creation. You will NOT be able to view it again.
 
-```
-as_demo_your_api_key_here
-```
-</Step>
+      - Copy the key immediately to your clipboard
+      - Store it securely (password manager, environment variables, secrets management system)
+      - Download the .txt file as a backup
+      - Never commit API keys to version control (Git, SVN, etc.)
+      - Never share your API key publicly or in client-side code
+    </Note>
+    Your API key will look like this:
+
+    ```
+    as_demo_your_api_key_here
+    ```
+  </Step>
 </Steps>
+
 ## API Key Format
 
 AutoSend API keys follow this format:
