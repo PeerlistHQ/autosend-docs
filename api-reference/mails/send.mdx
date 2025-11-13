@@ -5,9 +5,29 @@ openapi: 'POST /mails/send'
 
 <RequestExample>
 
-```bash Request
+```bash cURL
   curl --request POST \
-    --url https://dog-api.kinduff.com/api/facts
+    --url https://api.autosend.com/v1/mails/send \
+    --header 'Authorization: Bearer <token>' \
+    --header 'Content-Type: application/json' \
+    --data '{
+  "to": {
+    "email": "[email protected]",
+    "name": "Jane Smith"
+  },
+  "from": {
+    "email": "[email protected]",
+    "name": "Your Company"
+  },
+  "subject": "Welcome to Our Platform!",
+  "html": "<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>",
+  "dynamicData": {
+    "name": "Jane"
+  },
+  "replyTo": {
+    "email": "[email protected]"
+  }
+}'
 ```
 
 </RequestExample>
@@ -40,16 +60,69 @@ Email data to send
   <ParamField path="to.email" type="string<email>"  required>
   Email address
   
-  Example: `"customer@example.com"`
+  Example: `"[email protected]"`
 </ParamField>
   
   <ParamField path="to.name" type="string" >
   Display name
 
-  Example: `"John Doe"`
+  Example: `"Jane Smith"`
 </ParamField>
 
-<ParamField path="to.dynamicData" type="object" >
+  </Accordion>
+</ParamField>
+
+<ParamField path="from" type="object"  required>
+  Sender email address (must be from a verified domain) and name
+  <Accordion title="child attributes">
+  <ParamField path="from.email" type="string<email>"  required>
+  Email address
+  
+  Example: `"[email protected]"`
+</ParamField>
+  
+  <ParamField path="from.name" type="string" >
+  Display name
+
+  Example: `"Your Company"`
+</ParamField>
+
+  </Accordion>
+</ParamField>
+
+<ParamField path="subject" type="string" >
+  Email subject line (max 998 characters). Required if not using templateId.
+  
+  Maximum length: `998`
+  
+  Example: `"Welcome to Our Platform!"`
+</ParamField>
+
+<ParamField path="html" type="string" >
+  HTML content of the email. Required if not using templateId.
+  
+  **Handlebars Template Variables:**
+  
+  Use Handlebars syntax for template variables in your HTML. Variables are wrapped in double curly braces: `{{variableName}}`. 
+  Example:
+  
+  ```html 
+  <h1>Hello {{firstName}}!</h1>
+  <p>Your order #{{orderNumber}} has been shipped.</p>
+  <p>Total: {{orderTotal}}</p>
+  ```
+  
+  Provide the values for these variables in the `dynamicData` field.
+  
+  Example: 
+  ```html  
+  <h1>Hello {{firstName}}!</h1>\n
+  <p>Your order #{{orderNumber}} has been shipped.</p>\n
+  <p>Total: {{orderTotal}}</p> 
+  ```
+</ParamField>
+
+<ParamField path="dynamicData" type="object" >
   Key-value pairs for template variable substitution (Handlebars syntax)
   
   Example: 
@@ -63,10 +136,112 @@ Email data to send
   ```
 </ParamField>
 
+<ParamField path="text" type="string" >
+  Plain text version of the email
+  
+  Example: `"Welcome! Thanks for signing up."`
+</ParamField>
+
+<ParamField path="templateId" type="string" >
+  ID of the email template to use. Required if not providing html/text.
+  
+  Example: `"tmpl_abc123"`
+</ParamField>
+
+<ParamField path="replyTo" type="object" >
+  Reply-to email address and name
+  <Accordion title="child attributes">
+  <ParamField path="replyTo.email" type="string<email>"  required>
+  Email address
+  
+  Example: `"customer@example.com"`
+</ParamField>
+  
+  <ParamField path="replyTo.name" type="string" >
+  Display name
+
+  Example: `"John Doe"`
+</ParamField>
+ 
+  <ParamField path="replyTo.dynamicData" type="object" >
+  Key-value pairs for template variable substitution (Handlebars syntax)
+
+  Example: 
+  ```jsx
+  {
+  "name": "Jane",
+  "firstName": "Jane",
+  "orderNumber": "ORD-12345",
+  "orderTotal": "$99.99"
+}
+ ```
+</ParamField>
 
   </Accordion>
 </ParamField>
 
+<ParamField path="unsubscribeGroupId" type="string" >
+  ID of the unsubscribe group
+  
+  Example: `"unsub_group_123"`
+</ParamField>
 
+<ParamField path="attachments" type="object[]" >
+  Filename and content of attachments (max 40MB per email, after Base64 encoding of the attachments).
+  
+  <Accordion title="child attributes">
+  <ParamField path="filename" type="string" required>
+  Filename of the attachment
+  
+  Example: `"attachment.pdf"`
+</ParamField>
+  
+  <ParamField path="content" type="string" >
+  Base64-encoded content of the attachment
+  
+</ParamField>
+  
+  <ParamField path="contentType" type="string" >
+  Content type of the attachment (e.g. application/pdf, image/png, image/jpeg)
+</ParamField>
 
+  <ParamField path="fileUrl" type="string" >
+  File URL where the attachment is hosted (required if content is not provided)
+</ParamField>
+  <ParamField path="description" type="string" >
+  Description of the attachment (optional)
+</ParamField>
 
+  </Accordion>
+  
+  Example:
+  ```jsx
+  [
+    {
+      "filename": "attachment.pdf",
+      "content": "base64-encoded-content",
+      "contentType": "application/pdf"
+    }
+  ]
+  ```
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Email queued successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+  
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="child attributes">
+  <ResponseField name="data.emailId" type="string">
+    The ID of the queued email
+    
+    Example: `"507f1f77bcf86cd799439011"`
+  </ResponseField>
+  </Expandable>
+</ResponseField>
