@@ -15,14 +15,14 @@ AutoSend uses **API Key authentication** with Bearer tokens. Every API request m
 Follow these steps to generate a new API key from your AutoSend dashboard:
 
 <Steps>
-  <Step title="Navigate to API Keys Settings">
+  <Step title="Navigate to API Keys Settings" titleSize='h3'>
     Go to **Settings \> API Keys** from the sidebar
 
     <Frame>
       ![](/images/api-keys.png)
     </Frame>
   </Step>
-  <Step title="Generate New API Key">
+  <Step title="Generate New API Key" titleSize='h3'>
     1. Click the **"Generate API Key"** button in the top-right corner
     2. Enter a descriptive name for your API key:
        - Use names that describe the purpose or environment (e.g., "Production", "Staging", "Development", "Marketing Automation")
@@ -33,7 +33,7 @@ Follow these steps to generate a new API key from your AutoSend dashboard:
       ![](/images/create-api-key.png)
     </Frame>
   </Step>
-  <Step title=" Save Your API Key Secret">
+  <Step title=" Save Your API Key Secret" titleSize='h3'>
     After generation, you'll see your **API Key Secret** displayed once:
 
     <Frame>
@@ -321,7 +321,8 @@ To delete an API key:
 
 ## Authentication Errors
 
-### 401 Unauthorized
+<AccordionGroup>
+<Accordion title="401 Unauthorized">
 
 **Error Response:**
 
@@ -345,8 +346,8 @@ To delete an API key:
 - Check that your API key is correct and hasn't been deleted
 - Ensure the format is: `Authorization: Bearer YOUR_API_KEY`
 - Confirm there's a space after "Bearer"
-
-### 403 Forbidden
+</Accordion>
+<Accordion title="403 Forbidden">
 
 **Error Response:**
 
@@ -367,7 +368,10 @@ To delete an API key:
 - Verify you're using the correct API key for the project
 - Check that the resource (domain, template, etc.) exists in the project
 
-## Security Considerations
+</Accordion>
+</AccordionGroup>
+
+
 
 ### Keep Your API Keys Secret
 
@@ -378,9 +382,11 @@ API keys provide full access to your AutoSend account and should be treated like
 - Revoke keys immediately if exposed
 - Use read-only keys when possible (future feature)
 
-### HTTPS Only
+<Note>
+**HTTPS Only**
 
 Always use HTTPS when making API requests. AutoSend APIs reject non-HTTPS requests to protect your API keys from interception.
+</Note>
 
 ### Rate Limiting
 
@@ -389,4 +395,6 @@ API keys are subject to rate limits:
 - **2 requests per second** per API key
 - **50 requests per minute** per API key
 
+<Info>
 Exceeding these limits returns a `429 Too Many Requests` error. See the [API Reference](/api-reference) for more details.
+</Info>

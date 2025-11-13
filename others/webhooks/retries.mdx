@@ -73,6 +73,63 @@ Once a delivery is marked as failed after exhausting all retries, AutoSend will 
 
 ---
 
+## Monitoring Your Webhook
+
+### Check Webhook Status
+
+Monitor your webhooks:
+
+<Steps>
+<Step title="Navigate to Webhooks from the AutoSend sidebar" titleSize='h3' />
+<Step title="View your webhooks with their current status" titleSize='h3'>
+   - **Enabled** (green) - Webhook is active
+   - **Disabled** (gray) - Webhook is inactive
+</Step>
+</Steps>
+
+### Track Webhook Health
+
+The webhook model tracks important metrics:
+
+- `failureCount`: Number of consecutive failures
+- `lastSuccessAt`: Timestamp of last successful delivery
+- `lastFailedAt`: Timestamp of last failed delivery
+- `isActive`: Whether the webhook is enabled
+
+These metrics are updated automatically by the system.
+
+### Implement Your Own Monitoring
+
+Set up your own monitoring for webhook health:
+
+```javascript Nodejs expandable
+// Example: Check webhook health periodically
+async function monitorWebhookHealth() {
+  // Track webhook deliveries in your database
+  const recentDeliveries = await db.webhookLogs.find({
+    timestamp: { $gte: Date.now() - 3600000 }, // Last hour
+  });
+
+  const failureCount = recentDeliveries.filter((d) => !d.success).length;
+  const successCount = recentDeliveries.filter((d) => d.success).length;
+  const successRate = (successCount / recentDeliveries.length) * 100;
+
+  if (successRate < 90) {
+    await sendAlert({
+      title: "Webhook Health Alert",
+      message: `Webhook success rate dropped to ${successRate}%`,
+      severity: "warning",
+    });
+  }
+}
+
+// Run every 5 minutes
+setInterval(monitorWebhookHealth, 5 * 60 * 1000);
+```
+
+---
+
+
 ## Best Practices
 
 <AccordionGroup>
@@ -252,61 +309,7 @@ app.post("/webhooks/autosend", async (req, res) => {
  </Accordion>
 </AccordionGroup>
 
-## Monitoring Your Webhook
 
-### Check Webhook Status in Dashboard
-
-Monitor your webhooks in the AutoSend dashboard:
-
-<Steps>
-<Step title="Navigate to Webhooks section" />
-<Step title="View your webhooks with their current status">
-   - **Enabled** (green) - Webhook is active
-   - **Disabled** (gray) - Webhook is inactive
-</Step>
-</Steps>
-
-### Track Webhook Health
-
-The webhook model tracks important metrics:
-
-- **failureCount**: Number of consecutive failures
-- **lastSuccessAt**: Timestamp of last successful delivery
-- **lastFailedAt**: Timestamp of last failed delivery
-- **isActive**: Whether the webhook is enabled
-
-These metrics are updated automatically by the system.
-
-### Implement Your Own Monitoring
-
-Set up your own monitoring for webhook health:
-
-```javascript Nodejs expandable
-// Example: Check webhook health periodically
-async function monitorWebhookHealth() {
-  // Track webhook deliveries in your database
-  const recentDeliveries = await db.webhookLogs.find({
-    timestamp: { $gte: Date.now() - 3600000 }, // Last hour
-  });
-
-  const failureCount = recentDeliveries.filter((d) => !d.success).length;
-  const successCount = recentDeliveries.filter((d) => d.success).length;
-  const successRate = (successCount / recentDeliveries.length) * 100;
-
-  if (successRate < 90) {
-    await sendAlert({
-      title: "Webhook Health Alert",
-      message: `Webhook success rate dropped to ${successRate}%`,
-      severity: "warning",
-    });
-  }
-}
-
-// Run every 5 minutes
-setInterval(monitorWebhookHealth, 5 * 60 * 1000);
-```
-
----
 
 ## Troubleshooting
 
@@ -418,7 +421,7 @@ webhookQueue.process(async (job) => {
   <Card title="Verify Webhook Requests" icon="shield-check" iconType="duotone" href={APP_PATHS.webhookVerifyRequests}>
    Security and signature verification
   </Card>
-  <Card title="Webhooks Dashboard" icon="gear" iconType="duotone" href={AUTOSEND_PATHS.webhooks}>
-   Manage your webhooks in the AutoSend dashboard
+  <Card title="Webhooks" icon="gear" iconType="duotone" href={AUTOSEND_PATHS.webhooks}>
+   Manage your webhooks from the AutoSend sidebar
   </Card>
 </Columns>
