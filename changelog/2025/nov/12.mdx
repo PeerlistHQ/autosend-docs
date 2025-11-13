@@ -6,6 +6,7 @@ sidebarTitle: "12 November 2025"
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx';
 
 We’ve been busy building here! This week we shipped two of the most requested features from our community - webhooks and email attachments. Both have been high on our roadmap, and we’re excited to finally get them into your hands. Let’s dive into more details.
 
@@ -24,7 +25,7 @@ We’ve been busy building here! This week we shipped two of the most requested 
         2. Contact events:
             - `contact.created`, `contact.updated`, `contact.deleted`
 
-    No more polling APIs or checking dashboards manually. Get instant notifications when things happen.Check out the webhooks docs.
+    No more polling APIs or checking dashboards manually. Get instant notifications when things happen. Check out the <a href={APP_PATHS.webhookIntroduction} title='Webhooks'>webhooks docs</a>.
 
 2. ###  Send Emails with Attachments
     You can now attach files to your emails. Upload via base64, reference files from S3, or pass external URLs, we’ll handle the rest.
@@ -41,8 +42,9 @@ We’ve been busy building here! This week we shipped two of the most requested 
 
 The pricing page during onboarding were facing some data issues. No more squinting at plan details or wondering which tier includes what.
 
-As always, let us know if you run into issues or have feedback. We’re listening (and probably already working on the next thing you didn’t know you needed).
-
+<Info>
+As always, let us know if you run into issues or have feedback at <a href={`mailto:${SUPPORT_EMAIL}`} title='AutoSend support mail'>{SUPPORT_EMAIL}</a>. We’re listening (and probably already working on the next thing you didn’t know you needed).
+</Info>
 ## Learn More
 
 <Columns cols={2}>
