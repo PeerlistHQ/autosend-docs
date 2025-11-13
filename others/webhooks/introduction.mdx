@@ -26,7 +26,7 @@ AutoSend uses webhooks to push real-time notifications to your application about
 
 ---
 
-## Steps to receive webhooks
+## How to create and setup webhooks
 <Steps>
 <Step titleSize='h3' title="Create a local endpoint to receive requests">
 
@@ -164,12 +164,18 @@ On receiving an event, you should respond with an `HTTP 200 OK` status within 10
 <Step titleSize='h3' title="Register your development webhook endpoint">
 
 1. Navigate to <a href={AUTOSEND_PATHS.webhooks} title="Webhook AutoSend" target='_blank' rel='noopener noreferrer'>Webhooks</a> from the AutoSend sidebar
+
+<Frame>![](/images/webhook-home.png)</Frame>
+
 2. Click the **"New Webhook"** button
 3. Fill in the webhook details:
    - **Name**: A friendly name for identification (e.g., "Development Email Tracker")
    - **Endpoint URL**: Your publicly accessible HTTPS URL (use your ngrok URL for development)
    - **Events**: Select the events you want to receive notifications for
 4. Click **"Create Webhook"**
+
+<Frame>![](/images/create-new-webhook.png)</Frame>
+
 5. **Important**: Copy the secret token and save it securely - you'll need it to verify webhook requests
 
 <Note> 
@@ -226,6 +232,9 @@ After testing locally, deploy your webhook endpoint to your production environme
 Once deployed, create a new webhook in AutoSend with your production URL:
 
 1. Navigate to <a href={AUTOSEND_PATHS.webhooks} title="Webhook AutoSend" target='_blank' rel='noopener noreferrer'>**Webhooks**</a> from the AutoSend sidebar
+
+<Frame>![](/images/webhook-home.png)</Frame>
+
 2. Click the **"New Webhook"** button
 3. Fill in the production details:
    - **Name**: "Production Email Tracker" (or any descriptive name)
@@ -235,6 +244,9 @@ Once deployed, create a new webhook in AutoSend with your production URL:
      - Deliverability: delivered, bounced, deferred
      - Contact events: created, updated, deleted
 4. Click **"Create Webhook"**
+
+<Frame>![](/images/create-new-webhook.png)</Frame>
+
 5. **Important**: Copy the secret token and save it securely - you'll need it to verify webhook requests
 
 <Note>
