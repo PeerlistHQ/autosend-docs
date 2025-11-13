@@ -163,7 +163,7 @@ On receiving an event, you should respond with an `HTTP 200 OK` status within 10
 </Step>
 <Step titleSize='h3' title="Register your development webhook endpoint">
 
-1. Navigate to the **Webhooks** section in your <a href={AUTOSEND_PATHS.dashboard} title='AutoSend dashboard' target='_blank' rel='noopener noreferrer'>AutoSend dashboard</a>
+1. Navigate to <a href={AUTOSEND_PATHS.webhooks} title="Webhook AutoSend" target='_blank' rel='noopener noreferrer'>Webhooks</a> from the AutoSend sidebar
 2. Click the **"New Webhook"** button
 3. Fill in the webhook details:
    - **Name**: A friendly name for identification (e.g., "Development Email Tracker")
@@ -225,7 +225,7 @@ After testing locally, deploy your webhook endpoint to your production environme
 
 Once deployed, create a new webhook in AutoSend with your production URL:
 
-1. Navigate to the **Webhooks** section in your <a href={AUTOSEND_PATHS.dashboard} title='AutoSend dashboard' target='_blank' rel='noopener noreferrer'>AutoSend dashboard</a>
+1. Navigate to <a href={AUTOSEND_PATHS.webhooks} title="Webhook AutoSend" target='_blank' rel='noopener noreferrer'>**Webhooks**</a> from the AutoSend sidebar
 2. Click the **"New Webhook"** button
 3. Fill in the production details:
    - **Name**: "Production Email Tracker" (or any descriptive name)
@@ -248,7 +248,7 @@ Once deployed, create a new webhook in AutoSend with your production URL:
 </Steps>
 ### Managing Your Webhooks
 
-From the Webhooks dashboard page, you can:
+From the Webhooks page, you can:
 
 - **View all webhooks** for your project - displayed as cards showing webhook details
 - **Edit webhooks** - Click the menu (⋮) on a webhook card and select "Edit"
@@ -335,7 +335,7 @@ No, webhook URLs cannot be changed after creation for security reasons. If you n
 
 You can reveal your webhook secret:
 
-1. Go to <a href={AUTOSEND_PATHS.webhooks} title='Webhooks section' target='_blank' rel='noopener noreferrer'>Webhooks section</a>
+1. Navigate to <a href={AUTOSEND_PATHS.webhooks} title="Webhook AutoSend" target='_blank' rel='noopener noreferrer'>**Webhooks**</a> from the AutoSend sidebar
 2. Click the menu (⋮) on your webhook card
 3. Select "Edit"
 4. Click "Reveal Secret" button
@@ -357,7 +357,7 @@ Yes, webhook requests have a 10-second timeout. Ensure your endpoint responds wi
 <Accordion title="How do I test webhooks locally?">
 
 
-Yes! Use tools like <a href={NGROK_LINK} target='_blank' title='ngrok'>ngrok</a> or <a href={LOCALTUNNEL_LINK} target='_blank' title='localtunnel'>localtunnel</a> to expose your local server to the internet, then create a webhook in the <a href={AUTOSEND_PATHS.webhooks} title='dashboard' target='_blank' rel='noopener noreferrer'>dashboard</a> with your ngrok URL. Trigger events by sending emails or managing contacts in AutoSend, and your local endpoint will receive the webhooks.
+Yes! Use tools like <a href={NGROK_LINK} target='_blank' title='ngrok'>ngrok</a> or <a href={LOCALTUNNEL_LINK} target='_blank' title='localtunnel'>localtunnel</a> to expose your local server to the internet, then navigate to <a href={AUTOSEND_PATHS.webhooks} title="Webhook AutoSend" target='_blank' rel='noopener noreferrer'>**Webhooks**</a> from the AutoSend sidebar and create a webhook with your ngrok URL. Trigger events by sending emails or managing contacts in AutoSend, and your local endpoint will receive the webhooks.
 </Accordion>
 <Accordion title="Are webhooks secure?">
 
@@ -379,7 +379,7 @@ Yes, all webhooks are sent over HTTPS and include an `HMAC-SHA256` signature tha
   <Card title="Verify Webhook Requests" icon="shield-check" iconType="duotone" href={APP_PATHS.webhookVerifyRequests}>
    Security and signature verification
   </Card>
-  <Card title="Webhooks Dashboard" icon="gear" iconType="duotone" href={AUTOSEND_PATHS.webhooks}>
-   Manage your webhooks in the AutoSend dashboard
+  <Card title="Webhooks" icon="gear" iconType="duotone" href={AUTOSEND_PATHS.webhooks}>
+   Manage your webhooks from the AutoSend sidebar
   </Card>
 </Columns>
