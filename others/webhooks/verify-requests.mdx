@@ -22,7 +22,7 @@ import { APP_PATHS } from '/snippets/appPaths.mdx';
 
 ## How AutoSend Signs Webhooks
 
-Every webhook request from AutoSend includes an `X-Webhook-Signature` header containing an HMAC-SHA256 signature.
+Every webhook request from AutoSend includes an `X-Webhook-Signature` header containing an `HMAC-SHA256` signature.
 
 ### Signature Generation
 
@@ -47,16 +47,41 @@ const signature = crypto
 
 Every webhook request includes these headers:
 
-| Header                  | Description                               | Example                 |
-| ----------------------- | ----------------------------------------- | ----------------------- |
-| `X-Webhook-Signature`   | HMAC-SHA256 signature of the request body | `a1b2c3d4e5f6...`       |
-| `X-Webhook-Event`       | The event type                            | `email.opened`          |
-| `X-Webhook-Delivery-Id` | Unique delivery identifier                | `delivery-123...`       |
-| `X-Webhook-Timestamp`   | Unix timestamp when webhook was sent      | `1699790400`            |
-| `Content-Type`          | Always `application/json`                 | `application/json`      |
-| `User-Agent`            | AutoSend user agent                       | `AutoSend-Webhooks/1.0` |
+<ParamField path="X-Webhook-Signature" type="string" required>
+  `HMAC-SHA256` signature of the request body
+  
+  Example: `"a1b2c3d4e5f6..."`
+</ParamField>
 
----
+<ParamField path="X-Webhook-Event" type="string" required>
+  The event type
+  
+  Example: `"email.opened"`
+</ParamField>
+
+<ParamField path="X-Webhook-Delivery-Id" type="string" required>
+  Unique delivery identifier
+  
+  Example: `"delivery-123..."`
+</ParamField>
+
+<ParamField path="X-Webhook-Timestamp" type="string" required>
+  Unix timestamp when webhook was sent
+  
+  Example: `"1699790400"`
+</ParamField>
+
+<ParamField path="Content-Type" type="string" required>
+  Always `application/json`
+  
+  Example: `"application/json"`
+</ParamField>
+
+<ParamField path="User-Agent" type="string" required>
+  AutoSend user agent
+  
+  Example: `"AutoSend-Webhooks/1.0"`
+</ParamField>
 
 ## Steps to verify Signatures
 
@@ -320,7 +345,7 @@ func main() {
 
 </CodeGroup>
 
-
+--- 
 
 ## Retrieving Your Webhook Secret
 
