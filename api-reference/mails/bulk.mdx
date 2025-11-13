@@ -4,3 +4,605 @@ sidebarTitle: 'Send Bulk Email'
 openapi: 'POST /mails/bulk'
 ---
 
+<RequestExample>
+
+
+
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/mails/bulk \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "recipients": [
+    {
+      "email": "customer1@example.com",
+      "name": "Jane Smith",
+      "dynamicData": {
+        "firstName": "Jane",
+        "orderNumber": "ORD-123",
+        "orderTotal": "$19.99"
+      }
+    },
+    {
+      "email": "customer2@example.com",
+      "name": "John Doe",
+      "dynamicData": {
+        "firstName": "John",
+        "orderNumber": "ORD-124",
+        "orderTotal": "$29.99"
+      }
+    }
+  ],
+  "from": {
+    "email": "hello@mail.yourdomain.com",
+    "name": "Your Company"
+  },
+  "subject": "Welcome to Our Platform!",
+  "html": "<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>",
+  "replyTo": {
+    "email": "support@yourdomain.com"
+  }
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/mails/bulk"
+
+headers = {
+    "Authorization": "Bearer <token>",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "recipients": [
+        {
+            "email": "customer1@example.com",
+            "name": "Jane Smith",
+            "dynamicData": {
+                "firstName": "Jane",
+                "orderNumber": "ORD-123",
+                "orderTotal": "$19.99"
+            }
+        },
+        {
+            "email": "customer2@example.com",
+            "name": "John Doe",
+            "dynamicData": {
+                "firstName": "John",
+                "orderNumber": "ORD-124",
+                "orderTotal": "$29.99"
+            }
+        }
+    ],
+    "from": {
+        "email": "hello@mail.yourdomain.com",
+        "name": "Your Company"
+    },
+    "subject": "Welcome to Our Platform!",
+    "html": "<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>",
+    "replyTo": {
+        "email": "support@yourdomain.com"
+    }
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/mails/bulk', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer <token>',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    recipients: [
+      {
+        email: 'customer1@example.com',
+        name: 'Jane Smith',
+        dynamicData: {
+          firstName: 'Jane',
+          orderNumber: 'ORD-123',
+          orderTotal: '$19.99'
+        }
+      },
+      {
+        email: 'customer2@example.com',
+        name: 'John Doe',
+        dynamicData: {
+          firstName: 'John',
+          orderNumber: 'ORD-124',
+          orderTotal: '$29.99'
+        }
+      }
+    ],
+    from: {
+      email: 'hello@mail.yourdomain.com',
+      name: 'Your Company'
+    },
+    subject: 'Welcome to Our Platform!',
+    html: '<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>',
+    replyTo: {
+      email: 'support@yourdomain.com'
+    }
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/mails/bulk';
+
+$data = [
+    'recipients' => [
+        [
+            'email' => 'customer1@example.com',
+            'name' => 'Jane Smith',
+            'dynamicData' => [
+                'firstName' => 'Jane',
+                'orderNumber' => 'ORD-123',
+                'orderTotal' => '$19.99'
+            ]
+        ],
+        [
+            'email' => 'customer2@example.com',
+            'name' => 'John Doe',
+            'dynamicData' => [
+                'firstName' => 'John',
+                'orderNumber' => 'ORD-124',
+                'orderTotal' => '$29.99'
+            ]
+        ]
+    ],
+    'from' => [
+        'email' => 'hello@mail.yourdomain.com',
+        'name' => 'Your Company'
+    ],
+    'subject' => 'Welcome to Our Platform!',
+    'html' => '<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>',
+    'replyTo' => [
+        'email' => 'support@yourdomain.com'
+    ]
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer <token>',
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/mails/bulk"
+    
+    payload := map[string]interface{}{
+        "recipients": []map[string]interface{}{
+            {
+                "email": "customer1@example.com",
+                "name":  "Jane Smith",
+                "dynamicData": map[string]interface{}{
+                    "firstName":   "Jane",
+                    "orderNumber": "ORD-123",
+                    "orderTotal":  "$19.99",
+                },
+            },
+            {
+                "email": "customer2@example.com",
+                "name":  "John Doe",
+                "dynamicData": map[string]interface{}{
+                    "firstName":   "John",
+                    "orderNumber": "ORD-124",
+                    "orderTotal":  "$29.99",
+                },
+            },
+        },
+        "from": map[string]string{
+            "email": "hello@mail.yourdomain.com",
+            "name":  "Your Company",
+        },
+        "subject": "Welcome to Our Platform!",
+        "html":     "<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>",
+        "replyTo": map[string]string{
+            "email": "support@yourdomain.com",
+        },
+    }
+    
+    jsonData, _ := json.Marshal(payload)
+    
+    req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer <token>")
+    req.Header.Set("Content-Type", "application/json")
+    
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+    
+    fmt.Println("Response Status:", resp.Status)
+}
+```
+
+```java Java
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class SendBulkEmail {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/mails/bulk");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Authorization", "Bearer <token>");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+            
+            String jsonInputString = "{\n" +
+                "  \"recipients\": [\n" +
+                "    {\n" +
+                "      \"email\": \"customer1@example.com\",\n" +
+                "      \"name\": \"Jane Smith\",\n" +
+                "      \"dynamicData\": {\n" +
+                "        \"firstName\": \"Jane\",\n" +
+                "        \"orderNumber\": \"ORD-123\",\n" +
+                "        \"orderTotal\": \"$19.99\"\n" +
+                "      }\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"email\": \"customer2@example.com\",\n" +
+                "      \"name\": \"John Doe\",\n" +
+                "      \"dynamicData\": {\n" +
+                "        \"firstName\": \"John\",\n" +
+                "        \"orderNumber\": \"ORD-124\",\n" +
+                "        \"orderTotal\": \"$29.99\"\n" +
+                "      }\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"from\": {\n" +
+                "    \"email\": \"hello@mail.yourdomain.com\",\n" +
+                "    \"name\": \"Your Company\"\n" +
+                "  },\n" +
+                "  \"subject\": \"Welcome to Our Platform!\",\n" +
+                "  \"html\": \"<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>\",\n" +
+                "  \"replyTo\": {\n" +
+                "    \"email\": \"support@yourdomain.com\"\n" +
+                "  }\n" +
+                "}";
+            
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+            
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/mails/bulk')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(uri.path)
+request['Authorization'] = 'Bearer <token>'
+request['Content-Type'] = 'application/json'
+
+request.body = {
+  recipients: [
+    {
+      email: 'customer1@example.com',
+      name: 'Jane Smith',
+      dynamicData: {
+        firstName: 'Jane',
+        orderNumber: 'ORD-123',
+        orderTotal: '$19.99'
+      }
+    },
+    {
+      email: 'customer2@example.com',
+      name: 'John Doe',
+      dynamicData: {
+        firstName: 'John',
+        orderNumber: 'ORD-124',
+        orderTotal: '$29.99'
+      }
+    }
+  ],
+  from: {
+    email: 'hello@mail.yourdomain.com',
+    name: 'Your Company'
+  },
+  subject: 'Welcome to Our Platform!',
+  html: '<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>',
+  replyTo: {
+    email: 'support@yourdomain.com'
+  }
+}.to_json
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "batchId": "ae22c1e0-2022-4f6b-bdca-ce94901fbc6e",
+    "totalRecipients": 2,
+    "successCount": 2,
+    "failedCount": 0
+  }
+}
+```
+
+</ResponseExample>
+
+--- 
+#### Authorizations
+<ParamField path="Authorizations" type="string | header"  required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Body
+Email data to send to multiple recipients
+
+<ParamField path="recipients" type="object[]"  required>
+  Array of recipient email addresses and names (maximum 100 recipients)
+  
+  <Note>
+    Maximum 100 recipients per request.
+  </Note>
+  
+  <Accordion title="child attributes">
+  <ParamField path="recipients[].email" type="string<email>"  required>
+  Email address
+  
+  Example: `"customer1@example.com"`
+</ParamField>
+  
+  <ParamField path="recipients[].name" type="string" >
+  Display name
+
+  Example: `"Jane Smith"`
+</ParamField>
+
+  <ParamField path="recipients[].dynamicData" type="object" >
+  Key-value pairs for template variable substitution (Handlebars syntax) specific to this recipient. This will override any values from the root-level dynamicData for this recipient.
+  
+  Example: 
+  ```jsx
+  {
+  "firstName": "Jane",
+  "orderNumber": "ORD-123",
+  "orderTotal": "$19.99"
+}
+  ```
+</ParamField>
+
+  </Accordion>
+  
+  Example:
+  ```jsx
+  [
+    {
+      "email": "customer1@example.com",
+      "name": "Jane Smith",
+      "dynamicData": {
+        "firstName": "Jane",
+        "orderNumber": "ORD-123",
+        "orderTotal": "$19.99"
+      }
+    },
+    {
+      "email": "customer2@example.com",
+      "name": "John Doe",
+      "dynamicData": {
+        "firstName": "John",
+        "orderNumber": "ORD-124",
+        "orderTotal": "$29.99"
+      }
+    }
+  ]
+  ```
+</ParamField>
+
+<ParamField path="from" type="object"  required>
+  Sender email address (must be from a verified domain) and name
+  <Accordion title="child attributes">
+  <ParamField path="from.email" type="string<email>"  required>
+  Email address
+  
+  Example: `"hello@mail.yourdomain.com"`
+</ParamField>
+  
+  <ParamField path="from.name" type="string" >
+  Display name
+
+  Example: `"Your Company"`
+</ParamField>
+
+  </Accordion>
+</ParamField>
+
+<ParamField path="subject" type="string" >
+  Email subject line (max 998 characters). Required if not using templateId.
+  
+  Maximum length: `998`
+  
+  Example: `"Welcome to Our Platform!"`
+</ParamField>
+
+<ParamField path="html" type="string" >
+  HTML content of the email. Required if not using templateId.
+  
+  **Handlebars Template Variables:**
+  
+  Use Handlebars syntax for template variables in your HTML. Variables are wrapped in double curly braces: `{{variableName}}`. 
+  Example:
+  
+  ```html 
+  <h1>Hello {{firstName}}!</h1>
+  <p>Your order #{{orderNumber}} has been shipped.</p>
+  <p>Total: {{orderTotal}}</p>
+  ```
+  
+  Provide the values for these variables in the `dynamicData` field (either at the root level for all recipients, or per recipient).
+  
+  Example: 
+  ```html  
+  <h1>Hello {{firstName}}!</h1>\n
+  <p>Your order #{{orderNumber}} has been shipped.</p>\n
+  <p>Total: {{orderTotal}}</p> 
+  ```
+</ParamField>
+
+<ParamField path="dynamicData" type="object" >
+  Key-value pairs for template variable substitution (Handlebars syntax). Same data will be used for all recipients. Individual recipients can override these values by providing their own dynamicData.
+  
+  Example: 
+  ```jsx
+  {
+  "name": "Valued Customer",
+  "firstName": "Valued",
+  "orderNumber": "ORD-12345",
+  "orderTotal": "$99.99"
+}
+  ```
+</ParamField>
+
+<ParamField path="text" type="string" >
+  Plain text version of the email
+  
+  Example: `"Welcome! Thanks for signing up."`
+</ParamField>
+
+<ParamField path="templateId" type="string" >
+  ID of the email template to use. Required if not providing html/text.
+  
+  Example: `"tmpl_abc123"`
+</ParamField>
+
+<ParamField path="replyTo" type="object" >
+  Reply-to email address and name
+  <Accordion title="child attributes">
+  <ParamField path="replyTo.email" type="string<email>"  required>
+  Email address
+  
+  Example: `"support@yourdomain.com"`
+</ParamField>
+  
+  <ParamField path="replyTo.name" type="string" >
+  Display name
+
+  Example: `"John Doe"`
+</ParamField>
+ 
+  <ParamField path="replyTo.dynamicData" type="object" >
+  Key-value pairs for template variable substitution (Handlebars syntax)
+
+  Example: 
+  ```jsx
+  {
+  "name": "Jane",
+  "firstName": "Jane",
+  "orderNumber": "ORD-12345",
+  "orderTotal": "$99.99"
+}
+ ```
+</ParamField>
+
+  </Accordion>
+</ParamField>
+
+<ParamField path="unsubscribeGroupId" type="string" >
+  ID of the unsubscribe group
+  
+  Example: `"unsub_group_123"`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Bulk send completed</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+  
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="child attributes">
+  <ResponseField name="data.batchId" type="string">
+    Unique identifier for the batch
+    
+    Example: `"ae22c1e0-2022-4f6b-bdca-ce94901fbc6e"`
+  </ResponseField>
+  
+  <ResponseField name="data.totalRecipients" type="integer">
+    Total number of recipients
+    
+    Example: `2`
+  </ResponseField>
+  
+  <ResponseField name="data.successCount" type="integer">
+    Number of successfully queued emails
+    
+    Example: `2`
+  </ResponseField>
+  
+  <ResponseField name="data.failedCount" type="integer">
+    Number of failed emails
+    
+    Example: `0`
+  </ResponseField>
+  </Expandable>
+</ResponseField>
