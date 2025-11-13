@@ -11,140 +11,125 @@ This release introduces email attachments functionality, a dedicated webhooks ma
 
 ## New Features
 
-### Webhooks Management Interface
+1. ### Webhooks Management Interface
+    
+    A comprehensive webhooks management system with full CRUD operations and enhanced navigation.
+    
+    **Key Capabilities:**
+    - **List View**: Centralized dashboard displaying all configured webhooks with status indicators
+    - **Create/Edit Modal**: Streamlined interface for webhook configuration with URL validation and event selection
+    - **Delete Functionality**: Safe webhook removal with confirmation dialogs
+    - **Sidebar Navigation**: Improved navigation structure for webhook-related pages
+    - **Webhook Status Management**: Enable/disable webhooks with real-time status updates
 
-A comprehensive webhooks management system with full CRUD operations and enhanced navigation.
 
-**Key Capabilities:**
-- **List View**: Centralized dashboard displaying all configured webhooks with status indicators
-- **Create/Edit Modal**: Streamlined interface for webhook configuration with URL validation and event selection
-- **Delete Functionality**: Safe webhook removal with confirmation dialogs
-- **Sidebar Navigation**: Improved navigation structure for webhook-related pages
-- **Webhook Status Management**: Enable/disable webhooks with real-time status updates
+2. ### Email Attachments
+    
+    Send emails with file attachments using multiple upload methods with built-in validation and security controls.
+    
+    **Features:**
+      - **Dual Upload Methods**: Support for file uploads and URL-based attachments
+      - **Size Validation**: Automatic file size checks to ensure payload limits are respected
+      - **Extended Payload Support**: Enhanced infrastructure to handle larger email payloads
+      - **Attachment Limits**: Per-email attachment limit of 20 files enforced at the API level
+      
+      **Technical Implementation:**
+      - File size validation on upload
+      - URL attachment validation and fetching
+      - Secure attachment storage and delivery
+      - Enhanced email payload handling for larger attachments
 
----
 
-### Email Attachments
 
-Send emails with file attachments using multiple upload methods with built-in validation and security controls.
-
-**Features:**
-- **Dual Upload Methods**: Support for file uploads and URL-based attachments
-- **Size Validation**: Automatic file size checks to ensure payload limits are respected
-- **Extended Payload Support**: Enhanced infrastructure to handle larger email payloads
-- **Attachment Limits**: Per-email attachment limit of 20 files enforced at the API level
-
-**Technical Implementation:**
-- File size validation on upload
-- URL attachment validation and fetching
-- Secure attachment storage and delivery
-- Enhanced email payload handling for larger attachments
-
----
-
-### Bulk Contact Management
-
-New dedicated API endpoints for efficient bulk contact operations in email workflows.
-
-**Endpoints:**
-- **Bulk Add Contacts**: Add multiple contacts by ID in a single API request
-- **Bulk Remove Contacts**: Remove multiple contacts by ID through dedicated endpoint
-- **Optimized Performance**: Batch operations reduce API calls and improve efficiency
-
-**Use Cases:**
-- Mass contact list updates
-- Automated contact synchronization
-- Bulk contact management in email automation workflows
+3. ### Bulk Contact Management
+    
+    New dedicated API endpoints for efficient bulk contact operations in email workflows.
+    
+    **Endpoints:**
+    - **Bulk Add Contacts**: Add multiple contacts by ID in a single API request
+    - **Bulk Remove Contacts**: Remove multiple contacts by ID through dedicated endpoint
+    - **Optimized Performance**: Batch operations reduce API calls and improve efficiency
+    
+    **Use Cases:**
+    - Mass contact list updates
+    - Automated contact synchronization
+    - Bulk contact management in email automation workflows
 
 ---
 
 ## Improvements
 
-### Email Templates Display
+1. ### Email Templates Display
+    
+    Email template information is now displayed on pricing plan pages, providing transparency on template limits across all subscription tiers.
+    
+    **Changes:**
+    - Template limits visible on all pricing page
+    - All plans offer unlimited templates except the Hobby pla
+    - Clear template allocation information for each plan tier
 
-Email template information is now displayed on pricing plan pages, providing transparency on template limits across all subscription tiers.
+2. ### Email Automation Controls
+    Enhanced automation features with improved UI controls and external link handling.
+    
+    **Enhancements:**
+    - **Feature Flag Implementation**: Conditional rendering of automation features based on plan and settings
+    - **Footer/Navigation Hide Logic**: Dynamic UI element visibility based on automation configuration
+    - **External Link Indicators**: Visual indicators for external links that open in new tabs
+    - **Tab Management**: Improved handling of external links with proper tab indicators
 
-**Changes:**
-- Template limits visible on all pricing pages
-- All plans offer unlimited templates except the Hobby plan
-- Clear template allocation information for each plan tier
+3. ### Webhook Events Expansion
+    Extended webhook event coverage to support additional email lifecycle and engagement events.
+    
+    **New Event Types:**
+    - `email.deferred` - Email delivery temporarily deferred by recipient server
+    - `email.complained` - Recipient marked email as spam or complaint
+    - `email.group_unsubscribed` - Recipient unsubscribed from a specific unsubscribe group
+    - `email.group_resubscribed` - Recipient resubscribed to a previously unsubscribed group
+    
+    **Benefits:**
+    - More granular event tracking
+    - Better compliance monitoring
+    - Enhanced unsubscribe group management
+    - Improved deliverability insights
 
----
+4. ### Attachment Security Enhancements
+    Strengthened security validations for email attachments to prevent abuse and ensure safe file handling.
+    
+    **Security Improvements:**
+    - **Stricter Validations**: Enhanced file type and content validation
+    - **Download Safety**: Improved security checks for attachment downloads
+    - **Upload Safety**: Additional validation layers for file uploads
+    - **Per-Email Limits**: Hard limit of 20 attachments per email enforced at API level
+    - **File Size Restrictions**: Enhanced size validation to prevent payload abuse
 
-### Email Automation Controls
+5. ### User Interface Updates
+    Comprehensive UI refresh with improved messaging, layout, and visual consistency.
+    
+    **UI Changes:**
+    - **CTA Updates**: Changed primary CTA text from "Start Sending" to "Get Started" across the platform
+    - **Layout Spacing**: Improved spacing and padding for better visual hierarchy
+    - **Signup Flow**: Refined signup page text and messaging
+    - **Banner Text**: Updated banner content for clarity and consistency
 
-Enhanced automation features with improved UI controls and external link handling.
+6. ### Content Formatting Improvements
 
-**Enhancements:**
-- **Feature Flag Implementation**: Conditional rendering of automation features based on plan and settings
-- **Footer/Navigation Hide Logic**: Dynamic UI element visibility based on automation configuration
-- **External Link Indicators**: Visual indicators for external links that open in new tabs
-- **Tab Management**: Improved handling of external links with proper tab indicators
-
----
-
-### Webhook Events Expansion
-
-Extended webhook event coverage to support additional email lifecycle and engagement events.
-
-**New Event Types:**
-- `email.deferred` - Email delivery temporarily deferred by recipient server
-- `email.complained` - Recipient marked email as spam or complaint
-- `email.group_unsubscribed` - Recipient unsubscribed from a specific unsubscribe group
-- `email.group_resubscribed` - Recipient resubscribed to a previously unsubscribed group
-
-**Benefits:**
-- More granular event tracking
-- Better compliance monitoring
-- Enhanced unsubscribe group management
-- Improved deliverability insights
-
----
-
-### Attachment Security Enhancements
-
-Strengthened security validations for email attachments to prevent abuse and ensure safe file handling.
-
-**Security Improvements:**
-- **Stricter Validations**: Enhanced file type and content validation
-- **Download Safety**: Improved security checks for attachment downloads
-- **Upload Safety**: Additional validation layers for file uploads
-- **Per-Email Limits**: Hard limit of 20 attachments per email enforced at API level
-- **File Size Restrictions**: Enhanced size validation to prevent payload abuse
-
----
-
-### User Interface Updates
-
-Comprehensive UI refresh with improved messaging, layout, and visual consistency.
-
-**UI Changes:**
-- **CTA Updates**: Changed primary CTA text from "Start Sending" to "Get Started" across the platform
-- **Layout Spacing**: Improved spacing and padding for better visual hierarchy
-- **Signup Flow**: Refined signup page text and messaging
-- **Banner Text**: Updated banner content for clarity and consistency
-
----
-
-### Content Formatting Improvements
-
-Enhanced content display and formatting across documentation and UI elements.
-
-**Updates:**
-- **Blog Title**: Updated blog section title for better clarity
-- **Filter Labels**: Improved filter label formatting - hyphens now display as spaces for better readability
-- **Text Consistency**: Standardized text formatting across platform
+    Enhanced content display and formatting across documentation and UI elements.
+    
+    **Updates:**
+    - **Blog Title**: Updated blog section title for better clarity
+    - **Filter Labels**: Improved filter label formatting - hyphens now display as spaces for better readability
+    - **Text Consistency**: Standardized text formatting across platform
 
 ---
 
 ## Fixes
 
-### Onboarding Flow
+1. ### Onboarding Flow
 
-**Resolved Issues:**
-- Fixed pricing display issue during user onboarding flow
-- Corrected pricing information visibility at onboarding stage
-- Ensured consistent pricing display across all onboarding steps
+    **Resolved Issues:**
+    - Fixed pricing display issue during user onboarding flow
+    - Corrected pricing information visibility at onboarding stage
+    - Ensured consistent pricing display across all onboarding steps
 
 ---
 
