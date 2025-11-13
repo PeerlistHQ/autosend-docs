@@ -26,8 +26,7 @@
           {
             "group": "Quickstart",
             "pages": [
-              "quickstart/email-using-api",
-              "quickstart/supabase-edge-functions"
+              "quickstart/email-using-api"
             ]
           },
           {
@@ -115,29 +114,12 @@
       },
       {
         "tab": "Guides",
-        "hidden": true,
+        "hidden": false,
         "groups": [
           {
             "group": "Getting started",
             "pages": [
-              "index",
-              "quickstart"
-            ]
-          },
-          {
-            "group": "Customization",
-            "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+              "guides/supabase-edge-functions"
             ]
           }
         ]
