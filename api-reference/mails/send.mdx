@@ -2,3 +2,71 @@
 title: 'Send Email'
 openapi: 'POST /mails/send'
 ---
+
+<RequestExample>
+
+```bash Request
+  curl --request POST \
+    --url https://dog-api.kinduff.com/api/facts
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "emailId": "507f1f77bcf86cd799439011"
+  }
+}
+```
+
+</ResponseExample>
+
+
+#### Authorizations
+<ParamField path="Authorizations" type="string | header"  required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Body
+Email data to send
+
+<ParamField path="to" type="object"  required>
+  Recipient email address and name
+  <Accordion title="child attributes">
+  <ParamField path="to.email" type="string<email>"  required>
+  Email address
+  
+  Example: `"customer@example.com"`
+</ParamField>
+  
+  <ParamField path="to.name" type="string" >
+  Display name
+
+  Example: `"John Doe"`
+</ParamField>
+
+<ParamField path="to.dynamicData" type="object" >
+  Key-value pairs for template variable substitution (Handlebars syntax)
+  
+  Example: 
+  ```jsx
+  {
+  "name": "Jane",
+  "firstName": "Jane",
+  "orderNumber": "ORD-12345",
+  "orderTotal": "$99.99"
+}
+  ```
+</ParamField>
+
+
+  </Accordion>
+</ParamField>
+
+
+
+
