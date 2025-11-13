@@ -1,159 +1,161 @@
 ---
-title: "Introducing Webhooks"
-description: "Get real-time notifications about email and contact events with AutoSend webhooks!"
+title: "Email Attachments, Webhooks Management, and Enhanced Automation"
+description: "New webhooks management interface, email attachments support, bulk contact operations, and platform improvements"
 sidebarTitle: "12 November 2025"
 ---
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
 
-We're excited to announce the launch of <a href={AUTOSEND_PATHS.webhooks} target='_blank' title='Webhooks'>Webhooks</a> in AutoSend! You can now receive real-time notifications about email events, contact changes, and engagement metrics—all delivered directly to your application via HTTP callbacks.
+This release introduces email attachments functionality, a dedicated webhooks management interface, enhanced email automation controls, and significant platform improvements. We've expanded webhook event coverage and implemented stricter attachment security validations.
 
-## What's New
+## New Features
 
-### Real-Time Event Notifications
+### Webhooks Management Interface
 
-Receive instant notifications when events occur in your AutoSend account. Instead of continuously polling our API, webhooks push data to your application immediately when events happen.
+A comprehensive webhooks management system with full CRUD operations and enhanced navigation.
 
-**Key Benefits:**
-- **Real-Time Updates**: Get notified instantly when emails are sent, delivered, opened, clicked, or bounced
-- **Contact Sync**: Automatically sync contact changes (created, updated, deleted) to your CRM or database
-- **Engagement Tracking**: Track email opens, clicks, and unsubscribes in real-time
-- **Automated Workflows**: Trigger custom workflows based on specific events
-- **Compliance Logging**: Maintain audit logs for all email and contact activities
-
----
-
-### Event Types
-
-AutoSend webhooks support three comprehensive categories of events:
-
-**Email Lifecycle Events:**
-- `email.sent` - Email successfully sent to the recipient's mail server
-- `email.delivered` - Email successfully delivered to the recipient
-- `email.bounced` - Email failed to deliver (with bounce type and reason)
-
-**Email Engagement Events:**
-- `email.opened` - Recipient opened the email
-- `email.clicked` - Recipient clicked a link in the email
-- `email.unsubscribed` - Recipient unsubscribed from your emails
-
-**Contact Events:**
-- `contact.created` - New contact created in your project
-- `contact.updated` - Contact information updated
-- `contact.deleted` - Contact deleted from your project
-
-Each webhook payload includes comprehensive event data including email IDs, contact information, timestamps, and event-specific details.
+**Key Capabilities:**
+- **List View**: Centralized dashboard displaying all configured webhooks with status indicators
+- **Create/Edit Modal**: Streamlined interface for webhook configuration with URL validation and event selection
+- **Delete Functionality**: Safe webhook removal with confirmation dialogs
+- **Sidebar Navigation**: Improved navigation structure for webhook-related pages
+- **Webhook Status Management**: Enable/disable webhooks with real-time status updates
 
 ---
 
-### Security & Signature Verification
+### Email Attachments
 
-All webhooks are secured with HMAC-SHA256 signature verification to ensure requests are genuinely from AutoSend.
-
-**Security Features:**
-- **HMAC-SHA256 Signatures**: Every webhook includes an `X-Webhook-Signature` header for verification
-- **HTTPS Only**: All webhooks are delivered over secure HTTPS connections
-- **Secret Tokens**: Each webhook has a unique secret token for signature verification
-- **Constant-Time Comparison**: Built-in protection against timing attacks
-- **Timestamp Validation**: Optional timestamp validation to reject old requests
-
-**Headers Included:**
-- `X-Webhook-Signature` - HMAC-SHA256 signature of the request body
-- `X-Webhook-Event` - The event type (e.g., `email.opened`)
-- `X-Webhook-Delivery-Id` - Unique delivery identifier for tracking
-- `X-Webhook-Timestamp` - Unix timestamp when webhook was sent
-
----
-
-### Automatic Retries
-
-AutoSend automatically handles failed webhook deliveries with intelligent retry logic.
-
-**Retry Schedule:**
-- **1st Retry**: 1 minute after initial failure
-- **2nd Retry**: 5 minutes after first retry
-- **3rd Retry**: 15 minutes after second retry
-- **Total Attempts**: 4 attempts (initial + 3 retries)
-
-**Retry Triggers:**
-- Non-2xx status codes (400, 401, 500, 503, etc.)
-- Network errors (connection refused, DNS failures)
-- Timeouts (no response within 10 seconds)
-- SSL/TLS errors
-
-**Best Practices:**
-- Respond with 2xx status codes within 10 seconds
-- Process webhooks asynchronously for better performance
-- Implement idempotency to handle duplicate deliveries
-- Log all delivery attempts for debugging
-
----
-
-### Webhook Management
-
-Manage your webhooks easily through the AutoSend dashboard.
+Send emails with file attachments using multiple upload methods with built-in validation and security controls.
 
 **Features:**
-- **Create Multiple Webhooks**: Create up to 100 webhooks per project
-- **Event Selection**: Choose which events each webhook should receive
-- **Webhook Status**: View enabled/disabled status for each webhook
-- **Edit & Delete**: Update webhook settings or remove webhooks as needed
-- **Secret Management**: Reveal webhook secrets when needed
-- **Delivery Tracking**: Monitor webhook health and delivery status
+- **Dual Upload Methods**: Support for file uploads and URL-based attachments
+- **Size Validation**: Automatic file size checks to ensure payload limits are respected
+- **Extended Payload Support**: Enhanced infrastructure to handle larger email payloads
+- **Attachment Limits**: Per-email attachment limit of 20 files enforced at the API level
 
-**Dashboard Capabilities:**
-- View all webhooks as cards with key details
-- Copy webhook IDs and URLs easily
-- Enable or disable webhooks with one click
-- Access webhook secrets securely
+**Technical Implementation:**
+- File size validation on upload
+- URL attachment validation and fetching
+- Secure attachment storage and delivery
+- Enhanced email payload handling for larger attachments
 
 ---
 
-### Use Cases
+### Bulk Contact Management
 
-Webhooks enable powerful automation and integration scenarios:
+New dedicated API endpoints for efficient bulk contact operations in email workflows.
 
-**Email Management:**
-- Automatically remove bounced email addresses from mailing lists
-- Track email engagement in real-time (opens, clicks, unsubscribes)
-- Create alerts in messaging tools based on event types
-- Store all events in your database for custom reporting
+**Endpoints:**
+- **Bulk Add Contacts**: Add multiple contacts by ID in a single API request
+- **Bulk Remove Contacts**: Remove multiple contacts by ID through dedicated endpoint
+- **Optimized Performance**: Batch operations reduce API calls and improve efficiency
 
-**Contact Synchronization:**
-- Sync contact changes across multiple systems (CRM, databases)
-- Trigger welcome email sequences when contacts are created
-- Update analytics dashboards in real-time
-- Maintain data consistency across platforms
+**Use Cases:**
+- Mass contact list updates
+- Automated contact synchronization
+- Bulk contact management in email automation workflows
 
-**Workflow Automation:**
-- Trigger Slack notifications when emails bounce
-- Update customer records when engagement occurs
-- Send alerts for high-priority events
-- Build custom analytics and reporting systems
+---
 
-**Compliance & Auditing:**
-- Maintain compliance logs for audit purposes
-- Track all email and contact activities
-- Generate custom reports from webhook data
-- Monitor email deliverability and engagement
+## Improvements
+
+### Email Templates Display
+
+Email template information is now displayed on pricing plan pages, providing transparency on template limits across all subscription tiers.
+
+**Changes:**
+- Template limits visible on all pricing pages
+- All plans offer unlimited templates except the Hobby plan
+- Clear template allocation information for each plan tier
+
+---
+
+### Email Automation Controls
+
+Enhanced automation features with improved UI controls and external link handling.
+
+**Enhancements:**
+- **Feature Flag Implementation**: Conditional rendering of automation features based on plan and settings
+- **Footer/Navigation Hide Logic**: Dynamic UI element visibility based on automation configuration
+- **External Link Indicators**: Visual indicators for external links that open in new tabs
+- **Tab Management**: Improved handling of external links with proper tab indicators
+
+---
+
+### Webhook Events Expansion
+
+Extended webhook event coverage to support additional email lifecycle and engagement events.
+
+**New Event Types:**
+- `email.deferred` - Email delivery temporarily deferred by recipient server
+- `email.complained` - Recipient marked email as spam or complaint
+- `email.group_unsubscribed` - Recipient unsubscribed from a specific unsubscribe group
+- `email.group_resubscribed` - Recipient resubscribed to a previously unsubscribed group
+
+**Benefits:**
+- More granular event tracking
+- Better compliance monitoring
+- Enhanced unsubscribe group management
+- Improved deliverability insights
+
+---
+
+### Attachment Security Enhancements
+
+Strengthened security validations for email attachments to prevent abuse and ensure safe file handling.
+
+**Security Improvements:**
+- **Stricter Validations**: Enhanced file type and content validation
+- **Download Safety**: Improved security checks for attachment downloads
+- **Upload Safety**: Additional validation layers for file uploads
+- **Per-Email Limits**: Hard limit of 20 attachments per email enforced at API level
+- **File Size Restrictions**: Enhanced size validation to prevent payload abuse
+
+---
+
+### User Interface Updates
+
+Comprehensive UI refresh with improved messaging, layout, and visual consistency.
+
+**UI Changes:**
+- **CTA Updates**: Changed primary CTA text from "Start Sending" to "Get Started" across the platform
+- **Layout Spacing**: Improved spacing and padding for better visual hierarchy
+- **Signup Flow**: Refined signup page text and messaging
+- **Banner Text**: Updated banner content for clarity and consistency
+
+---
+
+### Content Formatting Improvements
+
+Enhanced content display and formatting across documentation and UI elements.
+
+**Updates:**
+- **Blog Title**: Updated blog section title for better clarity
+- **Filter Labels**: Improved filter label formatting - hyphens now display as spaces for better readability
+- **Text Consistency**: Standardized text formatting across platform
+
+---
+
+## Fixes
+
+### Onboarding Flow
+
+**Resolved Issues:**
+- Fixed pricing display issue during user onboarding flow
+- Corrected pricing information visibility at onboarding stage
+- Ensured consistent pricing display across all onboarding steps
 
 ---
 
 ## Learn More
 
 <Columns cols={2}>
-  <Card title="Webhook Introduction" icon="book" iconType="duotone" href={APP_PATHS.webhookIntroduction}>
-    Learn how to get started with webhooks and set up your first webhook endpoint.
+  <Card title="Webhooks" icon="book" iconType="duotone" href={APP_PATHS.webhookIntroduction}>
+    Learn how to configure and manage webhooks in AutoSend.
   </Card>
-  <Card title="Event Types" icon="list" iconType="duotone" href={APP_PATHS.webhookEventType}>
-    Complete list of supported webhook events and their payloads.
-  </Card>
-  <Card title="Verify Webhook Requests" icon="shield-check" iconType="duotone" href={APP_PATHS.webhookVerifyRequests}>
-    Learn how to verify webhook signatures for security.
-  </Card>
-  <Card title="Retries and Replays" icon="rotate" iconType="duotone" href={APP_PATHS.webhookRetries}>
-    Understand automatic retry logic and best practices for handling webhooks.
+  <Card title="Email Attachments" icon="paperclip" iconType="duotone" href={`${APP_PATHS.sendEmail}#body-attachments`}>
+    Learn how to send emails with file attachments using upload or URL methods, including size validation and security limits.
   </Card>
 </Columns>
 
