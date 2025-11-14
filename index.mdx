@@ -13,13 +13,13 @@ import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx'
 Learn how to send transactional emails like magic links, verification codes, and signup confirmations using the AutoSend Email API.
 
 <Columns cols={2}>
-  <Card title="Email Templates" icon="envelope" iconType="duotone" href="APP_PATHS.emailTemplates">
+  <Card title="Email Templates" icon="envelope" iconType="duotone" href={APP_PATHS.emailTemplates}>
     Learn how to create and use resuable transactional email templates in AutoSend.
   </Card>
-  <Card title="Email Activity" icon="wave-triangle" iconType="duotone" href="APP_PATHS.emailActivity">
+  <Card title="Email Activity" icon="wave-triangle" iconType="duotone" href={APP_PATHS.emailActivity}>
     Monitor the status, delivery details, and engagement for all the emails that you send.
   </Card>
-  <Card title="Sending emails with API" icon="send" iconType="duotone" href="APP_PATHS.sendingEmail">
+  <Card title="Sending emails with API" icon="send" iconType="duotone" href={APP_PATHS.sendingEmail}>
     Learn how to send Transactional emails using the AutoSend email API.
   </Card>
 </Columns>
@@ -29,13 +29,13 @@ Learn how to send transactional emails like magic links, verification codes, and
 Learn how to send marketing emails like newsletters, product updates, and announcements using AutoSend’s campaign tools
 
 <Columns cols={2}>
-  <Card title="Campaigns" icon="megaphone" iconType="duotone" href="APP_PATHS.campaigns">
+  <Card title="Campaigns" icon="megaphone" iconType="duotone" href={APP_PATHS.campaigns}>
     Learn how to create and send marketing campaigns using AutoSend.
   </Card>
-  <Card title="Contacts" icon="book-user" iconType="duotone" href="APP_PATHS.contacts">
+  <Card title="Contacts" icon="book-user" iconType="duotone" href={APP_PATHS.contacts}>
     Learn about contact lists and dynamic segments in Autosend.
   </Card>
-  <Card title="Sender" icon="circle-user" iconType="duotone" href="APP_PATHS.sender">
+  <Card title="Sender" icon="circle-user" iconType="duotone" href={APP_PATHS.sender}>
     Learn how to add and manage senders for sending marketing campaigns.
   </Card>
 </Columns>
@@ -43,10 +43,10 @@ Learn how to send marketing emails like newsletters, product updates, and announ
 ## Need Help ?
 
 <Columns cols={2}>
-  <Card title="FAQs" icon="question" iconType="duotone" href="AUTOSEND_PATHS.faqs">
+  <Card title="FAQs" icon="question" iconType="duotone" href={AUTOSEND_PATHS.faqs}>
     Frequently asked questions about transactional emails, marketing emails, pricing, and everything else.
   </Card>
-  <Card title="Contact Support" icon="star-of-life" iconType="duotone" href="`mailto:${SUPPORT_EMAIL}`">
+  <Card title="Contact Support" icon="star-of-life" iconType="duotone" href={`mailto:${SUPPORT_EMAIL}`}>
     Get direct help from our support team
   </Card>
 </Columns>
