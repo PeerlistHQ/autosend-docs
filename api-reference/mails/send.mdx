@@ -302,7 +302,7 @@ Email data to send
 
 <ParamField path="to" type="object"  required>
   Recipient email address and name
-  <Accordion title="child attributes">
+  <Expandable title="child attributes">
   <ParamField path="to.email" type="string<email>"  required>
   Email address
   
@@ -329,12 +329,12 @@ Email data to send
 ```
 </ParamField>
 
-  </Accordion>
+  </Expandable>
 </ParamField>
 
 <ParamField path="from" type="object"  required>
   Sender email address (must be from a verified domain) and name
-  <Accordion title="child attributes">
+  <Expandable title="child attributes">
   <ParamField path="from.email" type="string<email>"  required>
   Email address
   
@@ -363,7 +363,7 @@ Email data to send
 ```
 </ParamField>
 
-  </Accordion>
+  </Expandable>
 </ParamField>
 
 <ParamField path="subject" type="string" >
@@ -426,7 +426,7 @@ Email data to send
 
 <ParamField path="replyTo" type="object" >
   Reply-to email address and name
-  <Accordion title="child attributes">
+  <Expandable title="child attributes">
   <ParamField path="replyTo.email" type="string<email>"  required>
   Email address
   
@@ -453,7 +453,7 @@ Email data to send
  ```
 </ParamField>
 
-  </Accordion>
+  </Expandable>
 </ParamField>
 
 <ParamField path="unsubscribeGroupId" type="string" >
@@ -469,7 +469,7 @@ Email data to send
     Maximum 20 files can be attached to an email. The total size of the email should be max 40MB after Base64 encoding of the attachments.
   </Note>
   
-  <Accordion title="child attributes">
+  <Expandable title="child attributes">
   <ParamField path="filename" type="string" required>
   Filename of the attachment
   
@@ -492,7 +492,7 @@ Email data to send
   Description of the attachment (optional)
 </ParamField>
 
-  </Accordion>
+  </Expandable>
   
   Example:
   ```jsx
