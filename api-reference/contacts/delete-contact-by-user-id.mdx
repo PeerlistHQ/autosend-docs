@@ -3,3 +3,158 @@ title: 'Delete Contact by User ID'
 openapi: 'DELETE /contacts/email/userId/{userId}'
 ---
 
+<RequestExample>
+
+
+
+```bash cURL
+curl --request DELETE \
+  --url https://api.autosend.com/v1/contacts/email/userId/{id} \
+  --header 'Authorization: Bearer <token>'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/contacts/email/userId/{id}"
+
+headers = {
+    "Authorization": "Bearer <token>"
+}
+
+response = requests.delete(url, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/contacts/email/userId/{id}', {
+  method: 'DELETE',
+  headers: {
+    'Authorization': 'Bearer <token>'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/contacts/email/userId/{id}';
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer <token>'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/contacts/email/userId/{id}"
+    
+    req, _ := http.NewRequest("DELETE", url, nil)
+    req.Header.Set("Authorization", "Bearer <token>")
+    
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+    
+    fmt.Println("Response Status:", resp.Status)
+}
+```
+
+```java Java
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class DeleteContactByUserId {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/contacts/email/userId/{id}");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            
+            con.setRequestMethod("DELETE");
+            con.setRequestProperty("Authorization", "Bearer <token>");
+            
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/contacts/email/userId/{id}')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Delete.new(uri.path)
+request['Authorization'] = 'Bearer <token>'
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true
+}
+```
+
+</ResponseExample>
+
+--- 
+#### Authorizations
+<ParamField path="Authorizations" type="string | header"  required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="userId" type="string"  required>
+  Your application's user identifier
+  
+  Example: `"user_12345"`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Contact deleted successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Example: `true`
+</ResponseField>
+

@@ -3,3 +3,186 @@ title: 'Get Unsubscribe Groups'
 openapi: 'GET /contacts/{id}/unsubscribe-groups'
 ---
 
+<RequestExample>
+
+
+
+```bash cURL
+curl --request GET \
+  --url https://api.autosend.com/v1/contacts/{id}/unsubscribe-groups \
+  --header 'Authorization: Bearer <token>'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/contacts/{id}/unsubscribe-groups"
+
+headers = {
+    "Authorization": "Bearer <token>"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/contacts/{id}/unsubscribe-groups', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer <token>'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/contacts/{id}/unsubscribe-groups';
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer <token>'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/contacts/{id}/unsubscribe-groups"
+    
+    req, _ := http.NewRequest("GET", url, nil)
+    req.Header.Set("Authorization", "Bearer <token>")
+    
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+    
+    fmt.Println("Response Status:", resp.Status)
+}
+```
+
+```java Java
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class GetUnsubscribeGroups {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/contacts/{id}/unsubscribe-groups");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Authorization", "Bearer <token>");
+            
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/contacts/{id}/unsubscribe-groups')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Get.new(uri.path)
+request['Authorization'] = 'Bearer <token>'
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "groups": [
+      {
+        "groupId": "20XWO",
+        "name": "Our blog"
+      }
+    ]
+  }
+}
+```
+
+</ResponseExample>
+
+--- 
+#### Authorizations
+<ParamField path="Authorizations" type="string | header"  required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="id" type="string"  required>
+  Unique id of the contact
+  
+  Example: `"507f1f77bcf86cd799439011"`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Unsubscribe groups retrieved successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+  
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="child attributes">
+  <ResponseField name="data.groups" type="array">
+   Array of unsubscribe groups with groupId and name
+    <Expandable>
+    <ResponseField name="groupId" type="string">
+    
+    Example: `"20XWO"`
+  </ResponseField>
+    <ResponseField name="name" type="string">
+    
+    Example: `"Our blog"`
+  </ResponseField>
+   </Expandable>
+  </ResponseField>
+  
+  </Expandable>
+</ResponseField>
+

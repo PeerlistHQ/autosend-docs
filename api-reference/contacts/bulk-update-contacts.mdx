@@ -3,3 +3,379 @@ title: 'Bulk Update Contacts'
 openapi: 'POST /contacts/bulk-update'
 ---
 
+<RequestExample>
+
+
+
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/contacts/bulk-update \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "contacts": [
+    {
+      "email": "john.doe@example.com",
+      "firstName": "John",
+      "lastName": "Doe",
+      "userId": "user_12345",
+      "customFields": {
+        "company": "Acme Corp",
+        "role": "Developer",
+        "plan": "premium"
+      }
+    }
+  ],
+  "runWorkflow": false
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/contacts/bulk-update"
+
+headers = {
+    "Authorization": "Bearer <token>",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "contacts": [
+        {
+            "email": "john.doe@example.com",
+            "firstName": "John",
+            "lastName": "Doe",
+            "userId": "user_12345",
+            "customFields": {
+                "company": "Acme Corp",
+                "role": "Developer",
+                "plan": "premium"
+            }
+        }
+    ],
+    "runWorkflow": False
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/contacts/bulk-update', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer <token>',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    contacts: [
+      {
+        email: 'john.doe@example.com',
+        firstName: 'John',
+        lastName: 'Doe',
+        userId: 'user_12345',
+        customFields: {
+          company: 'Acme Corp',
+          role: 'Developer',
+          plan: 'premium'
+        }
+      }
+    ],
+    runWorkflow: false
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/contacts/bulk-update';
+
+$data = [
+    'contacts' => [
+        [
+            'email' => 'john.doe@example.com',
+            'firstName' => 'John',
+            'lastName' => 'Doe',
+            'userId' => 'user_12345',
+            'customFields' => [
+                'company' => 'Acme Corp',
+                'role' => 'Developer',
+                'plan' => 'premium'
+            ]
+        ]
+    ],
+    'runWorkflow' => false
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer <token>',
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/contacts/bulk-update"
+    
+    payload := map[string]interface{}{
+        "contacts": []map[string]interface{}{
+            {
+                "email":     "john.doe@example.com",
+                "firstName": "John",
+                "lastName":  "Doe",
+                "userId":    "user_12345",
+                "customFields": map[string]string{
+                    "company": "Acme Corp",
+                    "role":    "Developer",
+                    "plan":    "premium",
+                },
+            },
+        },
+        "runWorkflow": false,
+    }
+    
+    jsonData, _ := json.Marshal(payload)
+    
+    req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer <token>")
+    req.Header.Set("Content-Type", "application/json")
+    
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+    
+    fmt.Println("Response Status:", resp.Status)
+}
+```
+
+```java Java
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class BulkUpdateContacts {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/contacts/bulk-update");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Authorization", "Bearer <token>");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+            
+            String jsonInputString = "{\n" +
+                "  \"contacts\": [\n" +
+                "    {\n" +
+                "      \"email\": \"john.doe@example.com\",\n" +
+                "      \"firstName\": \"John\",\n" +
+                "      \"lastName\": \"Doe\",\n" +
+                "      \"userId\": \"user_12345\",\n" +
+                "      \"customFields\": {\n" +
+                "        \"company\": \"Acme Corp\",\n" +
+                "        \"role\": \"Developer\",\n" +
+                "        \"plan\": \"premium\"\n" +
+                "      }\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"runWorkflow\": false\n" +
+                "}";
+            
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+            
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/contacts/bulk-update')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(uri.path)
+request['Authorization'] = 'Bearer <token>'
+request['Content-Type'] = 'application/json'
+
+request.body = {
+  contacts: [
+    {
+      email: 'john.doe@example.com',
+      firstName: 'John',
+      lastName: 'Doe',
+      userId: 'user_12345',
+      customFields: {
+        company: 'Acme Corp',
+        role: 'Developer',
+        plan: 'premium'
+      }
+    }
+  ],
+  runWorkflow: false
+}.to_json
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "successCount": 1,
+    "failedCount": 0,
+    "totalCount": 1
+  }
+}
+```
+
+</ResponseExample>
+
+--- 
+#### Authorizations
+<ParamField path="Authorizations" type="string | header"  required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Body
+Array of contacts to update or create
+
+<ParamField path="contacts" type="object[]"  required>
+  Array of contact objects (minimum 1, maximum 100)
+  
+  <Note>
+    Maximum 100 contacts per request.
+  </Note>
+
+   <Expandable title="child attributes">
+  
+  <ResponseField name="email" type="string<string>">
+Valid email address (automatically normalized to lowercase)
+    
+    Example: `"john.doe@example.com"`
+  </ResponseField>
+  
+  <ResponseField name="firstName" type="string">
+    Contact's first name
+    
+    Example: `"John"`
+  </ResponseField>
+  
+  <ResponseField name="lastName" type="string">
+    Contact's last name
+    
+    Example: `"Doe"`
+  </ResponseField>
+  
+  <ResponseField name="userId" type="string">
+    Your application's user identifier
+    
+    Example: `"user_12345"`
+  </ResponseField>
+  
+  <ResponseField name="customFields" type="object">
+    Custom contact attributes
+
+     <Expandable title="child attributes">
+
+  <ResponseField name="customFields.{key}" type="string" />
+  </Expandable>
+    
+    Example: 
+    ```jsx
+    {
+      "company": "Acme Corp",
+      "role": "Developer",
+      "plan": "premium"
+    }
+    ```
+  </ResponseField>
+  
+ </Expandable>
+  
+</ParamField>
+
+<ParamField path="runWorkflow" type="boolean" >
+  Whether to trigger workflows for updated contacts
+  
+  Example: `false`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Bulk update completed</span>
+
+<ResponseField name="success" type="boolean">  
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="child attributes">
+  <ResponseField name="data.successCount" type="integer">
+    Number of successfully updated/created contacts
+    
+    Example: `1`
+  </ResponseField>
+  
+  <ResponseField name="data.failedCount" type="integer">
+    Number of failed contacts
+    
+    Example: `0`
+  </ResponseField>
+  
+  <ResponseField name="data.totalCount" type="integer">
+    Total number of contacts processed
+    
+    Example: `1`
+  </ResponseField>
+  </Expandable>
+</ResponseField>
+
