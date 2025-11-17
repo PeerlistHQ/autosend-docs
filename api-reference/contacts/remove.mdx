@@ -3,3 +3,223 @@ title: 'Remove Contacts'
 openapi: 'POST /contacts/remove'
 ---
 
+<RequestExample>
+
+
+
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/contacts/remove \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "emails": [
+    "email1@gmail.com"
+  ]
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/contacts/remove"
+
+headers = {
+    "Authorization": "Bearer <token>",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "emails": [
+        "email1@gmail.com"
+    ]
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/contacts/remove', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer <token>',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    emails: [
+      'email1@gmail.com'
+    ]
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/contacts/remove';
+
+$data = [
+    'emails' => [
+        'email1@gmail.com'
+    ]
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer <token>',
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/contacts/remove"
+    
+    payload := map[string]interface{}{
+        "emails": []string{
+            "email1@gmail.com",
+        },
+    }
+    
+    jsonData, _ := json.Marshal(payload)
+    
+    req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer <token>")
+    req.Header.Set("Content-Type", "application/json")
+    
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+    
+    fmt.Println("Response Status:", resp.Status)
+}
+```
+
+```java Java
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class RemoveContacts {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/contacts/remove");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Authorization", "Bearer <token>");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+            
+            String jsonInputString = "{\n" +
+                "  \"emails\": [\n" +
+                "    \"email1@gmail.com\"\n" +
+                "  ]\n" +
+                "}";
+            
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+            
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/contacts/remove')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(uri.path)
+request['Authorization'] = 'Bearer <token>'
+request['Content-Type'] = 'application/json'
+
+request.body = {
+  emails: [
+    'email1@gmail.com'
+  ]
+}.to_json
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true
+}
+```
+
+</ResponseExample>
+
+--- 
+#### Authorizations
+<ParamField path="Authorizations" type="string | header"  required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Body
+Array of email addresses to remove
+
+<ParamField path="emails" type="string[]"  required>
+  Array of email addresses to remove (minimum 1, automatically normalized)
+ 
+  Minimum length: `1`
+
+  Example: `["email1@gmail.com"]`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Contacts removed successfully</span>
+
+<ResponseField name="success" type="boolean">
+ 
+  Example: `true`
+</ResponseField>
+
