@@ -170,18 +170,19 @@ puts response.body
 <ResponseField name="data" type="object">
   <Expandable title="child attributes">
   <ResponseField name="data.groups" type="array">
-    Array of unsubscribe groups with groupId and name
+   Array of unsubscribe groups with groupId and name
+    <Expandable>
+    <ResponseField name="groupId" type="string">
     
-    Example: 
-    ```jsx
-    [
-      {
-        "groupId": "20XWO",
-        "name": "Our blog"
-      }
-    ]
-    ```
+    Example: `"20XWO"`
   </ResponseField>
+    <ResponseField name="name" type="string">
+    
+    Example: `"Our blog"`
+  </ResponseField>
+   </Expandable>
+  </ResponseField>
+  
   </Expandable>
 </ResponseField>
 
