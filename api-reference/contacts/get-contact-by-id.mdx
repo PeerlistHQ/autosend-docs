@@ -9,14 +9,14 @@ openapi: 'GET /contacts/{id}'
 
 ```bash cURL
 curl --request GET \
-  --url https://api.autosend.com/v1/contacts/507f1f77bcf86cd799439011 \
+  --url https://api.autosend.com/v1/contacts/{id} \
   --header 'Authorization: Bearer <token>'
 ```
 
 ```python Python
 import requests
 
-url = "https://api.autosend.com/v1/contacts/507f1f77bcf86cd799439011"
+url = "https://api.autosend.com/v1/contacts/{id}"
 
 headers = {
     "Authorization": "Bearer <token>"
@@ -27,7 +27,7 @@ print(response.json())
 ```
 
 ```javascript JavaScript
-fetch('https://api.autosend.com/v1/contacts/507f1f77bcf86cd799439011', {
+fetch('https://api.autosend.com/v1/contacts/{id}', {
   method: 'GET',
   headers: {
     'Authorization': 'Bearer <token>'
@@ -41,7 +41,7 @@ fetch('https://api.autosend.com/v1/contacts/507f1f77bcf86cd799439011', {
 ```php PHP
 <?php
 
-$url = 'https://api.autosend.com/v1/contacts/507f1f77bcf86cd799439011';
+$url = 'https://api.autosend.com/v1/contacts/{id}';
 
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -65,7 +65,7 @@ import (
 )
 
 func main() {
-    url := "https://api.autosend.com/v1/contacts/507f1f77bcf86cd799439011"
+    url := "https://api.autosend.com/v1/contacts/{id}"
     
     req, _ := http.NewRequest("GET", url, nil)
     req.Header.Set("Authorization", "Bearer <token>")
@@ -89,7 +89,7 @@ import java.net.URL;
 public class GetContactById {
     public static void main(String[] args) {
         try {
-            URL url = new URL("https://api.autosend.com/v1/contacts/507f1f77bcf86cd799439011");
+            URL url = new URL("https://api.autosend.com/v1/contacts/{id}");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             
             con.setRequestMethod("GET");
@@ -109,7 +109,7 @@ public class GetContactById {
 require 'net/http'
 require 'uri'
 
-uri = URI('https://api.autosend.com/v1/contacts/507f1f77bcf86cd799439011')
+uri = URI('https://api.autosend.com/v1/contacts/{id}')
 
 http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true
