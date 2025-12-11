@@ -1,0 +1,49 @@
+---
+title: "Introducing Email Activity Filters"
+description: "Filter and analyze your email activity by status, templates, domain, and API key"
+sidebarTitle: "21 November 2025"
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx';
+
+We've added powerful filtering capabilities to <a href={AUTOSEND_PATHS.emailActivity} target='_blank' title='Email Activity'>Email Activity</a>, making it easier to analyze and troubleshoot your transactional and campaign emails. Now you can quickly find exactly what you're looking for with our new filter modal.
+
+<Frame>
+  <img src='/images/autosend-email-activity-changelog.jpeg' alt="Email Activity Filter Modal" />
+</Frame>
+
+
+### Filter Options:
+
+- **Status Filters**: Filter by email delivery and engagement status
+  - Delivery lifecycle: Sent, Delivered, Bounced
+  - Engagement: Opened, Clicked
+  - Issues: Complained, Suppressed, Failed
+
+- **Email Source**: Filter by email template or campaign to see activity for specific email types
+
+- **Sending Domain**: Filter emails sent from specific verified domains
+
+- **API Key**: Filter emails sent using specific API keys for better organization and tracking
+
+Combine multiple filters to narrow down your search and get precise insights into your email activity. Perfect for debugging delivery issues, analyzing campaign performance, or tracking emails from specific sources.
+
+---
+
+<Info>
+As always, let us know if you run into issues or have feedback at <a href={`mailto:${SUPPORT_EMAIL}`} title='AutoSend support mail'>{SUPPORT_EMAIL}</a>. We're listening (and probably already working on the next thing you didn't know you needed).
+</Info>
+
+## Learn More
+
+<Columns cols={2}>
+  <Card title="Email Activity" icon="chart-line" iconType="duotone" href={APP_PATHS.emailActivity}>
+    Learn how to monitor and track your transactional email activity.
+  </Card>
+  <Card title="Email Templates" icon="envelope" iconType="duotone" href={APP_PATHS.emailTemplates}>
+    Learn about email templates and how to use them in AutoSend.
+  </Card>
+</Columns>
+
