@@ -73,6 +73,12 @@
                 ]
               }
             ]
+          },
+            {
+            "group": "Teams",
+            "pages": [
+              "teams"
+            ]
           }
         ]
       },
