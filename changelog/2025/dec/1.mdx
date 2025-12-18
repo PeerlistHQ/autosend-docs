@@ -6,35 +6,70 @@ sidebarTitle: "01 December 2025"
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { AUTOSEND_BASE_URL } from '/snippets/custom-variables.mdx';
 
-Introducing <a href={AUTOSEND_PATHS.composeByAutoSend} target='_blank' title='AutoSend Compose'>Compose by AutoSend</a> - a powerful, free email template builder designed to simplify the creation of responsive email templates without requiring any coding skills. Build beautiful emails using Markdown and export clean, email-ready HTML that works seamlessly with any platform.
+Let’s be honest: building email templates is painful. You either wrestle with HTML that breaks in Outlook, use a drag-and-drop builder that exports bloated code, or pay for tools that do way more than you need.
+We built Compose to fix that.
 
 <Frame>
   <img src='/images/compose-og.webp' alt="Compose by AutoSend"  />
 </Frame>
 
-### **Key Features:**
 
-- **Markdown Support**: Build emails using intuitive visual blocks or simple markdown, perfect for non-technical teams. No HTML knowledge required.
+## What’s Compose?
 
-- **Clean HTML Export**: Export fully coded HTML, ready to plug into your ESP or backend. The exported code is production-ready and optimized for email clients.
+A free email template builder that lives at <a href={AUTOSEND_PATHS.composeByAutoSend} target='_blank' title='AutoSend Compose'>autosend.com/compose</a>. You write in Markdown (yes, the same Markdown you already know), and it spits out clean, responsive HTML that actually works in email clients.
 
-- **Personalization & Variables**: Use variables and placeholders to personalize emails at scale. Perfect for transactional and marketing emails that need dynamic content.
+<Callout icon="sparkles" color="#16A34A">
+No signup. No credit card. No “free tier with limitations.” Just open it and start building.
+</Callout>
 
-- **Universal Compatibility**: Compatible with all major email clients, ensuring emails display correctly across platforms like Gmail, Outlook, Yahoo, and Apple Mail.
+## Why we built this
 
-- **Responsive Design**: Emails adapt perfectly across devices without the need for breakpoints or tweaks. Your templates will look great on desktop, tablet, and mobile devices automatically.
+Every developer has that moment: you need to send a simple welcome email, and suddenly you’re three hours deep in a Stack Overflow thread about Outlook’s rendering engine from 2007. Or you’re handed a “quick template update” that turns into a full afternoon of testing across Gmail, Yahoo, and Apple Mail.
 
-- **No Signup Required**: Start building immediately - no account creation or login needed. Just visit, create, and export.
+Compose skips all that. Write your content, style it visually, export the HTML, done.
 
-Whether you're a developer looking to speed up email template creation, a marketer who wants to build emails without touching code, or a designer who needs clean HTML output, Compose by AutoSend makes email template creation effortless.
+## What you get
 
----
+1. **Markdown support** - Write emails the same way you write docs, READMEs, or Notion pages. Headers, bold, links, images. If you’ve written Markdown before, you already know how to use Compose.
+
+2. **Visual blocks when you need them** - Not everything fits neatly into Markdown. Buttons, columns, spacers, dividers. Drag them in, style them, move on.
+
+3. **Variables for personalization** - Drop in `{{first_name}}` or `{{company_name}}` and your email is ready for dynamic content. Works perfectly with AutoSend’s API or any other provider.
+
+4. **Responsive by default** - Your emails automatically adapt to desktop, tablet, and mobile. No media queries to write. No breakpoints to test. It just works.
+
+5. **Clean HTML export** - The code you export is production-ready. No inline styles soup. No unnecessary divs. Just clean HTML you can actually read if you need to.
+
+6. **Works everywhere** - Gmail, Outlook (yes, even the desktop version), Yahoo, Apple Mail. We’ve done the cross-client testing so you don’t have to open six email accounts.
+
+7. **Start with templates** - Don’t want to start from scratch? We’ve got you covered:
+<Columns cols={4}>
+<Card title="Verify Email" img='/images/verifyEmail.webp' href={AUTOSEND_PATHS.verifyEmail} external />
+  <Card title="Welcome Email" img='/images/welcomeEmail.webp' href={AUTOSEND_PATHS.welcomeEmail} external />
+  <Card title="Product Update" img='/images/productUpdateEmail.webp' href={AUTOSEND_PATHS.productUpdate} external />
+  <Card title="Newsletter" img='/images/newsletterEmail.webp' href={AUTOSEND_PATHS.newsletter} external />
+</Columns>
+
+Pick one, customize it, export. You can go from zero to production-ready template in minutes.
+
+
+## Who’s it for?
+
+Developers who’d rather write Markdown than debug table-based layouts. Marketers who want to ship emails without filing a ticket. Founders who just need to send that launch announcement without hiring a designer.
+Basically, anyone who’s ever thought “why is email still this hard in 2025?”
+
+## One more thing
+
+Compose works with any email provider.AutoSend, SendGrid, Resend, Postmark, your own SMTP server. Export the HTML and use it wherever you want. We’re not trying to lock you in.
+
+
 
 ## Learn More
 
 <Columns cols={2}>
-  <Card title="Try AutoSend Compose" icon="i-cursor" iconType="duotone" href="https://compose.autosend.com" external>
+  <Card title="Try AutoSend Compose" icon="i-cursor" iconType="duotone" href={AUTOSEND_PATHS.composeByAutoSend} external>
     Visit AutoSend Compose to start building email templates for free.
   </Card>
   <Card title="Email Templates" icon="envelope" iconType="duotone" href={APP_PATHS.emailTemplates}>
