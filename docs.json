@@ -71,13 +71,8 @@
                   "others/webhooks/retries",
                   "others/webhooks/verify-requests"
                 ]
-              }
-            ]
-          },
-            {
-            "group": "Teams",
-            "pages": [
-              "teams"
+              },
+              "others/teams"
             ]
           }
         ]
