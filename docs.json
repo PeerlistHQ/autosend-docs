@@ -55,7 +55,8 @@
                   "marketing-emails/contacts/segments",
                   "marketing-emails/contacts/custom-fields"
                 ]
-              }
+              },
+              "/automations"
             ]
           },
             {
