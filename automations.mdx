@@ -30,7 +30,7 @@ AutoSend uses a contact-based trigger system. This means automations are trigger
   <Step title="Create the Corresponding Contact List or Segment">
     Since AutoSend triggers automations based on contact list membership, you'll need to create a list or segment that represents your trigger condition.
 
-    **Example:** For a Pro plan onboarding sequence, create a segment called "Pro Plan Members" that includes all contacts with the attribute `plan: pro`. When a user purchases a Pro plan and is added to this segment, the automation will trigger automatically.
+    **Example:** For a Pro plan onboarding sequence, create a segment called "Pro Plan Members" that includes all contacts with the custom field `plan: pro`. When a user purchases a Pro plan and is added to this segment, the automation will trigger automatically.
   </Step>
   <Step title="Create Your Automation">
     1. Navigate to **Marketing Emails** in your AutoSend dashboard
@@ -57,7 +57,8 @@ AutoSend uses a contact-based trigger system. This means automations are trigger
 </Frame>
     - **When the contact has received all the automation emails** - The contact completes the entire sequence and exits automatically
     - **Contact is no longer a part of the list/segment** - The contact exits immediately if they're removed from the trigger list or segment
-    - Choose the option that best fits your automation's purpose. For example, onboarding sequences typically use the first option, while promotional campaigns might use the second to stop sending if someone cancels their subscription.
+  
+  Choose the option that best fits your automation's purpose. For example, onboarding sequences typically use the first option, while promotional campaigns might use the second to stop sending if someone cancels their subscription.
   </Step>
   <Step title="Add Emails to Your Automation">
   
