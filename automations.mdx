@@ -4,6 +4,9 @@ description: "Learn how to create contact-triggered email automations in AutoSen
 sidebarTitle: "Automations"
 ---
 
+import { APP_PATHS } from '/snippets/appPaths.mdx'
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx'
+
 ## Common use cases for Email Automations
 
 - **Onboarding sequences** for new users or customers on different plans
@@ -17,21 +20,24 @@ sidebarTitle: "Automations"
 
 ## How to Create an Email Automation in AutoSend
 
+### Prerequisites
+
 AutoSend uses a contact-based trigger system. This means automations are triggered when a contact joins a specific list or segment. Here's how to set one up:
 
-<Steps>
-  <Step title="Define Your Trigger">
-    Identify what action should trigger your automation. For example, a user purchasing a Pro plan, signing up for a webinar, or abandoning their cart.
-  </Step>
-  <Step title="Create the Corresponding Contact List or Segment">
-    Since AutoSend triggers automations based on contact list membership, you'll need to create a list or segment that represents your trigger condition.
+  
+  - ##### **Define Your Trigger**
+        Identify what action should trigger your automation. For example, a user purchasing a Pro plan, signing up for a webinar, or abandoning their cart.
+ 
+   - ##### **Create the Corresponding Contact List or Segment**
+        Since AutoSend triggers automations based on contact list membership, you'll need to <a href={APP_PATHS.contactsLists}>create a list</a> or <a href={APP_PATHS.contactsSegments}>segment</a> that represents your trigger condition.
+         
+         **Example:** For a Pro plan onboarding sequence, create a segment called "Pro Plan Members" that includes all contacts with the custom field `plan: pro`. When a user purchases a Pro plan and is added to this segment, the automation will trigger automatically.
 
-    **Example:** For a Pro plan onboarding sequence, create a segment called "Pro Plan Members" that includes all contacts with the custom field `plan: pro`. When a user purchases a Pro plan and is added to this segment, the automation will trigger automatically.
-  </Step>
+
+<Steps>
+ 
   <Step title="Create Your Automation">
-    1. Navigate to **Marketing Emails** in your AutoSend dashboard
-    2. Click on the **Automations** tab
-    3. Click **New Automation**
+Under **Marketing Emails** in the sidebar, select <a href={AUTOSEND_PATHS.automations} target='_blank' title='Automations' rel='noopener noreferrer'>**Automations**</a> and click **New Automation**.
 
     <Frame>
   <img src='/images/email-automations/step-3.png' alt="navigate to team"  />
@@ -41,7 +47,7 @@ AutoSend uses a contact-based trigger system. This means automations are trigger
   </Step>
   <Step title="Set Entry Condition">
    
-    In the **Entry** card, select the **contact list** or **segment** that will trigger this automation. When a contact joins this list or segment, they will enter the automation flow and begin receiving emails.
+    In the **Entry** card, select the <a href={APP_PATHS.contactsLists}> **contact list** </a> or <a href={APP_PATHS.contactsSegments}>**segment**</a> that will trigger this automation. When a contact joins this list or segment, they will enter the automation flow and begin receiving emails.
      <Frame>
   <img src='/images/email-automations/step-4.png' alt="navigate to team"  />
 </Frame>
@@ -53,8 +59,9 @@ AutoSend uses a contact-based trigger system. This means automations are trigger
 </Frame>
     - **When the contact has received all the automation emails** - The contact completes the entire sequence and exits automatically
     - **Contact is no longer a part of the list/segment** - The contact exits immediately if they're removed from the trigger list or segment
-  
-  Choose the option that best fits your automation's purpose. For example, onboarding sequences typically use the first option, while promotional campaigns might use the second to stop sending if someone cancels their subscription.
+  <Note>
+    Choose the option that best fits your automation's purpose. For example, onboarding sequences typically use the first option, while promotional campaigns might use the second to stop sending if someone cancels their subscription.
+  </Note>
   </Step>
   <Step title="Add Emails to Your Automation">
   
@@ -74,7 +81,7 @@ AutoSend uses a contact-based trigger system. This means automations are trigger
     </Info>
   </Step>
   <Step title="Select an Unsubscribe Group">
-    Choose an appropriate unsubscribe group for this automation. Since automations are treated as marketing emails, they are required to include an unsubscribe link. This ensures compliance with email regulations and gives contacts control over the emails they receive.
+    Choose an appropriate <a href={APP_PATHS.unsubscribeGroups}>unsubscribe group</a> for this automation. Since automations are treated as marketing emails, they are required to include an unsubscribe link. This ensures compliance with email regulations and gives contacts control over the emails they receive.
 
     <Frame>
       <img src='/images/email-automations/step-7.png' alt="Select an Unsubscribe Group"  />
@@ -90,7 +97,6 @@ AutoSend uses a contact-based trigger system. This means automations are trigger
     <Frame>
       <img src='/images/email-automations/step-8.png' alt="Activate Your Automation"  />
     </Frame>
-
     Your automation is now active and will begin triggering for contacts who join the specified list or segment.
   </Step>
 </Steps>
@@ -115,17 +121,17 @@ AutoSend uses a contact-based trigger system. This means automations are trigger
 
 <AccordionGroup>
   <Accordion title="Contacts aren't entering my automation">
-    - Verify the automation is in Active state, not Draft or Paused
-    - Check that contacts are actually joining your trigger list or segment
-    - Ensure your list or segment criteria are correctly configured
+    - Verify the automation is in Active state, not Draft or Paused.
+    - Check that contacts are actually joining your trigger list or segment.
+    - Ensure your list or segment criteria are correctly configured.
   </Accordion>
   <Accordion title="Emails are sending at unexpected times">
-    - Review your Wait For settings between each email
-    - Remember that timing starts from when the contact enters, not from a specific time of day
+    - Review your Wait For settings between each email.
+    - Remember that timing starts from when the contact enters, not from a specific time of day.
   </Accordion>
   <Accordion title="Contacts stopped receiving emails">
-    - Check if they were removed from the trigger list/segment that you selected for the exit option "Contact is no longer a part of the list/segment"
-    - Verify the automation hasn't been paused
-    - Confirm they haven't unsubscribed from the unsubscribe group
+    - Check if they were removed from the trigger list/segment that you selected for the exit option "Contact is no longer a part of the list/segment".
+    - Verify the automation hasn't been paused.
+    - Confirm they haven't unsubscribed from these emails.
   </Accordion>
 </AccordionGroup>
