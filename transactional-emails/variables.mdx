@@ -32,12 +32,12 @@ AutoSend automatically replaces these placeholders with their corresponding valu
 
 ```json
 {
-  "to": "robert@example.com",
-  "template_id": "welcome_email",
-  "dynamicData": {
-    "name": "Robert",
-    "login_link": "https://app.autosend.io/login"
-  }
+	"to": "robert@example.com",
+	"template_id": "A-b4e8a1c93f2d7e6k5m0p",
+	"dynamicData": {
+		"name": "Robert",
+		"login_link": "https://app.autosend.io/login"
+	}
 }
 ```
 
@@ -66,7 +66,10 @@ https://app.autosend.io/login
 
 AutoSend uses **double curly braces `{{variable_name}}`** to identify variables inside email templates.
 
-<Info>Variable names can include letters, numbers, and underscores, but must start with a letter (e.g., `{{first_name}}`, `{{orderTotal}}`).</Info>
+<Info>
+	Variable names can include letters, numbers, and underscores, but must start with a letter (e.g.,
+	`{{ first_name }}`, `{{ orderTotal }}`).
+</Info>
 
 ---
 
@@ -110,20 +113,78 @@ You can define your own custom variables when sending emails via the API. These 
 
 ---
 
-## Using Dynamic Variables with Conditions
+## Nested Variables
+
+AutoSend supports nested variables, allowing you to organize your data in a more structured way. You can access nested properties using dot notation in your templates.
+
+For example, instead of flat variables like `{{firstName}}`, you can use nested structures like `{{userData.firstName}}` or `{{order.id}}`.
+
+### Example API Payload with Nested Data:
+
+```json
+{
+	"to": "robert@example.com",
+	"template_id": "A-c7fde221a2s3dff45cb8",
+	"dynamicData": {
+		"userData": {
+			"firstName": "Robert",
+			"lastName": "Smith",
+			"email": "robert@example.com"
+		},
+		"order": {
+			"id": "#2341",
+			"total": "$129.99",
+			"status": "shipped"
+		}
+	}
+}
+```
+
+### Example Template with Nested Variables:
+
+```
+Hi {{userData.firstName}} {{userData.lastName}},
+
+Your order {{order.id}} has been {{order.status}}!
+
+Order Total: {{order.total}}
+
+If you have any questions, we'll reach out to you at {{userData.email}}.
+```
+
+### Resulting Email:
+
+```
+Hi Robert Smith,
+
+Your order #2341 has been shipped!
+
+Order Total: $129.99
+
+If you have any questions, we'll reach out to you at robert@example.com.
+```
+
+<Note>
+	Nested variables are only available with transactional emails. They are not supported in email
+	campaigns or automation emails.
+</Note>
+
+---
+
+## Using Variables with Conditions
 
 You can use simple `if/else` logic in your email templates to handle missing data. For example, if a user doesn’t have a `firstName`, you can fall back to a default like **“there”.**
 
-
-``` jsx
+```jsx
 Hello {{#if firstName}}{{firstName}}{{else}}there{{/if}}!
 ```
 
 ### What this does:
- - If `firstName` exists → `Hello Johan!`
- - If it’s missing/empty → `Hello there!`
 
-This works for any variable in AutoSend, just wrap it with `{{#if}}{{else}}{{/if}}` to make your messages feel natural even when some data is unavailable. 
+- If `firstName` exists → `Hello Johan!`
+- If it’s missing/empty → `Hello there!`
+
+This works for any variable in AutoSend, just wrap it with `{{#if}}{{else}}{{/if}}` to make your messages feel natural even when some data is unavailable.
 
 ## Best Practices
 
@@ -139,9 +200,9 @@ This works for any variable in AutoSend, just wrap it with `{{#if}}{{else}}{{/if
 
   <Accordion title="If a variable doesn’t render correctly:">
 
-  - Check that your variable name in the API payload exactly matches the placeholder in your template.
-  - Ensure that the variable is passed under the `"variables"` object in your API request.
-  - Preview the email in your AutoSend dashboard to confirm the replacement works as expected.
+- Check that your variable name in the API payload exactly matches the placeholder in your template.
+- Ensure that the variable is passed under the `"variables"` object in your API request.
+- Preview the email in your AutoSend dashboard to confirm the replacement works as expected.
 
   </Accordion>
 
