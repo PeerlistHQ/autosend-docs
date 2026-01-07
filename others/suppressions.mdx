@@ -6,8 +6,9 @@ sidebarTitle: "Suppressions "
 
 Suppressions in AutoSend help ensure that your emails are only sent to valid, consenting recipients. By automatically maintaining these suppression lists, AutoSend improves your deliverability, protects your sender reputation, and ensures compliance with email regulations.
 
+<Frame>
 ![Autosend Suppressions Screenshot](/images/autosend-suppressions-screenshot.png)
-
+</Frame>
 You can access all suppression records from the [**Suppressions ↗**](https://autosend.com/suppressions/global) tab in the side-panel.\
 Each record includes:
 
@@ -48,8 +49,6 @@ If a recipient marks your email as spam, AutoSend automatically adds them to you
 This ensures you don’t email them again, protecting your sender reputation and reducing spam complaints.
 
 <Warning>
-  **Note:**
-
   Multiple spam complaints can lead to domain or IP blacklisting, so monitoring this suppression type is essential.
 </Warning>
 
@@ -65,3 +64,11 @@ A bounce occurs when an email cannot be delivered to a recipient’s inbox.
 - **Soft Bounce:** Temporary issue (like a full inbox or server problem). AutoSend retries for a short period before suppressing if the issue persists.
 
 ---
+
+### Invalid emails
+
+Invalid emails are addresses that fail basic syntax or DNS checks and can never receive messages.
+
+AutoSend detects these during list imports or send attempts and **suppresses them immediately** to protect your domain reputation, deliverability, and avoid spam traps.
+
+Common causes include typos (e.g., gmial.com), non-existent domains, malformed formats, or disposable addresses that no longer exist.
