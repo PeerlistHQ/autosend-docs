@@ -4,11 +4,14 @@ description: "Suppressions in AutoSend help ensure that your emails are only sen
 sidebarTitle: "Suppressions "
 ---
 
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+
 Suppressions in AutoSend help ensure that your emails are only sent to valid, consenting recipients. By automatically maintaining these suppression lists, AutoSend improves your deliverability, protects your sender reputation, and ensures compliance with email regulations.
 
+<Frame>
 ![Autosend Suppressions Screenshot](/images/autosend-suppressions-screenshot.png)
-
-You can access all suppression records from the [**Suppressions ↗**](https://autosend.com/suppressions/global) tab in the side-panel.\
+</Frame>
+You can access all suppression records from the <a href={AUTOSEND_PATHS.globalSuppressions} target='_blank'> Suppressions ↗</a> tab in the side-panel.\
 Each record includes:
 
 - **Email address**
@@ -48,8 +51,6 @@ If a recipient marks your email as spam, AutoSend automatically adds them to you
 This ensures you don’t email them again, protecting your sender reputation and reducing spam complaints.
 
 <Warning>
-  **Note:**
-
   Multiple spam complaints can lead to domain or IP blacklisting, so monitoring this suppression type is essential.
 </Warning>
 
@@ -66,14 +67,10 @@ A bounce occurs when an email cannot be delivered to a recipient’s inbox.
 
 ---
 
-### Blocks
+### Invalid emails
 
-A block occurs when a recipient’s email server rejects your email before delivery.
+Invalid emails are addresses that fail basic syntax or DNS checks and can never receive messages.
 
-Blocks usually happen due to:
+AutoSend detects these during list imports or send attempts and **suppresses them immediately** to protect your domain reputation, deliverability, and avoid spam traps.
 
-- IP or domain reputation issues
-- Spam filtering rules
-- Authentication failures (SPF, DKIM, DMARC)
-
-Blocked addresses are temporarily suppressed until the issue is resolved.
+Common causes include typos (e.g., gmial.com), non-existent domains, malformed formats, or disposable addresses that no longer exist.
