@@ -1,7 +1,7 @@
 ---
-title: "Retries and Replays"
-description: "Learn how AutoSend automatically handles failed webhook deliveries."
-sidebarTitle: " Retries and Replays"
+title: 'Retries and Replays'
+description: 'Learn how AutoSend automatically handles failed webhook deliveries.'
+sidebarTitle: ' Retries and Replays'
 ---
 
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
@@ -13,25 +13,27 @@ AutoSend automatically retries webhook deliveries that fail due to network error
 
 ### Retry Schedule
 
-If AutoSend does not receive a 200-299 response from your webhook endpoint, we will retry the webhook delivery based on the following schedule:
+If AutoSend does not receive a 2xx (200-299) response from your webhook endpoint, we will retry the webhook delivery using an **exponential backoff strategy**.
 
-| Attempt   | Delay After Previous Failure |
-| --------- | ---------------------------- |
-| 1st Retry | 1 minute                     |
-| 2nd Retry | 5 minutes                    |
-| 3rd Retry | 15 minutes                   |
+| Attempt   | Approximate Delay After Previous Failure |
+| --------- | ---------------------------------------- |
+| 1st Retry | ~5 seconds                               |
+| 2nd Retry | ~10 seconds                              |
+| 3rd Retry | ~20 seconds                              |
 
 **Total Retry Attempts**: 3 retries (4 total delivery attempts including the initial attempt)
 
-**Backoff Strategy**: Exponential backoff with jitter to prevent thundering herd issues
+**Backoff Strategy**: Exponential backoff starting with a 5-second delay, doubling with each retry
+
+**Request Timeout**: Each delivery attempt will timeout after **10 seconds** if no response is received
 
 ### Example Timeline
 
 ```
 Initial Attempt:  10:00:00 - Failed (500 Internal Server Error)
-1st Retry:        10:01:00 - Failed (Timeout)
-2nd Retry:        10:06:00 - Failed (503 Service Unavailable)
-3rd Retry:        10:21:00 - Success (200 OK)
+1st Retry:        10:00:05 - Failed (Timeout after 10s)
+2nd Retry:        10:00:15 - Failed (503 Service Unavailable)
+3rd Retry:        10:00:35 - Success (200 OK)
 ```
 
 ---
@@ -46,79 +48,178 @@ AutoSend will retry webhook deliveries when:
 - **Network errors** occur (connection refused, DNS resolution failure, etc.)
 - **Timeouts** happen (no response within 10 seconds)
 - **SSL/TLS errors** are encountered
+- **Request aborted** due to timeout
 
 ### No Retry for Success
 
 If your endpoint returns any 2xx status code (200-299), the delivery is marked as successful and no retries will occur.
 
-```javascript
+```javascript theme={null}
 // ✅ These responses mark delivery as successful (no retry)
 res.status(200).json({ received: true });
 res.status(201).json({ queued: true });
 res.status(202).json({ accepted: true });
 
 // ❌ These responses trigger retries
-res.status(400).json({ error: "Bad request" });
-res.status(500).json({ error: "Internal error" });
-res.status(503).json({ error: "Service unavailable" });
+res.status(400).json({ error: 'Bad request' });
+res.status(401).json({ error: 'Unauthorized' });
+res.status(500).json({ error: 'Internal error' });
+res.status(503).json({ error: 'Service unavailable' });
 ```
+
+---
+
+## Webhook Headers
+
+Every webhook delivery includes these headers:
+
+| Header                  | Description                                       | Example                  |
+| ----------------------- | ------------------------------------------------- | ------------------------ |
+| `Content-Type`          | Always `application/json`                         | `application/json`       |
+| `X-Webhook-Signature`   | HMAC-SHA256 signature for verification            | `a1b2c3d4e5f6...`        |
+| `X-Webhook-Event`       | The event type being delivered                    | `email.sent`             |
+| `X-Webhook-Delivery-Id` | Unique ID for this delivery (same across retries) | `deliver-webhook-123456` |
+| `X-Webhook-Timestamp`   | Unix timestamp (milliseconds) when sent           | `1699876543210`          |
+
+**Important**: The `X-Webhook-Delivery-Id` remains the same across all retry attempts for the same webhook event, making it perfect for implementing idempotency.
 
 ---
 
 ## After All Retries Fail
 
-After the conclusion of all retry attempts (initial + 3 retries), if the webhook still hasn't been delivered successfully, the delivery will be marked as **failed** in the system.
+After the conclusion of all retry attempts (initial + 3 retries = 4 total attempts), if the webhook still hasn't been delivered successfully, the delivery will be marked as **failed** in the system.
 
-Once a delivery is marked as failed after exhausting all retries, AutoSend will **not** automatically retry it again.
+### What Happens Next
+
+- The delivery log will show the final failure status
+- The webhook's `failureCount` is incremented
+- The webhook's `lastFailedAt` timestamp is updated
+- Failed delivery records are kept for **48 hours** for debugging
+- AutoSend will **not** automatically retry it again
+
+### Webhook Auto-Disable (Optional)
+
+By default, webhooks are NOT automatically disabled after consecutive failures. However, the system tracks:
+
+- `failureCount`: Number of consecutive delivery failures
+- `MAX_FAILURES` constant: Set to 5 (currently not enforced but available for future use)
+
+You can monitor these metrics to manually disable problematic webhooks.
 
 ---
 
-## Monitoring Your Webhook
+## Delivery Logs
+
+### Log Retention
+
+AutoSend keeps delivery attempt logs for debugging:
+
+- **Successful deliveries**: Retained for **24 hours**
+- **Failed deliveries**: Retained for **48 hours**
+- **Maximum completed jobs kept**: 1,000 most recent
+
+### Log Information
+
+Each delivery log includes:
+
+- Webhook ID and organization/project IDs
+- Event type
+- Full payload sent
+- Destination URL
+- HTTP status code
+- Response body and headers
+- Success/failure status
+- Error message (if failed)
+- Number of attempts made
+- Duration of the request (in milliseconds)
+- Timestamp of the delivery attempt
+
+---
+
+## Monitoring Your Webhooks
 
 ### Check Webhook Status
 
-Monitor your webhooks:
+Monitor your webhooks from the AutoSend dashboard:
 
 <Steps>
-<Step title="Navigate to Webhooks from the AutoSend sidebar" titleSize='h3' />
-<Step title="View your webhooks with their current status" titleSize='h3'>
-   - **Enabled** (green) - Webhook is active
-   - **Disabled** (gray) - Webhook is inactive
-</Step>
+  <Step title="Navigate to Webhooks from the AutoSend sidebar" titleSize="h3" />
+
+  <Step title="View your webhooks with their current status" titleSize="h3">
+    * **Active** (green) - Webhook is enabled and functional
+    * **Inactive** (gray) - Webhook is disabled
+    * **Disabled** (red) - Webhook has been disabled due to issues
+  </Step>
 </Steps>
 
-### Track Webhook Health
+### Webhook Health Metrics
 
-The webhook model tracks important metrics:
+Each webhook tracks important metrics:
 
-- `failureCount`: Number of consecutive failures
-- `lastSuccessAt`: Timestamp of last successful delivery
-- `lastFailedAt`: Timestamp of last failed delivery
-- `isActive`: Whether the webhook is enabled
+| Metric            | Description                               |
+| ----------------- | ----------------------------------------- |
+| `failureCount`    | Number of consecutive delivery failures   |
+| `lastSuccessAt`   | Timestamp of last successful delivery     |
+| `lastFailedAt`    | Timestamp of last failed delivery         |
+| `lastDeliveredAt` | Timestamp of last delivery attempt (any)  |
+| `isActive`        | Whether the webhook is enabled            |
+| `status`          | Current status (active/inactive/disabled) |
 
-These metrics are updated automatically by the system.
+These metrics are updated automatically:
+
+- **On success**: `failureCount` resets to 0, `lastSuccessAt` and `lastDeliveredAt` are updated
+- **On failure**: `failureCount` increments by 1, `lastFailedAt` is updated
 
 ### Implement Your Own Monitoring
 
 Set up your own monitoring for webhook health:
 
-```javascript Nodejs expandable
+```javascript Nodejs expandable theme={null}
 // Example: Check webhook health periodically
 async function monitorWebhookHealth() {
-  // Track webhook deliveries in your database
-  const recentDeliveries = await db.webhookLogs.find({
-    timestamp: { $gte: Date.now() - 3600000 }, // Last hour
+  // Fetch webhook delivery logs from your database
+  const recentDeliveries = await db.webhookDeliveryLogs.find({
+    createdAt: { $gte: new Date(Date.now() - 3600000) }, // Last hour
   });
 
   const failureCount = recentDeliveries.filter((d) => !d.success).length;
   const successCount = recentDeliveries.filter((d) => d.success).length;
-  const successRate = (successCount / recentDeliveries.length) * 100;
+  const totalDeliveries = recentDeliveries.length;
+  const successRate =
+    totalDeliveries > 0 ? (successCount / totalDeliveries) * 100 : 100;
 
+  // Calculate average response time
+  const avgDuration =
+    recentDeliveries.reduce((sum, d) => sum + d.duration, 0) / totalDeliveries;
+
+  console.log({
+    totalDeliveries,
+    successCount,
+    failureCount,
+    successRate: `${successRate.toFixed(2)}%`,
+    avgResponseTime: `${avgDuration.toFixed(0)}ms`,
+  });
+
+  // Alert if success rate drops
   if (successRate < 90) {
     await sendAlert({
-      title: "Webhook Health Alert",
-      message: `Webhook success rate dropped to ${successRate}%`,
-      severity: "warning",
+      title: 'Webhook Health Alert',
+      message: `Webhook success rate dropped to ${successRate.toFixed(2)}%`,
+      details: {
+        successCount,
+        failureCount,
+        totalDeliveries,
+      },
+      severity: 'warning',
+    });
+  }
+
+  // Alert if response time is slow
+  if (avgDuration > 5000) {
+    await sendAlert({
+      title: 'Webhook Performance Alert',
+      message: `Average webhook response time is ${avgDuration.toFixed(0)}ms`,
+      severity: 'warning',
     });
   }
 }
@@ -129,299 +230,634 @@ setInterval(monitorWebhookHealth, 5 * 60 * 1000);
 
 ---
 
-
 ## Best Practices
 
 <AccordionGroup>
+  <Accordion title="Return 2xx for Successful Processing">
+    Always return a 2xx status code when your endpoint successfully receives and processes a webhook:
 
- <Accordion title="Return 2xx for Successful Processing">
+    ```javascript Nodejs expandable theme={null}
+    app.post("/webhooks/autosend", async (req, res) => {
+      try {
+        // Verify signature first
+        const signature = req.headers["x-webhook-signature"];
+        const body = JSON.stringify(req.body);
 
-Always return a 2xx status code when your endpoint successfully receives and processes a webhook:
+        if (!verifySignature(signature, body, WEBHOOK_SECRET)) {
+          // Return 401 for invalid signature (will retry)
+          // Or return 200 to prevent retries for invalid signatures
+          return res.status(401).json({ error: "Invalid signature" });
+        }
 
-```javascript Nodejs expandable
-app.post("/webhooks/autosend", async (req, res) => {
-  try {
-    // Verify signature
-    if (!verifySignature(req)) {
-      // Return 401 for invalid signature (will retry)
-      return res.status(401).json({ error: "Invalid signature" });
-    }
+        // Queue for background processing
+        await queue.add("process-webhook", {
+          deliveryId: req.headers["x-webhook-delivery-id"],
+          event: req.body.type,
+          data: req.body.data,
+        });
 
-    // Queue for processing
-    await queue.add("process-webhook", req.body);
+        // Return 200 immediately - don't wait for processing
+        res.status(200).json({ received: true });
+      } catch (error) {
+        console.error("Webhook processing error:", error);
+        // Return 500 for temporary errors (will retry)
+        res.status(500).json({ error: "Internal error" });
+      }
+    });
+    ```
 
-    // Return 200 immediately
-    res.status(200).json({ received: true });
-  } catch (error) {
-    // Return 500 for temporary errors (will retry)
-    res.status(500).json({ error: "Internal error" });
-  }
-});
-```
+  </Accordion>
 
- </Accordion>
+  <Accordion title="Implement Idempotency with Delivery ID">
+    Use the `X-Webhook-Delivery-Id` header to prevent duplicate processing during retries:
+
+    ```javascript Nodejs expandable theme={null}
+    // Using Redis for idempotency tracking
+    const redis = require("redis");
+    const client = redis.createClient();
+
+    app.post("/webhooks/autosend", async (req, res) => {
+      const deliveryId = req.headers["x-webhook-delivery-id"];
+      const ttl = 86400; // 24 hours
+
+      // Check if already processed
+      const exists = await client.exists(`webhook:${deliveryId}`);
+      if (exists) {
+        console.log(`Duplicate delivery ${deliveryId}, skipping`);
+        return res.status(200).json({ received: true, duplicate: true });
+      }
+
+      try {
+        // Process the webhook
+        await processWebhook(req.body);
+
+        // Mark as processed (with TTL to auto-cleanup)
+        await client.setex(`webhook:${deliveryId}`, ttl, "processed");
+
+        res.status(200).json({ received: true });
+      } catch (error) {
+        // Don't mark as processed on error so it can be retried
+        console.error("Processing failed:", error);
+        res.status(500).json({ error: "Processing failed" });
+      }
+    });
+    ```
+
+    **Alternative: Database-based idempotency**
+
+    ```javascript Nodejs expandable theme={null}
+    app.post("/webhooks/autosend", async (req, res) => {
+      const deliveryId = req.headers["x-webhook-delivery-id"];
+
+      try {
+        // Try to insert the delivery ID (unique constraint)
+        await db.webhookDeliveries.insertOne({
+          deliveryId,
+          receivedAt: new Date(),
+          processed: false,
+        });
+      } catch (error) {
+        if (error.code === 11000) {
+          // Duplicate key - already processed
+          console.log(`Duplicate delivery ${deliveryId}`);
+          return res.status(200).json({ received: true, duplicate: true });
+        }
+        throw error;
+      }
+
+      try {
+        await processWebhook(req.body);
+
+        // Mark as processed
+        await db.webhookDeliveries.updateOne(
+          { deliveryId },
+          { $set: { processed: true, processedAt: new Date() } }
+        );
+
+        res.status(200).json({ received: true });
+      } catch (error) {
+        console.error("Processing failed:", error);
+        res.status(500).json({ error: "Processing failed" });
+      }
+    });
+    ```
+
+  </Accordion>
+
   <Accordion title="Differentiate Between Temporary and Permanent Errors">
+    Return appropriate status codes based on the type of error:
 
-Return appropriate status codes based on the type of error:
+    ```javascript Nodejs expandable theme={null}
+    app.post("/webhooks/autosend", async (req, res) => {
+      try {
+        // Verify signature
+        const signature = req.headers["x-webhook-signature"];
+        const isValid = verifySignature(signature, req.body, WEBHOOK_SECRET);
 
-```javascript Nodejs expandable
-app.post("/webhooks/autosend", async (req, res) => {
-  try {
-    // Verify signature
-    if (!verifySignature(req)) {
-      // Permanent error - return 401 but handle gracefully
-      // You might want to return 200 to prevent retries for invalid signatures
-      return res
-        .status(200)
-        .json({ error: "Invalid signature", retryable: false });
-    }
+        if (!isValid) {
+          // Invalid signature is a permanent error
+          // Return 200 to prevent unnecessary retries
+          return res.status(200).json({
+            error: "Invalid signature",
+            retryable: false
+          });
+        }
 
-    // Process webhook
-    await processWebhook(req.body);
-    res.status(200).json({ received: true });
-  } catch (error) {
-    if (error.code === "DATABASE_CONNECTION_ERROR") {
-      // Temporary error - return 500 to trigger retry
-      return res
-        .status(500)
-        .json({ error: "Database unavailable", retryable: true });
-    } else if (error.code === "INVALID_DATA") {
-      // Permanent error - return 200 to prevent retries
-      return res.status(200).json({ error: "Invalid data", retryable: false });
-    } else {
-      // Unknown error - return 500 to be safe
-      return res.status(500).json({ error: "Internal error", retryable: true });
-    }
-  }
-});
-```
- </Accordion>
-  <Accordion title="Handle Duplicate Deliveries">
-Since webhooks can be retried, implement idempotency to prevent duplicate processing:
+        // Process webhook
+        await processWebhook(req.body);
+        res.status(200).json({ received: true });
+      } catch (error) {
+        console.error("Webhook error:", error);
 
-```javascript Nodejs expandable
-const processedDeliveries = new Set();
+        // Determine if error is temporary or permanent
+        if (error.code === "ECONNREFUSED" || error.code === "ETIMEDOUT") {
+          // Temporary database/service error - retry
+          return res.status(500).json({
+            error: "Service temporarily unavailable",
+            retryable: true
+          });
+        } else if (error.name === "ValidationError") {
+          // Permanent error - bad data, don't retry
+          return res.status(200).json({
+            error: "Invalid data format",
+            retryable: false
+          });
+        } else {
+          // Unknown error - retry to be safe
+          return res.status(500).json({
+            error: "Internal error",
+            retryable: true
+          });
+        }
+      }
+    });
+    ```
 
-app.post("/webhooks/autosend", async (req, res) => {
-  const deliveryId = req.headers["x-webhook-delivery-id"];
+  </Accordion>
 
-  // Check if already processed
-  if (processedDeliveries.has(deliveryId)) {
-    console.log("Duplicate delivery, skipping");
-    return res.status(200).json({ received: true, duplicate: true });
-  }
+  <Accordion title="Respond Quickly (Under 10 Seconds)">
+    Your endpoint MUST respond within 10 seconds or the request will timeout. Process webhooks asynchronously:
 
-  try {
-    await processWebhook(req.body);
-    processedDeliveries.add(deliveryId);
-    res.status(200).json({ received: true });
-  } catch (error) {
-    // Don't add to processed set on error so it can be retried
-    res.status(500).json({ error: "Processing failed" });
-  }
-});
-```
- </Accordion>
-  <Accordion title="Log All Attempts">
-Keep detailed logs of all webhook delivery attempts for debugging:
+    ```javascript Nodejs expandable theme={null}
+    const Queue = require("bull");
+    const webhookQueue = new Queue("webhooks", {
+      redis: { host: "localhost", port: 6379 },
+    });
 
-```javascript Nodejs expandable
-app.post("/webhooks/autosend", async (req, res) => {
-  const deliveryId = req.headers["x-webhook-delivery-id"];
-  const event = req.body.event;
+    // ❌ Bad - Synchronous processing (may timeout)
+    app.post("/webhooks/autosend", async (req, res) => {
+      await updateDatabase(req.body);      // 2 seconds
+      await sendToAnalytics(req.body);     // 3 seconds
+      await notifySlack(req.body);         // 2 seconds
+      await triggerWorkflow(req.body);     // 4 seconds
+      // Total: 11 seconds - WILL TIMEOUT!
 
-  logger.info(
-    {
-      deliveryId,
-      event,
-      timestamp: new Date().toISOString(),
-      attempt: req.headers["x-webhook-attempt"] || 1,
-    },
-    "Webhook delivery attempt"
-  );
+      res.status(200).json({ received: true });
+    });
 
-  try {
-    await processWebhook(req.body);
+    // ✅ Good - Asynchronous processing
+    app.post("/webhooks/autosend", async (req, res) => {
+      const deliveryId = req.headers["x-webhook-delivery-id"];
 
-    logger.info({ deliveryId, event }, "Webhook processed successfully");
-    res.status(200).json({ received: true });
-  } catch (error) {
-    logger.error(
-      {
+      // Queue for background processing (fast!)
+      await webhookQueue.add("process", {
+        deliveryId,
+        event: req.body.type,
+        data: req.body.data,
+      });
+
+      // Respond immediately (< 100ms)
+      res.status(200).json({ received: true });
+    });
+
+    // Process in background worker
+    webhookQueue.process("process", async (job) => {
+      const { deliveryId, event, data } = job.data;
+
+      console.log(`Processing webhook ${deliveryId} for event ${event}`);
+
+      await updateDatabase(data);
+      await sendToAnalytics(data);
+      await notifySlack(data);
+      await triggerWorkflow(data);
+
+      console.log(`Completed processing webhook ${deliveryId}`);
+    });
+    ```
+
+  </Accordion>
+
+  <Accordion title="Log All Delivery Attempts">
+    Keep detailed logs of all webhook delivery attempts for debugging:
+
+    ```javascript Nodejs expandable theme={null}
+    const winston = require("winston");
+
+    const logger = winston.createLogger({
+      level: "info",
+      format: winston.format.json(),
+      transports: [
+        new winston.transports.File({ filename: "webhooks.log" }),
+        new winston.transports.Console(),
+      ],
+    });
+
+    app.post("/webhooks/autosend", async (req, res) => {
+      const deliveryId = req.headers["x-webhook-delivery-id"];
+      const event = req.body.type;
+      const timestamp = req.headers["x-webhook-timestamp"];
+
+      logger.info("Webhook received", {
         deliveryId,
         event,
-        error: error.message,
-        stack: error.stack,
-      },
-      "Webhook processing failed"
-    );
+        timestamp,
+        receivedAt: new Date().toISOString(),
+      });
 
-    res.status(500).json({ error: "Processing failed" });
-  }
-});
-```
- </Accordion>
-  <Accordion title="Respond Quickly">
-Your endpoint should respond within 10 seconds. Process webhooks asynchronously:
+      try {
+        await processWebhook(req.body);
 
-```javascript Nodejs expandable
-// ❌ Bad - Synchronous processing
-app.post("/webhooks/autosend", async (req, res) => {
-  await updateDatabase(data);
-  await sendToAnalytics(data);
-  await notifySlack(data);
-  res.status(200).json({ received: true });
-});
+        logger.info("Webhook processed successfully", {
+          deliveryId,
+          event,
+          processingTime: Date.now() - parseInt(timestamp),
+        });
 
-// ✅ Good - Asynchronous processing
-app.post("/webhooks/autosend", async (req, res) => {
-  // Queue for background processing
-  await queue.add("process-webhook", { event, data });
+        res.status(200).json({ received: true });
+      } catch (error) {
+        logger.error("Webhook processing failed", {
+          deliveryId,
+          event,
+          error: error.message,
+          stack: error.stack,
+        });
 
-  // Respond immediately
-  res.status(200).json({ received: true });
-});
-```
- </Accordion>
+        res.status(500).json({ error: "Processing failed" });
+      }
+    });
+    ```
+
+  </Accordion>
+
   <Accordion title="Test Retry Behavior">
-Test how your endpoint handles retries:
- 
-```javascript Nodejs expandable 
+    Test how your endpoint handles retries in development:
 
-// Simulate intermittent failures for testing
-let attemptCount = 0;
+    ```javascript Nodejs expandable theme={null}
+    // Simulate intermittent failures for testing
+    const deliveryAttempts = new Map();
 
-app.post("/webhooks/autosend", async (req, res) => {
-  attemptCount++;
+    app.post("/webhooks/autosend", async (req, res) => {
+      const deliveryId = req.headers["x-webhook-delivery-id"];
 
-  // Fail first 2 attempts, succeed on 3rd
-  if (attemptCount <= 2) {
-    console.log(`Simulating failure on attempt ${attemptCount}`);
-    return res.status(500).json({ error: "Simulated error" });
-  }
+      // Track attempts for this delivery
+      const attempts = (deliveryAttempts.get(deliveryId) || 0) + 1;
+      deliveryAttempts.set(deliveryId, attempts);
 
-  console.log(`Success on attempt ${attemptCount}`);
-  attemptCount = 0; // Reset for next webhook
-  res.status(200).json({ received: true });
-});
-```
+      console.log(`Delivery ${deliveryId} - Attempt ${attempts}`);
 
- </Accordion>
+      // Simulate: Fail first 2 attempts, succeed on 3rd
+      if (attempts <= 2) {
+        console.log(`Simulating failure on attempt ${attempts}`);
+        return res.status(500).json({ error: "Simulated error" });
+      }
+
+      console.log(`Success on attempt ${attempts}`);
+
+      // Process webhook
+      await processWebhook(req.body);
+
+      // Clean up tracking
+      deliveryAttempts.delete(deliveryId);
+
+      res.status(200).json({ received: true, attempts });
+    });
+    ```
+
+  </Accordion>
+
+  <Accordion title="Handle Concurrent Deliveries">
+    AutoSend processes up to 5 webhooks concurrently. Ensure your endpoint can handle concurrent requests:
+
+    ```javascript Nodejs expandable theme={null}
+    const express = require("express");
+    const cluster = require("cluster");
+    const os = require("os");
+
+    if (cluster.isMaster) {
+      // Fork workers (one per CPU core)
+      const numCPUs = os.cpus().length;
+      console.log(`Master process starting ${numCPUs} workers`);
+
+      for (let i = 0; i < numCPUs; i++) {
+        cluster.fork();
+      }
+
+      cluster.on("exit", (worker) => {
+        console.log(`Worker ${worker.process.pid} died, starting new worker`);
+        cluster.fork();
+      });
+    } else {
+      // Worker process
+      const app = express();
+      app.use(express.json());
+
+      app.post("/webhooks/autosend", async (req, res) => {
+        try {
+          await processWebhook(req.body);
+          res.status(200).json({ received: true });
+        } catch (error) {
+          res.status(500).json({ error: "Processing failed" });
+        }
+      });
+
+      app.listen(3000, () => {
+        console.log(`Worker ${process.pid} listening on port 3000`);
+      });
+    }
+    ```
+
+  </Accordion>
 </AccordionGroup>
 
-
+---
 
 ## Troubleshooting
 
 <AccordionGroup>
-<Accordion title="High Failure Rate">
+  <Accordion title="High Failure Rate">
+    **Symptoms**: Webhooks failing frequently
 
-**Symptoms**: Webhooks failing frequently
+    **Possible Causes**:
 
-**Possible Causes**:
+    * Endpoint is down or unreachable
+    * Endpoint is timing out (>10 seconds)
+    * Endpoint is returning non-2xx status codes
+    * SSL/TLS certificate issues
+    * Rate limiting on your server
 
-- Endpoint is down or unreachable
-- Endpoint is timing out (>10 seconds)
-- Endpoint is returning non-2xx status codes
-- SSL/TLS certificate issues
+    **Solutions**:
 
-**Solutions**:
+    1. **Test your endpoint manually**:
 
-1. **Test your endpoint manually**:
+    ```bash theme={null}
+    curl -X POST https://your-endpoint.com/webhooks/autosend \
+      -H "Content-Type: application/json" \
+      -H "X-Webhook-Signature: test_signature" \
+      -H "X-Webhook-Event: email.sent" \
+      -H "X-Webhook-Delivery-Id: test-123" \
+      -H "X-Webhook-Timestamp: $(date +%s)000" \
+      -d '{
+        "type": "email.sent",
+        "createdAt": "2025-01-05T10:00:00.000Z",
+        "data": {
+          "emailId": "test123",
+          "from": "test@example.com",
+          "to": {"email": "user@example.com", "name": "Test User"},
+          "subject": "Test Email"
+        }
+      }'
+    ```
 
-```bash
-curl -X POST https://your-endpoint.com/webhooks/autosend \
-  -H "Content-Type: application/json" \
-  -H "X-Webhook-Signature: test" \
-  -d '{"event":"test","data":{"test":true}}'
-```
+    2. **Check your server logs** for error messages
 
-2. **Check your server logs** for error messages
+    3. **Verify SSL certificate is valid**:
 
-3. **Verify SSL certificate**:
+    ```bash theme={null}
+    openssl s_client -connect your-endpoint.com:443 -servername your-endpoint.com
+    ```
 
-```bash
-curl -v https://your-endpoint.com/webhooks/autosend
-```
+    4. **Check response time**:
 
-4. **Check response time**:
+    ```bash theme={null}
+    time curl -X POST https://your-endpoint.com/webhooks/autosend \
+      -H "Content-Type: application/json" \
+      -d '{"type":"test","data":{}}'
+    ```
 
-```bash
-time curl -X POST https://your-endpoint.com/webhooks/autosend \
-  -H "Content-Type: application/json" \
-  -d '{"test":true}'
-```
+    5. **Monitor your server resources** (CPU, memory, disk) to ensure it's not overloaded
 
-5. **Review your code** for errors in webhook processing logic
+    6. **Check for rate limiting** on your server or firewall
 
-</Accordion>
-<Accordion title="Signature Verification Failures">
-**Symptoms**: All webhooks returning 401
+  </Accordion>
 
-**Possible Causes**:
+  <Accordion title="Signature Verification Failures">
+    **Symptoms**: All webhooks returning 401 or failing signature verification
 
-- Using wrong webhook secret
-- Incorrect signature verification logic
-- Body parsing issues
+    **Possible Causes**:
 
-**Solutions**:
+    * Using wrong webhook secret
+    * Incorrect signature verification logic
+    * Body parsing issues (modified body)
+    * Character encoding issues
 
-See <a href={APP_PATHS.webhookVerifyRequests} title='Verify Webhook Requests'>Verify Webhook Requests</a> for detailed troubleshooting.
-</Accordion>
-<Accordion title="Timeout Issues" >
+    **Solutions**:
 
-**Symptoms**: Webhooks timing out
+    See <a href={APP_PATHS.webhookVerifyRequests} title="Verify Webhook Requests">Verify Webhook Requests</a> for detailed troubleshooting.
 
-**Possible Causes**:
+    **Quick verification test**:
 
-- Synchronous processing taking too long
-- Database queries are slow
-- External API calls are slow
+    ```javascript theme={null}
+    const crypto = require("crypto");
 
-**Solutions**:
+    function verifyWebhookSignature(signature, body, secret) {
+      const expectedSignature = crypto
+        .createHmac("sha256", secret)
+        .update(body)
+        .digest("hex");
 
-1. Use background job queues:
+      console.log("Received signature:", signature);
+      console.log("Expected signature:", expectedSignature);
+      console.log("Match:", signature === expectedSignature);
 
-```javascript
-// Use Bull, BullMQ, or similar
-const Queue = require("bull");
-const webhookQueue = new Queue("webhooks");
+      return signature === expectedSignature;
+    }
 
-app.post("/webhooks/autosend", async (req, res) => {
-  // Queue immediately
-  await webhookQueue.add(req.body);
+    app.post("/webhooks/autosend", express.raw({ type: "application/json" }), (req, res) => {
+      const signature = req.headers["x-webhook-signature"];
+      const body = req.body.toString(); // Raw body as string
 
-  // Respond fast
-  res.status(200).json({ received: true });
-});
+      if (!verifyWebhookSignature(signature, body, WEBHOOK_SECRET)) {
+        return res.status(401).json({ error: "Invalid signature" });
+      }
 
-// Process in background
-webhookQueue.process(async (job) => {
-  await processWebhook(job.data);
-});
-```
+      // Parse body after verification
+      const data = JSON.parse(body);
+      res.status(200).json({ received: true });
+    });
+    ```
 
-2. Optimize database queries
-3. Add database indexes
-4. Cache frequently accessed data
+  </Accordion>
 
-</Accordion>
+  <Accordion title="Timeout Issues">
+    **Symptoms**: Webhooks timing out (10 second timeout)
+
+    **Possible Causes**:
+
+    * Synchronous processing taking too long
+    * Database queries are slow
+    * External API calls are slow
+    * No connection pooling
+    * Inefficient code
+
+    **Solutions**:
+
+    1. **Use background job queues**:
+
+    ```javascript theme={null}
+    const Queue = require("bull");
+    const webhookQueue = new Queue("webhooks");
+
+    app.post("/webhooks/autosend", async (req, res) => {
+      // Queue immediately (fast)
+      await webhookQueue.add(req.body, {
+        attempts: 3,
+        backoff: { type: "exponential", delay: 2000 },
+      });
+
+      // Respond fast
+      res.status(200).json({ received: true });
+    });
+
+    // Process in background
+    webhookQueue.process(async (job) => {
+      const { type, data } = job.data;
+
+      // Time-consuming operations here
+      await updateDatabase(data);
+      await callExternalAPI(data);
+      await generateReport(data);
+    });
+    ```
+
+    2. **Optimize database queries**:
+
+    ```javascript theme={null}
+    // ❌ Slow - Sequential queries
+    const user = await db.users.findOne({ email: data.to.email });
+    const campaign = await db.campaigns.findOne({ _id: data.campaignId });
+    const template = await db.templates.findOne({ _id: data.templateId });
+
+    // ✅ Fast - Parallel queries
+    const [user, campaign, template] = await Promise.all([
+      db.users.findOne({ email: data.to.email }),
+      db.campaigns.findOne({ _id: data.campaignId }),
+      db.templates.findOne({ _id: data.templateId }),
+    ]);
+    ```
+
+    3. **Add database indexes**:
+
+    ```javascript theme={null}
+    // Create indexes on frequently queried fields
+    db.webhookDeliveries.createIndex({ deliveryId: 1 }, { unique: true });
+    db.webhookDeliveries.createIndex({ createdAt: -1 });
+    db.webhookLogs.createIndex({ webhookId: 1, createdAt: -1 });
+    ```
+
+    4. **Use connection pooling**:
+
+    ```javascript theme={null}
+    const mongoose = require("mongoose");
+
+    // Configure connection pool
+    mongoose.connect(MONGODB_URI, {
+      poolSize: 10,
+      socketTimeoutMS: 45000,
+      family: 4,
+    });
+    ```
+
+    5. **Cache frequently accessed data**:
+
+    ```javascript theme={null}
+    const NodeCache = require("node-cache");
+    const cache = new NodeCache({ stdTTL: 600 }); // 10 minute TTL
+
+    async function getWebhookConfig(webhookId) {
+      // Check cache first
+      let config = cache.get(`webhook:${webhookId}`);
+
+      if (!config) {
+        // Fetch from database
+        config = await db.webhooks.findOne({ _id: webhookId });
+        cache.set(`webhook:${webhookId}`, config);
+      }
+
+      return config;
+    }
+    ```
+
+  </Accordion>
+
+  <Accordion title="Duplicate Processing">
+    **Symptoms**: Same webhook processed multiple times
+
+    **Possible Causes**:
+
+    * Not implementing idempotency
+    * Retry logic processing same delivery multiple times
+    * Race conditions in distributed systems
+
+    **Solutions**:
+
+    Implement idempotency using `X-Webhook-Delivery-Id` (see Best Practices section above).
+
+  </Accordion>
+
+  <Accordion title="Missing Webhooks">
+    **Symptoms**: Not receiving expected webhooks
+
+    **Possible Causes**:
+
+    * Webhook not configured for the event type
+    * Webhook is inactive or disabled
+    * Firewall blocking incoming requests
+    * Incorrect URL configured
+
+    **Solutions**:
+
+    1. **Check webhook configuration** in AutoSend dashboard
+    2. **Verify event types** are selected for the webhook
+    3. **Check webhook is active** (not disabled)
+    4. **Test webhook URL** is accessible from external networks
+    5. **Check firewall rules** allow incoming traffic on your endpoint port
+    6. **Review AutoSend delivery logs** for delivery attempts
+
+  </Accordion>
 </AccordionGroup>
 
 ---
 
 ## Related Resources
+
 <Columns cols={2}>
   <Card title="Introduction" icon="book" iconType="duotone" href={APP_PATHS.webhookIntroduction}>
-   Getting started with webhooks
+    Getting started with webhooks
   </Card>
-  <Card title="Event Types" icon="list" iconType="duotone" href={APP_PATHS.webhookEventType}>
-    Complete list of webhook events
-  </Card>
-  <Card title="Verify Webhook Requests" icon="shield-check" iconType="duotone" href={APP_PATHS.webhookVerifyRequests}>
-   Security and signature verification
-  </Card>
+
+{' '}
+
+<Card
+  title='Event Types'
+  icon='list'
+  iconType='duotone'
+  href={APP_PATHS.webhookEventType}
+>
+  Complete list of webhook events
+</Card>
+
+{' '}
+
+<Card
+  title='Verify Webhook Requests'
+  icon='shield-check'
+  iconType='duotone'
+  href={APP_PATHS.webhookVerifyRequests}
+>
+  Security and signature verification
+</Card>
+
   <Card title="Webhooks" icon="gear" iconType="duotone" href={AUTOSEND_PATHS.webhooks}>
-   Manage your webhooks from the AutoSend sidebar
+    Manage your webhooks from the AutoSend sidebar
   </Card>
 </Columns>
