@@ -23,10 +23,36 @@ All webhook payloads follow this structure:
   "type": "event.type",
   "createdAt": "2025-11-12T10:30:00.000Z",
   "data": {
-    // Event-specific data
+    "emailId": "64f1a2b3c4d5e6f7g8h9i0j1",
+    "from": "sender@yourdomain.com",
+    "to": {
+      "email": "user@example.com",
+      "name": "John Doe"
+    },
+    "subject": "Email Subject",
+    "test": false,
+    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
+    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
+    "workflowAutomationId": "64f1a2b3c4d5e6f7g8h9i0j5",
+    "batchId": "64f1a2b3c4d5e6f7g8h9i0j6"
+    // Additional event-specific fields
   }
 }
 ```
+
+**Common Fields (for most email events):**
+
+- `emailId` - Unique identifier for the email activity
+- `from` - Sender email address
+- `to` - Recipient object containing email and name
+- `subject` - Email subject line
+- `test` - Boolean indicating if this is a test email (true) or production (false)
+- `campaignId` - Campaign identifier (optional)
+- `templateId` - Template identifier (optional)
+- `workflowAutomationId` - Workflow automation identifier (optional)
+- `batchId` - Batch identifier (optional)
+
+**Note:** Subscription events (`email.unsubscribed`, `email.group_unsubscribed`, `email.group_resubscribed`) and contact events have different structures for privacy reasons. See individual event details below.
 
 ## Supported Event Types
 
@@ -71,35 +97,33 @@ Triggered when an email is successfully sent to the recipient's mail server via 
   "type": "email.sent",
   "createdAt": "2025-11-12T10:00:00.000Z",
   "data": {
-    "createdAt": "2025-11-12T10:00:00.000Z",
     "emailId": "64f1a2b3c4d5e6f7g8h9i0j1",
-    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
-    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
-    "workflowAutomationId": "64f1a2b3c4d5e6f7g8h9i0j5",
-    "batchId": "64f1a2b3c4d5e6f7g8h9i0j6",
-    "timestamp": "2025-11-12T10:00:00.000Z",
     "from": "sender@yourdomain.com",
     "to": {
       "email": "user@example.com",
       "name": "John Doe"
     },
-    "subject": "Welcome to AutoSend"
+    "subject": "Welcome to AutoSend",
+    "test": false,
+    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
+    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
+    "workflowAutomationId": "64f1a2b3c4d5e6f7g8h9i0j5",
+    "batchId": "64f1a2b3c4d5e6f7g8h9i0j6"
   }
 }
 ```
 
 **Data Fields:**
 
-- `createdAt` - ISO 8601 timestamp when the event occurred
 - `emailId` - Unique identifier for the email activity
-- `campaignId` - Campaign ID (if sent as part of a campaign)
-- `templateId` - Template ID used for the email
-- `workflowAutomationId` - Workflow automation ID (if sent from automation)
-- `batchId` - Batch ID (if sent as part of a batch)
-- `timestamp` - When the email was sent
 - `from` - Sender email address
 - `to` - Recipient object with email and name
 - `subject` - Email subject line
+- `test` - Boolean indicating whether this is a test email (true) or production (false)
+- `campaignId` - Campaign ID (optional, if sent as part of a campaign)
+- `templateId` - Template ID used for the email (optional)
+- `workflowAutomationId` - Workflow automation ID (optional, if sent from automation)
+- `batchId` - Batch ID (optional, if sent as part of a batch)
 
 **Use Cases:**
 
@@ -123,37 +147,33 @@ Triggered when AutoSend successfully delivers an email to the recipient's mail s
   "type": "email.delivered",
   "createdAt": "2025-11-12T10:15:00.000Z",
   "data": {
-    "createdAt": "2025-11-12T10:15:00.000Z",
     "emailId": "64f1a2b3c4d5e6f7g8h9i0j1",
-    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
-    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
-    "workflowAutomationId": "64f1a2b3c4d5e6f7g8h9i0j5",
-    "batchId": "64f1a2b3c4d5e6f7g8h9i0j6",
-    "timestamp": "2025-11-12T10:15:00.000Z",
-    "smtpResponse": "250 2.0.0 OK",
     "from": "sender@yourdomain.com",
     "to": {
       "email": "user@example.com",
       "name": "John Doe"
     },
-    "subject": "Welcome to AutoSend"
+    "subject": "Welcome to AutoSend",
+    "test": false,
+    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
+    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
+    "workflowAutomationId": "64f1a2b3c4d5e6f7g8h9i0j5",
+    "batchId": "64f1a2b3c4d5e6f7g8h9i0j6"
   }
 }
 ```
 
 **Data Fields:**
 
-- `createdAt` - ISO 8601 timestamp when the event occurred
 - `emailId` - Unique identifier for the email activity
-- `campaignId` - Campaign ID (if applicable)
-- `templateId` - Template ID used
-- `workflowAutomationId` - Workflow automation ID (if sent from automation)
-- `batchId` - Batch ID (if sent as part of a batch)
-- `timestamp` - When the email was delivered
-- `smtpResponse` - SMTP server response (if available)
 - `from` - Sender email address
 - `to` - Recipient object with email and name
 - `subject` - Email subject line
+- `test` - Boolean indicating whether this is a test email (true) or production (false)
+- `campaignId` - Campaign ID (optional, if applicable)
+- `templateId` - Template ID used (optional)
+- `workflowAutomationId` - Workflow automation ID (optional, if sent from automation)
+- `batchId` - Batch ID (optional, if sent as part of a batch)
 
 **Use Cases:**
 
@@ -177,35 +197,39 @@ Triggered when email delivery is temporarily delayed by the recipient's mail ser
   "type": "email.deferred",
   "createdAt": "2025-11-12T10:10:00.000Z",
   "data": {
-    "createdAt": "2025-11-12T10:10:00.000Z",
     "emailId": "64f1a2b3c4d5e6f7g8h9i0j1",
-    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
-    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
-    "workflowAutomationId": "64f1a2b3c4d5e6f7g8h9i0j5",
-    "batchId": "64f1a2b3c4d5e6f7g8h9i0j6",
-    "timestamp": "2025-11-12T10:10:00.000Z",
     "from": "sender@yourdomain.com",
     "to": {
       "email": "user@example.com",
       "name": "John Doe"
     },
-    "subject": "Welcome to AutoSend"
+    "subject": "Welcome to AutoSend",
+    "test": false,
+    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
+    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
+    "workflowAutomationId": "64f1a2b3c4d5e6f7g8h9i0j5",
+    "batchId": "64f1a2b3c4d5e6f7g8h9i0j6",
+    "delayType": "InternalFailure",
+    "delayReason": "Temporary connection failure",
+    "expirationTime": "2025-11-12T14:10:00.000Z"
   }
 }
 ```
 
 **Data Fields:**
 
-- `createdAt` - ISO 8601 timestamp when the event occurred
 - `emailId` - Unique identifier for the email activity
-- `campaignId` - Campaign ID (if applicable)
-- `templateId` - Template ID used
-- `workflowAutomationId` - Workflow automation ID (if sent from automation)
-- `batchId` - Batch ID (if sent as part of a batch)
-- `timestamp` - When the deferral occurred
 - `from` - Sender email address
 - `to` - Recipient object with email and name
 - `subject` - Email subject line
+- `test` - Boolean indicating whether this is a test email (true) or production (false)
+- `campaignId` - Campaign ID (optional, if applicable)
+- `templateId` - Template ID used (optional)
+- `workflowAutomationId` - Workflow automation ID (optional, if sent from automation)
+- `batchId` - Batch ID (optional, if sent as part of a batch)
+- `delayType` - Type of delay, e.g., "InternalFailure", "MailboxFull" (optional)
+- `delayReason` - Human-readable explanation of the delay (optional)
+- `expirationTime` - ISO 8601 timestamp when delivery attempts will stop (optional)
 
 **Use Cases:**
 
@@ -229,41 +253,39 @@ Triggered when an email bounces (fails to deliver).
   "type": "email.bounced",
   "createdAt": "2025-11-12T10:20:00.000Z",
   "data": {
-    "createdAt": "2025-11-12T10:20:00.000Z",
     "emailId": "64f1a2b3c4d5e6f7g8h9i0j1",
+    "from": "sender@yourdomain.com",
+    "to": {
+      "email": "invalid@example.com",
+      "name": "Invalid User"
+    },
+    "subject": "Welcome to AutoSend",
+    "test": false,
     "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
     "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
     "workflowAutomationId": "64f1a2b3c4d5e6f7g8h9i0j5",
     "batchId": "64f1a2b3c4d5e6f7g8h9i0j6",
-    "timestamp": "2025-11-12T10:20:00.000Z",
     "bounceType": "Permanent",
     "bounceSubType": "General",
-    "bounceReason": "Mailbox does not exist",
-    "from": "sender@yourdomain.com",
-    "to": {
-      "email": "user@example.com",
-      "name": "John Doe"
-    },
-    "subject": "Welcome to AutoSend"
+    "reason": "550 5.1.1 The email account that you tried to reach does not exist"
   }
 }
 ```
 
 **Data Fields:**
 
-- `createdAt` - ISO 8601 timestamp when the event occurred
 - `emailId` - Unique identifier for the email activity
-- `campaignId` - Campaign ID (if applicable)
-- `templateId` - Template ID used
-- `workflowAutomationId` - Workflow automation ID (if sent from automation)
-- `batchId` - Batch ID (if sent as part of a batch)
-- `timestamp` - When the bounce occurred
-- `bounceType` - Type of bounce (Permanent or Transient)
-- `bounceSubType` - Bounce subtype classification
-- `bounceReason` - Human-readable bounce reason
 - `from` - Sender email address
 - `to` - Recipient object with email and name
 - `subject` - Email subject line
+- `test` - Boolean indicating whether this is a test email (true) or production (false)
+- `campaignId` - Campaign ID (optional, if applicable)
+- `templateId` - Template ID used (optional)
+- `workflowAutomationId` - Workflow automation ID (optional, if sent from automation)
+- `batchId` - Batch ID (optional, if sent as part of a batch)
+- `bounceType` - Bounce classification: "Permanent" or "Transient" (optional)
+- `bounceSubType` - Detailed bounce category, e.g., "General", "NoEmail", "Suppressed" (optional)
+- `reason` - Human-readable bounce reason from the mail server (optional)
 
 **Bounce Types:**
 
@@ -294,43 +316,35 @@ Triggered when a recipient opens an email.
   "type": "email.opened",
   "createdAt": "2025-11-12T10:30:00.000Z",
   "data": {
-    "createdAt": "2025-11-12T10:30:00.000Z",
     "emailId": "64f1a2b3c4d5e6f7g8h9i0j1",
-    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
-    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
-    "workflowAutomationId": "64f1a2b3c4d5e6f7g8h9i0j5",
-    "batchId": "64f1a2b3c4d5e6f7g8h9i0j6",
-    "timestamp": "2025-11-12T10:30:00.000Z",
-    "userAgent": "Mozilla/5.0...",
-    "ipAddress": "192.168.1.1",
-    "device": "mobile",
-    "location": "San Francisco, CA",
     "from": "sender@yourdomain.com",
     "to": {
       "email": "user@example.com",
       "name": "John Doe"
     },
-    "subject": "Welcome to AutoSend"
+    "subject": "Welcome to AutoSend",
+    "test": false,
+    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
+    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
+    "workflowAutomationId": "64f1a2b3c4d5e6f7g8h9i0j5",
+    "batchId": "64f1a2b3c4d5e6f7g8h9i0j6"
   }
 }
 ```
 
 **Data Fields:**
 
-- `createdAt` - ISO 8601 timestamp when the event occurred
 - `emailId` - Unique identifier for the email activity
-- `campaignId` - Campaign ID (if applicable)
-- `templateId` - Template ID used
-- `workflowAutomationId` - Workflow automation ID (if sent from automation)
-- `batchId` - Batch ID (if sent as part of a batch)
-- `timestamp` - When the email was opened
-- `userAgent` - Browser user agent string (if available)
-- `ipAddress` - IP address of the opener (if available)
-- `device` - Device type (if available)
-- `location` - Geographic location (if available)
 - `from` - Sender email address
 - `to` - Recipient object with email and name
 - `subject` - Email subject line
+- `test` - Boolean indicating whether this is a test email (true) or production (false)
+- `campaignId` - Campaign ID (optional, if applicable)
+- `templateId` - Template ID used (optional)
+- `workflowAutomationId` - Workflow automation ID (optional, if sent from automation)
+- `batchId` - Batch ID (optional, if sent as part of a batch)
+
+**Privacy Note:** This event does NOT include `ipAddress`, `userAgent`, `device`, or `location` information for privacy protection.
 
 **Use Cases:**
 
@@ -354,37 +368,37 @@ Triggered when a recipient clicks a link in an email.
   "type": "email.clicked",
   "createdAt": "2025-11-12T10:35:00.000Z",
   "data": {
-    "createdAt": "2025-11-12T10:35:00.000Z",
     "emailId": "64f1a2b3c4d5e6f7g8h9i0j1",
-    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
-    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
-    "workflowAutomationId": "64f1a2b3c4d5e6f7g8h9i0j5",
-    "batchId": "64f1a2b3c4d5e6f7g8h9i0j6",
-    "timestamp": "2025-11-12T10:35:00.000Z",
-    "url": "https://example.com/product",
     "from": "sender@yourdomain.com",
     "to": {
       "email": "user@example.com",
       "name": "John Doe"
     },
-    "subject": "Welcome to AutoSend"
+    "subject": "Welcome to AutoSend",
+    "test": false,
+    "clickedUrl": "https://example.com/product",
+    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
+    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
+    "workflowAutomationId": "64f1a2b3c4d5e6f7g8h9i0j5",
+    "batchId": "64f1a2b3c4d5e6f7g8h9i0j6"
   }
 }
 ```
 
 **Data Fields:**
 
-- `createdAt` - ISO 8601 timestamp when the event occurred
 - `emailId` - Unique identifier for the email activity
-- `campaignId` - Campaign ID (if applicable)
-- `templateId` - Template ID used
-- `workflowAutomationId` - Workflow automation ID (if sent from automation)
-- `batchId` - Batch ID (if sent as part of a batch)
-- `timestamp` - When the link was clicked
-- `url` - The URL that was clicked (if available)
 - `from` - Sender email address
 - `to` - Recipient object with email and name
 - `subject` - Email subject line
+- `test` - Boolean indicating whether this is a test email (true) or production (false)
+- `clickedUrl` - The URL that was clicked (optional)
+- `campaignId` - Campaign ID (optional, if applicable)
+- `templateId` - Template ID used (optional)
+- `workflowAutomationId` - Workflow automation ID (optional, if sent from automation)
+- `batchId` - Batch ID (optional, if sent as part of a batch)
+
+**Privacy Note:** This event does NOT include `ipAddress`, `userAgent`, or `device` information for privacy protection.
 
 **Use Cases:**
 
@@ -408,37 +422,35 @@ Triggered when a recipient marks an email as spam or files a complaint.
   "type": "email.spam_reported",
   "createdAt": "2025-11-12T10:45:00.000Z",
   "data": {
-    "createdAt": "2025-11-12T10:45:00.000Z",
     "emailId": "64f1a2b3c4d5e6f7g8h9i0j1",
-    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
-    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
-    "workflowAutomationId": "64f1a2b3c4d5e6f7g8h9i0j5",
-    "batchId": "64f1a2b3c4d5e6f7g8h9i0j6",
-    "timestamp": "2025-11-12T10:45:00.000Z",
-    "complaintFeedbackType": "abuse",
     "from": "sender@yourdomain.com",
     "to": {
       "email": "user@example.com",
       "name": "John Doe"
     },
-    "subject": "Welcome to AutoSend"
+    "subject": "Welcome to AutoSend",
+    "test": false,
+    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
+    "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
+    "workflowAutomationId": "64f1a2b3c4d5e6f7g8h9i0j5",
+    "batchId": "64f1a2b3c4d5e6f7g8h9i0j6",
+    "complaintType": "abuse"
   }
 }
 ```
 
 **Data Fields:**
 
-- `createdAt` - ISO 8601 timestamp when the event occurred
 - `emailId` - Unique identifier for the email activity
-- `campaignId` - Campaign ID (if applicable)
-- `templateId` - Template ID used
-- `workflowAutomationId` - Workflow automation ID (if sent from automation)
-- `batchId` - Batch ID (if sent as part of a batch)
-- `timestamp` - When the complaint was filed
-- `complaintFeedbackType` - Type of complaint (if available)
 - `from` - Sender email address
 - `to` - Recipient object with email and name
 - `subject` - Email subject line
+- `test` - Boolean indicating whether this is a test email (true) or production (false)
+- `campaignId` - Campaign ID (optional, if applicable)
+- `templateId` - Template ID used (optional)
+- `workflowAutomationId` - Workflow automation ID (optional, if sent from automation)
+- `batchId` - Batch ID (optional, if sent as part of a batch)
+- `complaintType` - Type of complaint: "abuse", "fraud", "virus", "other" (optional)
 
 **Use Cases:**
 
@@ -465,40 +477,28 @@ Triggered when a recipient globally unsubscribes from **all** emails.
   "type": "email.unsubscribed",
   "createdAt": "2025-11-12T10:40:00.000Z",
   "data": {
-    "createdAt": "2025-11-12T10:40:00.000Z",
     "emailId": "64f1a2b3c4d5e6f7g8h9i0j1",
+    "test": false,
     "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
     "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
     "workflowAutomationId": "64f1a2b3c4d5e6f7g8h9i0j5",
-    "batchId": "64f1a2b3c4d5e6f7g8h9i0j6",
-    "email": "user@example.com",
-    "suppressedAt": "2025-11-12T10:40:00.000Z",
-    "unsubscribeGroupId": "global",
-    "isGlobalUnsubscribed": true,
-    "reason": "unsubscribe",
-    "source": "user_action"
+    "batchId": "64f1a2b3c4d5e6f7g8h9i0j6"
   }
 }
 ```
 
 **Data Fields:**
 
-- `createdAt` - ISO 8601 timestamp when the event occurred
 - `emailId` - Unique identifier for the email activity (optional - only present if triggered from an email)
+- `test` - Boolean indicating whether this is a test email (true) or production (false)
 - `campaignId` - Campaign ID (optional - only present if triggered from a campaign email)
 - `templateId` - Template ID (optional - only present if triggered from an email)
 - `workflowAutomationId` - Workflow automation ID (optional - only present if triggered from automation email)
 - `batchId` - Batch ID (optional - only present if triggered from batch email)
-- `email` - Email address that unsubscribed
-- `suppressedAt` - When the unsubscribe occurred
-- `unsubscribeGroupId` - Always "global" for this event type
-- `isGlobalUnsubscribed` - Always true for this event
-- `reason` - Reason for unsubscribe (e.g., "unsubscribe", "bounce", "spam")
-- `source` - Source of the unsubscribe (e.g., "user_action", "webhook", "api")
 
 **Important Notes:**
 
-- This event does **NOT** include `from`, `to`, or `subject` fields (unlike other email events)
+- This event does **NOT** include `from`, `to`, or `subject` fields for privacy protection
 - Fields like `emailId`, `campaignId`, `templateId`, `workflowAutomationId`, and `batchId` are **optional** and only present when the unsubscribe is triggered from an email context
 
 **Use Cases:**
@@ -524,40 +524,30 @@ Triggered when a recipient unsubscribes from a specific email group or suppressi
   "type": "email.group_unsubscribed",
   "createdAt": "2025-11-12T10:42:00.000Z",
   "data": {
-    "createdAt": "2025-11-12T10:42:00.000Z",
     "emailId": "64f1a2b3c4d5e6f7g8h9i0j1",
+    "test": false,
+    "unsubscribeGroupId": "newsletter-marketing",
     "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2",
     "templateId": "64f1a2b3c4d5e6f7g8h9i0j4",
     "workflowAutomationId": "64f1a2b3c4d5e6f7g8h9i0j5",
-    "batchId": "64f1a2b3c4d5e6f7g8h9i0j6",
-    "email": "user@example.com",
-    "suppressedAt": "2025-11-12T10:42:00.000Z",
-    "unsubscribeGroupId": "newsletter-marketing",
-    "isGlobalUnsubscribed": false,
-    "reason": "unsubscribe",
-    "source": "user_action"
+    "batchId": "64f1a2b3c4d5e6f7g8h9i0j6"
   }
 }
 ```
 
 **Data Fields:**
 
-- `createdAt` - ISO 8601 timestamp when the event occurred
 - `emailId` - Unique identifier for the email activity (optional - only present if triggered from an email)
+- `test` - Boolean indicating whether this is a test email (true) or production (false)
+- `unsubscribeGroupId` - The specific group ID they unsubscribed from (optional)
 - `campaignId` - Campaign ID (optional - only present if triggered from a campaign email)
 - `templateId` - Template ID (optional - only present if triggered from an email)
 - `workflowAutomationId` - Workflow automation ID (optional - only present if triggered from automation email)
 - `batchId` - Batch ID (optional - only present if triggered from batch email)
-- `email` - Email address that unsubscribed
-- `suppressedAt` - When the unsubscribe occurred
-- `unsubscribeGroupId` - The specific group ID they unsubscribed from
-- `isGlobalUnsubscribed` - Always false for this event
-- `reason` - Reason for unsubscribe
-- `source` - Source of the unsubscribe
 
 **Important Notes:**
 
-- This event does **NOT** include `from`, `to`, or `subject` fields (unlike other email events)
+- This event does **NOT** include `from`, `to`, or `subject` fields for privacy protection
 - Fields like `emailId`, `campaignId`, `templateId`, `workflowAutomationId`, and `batchId` are **optional** and only present when the unsubscribe is triggered from an email context
 
 **Use Cases:**
@@ -583,18 +573,24 @@ Triggered when a recipient resubscribes to a specific email group they previousl
   "type": "email.group_resubscribed",
   "createdAt": "2025-11-12T11:00:00.000Z",
   "data": {
-    "createdAt": "2025-11-12T11:00:00.000Z",
-    "email": "user@example.com",
-    "unsubscribeGroupId": "newsletter-marketing"
+    "emailId": "64f1a2b3c4d5e6f7g8h9i0j1",
+    "test": false,
+    "unsubscribeGroupId": "newsletter-marketing",
+    "campaignId": "64f1a2b3c4d5e6f7g8h9i0j2"
   }
 }
 ```
 
 **Data Fields:**
 
-- `createdAt` - ISO 8601 timestamp when the event occurred
-- `email` - Email address that resubscribed
-- `unsubscribeGroupId` - The specific group ID they resubscribed to
+- `emailId` - Unique identifier for the email activity (optional)
+- `test` - Boolean indicating whether this is a test email (true) or production (false)
+- `unsubscribeGroupId` - The specific group ID they resubscribed to (optional)
+- `campaignId` - Campaign ID (optional)
+
+**Important Notes:**
+
+- This event does **NOT** include `from`, `to`, or `subject` fields for privacy protection
 
 **Use Cases:**
 
@@ -621,24 +617,20 @@ Triggered when a new contact is created in your AutoSend project.
   "type": "contact.created",
   "createdAt": "2025-11-12T09:00:00.000Z",
   "data": {
-    "createdAt": "2025-11-12T09:00:00.000Z",
     "contactId": "64f1a2b3c4d5e6f7g8h9i0j3",
     "email": "newuser@example.com",
-    "firstName": "John",
-    "lastName": "Doe",
-    "userId": "user_12345"
+    "name": "John Doe"
   }
 }
 ```
 
 **Data Fields:**
 
-- `createdAt` - ISO 8601 timestamp when the contact was created
-- `contactId` - Unique identifier for the contact
-- `email` - Contact's email address
-- `firstName` - Contact's first name (if provided)
-- `lastName` - Contact's last name (if provided)
-- `userId` - External user ID (if provided)
+- `contactId` - Unique identifier for the contact (optional)
+- `email` - Contact's email address (optional)
+- `name` - Contact's name (optional)
+
+**Note:** Additional custom fields may be included based on your contact schema.
 
 **Use Cases:**
 
@@ -663,26 +655,22 @@ Triggered when an existing contact's information is updated.
   "type": "contact.updated",
   "createdAt": "2025-11-12T09:30:00.000Z",
   "data": {
-    "createdAt": "2025-11-12T09:00:00.000Z",
     "contactId": "64f1a2b3c4d5e6f7g8h9i0j3",
     "email": "user@example.com",
-    "firstName": "Jonathan",
-    "lastName": "Doe",
-    "userId": "user_12345",
-    "updatedAt": "2025-11-12T09:30:00.000Z"
+    "name": "Jonathan Doe",
+    "changedFields": ["name"]
   }
 }
 ```
 
 **Data Fields:**
 
-- `createdAt` - ISO 8601 timestamp when the contact was originally created
-- `contactId` - Unique identifier for the contact
-- `email` - Contact's email address
-- `firstName` - Contact's first name
-- `lastName` - Contact's last name
-- `userId` - External user ID (if provided)
-- `updatedAt` - ISO 8601 timestamp when the contact was updated
+- `contactId` - Unique identifier for the contact (optional)
+- `email` - Contact's email address (optional)
+- `name` - Contact's name (optional)
+- `changedFields` - List of field names that were changed (optional)
+
+**Note:** Additional custom fields may be included based on your contact schema.
 
 **Use Cases:**
 
@@ -708,19 +696,15 @@ Triggered when a contact is deleted from your AutoSend project.
   "createdAt": "2025-11-12T09:45:00.000Z",
   "data": {
     "contactId": "64f1a2b3c4d5e6f7g8h9i0j3",
-    "email": "user@example.com",
-    "userId": "user_12345",
-    "deletedAt": "2025-11-12T09:45:00.000Z"
+    "email": "deleteduser@example.com"
   }
 }
 ```
 
 **Data Fields:**
 
-- `contactId` - Unique identifier for the deleted contact
-- `email` - Contact's email address
-- `userId` - External user ID (if it existed)
-- `deletedAt` - ISO 8601 timestamp when the contact was deleted
+- `contactId` - Unique identifier for the deleted contact (optional)
+- `email` - Contact's email address for reference (optional)
 
 **Use Cases:**
 
@@ -805,53 +789,51 @@ Triggered when a contact is deleted from your AutoSend project.
 
 ```javascript Track Email Engagement expandable
 async function handleEmailOpened(data) {
-const { emailId, to, timestamp, userAgent, device } = data;
+  const { emailId, to } = data;
 
-await db.emails.update({
-  where: { id: emailId },
-  data: {
-    opened: true,
-    openedAt: timestamp,
-    opens: { increment: 1 },
-    lastUserAgent: userAgent,
-    lastDevice: device,
-  },
-});
+  await db.emails.update({
+    where: { id: emailId },
+    data: {
+      opened: true,
+      openedAt: new Date(),
+      opens: { increment: 1 },
+    },
+  });
 
-await db.contacts.update({
-  where: { email: to.email },
-  data: {
-    lastEngagement: timestamp,
-    engagementScore: { increment: 1 },
-  },
-});
+  await db.contacts.update({
+    where: { email: to.email },
+    data: {
+      lastEngagement: new Date(),
+      engagementScore: { increment: 1 },
+    },
+  });
 }
 
 async function handleEmailClicked(data) {
-const { emailId, to, url, timestamp } = data;
+  const { emailId, to, clickedUrl } = data;
 
-await db.clicks.create({
-  data: {
-    emailId,
-    recipientEmail: to.email,
-    url,
-    clickedAt: timestamp,
-  },
-});
+  await db.clicks.create({
+    data: {
+      emailId,
+      recipientEmail: to.email,
+      url: clickedUrl,
+      clickedAt: new Date(),
+    },
+  });
 
-await db.contacts.update({
-  where: { email: to.email },
-  data: {
-    lastEngagement: timestamp,
-    engagementScore: { increment: 5 },
-  },
-});
+  await db.contacts.update({
+    where: { email: to.email },
+    data: {
+      lastEngagement: new Date(),
+      engagementScore: { increment: 5 },
+    },
+  });
 }
 ````
 
 ```javascript Handle Bounces and Complaints expandable
 async function handleEmailBounced(data) {
-  const { to, bounceType, bounceReason, timestamp } = data;
+  const { to, bounceType, reason } = data;
 
   if (bounceType === 'Permanent') {
     // Remove from active mailing lists
@@ -859,8 +841,8 @@ async function handleEmailBounced(data) {
       where: { email: to.email },
       data: {
         status: 'bounced',
-        bouncedAt: timestamp,
-        bounceReason,
+        bouncedAt: new Date(),
+        bounceReason: reason,
       },
     });
 
@@ -869,17 +851,17 @@ async function handleEmailBounced(data) {
       data: {
         email: to.email,
         type: 'bounce',
-        reason: bounceReason,
+        reason: reason,
       },
     });
 
     // Alert team
-    await sendAlert(`Hard bounce for ${to.email}: ${bounceReason}`);
+    await sendAlert(`Hard bounce for ${to.email}: ${reason}`);
   }
 }
 
 async function handleSpamReport(data) {
-  const { to, timestamp } = data;
+  const { to } = data;
   const email = to.email;
 
   // Immediately suppress the email
@@ -887,7 +869,7 @@ async function handleSpamReport(data) {
     data: {
       email,
       type: 'complaint',
-      reportedAt: timestamp,
+      reportedAt: new Date(),
     },
   });
 
@@ -896,7 +878,7 @@ async function handleSpamReport(data) {
     where: { email },
     data: {
       status: 'complained',
-      complainedAt: timestamp,
+      complainedAt: new Date(),
     },
   });
 
@@ -907,91 +889,94 @@ async function handleSpamReport(data) {
 
 ```javascript Handle Subscription Events expandable
 async function handleGlobalUnsubscribe(data) {
-  const { email, suppressedAt, reason } = data;
+  const { emailId, campaignId } = data;
 
-  // Remove from ALL mailing lists
-  await db.contacts.update({
-    where: { email },
+  // Update email activity record
+  await db.emails.update({
+    where: { id: emailId },
     data: {
-      globallyUnsubscribed: true,
-      unsubscribedAt: suppressedAt,
-      unsubscribeReason: reason,
+      unsubscribed: true,
+      unsubscribedAt: new Date(),
     },
   });
 
-  console.log(`${email} globally unsubscribed: ${reason}`);
+  console.log(
+    `Global unsubscribe from email ${emailId}, campaign ${campaignId}`
+  );
 }
 
 async function handleGroupUnsubscribe(data) {
-  const { email, unsubscribeGroupId, suppressedAt } = data;
+  const { emailId, unsubscribeGroupId, campaignId } = data;
 
-  // Remove from specific group
-  await db.contactGroupMemberships.delete({
-    where: {
-      email_groupId: {
-        email,
-        groupId: unsubscribeGroupId,
-      },
+  // Update email activity record
+  await db.emails.update({
+    where: { id: emailId },
+    data: {
+      groupUnsubscribed: true,
+      unsubscribeGroupId,
+      unsubscribedAt: new Date(),
     },
   });
 
-  console.log(`${email} unsubscribed from group ${unsubscribeGroupId}`);
+  console.log(
+    `Group unsubscribe from email ${emailId}, group ${unsubscribeGroupId}`
+  );
 }
 
 async function handleGroupResubscribe(data) {
-  const { email, unsubscribeGroupId } = data;
+  const { emailId, unsubscribeGroupId } = data;
 
-  // Re-add to specific group
-  await db.contactGroupMemberships.create({
+  // Update subscription record
+  await db.emails.update({
+    where: { id: emailId },
     data: {
-      email,
-      groupId: unsubscribeGroupId,
-      subscribedAt: new Date(),
+      resubscribed: true,
+      resubscribeGroupId: unsubscribeGroupId,
+      resubscribedAt: new Date(),
     },
   });
 
-  console.log(`${email} resubscribed to group ${unsubscribeGroupId}`);
+  console.log(
+    `Group resubscribe for email ${emailId}, group ${unsubscribeGroupId}`
+  );
 }
 ```
 
 ```javascript Sync Contacts expandable
 async function handleContactCreated(data) {
-  const { contactId, email, firstName, lastName, userId, createdAt } = data;
+  const { contactId, email, name } = data;
 
   // Sync to CRM
   await crm.contacts.create({
     externalId: contactId,
     email,
-    firstName,
-    lastName,
-    userId,
-    createdAt,
+    name,
+    createdAt: new Date(),
   });
 }
 
 async function handleContactUpdated(data) {
-  const { contactId, email, firstName, lastName, userId, updatedAt } = data;
+  const { contactId, email, name, changedFields } = data;
 
   // Sync to CRM
   await crm.contacts.update({
     externalId: contactId,
     email,
-    firstName,
-    lastName,
-    userId,
-    updatedAt,
+    name,
+    changedFields,
+    updatedAt: new Date(),
   });
 }
 
 async function handleContactDeleted(data) {
-  const { contactId, email, deletedAt } = data;
+  const { contactId, email } = data;
 
   // Remove from CRM
   await crm.contacts.delete({
     externalId: contactId,
   });
 
-  console.log(`Contact ${email} removed from CRM at ${deletedAt}`);
+  console.log(`Contact ${email} removed from CRM`);
 }
 ```
 
