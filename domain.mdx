@@ -45,13 +45,19 @@ The region you select will be used to send your emails and should be chosen base
 
 Once your domain is added, AutoSend will generate the required DNS records. You’ll need to add these records to your domain’s DNS settings. AutoSend requires two types of DNS records:
 
-### **DKIM and SPF Records (Required)**
+### **DKIM and SPF Records**
 
-These records enable email authentication and prevent email spoofing. You’ll typically see 3-4 records:
+These records enable email authentication and prevent email spoofing.
 
-1. **Ownership Verification Record**: Verifies you own the domain
-2. **DKIM Record(s)**: Cryptographic signatures that prove email authenticity
-3. **Mail-From Record**: Specifies authorized email sending servers (SPF)
+- **Ownership Verification Record**: Verifies you own the domain
+- **DKIM Record(s)**: Cryptographic signatures that prove email authenticity
+- **Mail-From Record**: Specifies authorized email sending servers (SPF)
+
+### **DMARC Record**
+
+DMARC (Domain-based Message Authentication, Reporting & Conformance) adds an extra layer of email authentication and provides reporting on email authentication status.
+
+
 <Frame>
 <img src='/images/domain/domain-verify-ownership.png' alt='Domain verify ownership' />
 </Frame>
@@ -65,9 +71,6 @@ Each record will have the following fields:
 | **Priority** | Used for MX records (usually not applicable) |
 | **TTL** | Time To Live - set to “Auto” or 3600 |
 
-### **DMARC Record (Optional but Recommended)**
-
-DMARC (Domain-based Message Authentication, Reporting & Conformance) adds an extra layer of email authentication and provides reporting on email authentication status.
 
 <Note>
 **Note**
