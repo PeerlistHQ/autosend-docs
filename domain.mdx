@@ -26,11 +26,11 @@ We recommend using a subdomain (like `mail.yourdomain.com` or `emails.yourdom
 <Step title="Add Your Domain" titleSize="h3">
 1. Navigate to **Settings > Domains** in your AutoSend dashboard and click the **Add Domain** button.
 <Frame>
-<img src='/images/domain-empty.png' alt='Domain empty' />
+<img src='/images/domain/domain-empty.png' alt='Domain empty' />
 </Frame>
 2. Enter your sending domain **without** `http://` or `https://`
 <Frame>
-<img src='/images/domain-add.png' alt='Domain add' />
+<img src='/images/domain/domain-add.png' alt='Domain add' />
 </Frame>
 3. Choose the AWS region closest to your users for optimal email delivery performance. Available regions include:
     - **US East (N. Virginia)** - `us-east-1`
@@ -53,7 +53,7 @@ These records enable email authentication and prevent email spoofing. You’ll t
 2. **DKIM Record(s)**: Cryptographic signatures that prove email authenticity
 3. **Mail-From Record**: Specifies authorized email sending servers (SPF)
 <Frame>
-<img src='/images/domain-verify-ownership.png' alt='Domain verify ownership' />
+<img src='/images/domain/domain-verify-ownership.png' alt='Domain verify ownership' />
 </Frame>
 Each record will have the following fields:
 
@@ -96,7 +96,7 @@ Your domain will progress through these statuses:
 | **Verified** | Green | Domain fully verified and ready to use | None - you can start sending! |
 | **Verification Failed** | Red | DNS records incorrect or missing | Check your DNS records and try again |
 <Frame>
-<img src='/images/domain-verified.png' alt='Domain verified' />
+<img src='/images/domain/domain-verified.png' alt='Domain verified' />
 </Frame>
 <Check> When your domain shows a green “Verified” badge, you’re all set! You can now use this domain to send emails through AutoSend’s API.</Check>
 
