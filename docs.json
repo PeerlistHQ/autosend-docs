@@ -131,6 +131,12 @@
         "hidden": false,
         "groups": [
           {
+            "group": "January 2026",
+            "pages": [
+              "changelog/2026/jan/8"
+            ]
+          },
+          {
             "group": "December 2025",
             "pages": [
               "changelog/2025/dec/29",
