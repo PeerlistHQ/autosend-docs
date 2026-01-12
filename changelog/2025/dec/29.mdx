@@ -1,7 +1,7 @@
 ---
-title: "Introducing Email Automations"
-description: "Email automation is now live in AutoSend. Create triggered sequences with visual workflows, tracking, and unsubscribe group management."
-sidebarTitle: "29 December 2025"
+title: 'Introducing Email Automations'
+description: 'Email automation is now live in AutoSend. Create triggered sequences with visual workflows, tracking, and unsubscribe group management.'
+sidebarTitle: '29 December 2025'
 ---
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
@@ -11,10 +11,11 @@ import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx';
 Email automation lets you send sequences of emails triggered by user actions without manual intervention. When someone signs up, or matches a segment, they automatically enter a sequence. You define the timing, content, and exit conditions once, then the system handles the rest.
 
 <Frame>
-  <img src='/images/automation-changelog.jpeg' alt="Email Automations in AutoSend"  />
+	<img src='/images/automation-changelog.jpeg' alt='Email Automations in AutoSend' />
 </Frame>
 
 ## New Features
+
 - **Visual Builder:** Design automation flows in a drag-and-drop interface. See your entire sequence at a glance with entry points, wait steps, and email blocks connected in order. Add new emails to your sequence with one click and adjust timing without touching code.
 - **Flexible Timing:** Set delays between emails:immediately, hours, days. You control when each email goes out.
 - **Exit Conditions:** Control when contacts leave automation sequences. Set sequences to end when all emails are sent, or exit contacts immediately when they’re removed from the triggering list or segment. Prevents sending irrelevant emails to contacts who no longer match your criteria.
@@ -22,11 +23,12 @@ Email automation lets you send sequences of emails triggered by user actions wit
 - **Tracking Built-in:** Enable or disable open and click tracking for each email in your sequence. Performance analytics show open rates, click rates, and engagement metrics for each email, so you can see which messages perform best.
 
 ## Common use-cases
- - **Welcome sequences** - Send a series of emails when someone signs up, introducing your product, sharing getting started guides, and building the relationship from day one.
- - **Onboarding drips** - Guide new users through your product over days or weeks. Each email highlights a specific feature, shares a tutorial, or encourages the next action.
- - **Re-engagement campaigns** - Automatically reach out to inactive users with targeted content, special offers, or feedback requests to bring them back.
- - **Trial conversion sequences** - Nurture trial users with use cases, success stories, and reminders as they approach the end of their trial period.
- - **Waitlist nurturing** - Keep waitlist users engaged with product updates, behind-the-scenes progress, early feature previews, and launch countdown emails until they get access
+
+- **Welcome sequences** - Send a series of emails when someone signs up, introducing your product, sharing getting started guides, and building the relationship from day one.
+- **Onboarding drips** - Guide new users through your product over days or weeks. Each email highlights a specific feature, shares a tutorial, or encourages the next action.
+- **Re-engagement campaigns** - Automatically reach out to inactive users with targeted content, special offers, or feedback requests to bring them back.
+- **Trial conversion sequences** - Nurture trial users with use cases, success stories, and reminders as they approach the end of their trial period.
+- **Waitlist nurturing** - Keep waitlist users engaged with product updates, behind-the-scenes progress, early feature previews, and launch countdown emails until they get access
 
 Head to <a href={AUTOSEND_PATHS.automations} target='_blank' title='Automations'>Marketing Emails → Automations</a> and create your first automation.
 
@@ -35,16 +37,20 @@ Happy AutoSend-ing!
 ---
 
 <Info>
-As always, let us know if you run into issues or have feedback at <a href={`mailto:${SUPPORT_EMAIL}`} title='AutoSend support mail'>{SUPPORT_EMAIL}</a>. We're listening (and probably already working on the next thing you didn't know you needed).
+	As always, let us know if you run into issues or have feedback at{' '}
+	<a href={`mailto:${SUPPORT_EMAIL}`} title='AutoSend support mail'>
+		{SUPPORT_EMAIL}
+	</a>
+	. We're listening (and probably already working on the next thing you didn't know you needed).
 </Info>
 
 ## Learn More
 
 <Columns cols={2}>
-  <Card title="Email Automations" icon="bolt" iconType="solid" href={APP_PATHS.automations}>
-    Learn how to create contact-triggered email automations in AutoSend.
-  </Card>
- <Card title="Contact Lists" icon="list" iconType="duotone" href={APP_PATHS.contactsLists}>
-    Learn how to create and manage contact lists that trigger your automations.
-  </Card>
+	<Card title='Email Automations' icon='bolt' iconType='solid' href={APP_PATHS.automations}>
+		Learn how to create contact-triggered email automations in AutoSend.
+	</Card>
+	<Card title='Contact Lists' icon='list' iconType='duotone' href={APP_PATHS.contactsLists}>
+		Learn how to create and manage contact lists that trigger your automations.
+	</Card>
 </Columns>
