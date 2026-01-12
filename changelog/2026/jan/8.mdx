@@ -1,7 +1,7 @@
 ---
-title: 'Email Builder, Webhooks, and Analytics'
-description: 'Improvements to email building, webhook tracking, analytics, and platform stability'
-sidebarTitle: '8 January 2026'
+title: "Email Builder, Webhooks, and Analytics"
+description: "Improvements to email building, webhook tracking, analytics, and platform stability"
+sidebarTitle: "8 January 2026"
 ---
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
@@ -14,8 +14,7 @@ We kicked off 2025 with major improvements to the email builder, better webhook 
 
 ### Global text color preference
 
-You can now set a default text color for your entire email in the email builder. Instead of changing the color for every text element individually, set it once and all your text inherits that color. Update individual elements when you need to, but the global default saves you time.
-Perfect for maintaining brand consistency without the tedious copy-paste.
+You can now set a default text color for your entire email in the email builder. Instead of changing the color for every text element individually, set it once and all your text inherits that color. Update individual elements when you need to, but the global default saves you time. Perfect for maintaining brand consistency without the tedious copy-paste.
 
 ### Plain text support
 
@@ -37,6 +36,8 @@ Sending test emails is now smoother and more intuitive. You can now enter test v
 
 ## Email Activity Analytics
 
+![Email Activity Analytics](/images/email-activity-analytics.png)
+
 You can now see analytics for your email activities at a glance. The email activities page shows you key metrics like total sent, delivered, opened, clicked, bounced, and failed emails in one view. No more scanning through tables to understand performance. The analytics dashboard gives you the numbers that matter, with visual indicators for each status type.
 
 ---
@@ -44,6 +45,8 @@ You can now see analytics for your email activities at a glance. The email activ
 ## Email Templates
 
 ### Table view and search
+
+![Email Templates Table](/images/email-templates-table.png)
 
 Email templates now have a proper table view. Browse your templates in a clean list, search by name or subject line, and find what you need faster. No more endless scrolling through cards. The search works across template names and subject lines, making it easy to locate specific templates when you have dozens of them.
 
@@ -53,13 +56,11 @@ Email templates now have a proper table view. Browse your templates in a clean l
 
 ### BatchId and test email tracking
 
-Webhook events now include a `batchId` and a `test` field. If you’re sending bulk emails or campaigns, you can now group webhook events by batch to track which emails belong together. The `test` field is a boolean that indicates if the email was sent as a test email.
-Useful for debugging campaign issues or building analytics around bulk sends.
+Webhook events now include a `batchId` and a `test` field. If you’re sending bulk emails or campaigns, you can now group webhook events by batch to track which emails belong together. The `test` field is a boolean that indicates if the email was sent as a test email. Useful for debugging campaign issues or building analytics around bulk sends.
 
 ### Optimized webhook payloads
 
-We reduced the size of webhook payloads by stripping out unnecessary data. You get what you need without the bloat. Faster processing on your end, less bandwidth used, and cleaner logs.
-We also removed sensitive SMTP response data from payloads for better security.
+We reduced the size of webhook payloads by stripping out unnecessary data. You get what you need without the bloat. Faster processing on your end, less bandwidth used, and cleaner logs. We also removed sensitive SMTP response data from payloads for better security.
 
 ---
 
@@ -67,23 +68,15 @@ We also removed sensitive SMTP response data from payloads for better security.
 
 We fixed several issues that were causing friction:
 
-1. **Email activity modal viewport** - The email activity detail modal now displays correctly on all screen sizes without layout issues.
-2. **Unsubscribe group undefined** - Fixed a bug where unsubscribe group IDs were coming through as `undefined`, breaking unsubscribe flows.
-3. **Image link focus behavior** - Adding links to images in the email builder no longer causes unexpected focus jumps or selection issues.
-4. **Domain validation errors** - Fixed domain validation errors and email validation checks to prevent false positives.
-5. **Button sizing in modals** - Image upload modal buttons now have consistent sizing across different states.
-6. **Documentation links** - Fixed broken links across marketing pages and documentation.
-7. **Template ID missing in HTML editor** - Fixed a bug where template IDs weren’t showing up in the HTML editor, making it hard to reference templates programmatically.
-8. **Workflow automation triggers** - Fixed edge cases where workflow automations weren’t triggering correctly when contacts were added to lists or updated.
-9. **Automation button states** - Fixed button state management in automations that was causing confusion about which actions were available.
+ 1. **Email activity modal viewport** - The email activity detail modal now displays correctly on all screen sizes without layout issues.
+ 2. **Unsubscribe group undefined** - Fixed a bug where unsubscribe group IDs were coming through as `undefined`, breaking unsubscribe flows.
+ 3. **Image link focus behavior** - Adding links to images in the email builder no longer causes unexpected focus jumps or selection issues.
+ 4. **Domain validation errors** - Fixed domain validation errors and email validation checks to prevent false positives.
+ 5. **Button sizing in modals** - Image upload modal buttons now have consistent sizing across different states.
+ 6. **Documentation links** - Fixed broken links across marketing pages and documentation.
+ 7. **Template ID missing in HTML editor** - Fixed a bug where template IDs weren’t showing up in the HTML editor, making it hard to reference templates programmatically.
+ 8. **Workflow automation triggers** - Fixed edge cases where workflow automations weren’t triggering correctly when contacts were added to lists or updated.
+ 9. **Automation button states** - Fixed button state management in automations that was causing confusion about which actions were available.
 10. **Automation settings and actions** - Resolved bugs in sequence settings and action handling that were preventing some automation workflows from running correctly.
 
 ---
-
-<Info>
-	As always, let us know if you run into issues or have feedback at{' '}
-	<a href={`mailto:${SUPPORT_EMAIL}`} title='AutoSend support mail'>
-		{SUPPORT_EMAIL}
-	</a>
-	. We're listening (and probably already working on the next thing you didn't know you needed).
-</Info>
