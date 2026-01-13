@@ -1,7 +1,7 @@
 ---
 title: 'Retries and Replays'
 description: 'Learn how AutoSend automatically handles failed webhook deliveries.'
-sidebarTitle: ' Retries and Replays'
+sidebarTitle: 'Retries and Replays'
 ---
 
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
@@ -177,51 +177,49 @@ Set up your own monitoring for webhook health:
 ```javascript Nodejs expandable theme={null}
 // Example: Check webhook health periodically
 async function monitorWebhookHealth() {
-  // Fetch webhook delivery logs from your database
-  const recentDeliveries = await db.webhookDeliveryLogs.find({
-    createdAt: { $gte: new Date(Date.now() - 3600000) }, // Last hour
-  });
+	// Fetch webhook delivery logs from your database
+	const recentDeliveries = await db.webhookDeliveryLogs.find({
+		createdAt: { $gte: new Date(Date.now() - 3600000) }, // Last hour
+	});
 
-  const failureCount = recentDeliveries.filter((d) => !d.success).length;
-  const successCount = recentDeliveries.filter((d) => d.success).length;
-  const totalDeliveries = recentDeliveries.length;
-  const successRate =
-    totalDeliveries > 0 ? (successCount / totalDeliveries) * 100 : 100;
+	const failureCount = recentDeliveries.filter((d) => !d.success).length;
+	const successCount = recentDeliveries.filter((d) => d.success).length;
+	const totalDeliveries = recentDeliveries.length;
+	const successRate = totalDeliveries > 0 ? (successCount / totalDeliveries) * 100 : 100;
 
-  // Calculate average response time
-  const avgDuration =
-    recentDeliveries.reduce((sum, d) => sum + d.duration, 0) / totalDeliveries;
+	// Calculate average response time
+	const avgDuration = recentDeliveries.reduce((sum, d) => sum + d.duration, 0) / totalDeliveries;
 
-  console.log({
-    totalDeliveries,
-    successCount,
-    failureCount,
-    successRate: `${successRate.toFixed(2)}%`,
-    avgResponseTime: `${avgDuration.toFixed(0)}ms`,
-  });
+	console.log({
+		totalDeliveries,
+		successCount,
+		failureCount,
+		successRate: `${successRate.toFixed(2)}%`,
+		avgResponseTime: `${avgDuration.toFixed(0)}ms`,
+	});
 
-  // Alert if success rate drops
-  if (successRate < 90) {
-    await sendAlert({
-      title: 'Webhook Health Alert',
-      message: `Webhook success rate dropped to ${successRate.toFixed(2)}%`,
-      details: {
-        successCount,
-        failureCount,
-        totalDeliveries,
-      },
-      severity: 'warning',
-    });
-  }
+	// Alert if success rate drops
+	if (successRate < 90) {
+		await sendAlert({
+			title: 'Webhook Health Alert',
+			message: `Webhook success rate dropped to ${successRate.toFixed(2)}%`,
+			details: {
+				successCount,
+				failureCount,
+				totalDeliveries,
+			},
+			severity: 'warning',
+		});
+	}
 
-  // Alert if response time is slow
-  if (avgDuration > 5000) {
-    await sendAlert({
-      title: 'Webhook Performance Alert',
-      message: `Average webhook response time is ${avgDuration.toFixed(0)}ms`,
-      severity: 'warning',
-    });
-  }
+	// Alert if response time is slow
+	if (avgDuration > 5000) {
+		await sendAlert({
+			title: 'Webhook Performance Alert',
+			message: `Average webhook response time is ${avgDuration.toFixed(0)}ms`,
+			severity: 'warning',
+		});
+	}
 }
 
 // Run every 5 minutes
@@ -837,24 +835,18 @@ setInterval(monitorWebhookHealth, 5 * 60 * 1000);
 
 {' '}
 
-<Card
-  title='Event Types'
-  icon='list'
-  iconType='duotone'
-  href={APP_PATHS.webhookEventType}
->
-  Complete list of webhook events
+<Card title='Event Types' icon='list' iconType='duotone' href={APP_PATHS.webhookEventType}>
+	Complete list of webhook events
 </Card>
 
 {' '}
 
 <Card
-  title='Verify Webhook Requests'
-  icon='shield-check'
-  iconType='duotone'
-  href={APP_PATHS.webhookVerifyRequests}
->
-  Security and signature verification
+	title='Verify Webhook Requests'
+	icon='shield-check'
+	iconType='duotone'
+	href={APP_PATHS.webhookVerifyRequests}>
+	Security and signature verification
 </Card>
 
   <Card title="Webhooks" icon="gear" iconType="duotone" href={AUTOSEND_PATHS.webhooks}>

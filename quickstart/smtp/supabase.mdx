@@ -1,7 +1,7 @@
 ---
-title: "Supabase SMTP Configuration"
-description: "Configure Supabase Auth to send authentication emails through AutoSend SMTP."
-sidebarTitle: "Supabase"
+title: 'Supabase SMTP Configuration'
+description: 'Configure Supabase Auth to send authentication emails through AutoSend SMTP.'
+sidebarTitle: 'Supabase'
 ---
 
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
@@ -24,8 +24,9 @@ Before you begin, make sure you have:
   <Step title="Open Supabase Auth Settings" titleSize="h3">
     1. Go to your [Supabase dashboard](https://supabase.com/dashboard)
     2. Select your project
-    3. Navigate to **Authentication** → **Providers**
-    4. Scroll down to **SMTP Settings**
+    3. Navigate to **Authentication**
+    4. Under Notifications, you will see **Email** Section.
+    4. Go to **SMTP Settings** tab.
   </Step>
   <Step title="Enable Custom SMTP" titleSize="h3">
     Toggle **Enable Custom SMTP** to enable the SMTP configuration form.
@@ -45,6 +46,7 @@ Before you begin, make sure you have:
     <Frame>
       <img src="/images/smtp/supabase-smtp-settings.png" alt="Supabase SMTP configuration screen" />
     </Frame>
+
   </Step>
   <Step title="Save Settings" titleSize="h3">
     Click **Save** to apply your SMTP configuration.
@@ -58,6 +60,7 @@ Before you begin, make sure you have:
     4. Click **Invite**
 
     Check the recipient's inbox to confirm the email was delivered through AutoSend.
+
   </Step>
 </Steps>
 
@@ -66,6 +69,7 @@ Before you begin, make sure you have:
 Supabase allows you to customize the email templates used for authentication. You can modify these in **Authentication** → **Email Templates**.
 
 Available templates:
+
 - **Confirm signup** - Sent when a user signs up
 - **Invite user** - Sent when inviting a user to your project
 - **Magic link** - Sent for passwordless login
@@ -85,14 +89,15 @@ Here's an example of a customized signup confirmation template:
 
 <p>Thanks for signing up. Please confirm your email address by clicking the button below:</p>
 
-<a href="{{ .ConfirmationURL }}"
-   style="display: inline-block; padding: 12px 24px; background-color: #4F39F6; color: white; text-decoration: none; border-radius: 6px;">
-  Confirm Email
+<a
+	href="{{ .ConfirmationURL }}"
+	style="display: inline-block; padding: 12px 24px; background-color: #4F39F6; color: white; text-decoration: none; border-radius: 6px;">
+	Confirm Email
 </a>
 
 <p>If you didn't create an account, you can safely ignore this email.</p>
 
-<p>Thanks,<br>The MyApp Team</p>
+<p>Thanks,<br />The MyApp Team</p>
 ```
 
 ## Rate Limits
@@ -107,28 +112,24 @@ AutoSend's rate limits are separate and typically higher. Check your <a href={AU
 ## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title="Emails not being sent">
-    - Verify your SMTP credentials are correct
-    - Check that your sender email domain is verified in AutoSend
-    - Ensure the sender email matches a verified domain
-    - Check Supabase logs for SMTP connection errors
-  </Accordion>
-  <Accordion title="Emails going to spam">
-    - Ensure your domain has proper DNS records (SPF, DKIM, DMARC)
-    - Use a professional sender name, not "noreply"
-    - Avoid spam trigger words in your email templates
-    - Check your domain reputation in AutoSend
-  </Accordion>
-  <Accordion title="Connection refused">
-    - Supabase may have firewall restrictions on certain IP ranges
-    - Try using port 465 instead of 587
-    - Contact Supabase support if the issue persists
-  </Accordion>
-  <Accordion title="Authentication failed">
-    - Double-check your API key is correct
-    - Ensure you're using the same key for both username and password
-    - Verify your API key is active in the AutoSend dashboard
-  </Accordion>
+	<Accordion title='Emails not being sent'>
+		- Verify your SMTP credentials are correct - Check that your sender email domain is verified in
+		AutoSend - Ensure the sender email matches a verified domain - Check Supabase logs for SMTP
+		connection errors
+	</Accordion>
+	<Accordion title='Emails going to spam'>
+		- Ensure your domain has proper DNS records (SPF, DKIM, DMARC) - Use a professional sender name,
+		not "noreply" - Avoid spam trigger words in your email templates - Check your domain reputation
+		in AutoSend
+	</Accordion>
+	<Accordion title='Connection refused'>
+		- Supabase may have firewall restrictions on certain IP ranges - Try using port 465 instead of
+		587 - Contact Supabase support if the issue persists
+	</Accordion>
+	<Accordion title='Authentication failed'>
+		- Double-check your API key is correct - Ensure you're using the same key for both username and
+		password - Verify your API key is active in the AutoSend dashboard
+	</Accordion>
 </AccordionGroup>
 
 ## Alternative: Supabase Edge Functions
@@ -139,6 +140,10 @@ For more advanced use cases, you can use Supabase Edge Functions with the AutoSe
 - Detailed delivery tracking
 - Webhook notifications
 
-<Card title="Edge Functions Integration" icon="bolt" iconType="duotone" href="/guides/supabase-edge-functions">
-  Learn how to send emails from Supabase Edge Functions using the AutoSend API
+<Card
+	title='Edge Functions Integration'
+	icon='bolt'
+	iconType='duotone'
+	href='/guides/supabase-edge-functions'>
+	Learn how to send emails from Supabase Edge Functions using the AutoSend API
 </Card>
