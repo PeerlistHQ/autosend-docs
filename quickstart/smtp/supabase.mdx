@@ -15,16 +15,12 @@ Supabase uses email for authentication flows like sign-up confirmations, passwor
 
 Before you begin, make sure you have:
 
-- An [AutoSend account](https://autosend.com/) with an API key
 - A [Supabase project](https://supabase.com/)
 - A <a href={APP_PATHS.domainConfiguration}>verified domain</a> in AutoSend
 
 ## Configuration
 
 <Steps>
-  <Step title="Get your AutoSend API key" titleSize="h3">
-    Navigate to <a href={AUTOSEND_PATHS.apiKey} target="_blank" rel="noopener noreferrer">Settings → API Keys</a> in the AutoSend dashboard and copy your API key.
-  </Step>
   <Step title="Open Supabase Auth Settings" titleSize="h3">
     1. Go to your [Supabase dashboard](https://supabase.com/dashboard)
     2. Select your project
@@ -43,8 +39,8 @@ Before you begin, make sure you have:
     | **Sender name** | Your app name (e.g., "MyApp") |
     | **Host** | `smtp.autosend.com` |
     | **Port number** | `587` |
-    | **Username** | Your AutoSend API key |
-    | **Password** | Your AutoSend API key |
+    | **Username** | autosend |
+    | **Password** | AutoSend API key secret |
 
     <Frame>
       <img src="/images/smtp/supabase-smtp-settings.png" alt="Supabase SMTP configuration screen" />

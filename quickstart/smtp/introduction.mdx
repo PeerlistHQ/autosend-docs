@@ -15,11 +15,9 @@ AutoSend provides an SMTP relay service that allows you to send transactional em
 
 Before you begin, make sure you have:
 
-<CardGroup cols={2}>
-  <Card title="Verified Domain" icon="globe">
-    Verify your sending domain in <a href={APP_PATHS.domainConfiguration}>Domain Settings</a>
-  </Card>
-</CardGroup>
+<Card title="Verified Domain" icon="globe" href={APP_PATHS.domainConfiguration} horizontal>
+  Verify your sending domain in Domain Settings
+</Card>
 
 ## SMTP Credentials
 
@@ -34,7 +32,7 @@ Use the following credentials to configure your SMTP client:
 | **Encryption** | TLS/SSL (see port guide below) |
 
 <Note>
-You can generate your API key secret in the <a href={AUTOSEND_PATHS.apiKey} target="_blank" rel="noopener noreferrer">API Keys settings</a>.
+The API key secret will be generated with the flow of setting up the SMTP.
 </Note>
 
 ## Port Configuration
@@ -57,126 +55,122 @@ Always use TLS/SSL encryption when connecting to SMTP. Never send credentials ov
 
 ## Integration Examples
 
-<Tabs>
-  <Tab title="Node.js">
-    ```javascript
-    const nodemailer = require('nodemailer');
+<CodeGroup>
 
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.autosend.com',
-      port: 587,
-      secure: true,
-      auth: {
-        user: 'autosend',
-        pass: 'AS_xxx'
-      }
-    });
+```javascript Node.js expandable
+const nodemailer = require('nodemailer');
 
-    await transporter.sendMail({
-      from: 'sender@yourdomain.com',
-      to: 'recipient@example.com',
-      subject: 'Hello from AutoSend',
-      html: '<h1>Welcome!</h1><p>This email was sent via SMTP.</p>'
-    });
-    ```
-  </Tab>
-  <Tab title="Python">
-    ```python
-    import smtplib
-    from email.mime.text import MIMEText
-    from email.mime.multipart import MIMEMultipart
+const transporter = nodemailer.createTransport({
+  host: 'smtp.autosend.com',
+  port: 587,
+  secure: true,
+  auth: {
+    user: 'autosend',
+    pass: 'AS_xxx'
+  }
+});
 
-    smtp_host = "smtp.autosend.com"
-    smtp_port = 587
-    username = "sender@yourdomain.com"
-    password = "as_your_api_key_here"
+await transporter.sendMail({
+  from: 'sender@yourdomain.com',
+  to: 'recipient@example.com',
+  subject: 'Hello from AutoSend',
+  html: '<h1>Welcome!</h1><p>This email was sent via SMTP.</p>'
+});
+```
 
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = "Hello from AutoSend"
-    msg["From"] = username
-    msg["To"] = "recipient@example.com"
+```python Python expandable
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
-    html = "<h1>Welcome!</h1><p>This email was sent via SMTP.</p>"
-    msg.attach(MIMEText(html, "html"))
+smtp_host = "smtp.autosend.com"
+smtp_port = 587
+username = "sender@yourdomain.com"
+password = "as_your_api_key_here"
 
-    with smtplib.SMTP(smtp_host, smtp_port) as server:
-        server.starttls()
-        server.login(username, password)
-        server.sendmail(username, ["recipient@example.com"], msg.as_string())
-    ```
-  </Tab>
-  <Tab title="PHP">
-    ```php
-    <?php
-    use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\SMTP;
+msg = MIMEMultipart("alternative")
+msg["Subject"] = "Hello from AutoSend"
+msg["From"] = username
+msg["To"] = "recipient@example.com"
 
-    $mail = new PHPMailer(true);
+html = "<h1>Welcome!</h1><p>This email was sent via SMTP.</p>"
+msg.attach(MIMEText(html, "html"))
 
-    $mail->isSMTP();
-    $mail->Host       = 'smtp.autosend.com';
-    $mail->SMTPAuth   = true;
-    $mail->Username   = 'sender@yourdomain.com';
-    $mail->Password   = 'as_your_api_key_here';
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port       = 587;
+with smtplib.SMTP(smtp_host, smtp_port) as server:
+    server.starttls()
+    server.login(username, password)
+    server.sendmail(username, ["recipient@example.com"], msg.as_string())
+```
 
-    $mail->setFrom('sender@yourdomain.com', 'Your Name');
-    $mail->addAddress('recipient@example.com');
+```php PHP expandable
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 
-    $mail->isHTML(true);
-    $mail->Subject = 'Hello from AutoSend';
-    $mail->Body    = '<h1>Welcome!</h1><p>This email was sent via SMTP.</p>';
+$mail = new PHPMailer(true);
 
-    $mail->send();
-    ?>
-    ```
-  </Tab>
-  <Tab title="Ruby">
-    ```ruby
-    require 'net/smtp'
+$mail->isSMTP();
+$mail->Host       = 'smtp.autosend.com';
+$mail->SMTPAuth   = true;
+$mail->Username   = 'sender@yourdomain.com';
+$mail->Password   = 'as_your_api_key_here';
+$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+$mail->Port       = 587;
 
-    message = <<~MESSAGE
-      From: sender@yourdomain.com
-      To: recipient@example.com
-      Subject: Hello from AutoSend
-      Content-Type: text/html
+$mail->setFrom('sender@yourdomain.com', 'Your Name');
+$mail->addAddress('recipient@example.com');
 
-      <h1>Welcome!</h1><p>This email was sent via SMTP.</p>
-    MESSAGE
+$mail->isHTML(true);
+$mail->Subject = 'Hello from AutoSend';
+$mail->Body    = '<h1>Welcome!</h1><p>This email was sent via SMTP.</p>';
 
-    Net::SMTP.start('smtp.autosend.com', 587, 'yourdomain.com',
-                    'sender@yourdomain.com', 'as_your_api_key_here', :plain) do |smtp|
-      smtp.send_message message, 'sender@yourdomain.com', 'recipient@example.com'
-    end
-    ```
-  </Tab>
-  <Tab title="Go">
-    ```go
-    package main
+$mail->send();
+?>
+```
 
-    import (
-        "net/smtp"
-    )
+```ruby Ruby expandable
+require 'net/smtp'
 
-    func main() {
-        auth := smtp.PlainAuth("", "sender@yourdomain.com", "as_your_api_key_here", "smtp.autosend.com")
+message = <<~MESSAGE
+  From: sender@yourdomain.com
+  To: recipient@example.com
+  Subject: Hello from AutoSend
+  Content-Type: text/html
 
-        to := []string{"recipient@example.com"}
-        msg := []byte("To: recipient@example.com\r\n" +
-            "Subject: Hello from AutoSend\r\n" +
-            "Content-Type: text/html\r\n" +
-            "\r\n" +
-            "<h1>Welcome!</h1><p>This email was sent via SMTP.</p>\r\n")
+  <h1>Welcome!</h1><p>This email was sent via SMTP.</p>
+MESSAGE
 
-        err := smtp.SendMail("smtp.autosend.com:587", auth, "sender@yourdomain.com", to, msg)
-        if err != nil {
-            panic(err)
-        }
+Net::SMTP.start('smtp.autosend.com', 587, 'yourdomain.com',
+                'sender@yourdomain.com', 'as_your_api_key_here', :plain) do |smtp|
+  smtp.send_message message, 'sender@yourdomain.com', 'recipient@example.com'
+end
+```
+
+```go Go expandable
+package main
+
+import (
+    "net/smtp"
+)
+
+func main() {
+    auth := smtp.PlainAuth("", "sender@yourdomain.com", "as_your_api_key_here", "smtp.autosend.com")
+
+    to := []string{"recipient@example.com"}
+    msg := []byte("To: recipient@example.com\r\n" +
+        "Subject: Hello from AutoSend\r\n" +
+        "Content-Type: text/html\r\n" +
+        "\r\n" +
+        "<h1>Welcome!</h1><p>This email was sent via SMTP.</p>\r\n")
+
+    err := smtp.SendMail("smtp.autosend.com:587", auth, "sender@yourdomain.com", to, msg)
+    if err != nil {
+        panic(err)
     }
-    ```
-  </Tab>
-</Tabs>
+}
+```
+
+</CodeGroup>
 
 ## Testing with Swaks
 
@@ -184,24 +178,22 @@ Always use TLS/SSL encryption when connecting to SMTP. Never send credentials ov
 
 ### Installation
 
-<Tabs>
-  <Tab title="macOS">
-    ```bash
-    brew install swaks
-    ```
-  </Tab>
-  <Tab title="Ubuntu/Debian">
-    ```bash
-    sudo apt-get install swaks
-    ```
-  </Tab>
-  <Tab title="Windows">
-    ```bash
-    # Using Chocolatey
-    choco install swaks
-    ```
-  </Tab>
-</Tabs>
+<CodeGroup>
+
+```bash macOS
+brew install swaks
+```
+
+```bash Ubuntu/Debian
+sudo apt-get install swaks
+```
+
+```bash Windows
+# Using Chocolatey
+choco install swaks
+```
+
+</CodeGroup>
 
 ### Basic Test
 
@@ -310,7 +302,7 @@ AutoSend SMTP works with any platform that supports SMTP configuration:
 
 <AccordionGroup>
   <Accordion title="Can I see emails sent via SMTP in my dashboard?">
-    Yes! All emails sent through SMTP appear in your AutoSend Dashboard under the **Email Activity** section. You can view delivery status, opens, clicks, and bounces just like API-sent emails.
+    Yes! All emails sent through SMTP appear in your AutoSend Dashboard under the <a href={AUTOSEND_PATHS.emailActivity} target="_blank" rel="noopener noreferrer">**Email Activity**</a>  section. You can view delivery status, opens, clicks, and bounces just like API-sent emails.
   </Accordion>
   <Accordion title="What are the rate limits for SMTP?">
     SMTP rate limits are the same as the REST API. Your plan's sending limits apply across both SMTP and API. Check your <a href={AUTOSEND_PATHS.dashboard} target="_blank" rel="noopener noreferrer">Dashboard</a> for your current limits.
