@@ -1,7 +1,7 @@
 ---
-title: "Send emails with SMTP"
+title: 'Send emails with SMTP'
 description: "Send transactional emails using AutoSend's SMTP relay service. Integrate with any application that supports SMTP."
-sidebarTitle: "Introduction"
+sidebarTitle: 'Introduction'
 ---
 
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
@@ -11,46 +11,47 @@ import { APP_PATHS } from '/snippets/appPaths.mdx';
 
 AutoSend provides an SMTP relay service that allows you to send transactional emails using standard SMTP protocols. This is useful when integrating with platforms that require SMTP credentials, such as Supabase, WordPress, or other services that don't support REST APIs.
 
+<Frame>![Supabase Step 1](/images/smtp/smtp-screenshot-1.png)</Frame>
+
 ## Prerequisites
 
 Before you begin, make sure you have:
 
-<Card title="Verified Domain" icon="globe" href={APP_PATHS.domainConfiguration} horizontal>
-  Verify your sending domain in Domain Settings
+<Card title='Verified Domain' icon='globe' href={APP_PATHS.domainConfiguration} horizontal>
+	Verify your sending domain in Domain Settings
 </Card>
 
 ## SMTP Credentials
 
 Use the following credentials to configure your SMTP client:
 
-| Setting | Value |
-|---------|-------|
-| **Host** | `smtp.autosend.com` |
-| **Port** | `465`, `587` |
-| **Username** | autosend |
-| **Password** | AS_xxxx (Your AutoSend API key secret) |
-| **Encryption** | TLS/SSL (see port guide below) |
+| Setting        | Value                                  |
+| -------------- | -------------------------------------- |
+| **Host**       | `smtp.autosend.com`                    |
+| **Port**       | `465`, `587`                           |
+| **Username**   | autosend                               |
+| **Password**   | AS_xxxx (Your AutoSend API key secret) |
+| **Encryption** | TLS/SSL (see port guide below)         |
 
-<Note>
-The API key secret will be generated with the flow of setting up the SMTP.
-</Note>
+<Note>The API key secret will be generated with the flow of setting up the SMTP.</Note>
 
 ## Port Configuration
 
 AutoSend supports multiple ports to accommodate different network configurations:
 
-| Port | Security | Description |
-|------|----------|-------------|
-| `465` | Implicit TLS | SMTPS - Connection is encrypted from the start. Recommended for most uses. |
-| `587` | STARTTLS | Submission port - Starts unencrypted, upgrades to TLS. Most widely supported. |
-
+| Port  | Security     | Description                                                                   |
+| ----- | ------------ | ----------------------------------------------------------------------------- |
+| `465` | Implicit TLS | SMTPS - Connection is encrypted from the start. Recommended for most uses.    |
+| `587` | STARTTLS     | Submission port - Starts unencrypted, upgrades to TLS. Most widely supported. |
 
 <Tip>
-**Which port should I use?** Start with port `587` (STARTTLS) as it's the most widely supported. For implicit TLS, use port `465`.
+	**Which port should I use?** Start with port `587` (STARTTLS) as it's the most widely supported.
+	For implicit TLS, use port `465`.
 </Tip>
 
 <Warning>
-Always use TLS/SSL encryption when connecting to SMTP. Never send credentials over an unencrypted connection.
+	Always use TLS/SSL encryption when connecting to SMTP. Never send credentials over an unencrypted
+	connection.
 </Warning>
 
 ## Integration Examples
@@ -61,20 +62,20 @@ Always use TLS/SSL encryption when connecting to SMTP. Never send credentials ov
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.autosend.com',
-  port: 587,
-  secure: true,
-  auth: {
-    user: 'autosend',
-    pass: 'AS_xxx'
-  }
+	host: 'smtp.autosend.com',
+	port: 587,
+	secure: true,
+	auth: {
+		user: 'autosend',
+		pass: 'AS_xxx',
+	},
 });
 
 await transporter.sendMail({
-  from: 'sender@yourdomain.com',
-  to: 'recipient@example.com',
-  subject: 'Hello from AutoSend',
-  html: '<h1>Welcome!</h1><p>This email was sent via SMTP.</p>'
+	from: 'sender@yourdomain.com',
+	to: 'recipient@example.com',
+	subject: 'Hello from AutoSend',
+	html: '<h1>Welcome!</h1><p>This email was sent via SMTP.</p>',
 });
 ```
 
@@ -241,12 +242,12 @@ Add `-v` or `-vv` for detailed SMTP conversation logs.
 AutoSend SMTP works with any platform that supports SMTP configuration:
 
 <Columns cols={2}>
-  <Card title="Supabase" icon="database" iconType="duotone" href="/quickstart/smtp/supabase">
-    Configure Supabase Auth to send emails via AutoSend
-  </Card>
-  <Card title="API Integration" icon="code" iconType="duotone" href="/quickstart/email-using-api">
-    Send emails directly via the AutoSend REST API
-  </Card>
+	<Card title='Supabase' icon='database' iconType='duotone' href='/quickstart/smtp/supabase'>
+		Configure Supabase Auth to send emails via AutoSend
+	</Card>
+	<Card title='API Integration' icon='code' iconType='duotone' href='/quickstart/email-using-api'>
+		Send emails directly via the AutoSend REST API
+	</Card>
 </Columns>
 
 ## Troubleshooting
@@ -262,6 +263,7 @@ AutoSend SMTP works with any platform that supports SMTP configuration:
     - Verify the hostname is `smtp.autosend.com`
     - Check your firewall rules
     - Test connectivity: `telnet smtp.autosend.com 587`
+
   </Accordion>
   <Accordion title="Authentication failed">
     **Possible causes:**
@@ -273,6 +275,7 @@ AutoSend SMTP works with any platform that supports SMTP configuration:
     - Ensure the username is a verified sender email address
     - Check that your domain is properly verified
     - Check for any extra whitespace in your credentials
+
   </Accordion>
   <Accordion title="TLS/SSL errors">
     **Possible causes:**
@@ -282,7 +285,8 @@ AutoSend SMTP works with any platform that supports SMTP configuration:
     **Solutions:**
     - For ports `465`: Use implicit TLS (connection encrypted from start)
     - For ports `587`: Use STARTTLS (starts unencrypted, upgrades to TLS)
-    - If using swaks, add `--tlsc` flag only for ports 465 
+    - If using swaks, add `--tlsc` flag only for ports 465
+
   </Accordion>
   <Accordion title="Emails not delivered">
     **Possible causes:**
@@ -295,45 +299,61 @@ AutoSend SMTP works with any platform that supports SMTP configuration:
     - Check the sender email matches your verified domain
     - Add the required DNS records for SPF and DKIM
     - Review email activity in the <a href={AUTOSEND_PATHS.emailActivity} target="_blank" rel="noopener noreferrer">Email Activity</a> dashboard
+
   </Accordion>
 </AccordionGroup>
 
 ## FAQs
 
 <AccordionGroup>
-  <Accordion title="Can I see emails sent via SMTP in my dashboard?">
-    Yes! All emails sent through SMTP appear in your AutoSend Dashboard under the <a href={AUTOSEND_PATHS.emailActivity} target="_blank" rel="noopener noreferrer">**Email Activity**</a>  section. You can view delivery status, opens, clicks, and bounces just like API-sent emails.
-  </Accordion>
-  <Accordion title="What are the rate limits for SMTP?">
-    SMTP rate limits are the same as the REST API. Your plan's sending limits apply across both SMTP and API. Check your <a href={AUTOSEND_PATHS.dashboard} target="_blank" rel="noopener noreferrer">Dashboard</a> for your current limits.
-  </Accordion>
-  <Accordion title="Can I send attachments via SMTP?">
-    Yes, AutoSend SMTP supports standard MIME attachments. Most SMTP libraries handle attachment encoding automatically. The maximum message size is 25MB including attachments.
-  </Accordion>
-  <Accordion title="Is SMTP as fast as the API?">
-    SMTP adds minimal overhead compared to the REST API. For high-volume sending or when you need immediate delivery confirmation, the API may be slightly faster. For most use cases, SMTP performance is excellent.
-  </Accordion>
-  <Accordion title="Do webhooks work with SMTP emails?">
-    Yes! Webhooks are triggered for all events (delivery, bounce, open, click, etc.) regardless of whether the email was sent via SMTP or the API.
-  </Accordion>
-  <Accordion title="Can I use multiple sender addresses?">
-    Yes, you can send from any email address on a verified domain. Simply use the desired sender address in the "From" field. Make sure all sender addresses are properly configured in your domain settings.
-  </Accordion>
+	<Accordion title='Can I see emails sent via SMTP in my dashboard?'>
+		Yes! All emails sent through SMTP appear in your AutoSend Dashboard under the{' '}
+		<a href={AUTOSEND_PATHS.emailActivity} target='_blank' rel='noopener noreferrer'>
+			**Email Activity**
+		</a>{' '}
+		section. You can view delivery status, opens, clicks, and bounces just like API-sent emails.
+	</Accordion>
+	<Accordion title='What are the rate limits for SMTP?'>
+		SMTP rate limits are the same as the REST API. Your plan's sending limits apply across both SMTP
+		and API. Check your{' '}
+		<a href={AUTOSEND_PATHS.dashboard} target='_blank' rel='noopener noreferrer'>
+			Dashboard
+		</a>{' '}
+		for your current limits.
+	</Accordion>
+	<Accordion title='Can I send attachments via SMTP?'>
+		Yes, AutoSend SMTP supports standard MIME attachments. Most SMTP libraries handle attachment
+		encoding automatically. The maximum message size is 25MB including attachments.
+	</Accordion>
+	<Accordion title='Is SMTP as fast as the API?'>
+		SMTP adds minimal overhead compared to the REST API. For high-volume sending or when you need
+		immediate delivery confirmation, the API may be slightly faster. For most use cases, SMTP
+		performance is excellent.
+	</Accordion>
+	<Accordion title='Do webhooks work with SMTP emails?'>
+		Yes! Webhooks are triggered for all events (delivery, bounce, open, click, etc.) regardless of
+		whether the email was sent via SMTP or the API.
+	</Accordion>
+	<Accordion title='Can I use multiple sender addresses?'>
+		Yes, you can send from any email address on a verified domain. Simply use the desired sender
+		address in the "From" field. Make sure all sender addresses are properly configured in your
+		domain settings.
+	</Accordion>
 </AccordionGroup>
 
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="Verify Your Domain" icon="shield-check" href="/domain">
-    Set up SPF, DKIM, and DMARC for better deliverability
-  </Card>
-  <Card title="API Integration" icon="code" href="/api-reference">
-    Explore our REST API for more advanced use cases
-  </Card>
-  <Card title="Webhooks" icon="webhook" href="/others/webhooks/introduction">
-    Set up webhooks to track email events in real-time
-  </Card>
-  <Card title="Email Activity" icon="list" href="/transactional-emails/email-activity">
-    Monitor your email delivery and engagement
-  </Card>
+	<Card title='Verify Your Domain' icon='shield-check' href='/domain'>
+		Set up SPF, DKIM, and DMARC for better deliverability
+	</Card>
+	<Card title='API Integration' icon='code' href='/api-reference'>
+		Explore our REST API for more advanced use cases
+	</Card>
+	<Card title='Webhooks' icon='webhook' href='/others/webhooks/introduction'>
+		Set up webhooks to track email events in real-time
+	</Card>
+	<Card title='Email Activity' icon='list' href='/transactional-emails/email-activity'>
+		Monitor your email delivery and engagement
+	</Card>
 </CardGroup>
