@@ -1,0 +1,168 @@
+---
+title: "SMTP Integration"
+description: "Send transactional emails using AutoSend's SMTP relay service."
+sidebarTitle: "Introduction"
+---
+
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+## Overview
+
+AutoSend provides an SMTP relay service that allows you to send transactional emails using standard SMTP protocols. This is useful when integrating with platforms that require SMTP credentials, such as Supabase, WordPress, or other services that don't support REST APIs.
+
+## SMTP Credentials
+
+To send emails via SMTP, you'll need the following credentials:
+
+| Setting | Value |
+|---------|-------|
+| **Host** | `smtp.autosend.com` |
+| **Port** | `587` (TLS) or `465` (SSL) |
+| **Username** | Your AutoSend API key |
+| **Password** | Your AutoSend API key |
+
+<Note>
+Your SMTP username and password are the same as your AutoSend API key. You can find your API key in the <a href={AUTOSEND_PATHS.apiKey} target="_blank" rel="noopener noreferrer">API Keys settings</a>.
+</Note>
+
+## Getting Your Credentials
+
+<Steps>
+  <Step title="Get your API key" titleSize="h3">
+    Navigate to <a href={AUTOSEND_PATHS.apiKey} target="_blank" rel="noopener noreferrer">Settings → API Keys</a> in the AutoSend dashboard and copy your API key.
+  </Step>
+  <Step title="Configure your application" titleSize="h3">
+    Use the SMTP settings above along with your API key to configure your application or service.
+  </Step>
+  <Step title="Verify your domain" titleSize="h3">
+    Ensure you have a <a href={APP_PATHS.domainConfiguration}>verified domain</a> configured in AutoSend before sending emails.
+  </Step>
+</Steps>
+
+## Supported Ports
+
+AutoSend SMTP supports the following ports:
+
+- **Port 587** - Recommended for most integrations. Uses STARTTLS for encryption.
+- **Port 465** - Uses implicit SSL/TLS encryption.
+- **Port 25** - Standard SMTP port (may be blocked by some ISPs).
+
+<Warning>
+Always use TLS/SSL encryption when connecting to SMTP. Never send credentials over an unencrypted connection.
+</Warning>
+
+## Example Configuration
+
+Here's an example of configuring SMTP in a Node.js application using Nodemailer:
+
+<CodeGroup>
+
+```javascript NodeJS
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  host: 'smtp.autosend.com',
+  port: 587,
+  secure: false, // Use STARTTLS
+  auth: {
+    user: 'YOUR_AUTOSEND_API_KEY',
+    pass: 'YOUR_AUTOSEND_API_KEY'
+  }
+});
+
+const mailOptions = {
+  from: '"Your App" <hello@yourdomain.com>',
+  to: 'recipient@example.com',
+  subject: 'Welcome to Our Platform',
+  html: '<h1>Welcome!</h1><p>Thanks for signing up.</p>'
+};
+
+transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+    console.error('Error sending email:', error);
+  } else {
+    console.log('Email sent:', info.messageId);
+  }
+});
+```
+
+```python Python
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+smtp_host = 'smtp.autosend.com'
+smtp_port = 587
+api_key = 'YOUR_AUTOSEND_API_KEY'
+
+msg = MIMEMultipart('alternative')
+msg['Subject'] = 'Welcome to Our Platform'
+msg['From'] = 'Your App <hello@yourdomain.com>'
+msg['To'] = 'recipient@example.com'
+
+html = '<h1>Welcome!</h1><p>Thanks for signing up.</p>'
+msg.attach(MIMEText(html, 'html'))
+
+with smtplib.SMTP(smtp_host, smtp_port) as server:
+    server.starttls()
+    server.login(api_key, api_key)
+    server.sendmail(msg['From'], msg['To'], msg.as_string())
+    print('Email sent successfully')
+```
+
+```php PHP
+<?php
+$to = 'recipient@example.com';
+$subject = 'Welcome to Our Platform';
+$message = '<h1>Welcome!</h1><p>Thanks for signing up.</p>';
+
+$headers = [
+    'MIME-Version: 1.0',
+    'Content-type: text/html; charset=UTF-8',
+    'From: Your App <hello@yourdomain.com>'
+];
+
+ini_set('SMTP', 'smtp.autosend.com');
+ini_set('smtp_port', '587');
+ini_set('sendmail_from', 'hello@yourdomain.com');
+
+// For production, use a library like PHPMailer for SMTP auth
+// This is a simplified example
+mail($to, $subject, $message, implode("\r\n", $headers));
+```
+
+</CodeGroup>
+
+## Platform Integrations
+
+AutoSend SMTP works with any platform that supports SMTP configuration:
+
+<Columns cols={2}>
+  <Card title="Supabase" icon="database" iconType="duotone" href="/quickstart/smtp/supabase">
+    Configure Supabase Auth to send emails via AutoSend
+  </Card>
+  <Card title="API Integration" icon="code" iconType="duotone" href="/quickstart/email-using-api">
+    Send emails directly via the AutoSend REST API
+  </Card>
+</Columns>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Connection timeout">
+    - Verify your firewall allows outbound connections on port 587 or 465
+    - Check if your hosting provider blocks SMTP ports
+    - Try using a different port (587, 465, or 25)
+  </Accordion>
+  <Accordion title="Authentication failed">
+    - Confirm you're using your AutoSend API key for both username and password
+    - Ensure your API key is active and not revoked
+    - Check for any extra whitespace in your credentials
+  </Accordion>
+  <Accordion title="Emails not delivered">
+    - Verify your sending domain is configured and verified in AutoSend
+    - Check the sender email matches your verified domain
+    - Review email activity in the <a href={AUTOSEND_PATHS.emailActivity} target="_blank" rel="noopener noreferrer">Email Activity</a> dashboard
+  </Accordion>
+</AccordionGroup>

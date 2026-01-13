@@ -1,0 +1,148 @@
+---
+title: "Supabase SMTP Configuration"
+description: "Configure Supabase Auth to send authentication emails through AutoSend SMTP."
+sidebarTitle: "Supabase"
+---
+
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+## Overview
+
+Supabase uses email for authentication flows like sign-up confirmations, password resets, and magic links. By default, Supabase uses its built-in email provider, but you can configure it to use AutoSend SMTP for better deliverability and custom branding.
+
+## Prerequisites
+
+Before you begin, make sure you have:
+
+- An [AutoSend account](https://autosend.com/) with an API key
+- A [Supabase project](https://supabase.com/)
+- A <a href={APP_PATHS.domainConfiguration}>verified domain</a> in AutoSend
+
+## Configuration
+
+<Steps>
+  <Step title="Get your AutoSend API key" titleSize="h3">
+    Navigate to <a href={AUTOSEND_PATHS.apiKey} target="_blank" rel="noopener noreferrer">Settings → API Keys</a> in the AutoSend dashboard and copy your API key.
+  </Step>
+  <Step title="Open Supabase Auth Settings" titleSize="h3">
+    1. Go to your [Supabase dashboard](https://supabase.com/dashboard)
+    2. Select your project
+    3. Navigate to **Authentication** → **Providers**
+    4. Scroll down to **SMTP Settings**
+  </Step>
+  <Step title="Enable Custom SMTP" titleSize="h3">
+    Toggle **Enable Custom SMTP** to enable the SMTP configuration form.
+  </Step>
+  <Step title="Enter SMTP Credentials" titleSize="h3">
+    Fill in the following settings:
+
+    | Field | Value |
+    |-------|-------|
+    | **Sender email** | `noreply@yourdomain.com` (must match your verified domain) |
+    | **Sender name** | Your app name (e.g., "MyApp") |
+    | **Host** | `smtp.autosend.com` |
+    | **Port number** | `587` |
+    | **Username** | Your AutoSend API key |
+    | **Password** | Your AutoSend API key |
+
+    <Frame>
+      <img src="/images/smtp/supabase-smtp-settings.png" alt="Supabase SMTP configuration screen" />
+    </Frame>
+  </Step>
+  <Step title="Save Settings" titleSize="h3">
+    Click **Save** to apply your SMTP configuration.
+  </Step>
+  <Step title="Test the Configuration" titleSize="h3">
+    Send a test email to verify your configuration:
+
+    1. Go to **Authentication** → **Users**
+    2. Click **Invite user**
+    3. Enter a test email address
+    4. Click **Invite**
+
+    Check the recipient's inbox to confirm the email was delivered through AutoSend.
+  </Step>
+</Steps>
+
+## Email Templates
+
+Supabase allows you to customize the email templates used for authentication. You can modify these in **Authentication** → **Email Templates**.
+
+Available templates:
+- **Confirm signup** - Sent when a user signs up
+- **Invite user** - Sent when inviting a user to your project
+- **Magic link** - Sent for passwordless login
+- **Change email address** - Sent when a user requests an email change
+- **Reset password** - Sent for password recovery
+
+<Note>
+Supabase email templates use Go templating syntax. Variables like `{{ .ConfirmationURL }}` are replaced with actual values when the email is sent.
+</Note>
+
+### Example Custom Template
+
+Here's an example of a customized signup confirmation template:
+
+```html
+<h2>Welcome to MyApp!</h2>
+
+<p>Thanks for signing up. Please confirm your email address by clicking the button below:</p>
+
+<a href="{{ .ConfirmationURL }}"
+   style="display: inline-block; padding: 12px 24px; background-color: #4F39F6; color: white; text-decoration: none; border-radius: 6px;">
+  Confirm Email
+</a>
+
+<p>If you didn't create an account, you can safely ignore this email.</p>
+
+<p>Thanks,<br>The MyApp Team</p>
+```
+
+## Rate Limits
+
+Supabase applies rate limits to authentication emails to prevent abuse. These limits are:
+
+- **30 emails per hour** per user
+- **4 emails per hour** for the same action (e.g., password reset)
+
+AutoSend's rate limits are separate and typically higher. Check your <a href={AUTOSEND_PATHS.pricing} target="_blank" rel="noopener noreferrer">plan limits</a> for details.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Emails not being sent">
+    - Verify your SMTP credentials are correct
+    - Check that your sender email domain is verified in AutoSend
+    - Ensure the sender email matches a verified domain
+    - Check Supabase logs for SMTP connection errors
+  </Accordion>
+  <Accordion title="Emails going to spam">
+    - Ensure your domain has proper DNS records (SPF, DKIM, DMARC)
+    - Use a professional sender name, not "noreply"
+    - Avoid spam trigger words in your email templates
+    - Check your domain reputation in AutoSend
+  </Accordion>
+  <Accordion title="Connection refused">
+    - Supabase may have firewall restrictions on certain IP ranges
+    - Try using port 465 instead of 587
+    - Contact Supabase support if the issue persists
+  </Accordion>
+  <Accordion title="Authentication failed">
+    - Double-check your API key is correct
+    - Ensure you're using the same key for both username and password
+    - Verify your API key is active in the AutoSend dashboard
+  </Accordion>
+</AccordionGroup>
+
+## Alternative: Supabase Edge Functions
+
+For more advanced use cases, you can use Supabase Edge Functions with the AutoSend API instead of SMTP. This gives you access to features like:
+
+- Email templates with dynamic variables
+- Detailed delivery tracking
+- Webhook notifications
+
+<Card title="Edge Functions Integration" icon="bolt" iconType="duotone" href="/guides/supabase-edge-functions">
+  Learn how to send emails from Supabase Edge Functions using the AutoSend API
+</Card>
