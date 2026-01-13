@@ -1,8 +1,7 @@
 ---
-title: "Verify Webhook Requests"
-description: "Learn how to verify that webhook requests are genuinely from AutoSend using HMAC-SHA256 signature verification."
-sidebarTitle: "Verify Requests"
-icon: "cloud-check"
+title: 'Verify Webhook Requests'
+description: 'Learn how to verify that webhook requests are genuinely from AutoSend using HMAC-SHA256 signature verification.'
+sidebarTitle: 'Verify Requests'
 ---
 
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
@@ -59,37 +58,43 @@ Every webhook request includes these headers:
 <ParamField path="X-Webhook-Signature" type="string" required>
   HMAC-SHA256 signature of the request body in hexadecimal format
 
-  Example: `"a1b2c3d4e5f6..."`
+Example: `"a1b2c3d4e5f6..."`
+
 </ParamField>
 
 <ParamField path="X-Webhook-Event" type="string" required>
   The event type
 
-  Example: `"email.opened"`
+Example: `"email.opened"`
+
 </ParamField>
 
 <ParamField path="X-Webhook-Delivery-Id" type="string" required>
   Unique delivery identifier (job ID from the queue system)
 
-  Example: `"delivery-123..."`
+Example: `"delivery-123..."`
+
 </ParamField>
 
 <ParamField path="X-Webhook-Timestamp" type="string" required>
   Unix timestamp in milliseconds when the webhook was sent
 
-  Example: `"1699790400000"`
+Example: `"1699790400000"`
+
 </ParamField>
 
 <ParamField path="Content-Type" type="string" required>
   Always `application/json`
 
-  Example: `"application/json"`
+Example: `"application/json"`
+
 </ParamField>
 
 <ParamField path="User-Agent" type="string">
   AutoSend user agent (if set)
 
-  Example: `"AutoSend-Webhooks/1.0"`
+Example: `"AutoSend-Webhooks/1.0"`
+
 </ParamField>
 
 ---
@@ -97,22 +102,25 @@ Every webhook request includes these headers:
 ## Steps to Verify Signatures
 
 <Steps>
-  <Step title="Extract the signature from the X-Webhook-Signature header" titleSize="h3">
-    
-  </Step>
-  <Step title="Get the raw request body as a string (before parsing)" titleSize="h3">
-    
-  </Step>
-  <Step title="Compute the expected signature using your webhook secret" titleSize="h3">
-    
-  </Step>
-  <Step title="Compare signatures using a constant-time comparison function" titleSize="h3">
-    
-  </Step>
+  <Step
+    title='Extract the signature from the X-Webhook-Signature header'
+    titleSize='h3'
+  />
+  <Step
+    title='Get the raw request body as a string (before parsing)'
+    titleSize='h3'
+  />
+  <Step
+    title='Compute the expected signature using your webhook secret'
+    titleSize='h3'
+  />
+  <Step
+    title='Compare signatures using a constant-time comparison function'
+    titleSize='h3'
+  />
 </Steps>
 
 <CodeGroup>
-
 ```javascript Node.js expandable
 const express = require("express");
 const crypto = require("crypto");
@@ -168,8 +176,8 @@ console.log(`Verified webhook: ${type}`);
 
 res.status(200).json({ received: true });
 });
-```
 
+````
 
 ```python Python expandable
 from flask import Flask, request, jsonify
@@ -216,8 +224,7 @@ def webhook():
 
 if __name__ == '__main__':
     app.run(port=3000)
-```
-
+````
 
 ```php PHP expandable
 <?php
@@ -260,7 +267,6 @@ echo json_encode(['received' => true]);
 ?>
 ```
 
-
 ```ruby Ruby expandable
 require 'sinatra'
 require 'json'
@@ -299,7 +305,6 @@ post '/webhooks/autosend' do
   { received: true }.to_json
 end
 ```
-
 
 ```go Go expandable
 package main
@@ -375,22 +380,18 @@ func main() {
 Your webhook secret is shown only once when you create the webhook. If you've lost it, you can retrieve it:
 
 <Steps>
-  <Step title="Navigate to Webhooks from the AutoSend sidebar" titleSize="h3">
-    
-  </Step>
-  <Step title="Click on the webhook you want to manage" titleSize="h3">
-    
-  </Step>
-  <Step title="Click the Reveal Secret button" titleSize="h3">
-    
-  </Step>
-  <Step title="Copy the secret and store it securely in your environment variables" titleSize="h3">
-    
-  </Step>
+  <Step title='Navigate to Webhooks from the AutoSend sidebar' titleSize='h3' />
+  <Step title='Click on the webhook you want to manage' titleSize='h3' />
+  <Step title='Click the Reveal Secret button' titleSize='h3' />
+  <Step
+    title='Copy the secret and store it securely in your environment variables'
+    titleSize='h3'
+  />
 </Steps>
 
 <Warning>
-  Store your webhook secret securely. Never commit it to version control or expose it in client-side code.
+  Store your webhook secret securely. Never commit it to version control or
+  expose it in client-side code.
 </Warning>
 
 ---
@@ -400,7 +401,6 @@ Your webhook secret is shown only once when you create the webhook. If you've lo
 Here's a complete, production-ready webhook endpoint with signature verification, timestamp validation, and error handling:
 
 <CodeGroup>
-
 ```javascript Node.js expandable
 const express = require("express");
 const crypto = require("crypto");
@@ -511,8 +511,8 @@ console.log(`Processing ${type} event:`, data);
 app.listen(3000, () => {
 console.log("Webhook server listening on port 3000");
 });
-```
 
+````
 
 ```python Python expandable
 from flask import Flask, request, jsonify
@@ -605,8 +605,7 @@ def process_webhook_async(event_type, data):
 
 if __name__ == '__main__':
     app.run(port=3000)
-```
-
+````
 
 ```php PHP expandable
 <?php
@@ -695,7 +694,6 @@ function processWebhookAsync($eventType, $data) {
 ?>
 ```
 
-
 ```ruby Ruby expandable
 require 'sinatra'
 require 'json'
@@ -779,7 +777,6 @@ def process_webhook_async(event_type, data)
   puts "Processing #{event_type} event: #{data}"
 end
 ```
-
 
 ```go Go expandable
 package main
@@ -906,256 +903,262 @@ func main() {
 ## Security Best Practices
 
 <AccordionGroup>
-  <Accordion title="Always Use Constant-Time Comparison">
-    **``Never use === or == to compare signatures.``** Use constant-time comparison functions to prevent timing attacks:
+<Accordion title="Always Use Constant-Time Comparison">
+**Never use `===` or `==` to compare signatures.** Use constant-time comparison functions to prevent timing attacks:
 
-    ```javascript
-    // ❌ Bad - Vulnerable to timing attacks
-    if (receivedSignature === expectedSignature) {
-      // Process webhook
-    }
-    
-    // ✅ Good - Constant-time comparison
+```javascript
+// ❌ Bad - Vulnerable to timing attacks
+if (receivedSignature === expectedSignature) {
+  // Process webhook
+}
+
+// ✅ Good - Constant-time comparison
+try {
+  if (
+    crypto.timingSafeEqual(
+      Buffer.from(receivedSignature),
+      Buffer.from(expectedSignature)
+    )
+  ) {
+    // Process webhook
+  }
+} catch (error) {
+  // Buffer lengths don't match - signature is invalid
+  return false;
+}
+```
+
+<Info>
+The `crypto.timingSafeEqual()` function throws an error if the buffer lengths don't match. Always wrap it in a try-catch block.
+</Info>
+</Accordion>
+
+<Accordion title="Store Secrets Securely">
+Never hardcode webhook secrets in your code:
+
+```javascript
+// ❌ Bad - Hardcoded secret
+const WEBHOOK_SECRET = 'a1b2c3d4e5f6g7h8...';
+
+// ✅ Good - Environment variable
+const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+
+if (!WEBHOOK_SECRET) {
+  throw new Error('WEBHOOK_SECRET environment variable is required');
+}
+```
+
+**Store secrets in:**
+
+- Environment variables (`.env` files for local development)
+- Secure secret management services (AWS Secrets Manager, HashiCorp Vault, etc.)
+- Encrypted configuration files
+
+**Never:**
+
+- Commit secrets to version control
+- Include secrets in client-side code
+- Share secrets in logs or error messages
+- Use the same secret across multiple environments
+
+</Accordion>
+
+<Accordion title="Use the Raw Request Body">
+Compute signatures using the **raw, unparsed request body**. Do not re-stringify the parsed JSON:
+
+```javascript
+// ✅ Good - Use raw body
+app.use(
+  express.json({
+    verify: (req, res, buf) => {
+      req.rawBody = buf.toString('utf8');
+    },
+  })
+);
+
+const signature = crypto
+  .createHmac('sha256', secret)
+  .update(req.rawBody) // Use raw body
+  .digest('hex');
+
+// ❌ Bad - Don't re-stringify parsed body
+const signature = crypto
+  .createHmac('sha256', secret)
+  .update(JSON.stringify(req.body)) // May not match original
+  .digest('hex');
+```
+
+<Warning>
+JSON stringification is not deterministic. The order of object keys may differ, causing signature verification to fail.
+</Warning>
+</Accordion>
+
+<Accordion title="Validate the Timestamp">
+Validate the `X-Webhook-Timestamp` header to reject old or replayed requests:
+
+```javascript
+function isTimestampValid(timestamp, maxAgeSeconds = 300) {
+  if (!timestamp) {
+    return false;
+  }
+
+  const now = Date.now();
+  const age = now - parseInt(timestamp);
+
+  // Reject if older than 5 minutes or more than 1 minute in the future
+  return age < maxAgeSeconds * 1000 && age > -60000;
+}
+
+app.post('/webhooks/autosend', (req, res) => {
+  const timestamp = req.headers['x-webhook-timestamp'];
+
+  if (!isTimestampValid(timestamp)) {
+    return res.status(401).json({ error: 'Invalid or expired timestamp' });
+  }
+
+  if (!verifyWebhookSignature(req, webhookSecret)) {
+    return res.status(401).json({ error: 'Invalid signature' });
+  }
+
+  // Process webhook
+});
+```
+
+<Info>
+The timestamp is in **milliseconds** (not seconds). AutoSend sends timestamps as `Date.now().toString()`.
+</Info>
+</Accordion>
+
+<Accordion title="Use HTTPS for Production">
+**Always use HTTPS** for your webhook endpoints in production:
+
+```javascript
+// ❌ Bad - HTTP in production
+const webhookUrl = 'http://api.example.com/webhooks/autosend';
+
+// ✅ Good - HTTPS
+const webhookUrl = 'https://api.example.com/webhooks/autosend';
+```
+
+HTTPS ensures:
+
+- Requests are encrypted in transit
+- Man-in-the-middle attacks are prevented
+- Webhook data remains confidential
+- Your webhook secret is protected
+
+<Note>
+AutoSend does not enforce HTTPS for webhook URLs, but it is strongly recommended for production use.
+</Note>
+</Accordion>
+
+<Accordion title="Respond Quickly (Under 10 Seconds)">
+Webhook requests have a **10-second timeout**. Always respond within this time:
+
+```javascript
+// ✅ Good - Queue processing and respond immediately
+app.post('/webhooks/autosend', async (req, res) => {
+  // Verify signature
+  if (!verifyWebhookSignature(req, webhookSecret)) {
+    return res.status(401).json({ error: 'Invalid signature' });
+  }
+
+  // Queue for background processing
+  await queue.add('process-webhook', req.body);
+
+  // Respond immediately
+  res.status(200).json({ received: true });
+});
+
+// ❌ Bad - Long processing blocks response
+app.post('/webhooks/autosend', async (req, res) => {
+  // This might take too long
+  await processWebhook(req.body);
+  await updateDatabase(req.body);
+  await sendNotification(req.body);
+
+  res.status(200).json({ received: true });
+});
+```
+
+<Warning>
+If your endpoint doesn't respond within 10 seconds, AutoSend will consider the delivery failed and retry up to 3 times.
+</Warning>
+</Accordion>
+
+<Accordion title="Handle Webhook Retries Idempotently">
+AutoSend retries failed deliveries up to **3 times**. Make your webhook handler idempotent:
+
+```javascript
+// ✅ Good - Idempotent processing
+app.post('/webhooks/autosend', async (req, res) => {
+  const deliveryId = req.headers['x-webhook-delivery-id'];
+
+  // Check if already processed
+  const exists = await db.webhookLogs.findOne({ deliveryId });
+  if (exists) {
+    return res.status(200).json({ received: true, status: 'duplicate' });
+  }
+
+  // Process webhook
+  await processWebhook(req.body);
+
+  // Store delivery ID
+  await db.webhookLogs.create({ deliveryId, processedAt: new Date() });
+
+  res.status(200).json({ received: true });
+});
+```
+
+<Info>
+Use the `X-Webhook-Delivery-Id` header to track which deliveries you've already processed.
+</Info>
+</Accordion>
+
+<Accordion title="Rotate Secrets Periodically">
+Regularly rotate your webhook secrets for enhanced security:
+
+<Steps>
+  <Step
+    title='Create a new webhook with the same events and URL'
+    titleSize='p'
+  />
+  <Step
+    title='Update your application to support both old and new secrets temporarily'
+    titleSize='p'
+  />
+  <Step title='Verify the new webhook is working correctly' titleSize='p' />
+  <Step title='Delete the old webhook' titleSize='p' />
+  <Step title='Remove the old secret from your application' titleSize='p' />
+</Steps>
+
+```javascript
+// Support multiple secrets during rotation
+const WEBHOOK_SECRETS = [
+  process.env.WEBHOOK_SECRET,
+  process.env.WEBHOOK_SECRET_OLD, // Remove after rotation complete
+].filter(Boolean);
+
+function verifyWithMultipleSecrets(req) {
+  return WEBHOOK_SECRETS.some((secret) => {
+    const expectedSignature = crypto
+      .createHmac('sha256', secret)
+      .update(req.rawBody)
+      .digest('hex');
+
     try {
-      if (
-        crypto.timingSafeEqual(
-          Buffer.from(receivedSignature),
-          Buffer.from(expectedSignature)
-        )
-      ) {
-        // Process webhook
-      }
-    } catch (error) {
-      // Buffer lengths don't match - signature is invalid
+      return crypto.timingSafeEqual(
+        Buffer.from(req.headers['x-webhook-signature']),
+        Buffer.from(expectedSignature)
+      );
+    } catch {
       return false;
     }
-    ```
+  });
+}
+```
 
-    <Info>
-      The `crypto.timingSafeEqual()` function throws an error if the buffer lengths don't match. Always wrap it in a try-catch block.
-    </Info>
-  </Accordion>
-  <Accordion title="Store Secrets Securely">
-    Never hardcode webhook secrets in your code:
-
-    ```javascript
-    // ❌ Bad - Hardcoded secret
-    const WEBHOOK_SECRET = 'a1b2c3d4e5f6g7h8...';
-    
-    // ✅ Good - Environment variable
-    const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
-    
-    if (!WEBHOOK_SECRET) {
-      throw new Error('WEBHOOK_SECRET environment variable is required');
-    }
-    ```
-
-    **Store secrets in:**
-
-    - Environment variables (`.env` files for local development)
-    - Secure secret management services (AWS Secrets Manager, HashiCorp Vault, etc.)
-    - Encrypted configuration files
-
-    **Never:**
-
-    - Commit secrets to version control
-    - Include secrets in client-side code
-    - Share secrets in logs or error messages
-    - Use the same secret across multiple environments
-  </Accordion>
-  <Accordion title="Use the Raw Request Body">
-    Compute signatures using the **raw, unparsed request body**. Do not re-stringify the parsed JSON:
-
-    ```javascript
-    // ✅ Good - Use raw body
-    app.use(
-      express.json({
-        verify: (req, res, buf) => {
-          req.rawBody = buf.toString('utf8');
-        },
-      })
-    );
-    
-    const signature = crypto
-      .createHmac('sha256', secret)
-      .update(req.rawBody) // Use raw body
-      .digest('hex');
-    
-    // ❌ Bad - Don't re-stringify parsed body
-    const signature = crypto
-      .createHmac('sha256', secret)
-      .update(JSON.stringify(req.body)) // May not match original
-      .digest('hex');
-    ```
-
-    <Warning>
-      JSON stringification is not deterministic. The order of object keys may differ, causing signature verification to fail.
-    </Warning>
-  </Accordion>
-  <Accordion title="Validate the Timestamp">
-    Validate the `X-Webhook-Timestamp` header to reject old or replayed requests:
-
-    ```javascript
-    function isTimestampValid(timestamp, maxAgeSeconds = 300) {
-      if (!timestamp) {
-        return false;
-      }
-    
-      const now = Date.now();
-      const age = now - parseInt(timestamp);
-    
-      // Reject if older than 5 minutes or more than 1 minute in the future
-      return age < maxAgeSeconds * 1000 && age > -60000;
-    }
-    
-    app.post('/webhooks/autosend', (req, res) => {
-      const timestamp = req.headers['x-webhook-timestamp'];
-    
-      if (!isTimestampValid(timestamp)) {
-        return res.status(401).json({ error: 'Invalid or expired timestamp' });
-      }
-    
-      if (!verifyWebhookSignature(req, webhookSecret)) {
-        return res.status(401).json({ error: 'Invalid signature' });
-      }
-    
-      // Process webhook
-    });
-    ```
-
-    <Info>
-      The timestamp is in **milliseconds** (not seconds). AutoSend sends timestamps as `Date.now().toString()`.
-    </Info>
-  </Accordion>
-  <Accordion title="Use HTTPS for Production">
-    **Always use HTTPS** for your webhook endpoints in production:
-
-    ```javascript
-    // ❌ Bad - HTTP in production
-    const webhookUrl = 'http://api.example.com/webhooks/autosend';
-    
-    // ✅ Good - HTTPS
-    const webhookUrl = 'https://api.example.com/webhooks/autosend';
-    ```
-
-    HTTPS ensures:
-
-    - Requests are encrypted in transit
-    - Man-in-the-middle attacks are prevented
-    - Webhook data remains confidential
-    - Your webhook secret is protected
-
-    <Note>
-      AutoSend does not enforce HTTPS for webhook URLs, but it is strongly recommended for production use.
-    </Note>
-  </Accordion>
-  <Accordion title="Respond Quickly (Under 10 Seconds)">
-    Webhook requests have a **10-second timeout**. Always respond within this time:
-
-    ```javascript
-    // ✅ Good - Queue processing and respond immediately
-    app.post('/webhooks/autosend', async (req, res) => {
-      // Verify signature
-      if (!verifyWebhookSignature(req, webhookSecret)) {
-        return res.status(401).json({ error: 'Invalid signature' });
-      }
-    
-      // Queue for background processing
-      await queue.add('process-webhook', req.body);
-    
-      // Respond immediately
-      res.status(200).json({ received: true });
-    });
-    
-    // ❌ Bad - Long processing blocks response
-    app.post('/webhooks/autosend', async (req, res) => {
-      // This might take too long
-      await processWebhook(req.body);
-      await updateDatabase(req.body);
-      await sendNotification(req.body);
-    
-      res.status(200).json({ received: true });
-    });
-    ```
-
-    <Warning>
-      If your endpoint doesn't respond within 10 seconds, AutoSend will consider the delivery failed and retry up to 3 times.
-    </Warning>
-  </Accordion>
-  <Accordion title="Handle Webhook Retries Idempotently">
-    AutoSend retries failed deliveries up to **3 times**. Make your webhook handler idempotent:
-
-    ```javascript
-    // ✅ Good - Idempotent processing
-    app.post('/webhooks/autosend', async (req, res) => {
-      const deliveryId = req.headers['x-webhook-delivery-id'];
-    
-      // Check if already processed
-      const exists = await db.webhookLogs.findOne({ deliveryId });
-      if (exists) {
-        return res.status(200).json({ received: true, status: 'duplicate' });
-      }
-    
-      // Process webhook
-      await processWebhook(req.body);
-    
-      // Store delivery ID
-      await db.webhookLogs.create({ deliveryId, processedAt: new Date() });
-    
-      res.status(200).json({ received: true });
-    });
-    ```
-
-    <Info>
-      Use the `X-Webhook-Delivery-Id` header to track which deliveries you've already processed.
-    </Info>
-  </Accordion>
-  <Accordion title="Rotate Secrets Periodically">
-    Regularly rotate your webhook secrets for enhanced security:
-
-    <Steps>
-      <Step title="Create a new webhook with the same events and URL" titleSize="p">
-        
-      </Step>
-      <Step title="Update your application to support both old and new secrets temporarily" titleSize="p">
-        
-      </Step>
-      <Step title="Verify the new webhook is working correctly" titleSize="p">
-        
-      </Step>
-      <Step title="Delete the old webhook" titleSize="p">
-        
-      </Step>
-      <Step title="Remove the old secret from your application" titleSize="p">
-        
-      </Step>
-    </Steps>
-    ```javascript
-    // Support multiple secrets during rotation
-    const WEBHOOK_SECRETS = [
-      process.env.WEBHOOK_SECRET,
-      process.env.WEBHOOK_SECRET_OLD, // Remove after rotation complete
-    ].filter(Boolean);
-    
-    function verifyWithMultipleSecrets(req) {
-      return WEBHOOK_SECRETS.some((secret) => {
-        const expectedSignature = crypto
-          .createHmac('sha256', secret)
-          .update(req.rawBody)
-          .digest('hex');
-    
-        try {
-          return crypto.timingSafeEqual(
-            Buffer.from(req.headers['x-webhook-signature']),
-            Buffer.from(expectedSignature)
-          );
-        } catch {
-          return false;
-        }
-      });
-    }
-    ```
-  </Accordion>
+</Accordion>
 </AccordionGroup>
 
 ---
@@ -1185,15 +1188,15 @@ AutoSend sends webhook payloads in this format:
 }
 ```
 
-<ParamField path="type" type="string" required>
+<ParamField path='type' type='string' required>
   The event type (e.g., `"email.opened"`, `"contact.created"`)
 </ParamField>
 
-<ParamField path="createdAt" type="string" required>
+<ParamField path='createdAt' type='string' required>
   ISO 8601 timestamp when the event occurred
 </ParamField>
 
-<ParamField path="data" type="object" required>
+<ParamField path='data' type='object' required>
   Event-specific data (varies by event type)
 </ParamField>
 
@@ -1202,157 +1205,173 @@ AutoSend sends webhook payloads in this format:
 ## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title="Signature Verification Always Fails">
-    **Symptoms**: All webhook requests return 401 Unauthorized
+<Accordion title="Signature Verification Always Fails">
+**Symptoms**: All webhook requests return 401 Unauthorized
 
-    **Common Causes:**
+**Common Causes:**
 
-    1. **Using the wrong secret**
+1. **Using the wrong secret**
 
-       ```javascript
-       // Debug: Check which secret you're using
-       console.log('Secret starts with:', webhookSecret.substring(0, 10));
-       console.log('Secret length:', webhookSecret.length); // Should be 64 chars
-       ```
-    2. **Body parsing issues**
+   ```javascript
+   // Debug: Check which secret you're using
+   console.log('Secret starts with:', webhookSecret.substring(0, 10));
+   console.log('Secret length:', webhookSecret.length); // Should be 64 chars
+   ```
 
-       ```javascript
-       // Ensure you're using raw body
-       console.log('Raw body:', req.rawBody);
-       console.log('Raw body length:', req.rawBody.length);
-       ```
-    3. **String encoding issues**
+2. **Body parsing issues**
 
-       ```javascript
-       // Ensure consistent UTF-8 encoding
-       const expectedSignature = crypto
-         .createHmac('sha256', webhookSecret)
-         .update(req.rawBody, 'utf8') // Explicit encoding
-         .digest('hex');
-       ```
-    4. **Comparing wrong values**
+   ```javascript
+   // Ensure you're using raw body
+   console.log('Raw body:', req.rawBody);
+   console.log('Raw body length:', req.rawBody.length);
+   ```
 
-       ```javascript
-       // Debug signature comparison
-       console.log('Received signature:', receivedSignature);
-       console.log('Expected signature:', expectedSignature);
-       console.log(
-         'Lengths match:',
-         receivedSignature.length === expectedSignature.length
-       );
-       ```
-    5. **Secret contains whitespace**
+3. **String encoding issues**
 
-       ```javascript
-       // Trim whitespace from secret
-       const webhookSecret = process.env.WEBHOOK_SECRET.trim();
-       ```
-  </Accordion>
-  <Accordion title="Timestamp Validation Fails">
-    **Symptoms**: Requests fail with "Invalid timestamp" error
+   ```javascript
+   // Ensure consistent UTF-8 encoding
+   const expectedSignature = crypto
+     .createHmac('sha256', webhookSecret)
+     .update(req.rawBody, 'utf8') // Explicit encoding
+     .digest('hex');
+   ```
 
-    **Common Causes:**
+4. **Comparing wrong values**
 
-    1. **Wrong time unit** - Timestamp is in milliseconds, not seconds
+   ```javascript
+   // Debug signature comparison
+   console.log('Received signature:', receivedSignature);
+   console.log('Expected signature:', expectedSignature);
+   console.log(
+     'Lengths match:',
+     receivedSignature.length === expectedSignature.length
+   );
+   ```
 
-       ```javascript
-       // ❌ Bad - Treating as seconds
-       const age = Math.floor(Date.now() / 1000) - parseInt(timestamp);
-       
-       // ✅ Good - Milliseconds
-       const age = Date.now() - parseInt(timestamp);
-       ```
-    2. **Clock skew** - Server time is off
+5. **Secret contains whitespace**
+   ```javascript
+   // Trim whitespace from secret
+   const webhookSecret = process.env.WEBHOOK_SECRET.trim();
+   ```
 
-       ```javascript
-       // Allow 1 minute of clock skew
-       const age = Date.now() - parseInt(timestamp);
-       return age < 300000 && age > -60000; // -1 min to +5 min
-       ```
-    3. **Timezone issues**
+</Accordion>
 
-       ```javascript
-       // Timestamps are always UTC
-       const now = Date.now(); // Always use Date.now(), not local time
-       ```
-  </Accordion>
-  <Accordion title="Testing Signature Verification Locally">
-    Test your signature verification without waiting for real webhooks:
+<Accordion title="Timestamp Validation Fails">
+**Symptoms**: Requests fail with "Invalid timestamp" error
 
-    ```javascript
-    const crypto = require('crypto');
-    
-    function testSignatureVerification() {
-      const webhookSecret = 'test-secret-12345';
-    
-      // Create a test payload (matching AutoSend's format)
-      const payload = {
-        type: 'email.opened',
-        createdAt: new Date().toISOString(),
-        data: {
-          emailId: 'test-123',
-          campaignId: 'campaign-456',
-          timestamp: new Date().toISOString(),
-        },
-      };
-    
-      const payloadString = JSON.stringify(payload);
-    
-      // Generate signature
-      const signature = crypto
-        .createHmac('sha256', webhookSecret)
-        .update(payloadString)
-        .digest('hex');
-    
-      console.log('Test payload:', payloadString);
-      console.log('Test signature:', signature);
-    
-      // Verify it works
-      const expectedSignature = crypto
-        .createHmac('sha256', webhookSecret)
-        .update(payloadString)
-        .digest('hex');
-    
-      console.log('Verification passes:', signature === expectedSignature);
-    
-      // Test with your actual verification function
-      const isValid = crypto.timingSafeEqual(
-        Buffer.from(signature),
-        Buffer.from(expectedSignature)
-      );
-    
-      console.log('timingSafeEqual passes:', isValid);
-    }
-    
-    testSignatureVerification();
-    ```
-  </Accordion>
-  <Accordion title="Webhooks Not Being Received">
-    **Symptoms**: No webhook requests arriving at your endpoint
+**Common Causes:**
 
-    **Troubleshooting Steps:**
+1. **Wrong time unit** - Timestamp is in milliseconds, not seconds
 
-    1. **Check webhook is active**
-       - Navigate to Webhooks in AutoSend
-       - Verify webhook status is "Active"
-       - Check if failure count is high (auto-disabled after 5 failures)
-    2. **Verify URL is accessible**
+   ```javascript
+   // ❌ Bad - Treating as seconds
+   const age = Math.floor(Date.now() / 1000) - parseInt(timestamp);
 
-       ```bash
-       # Test your endpoint is publicly accessible
-       curl -X POST https://your-domain.com/webhooks/autosend \
-         -H "Content-Type: application/json" \
-         -d '{"test": true}'
-       ```
-    3. **Check delivery logs**
-       - Click on your webhook in AutoSend
-       - View the "Delivery Logs" tab
-       - Look for error messages or status codes
-    4. **Test with resend**
-       - Create a test event
-       - Use the "Resend" feature to manually trigger delivery
-       - Check your server logs
-  </Accordion>
+   // ✅ Good - Milliseconds
+   const age = Date.now() - parseInt(timestamp);
+   ```
+
+2. **Clock skew** - Server time is off
+
+   ```javascript
+   // Allow 1 minute of clock skew
+   const age = Date.now() - parseInt(timestamp);
+   return age < 300000 && age > -60000; // -1 min to +5 min
+   ```
+
+3. **Timezone issues**
+   ```javascript
+   // Timestamps are always UTC
+   const now = Date.now(); // Always use Date.now(), not local time
+   ```
+
+</Accordion>
+
+<Accordion title="Testing Signature Verification Locally">
+Test your signature verification without waiting for real webhooks:
+
+```javascript
+const crypto = require('crypto');
+
+function testSignatureVerification() {
+  const webhookSecret = 'test-secret-12345';
+
+  // Create a test payload (matching AutoSend's format)
+  const payload = {
+    type: 'email.opened',
+    createdAt: new Date().toISOString(),
+    data: {
+      emailId: 'test-123',
+      campaignId: 'campaign-456',
+      timestamp: new Date().toISOString(),
+    },
+  };
+
+  const payloadString = JSON.stringify(payload);
+
+  // Generate signature
+  const signature = crypto
+    .createHmac('sha256', webhookSecret)
+    .update(payloadString)
+    .digest('hex');
+
+  console.log('Test payload:', payloadString);
+  console.log('Test signature:', signature);
+
+  // Verify it works
+  const expectedSignature = crypto
+    .createHmac('sha256', webhookSecret)
+    .update(payloadString)
+    .digest('hex');
+
+  console.log('Verification passes:', signature === expectedSignature);
+
+  // Test with your actual verification function
+  const isValid = crypto.timingSafeEqual(
+    Buffer.from(signature),
+    Buffer.from(expectedSignature)
+  );
+
+  console.log('timingSafeEqual passes:', isValid);
+}
+
+testSignatureVerification();
+```
+
+</Accordion>
+
+<Accordion title="Webhooks Not Being Received">
+**Symptoms**: No webhook requests arriving at your endpoint
+
+**Troubleshooting Steps:**
+
+1. **Check webhook is active**
+
+   - Navigate to Webhooks in AutoSend
+   - Verify webhook status is "Active"
+   - Check if failure count is high (auto-disabled after 5 failures)
+
+2. **Verify URL is accessible**
+
+   ```bash
+   # Test your endpoint is publicly accessible
+   curl -X POST https://your-domain.com/webhooks/autosend \
+     -H "Content-Type: application/json" \
+     -d '{"test": true}'
+   ```
+
+3. **Check delivery logs**
+
+   - Click on your webhook in AutoSend
+   - View the "Delivery Logs" tab
+   - Look for error messages or status codes
+
+4. **Test with resend**
+   - Create a test event
+   - Use the "Resend" feature to manually trigger delivery
+   - Check your server logs
+
+</Accordion>
 </AccordionGroup>
 
 ---
@@ -1360,16 +1379,36 @@ AutoSend sends webhook payloads in this format:
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="Event Types" icon="list" iconType="duotone" href="APP_PATHS.webhookEventType">
+  <Card
+    title='Event Types'
+    icon='list'
+    iconType='duotone'
+    href={APP_PATHS.webhookEventType}
+  >
     Learn about all available webhook events and their payloads
   </Card>
-  <Card title="Retries and Replays" icon="rotate" iconType="duotone" href="APP_PATHS.webhookRetries">
+  <Card
+    title='Retries and Replays'
+    icon='rotate'
+    iconType='duotone'
+    href={APP_PATHS.webhookRetries}
+  >
     Understand how AutoSend handles failed deliveries
   </Card>
-  <Card title="Best Practices" icon="shield-check" iconType="duotone" href="APP_PATHS.webhookBestPractices">
+  <Card
+    title='Best Practices'
+    icon='shield-check'
+    iconType='duotone'
+    href={APP_PATHS.webhookBestPractices}
+  >
     Production deployment guidelines and optimization tips
   </Card>
-  <Card title="Manage Webhooks" icon="gear" iconType="duotone" href="AUTOSEND_PATHS.webhooks">
+  <Card
+    title='Manage Webhooks'
+    icon='gear'
+    iconType='duotone'
+    href={AUTOSEND_PATHS.webhooks}
+  >
     Configure and monitor your webhooks in AutoSend
   </Card>
 </CardGroup>
@@ -1379,10 +1418,20 @@ AutoSend sends webhook payloads in this format:
 ## Related Resources
 
 <Columns cols={2}>
-  <Card title="Introduction" icon="book" iconType="duotone" href="APP_PATHS.webhookIntroduction">
+  <Card
+    title='Introduction'
+    icon='book'
+    iconType='duotone'
+    href={APP_PATHS.webhookIntroduction}
+  >
     Getting started with AutoSend webhooks
   </Card>
-  <Card title="Delivery Logs" icon="chart-line" iconType="duotone" href="APP_PATHS.webhookLogs">
+  <Card
+    title='Delivery Logs'
+    icon='chart-line'
+    iconType='duotone'
+    href={APP_PATHS.webhookLogs}
+  >
     View webhook delivery history and debug issues
   </Card>
 </Columns>

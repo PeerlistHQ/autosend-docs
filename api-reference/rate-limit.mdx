@@ -2,14 +2,11 @@
 title: "Rate Limit"
 description: "Learn how AutoSend rate limits work, including sending thresholds and API limits"
 sidebarTitle: "Rate Limit"
-icon: "circle-pause"
 ---
 
 API keys are subject to the following rate limits:
 
-<Info>
-  **2 requests per second** per API key. This is a default limit and can be increased upon request.
-</Info>
+<Info>**2 requests per second** per API key. This is a default limit and can be increased upon request.</Info>
 
 When you exceed the rate limit, you'll receive a `429 Too Many Requests` response with a `retryAfter` field indicating how many seconds to wait.
 

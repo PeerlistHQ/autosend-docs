@@ -2,7 +2,6 @@
 title: "How to Add Sending Domain in AutoSend?"
 description: "Here's a step-by-step guide on how to verify and authenticate domain on AutoSend for sending emails."
 sidebarTitle: "Domain"
-icon: "globe"
 ---
 
 import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx'
@@ -17,10 +16,97 @@ Before you can send emails through AutoSend, you need to verify ownership of you
 - **Compliance**: Meets industry standards for email authentication (SPF, DKIM, DMARC)
 
 <Note>
-  **Pro Tip: Use a Subdomain**
+**Pro Tip: Use a Subdomain**
 
-  We recommend using a subdomain (like `mail.yourdomain.com` or `emails.yourdomain.com`) instead of your root domain. This provides better email deliverability and keeps your transactional emails separate from your main domain’s reputation.
+We recommend using a subdomain (like `mail.yourdomain.com` or `emails.yourdomain.com`) instead of your root domain. This provides better email deliverability and keeps your transactional emails separate from your main domain’s reputation.
+
 </Note>
+
+<Steps>
+<Step title="Add Your Domain" titleSize="h3">
+1. Navigate to **Settings > Domains** in your AutoSend dashboard and click the **Add Domain** button.
+<Frame>
+<img src='/images/domain/domain-empty.png' alt='Domain empty' />
+</Frame>
+2. Enter your sending domain **without** `http://` or `https://`
+<Frame>
+<img src='/images/domain/domain-add.png' alt='Domain add' />
+</Frame>
+3. Choose the AWS region closest to your users for optimal email delivery performance. Available regions include:
+    - **US East (N. Virginia)** - `us-east-1`
+    - **US East (Ohio)** - `us-east-2`
+    
+The region you select will be used to send your emails and should be chosen based on where most of your recipients are located.
+    
+<Note> If you want support for other regions, please contact us at <a href={`mailto:${SUPPORT_EMAIL}`} title={SUPPORT_EMAIL}>{SUPPORT_EMAIL}</a> </Note>
+    
+</Step>
+<Step title="Configure DNS Records" titleSize="h3">
+
+Once your domain is added, AutoSend will generate the required DNS records. You’ll need to add these records to your domain’s DNS settings. AutoSend requires two types of DNS records:
+
+### **DKIM and SPF Records**
+
+These records enable email authentication and prevent email spoofing.
+
+- **Ownership Verification Record**: Verifies you own the domain
+- **DKIM Record(s)**: Cryptographic signatures that prove email authenticity
+- **Mail-From Record**: Specifies authorized email sending servers (SPF)
+
+### **DMARC Record**
+
+DMARC (Domain-based Message Authentication, Reporting & Conformance) adds an extra layer of email authentication and provides reporting on email authentication status.
+
+
+<Frame>
+<img src='/images/domain/domain-verify-ownership.png' alt='Domain verify ownership' />
+</Frame>
+Each record will have the following fields:
+
+| **Field** | **Description** |
+| --- | --- |
+| **Type** | DNS record type (CNAME or TXT) |
+| **Name** | The subdomain or host record |
+| **Content/Value** | The record value to add |
+| **Priority** | Used for MX records (usually not applicable) |
+| **TTL** | Time To Live - set to “Auto” or 3600 |
+
+
+<Note>
+**Note**
+- Copy the exact values from AutoSend - even small typos can cause verification to fail
+- Some DNS providers add your domain name automatically - check your provider’s documentation
+- Use the copy button next to each record value in AutoSend to avoid errors
+- All DKIM and SPF records must be added for successful verification
+</Note>
+
+</Step>
+<Step title="Verify Your Domain" titleSize="h3">
+After adding all DNS records to your DNS provider:
+
+1. **Wait for DNS propagation** (typically 5-30 minutes, but can take up to 48 hours)
+2. Navigate back to your domain details page in AutoSend
+3. Click the **“Verify Ownership”** or **“Check Verification”** button
+
+### **Verification Statuses**
+
+Your domain will progress through these statuses:
+
+| **Status** | **Badge Color** | **Description** | **Action Required** |
+| --- | --- | --- | --- |
+| **Unverified** | Red | No DNS records found | Add DNS records to your provider |
+| **Pending** | Orange | DNS records found, verification in progress | Wait for DNS propagation (5 mins - 2 hours) |
+| **Verified** | Green | Domain fully verified and ready to use | None - you can start sending! |
+| **Verification Failed** | Red | DNS records incorrect or missing | Check your DNS records and try again |
+<Frame>
+<img src='/images/domain/domain-verified.png' alt='Domain verified' />
+</Frame>
+<Check> When your domain shows a green “Verified” badge, you’re all set! You can now use this domain to send emails through AutoSend’s API.</Check>
+
+</Step>
+</Steps>
+
+
 
 ## Troubleshooting
 
@@ -32,16 +118,42 @@ If your domain verification is stuck or failing, try these steps:
   <Accordion title="Check DNS Propagation">
     DNS changes can take time to propagate globally. Use a DNS checker tool to verify your records are visible:
 
-    - 
-    - 
+    - <a
+            href={urlFormatter(DNS_CHECKER_LINK, {
+              addRef: true,
+              additionalQueryParams: {
+                utm_source: AUTOSEND_DOCS_DOMAIN,
+                utm_content: "troubleshooting",
+              },
+            })}
+            title="DNS Checker"
+            target='_blank'
+          >
+            <span className="text-brand-500">DNS Checker</span>
+          </a>
+    -  <a
+            href={urlFormatter(WHATS_MY_DNS_LINK, {
+              addRef: true,
+              additionalQueryParams: {
+                utm_source: AUTOSEND_DOCS_DOMAIN,
+                utm_content: "troubleshooting",
+              },
+            })}
+            title="WhatsMyDNS"
+             target='_blank'
+          >
+            <span className="text-brand-500">WhatsMyDNS</span>
+          </a>
 
     Enter your domain and check if the records appear globally.
   </Accordion>
+
   <Accordion title="Verify Record Values">
     - Ensure you copied the **exact** values from AutoSend (including any underscores or periods)
     - Check for extra spaces or hidden characters
     - Verify the record **Type** is correct (CNAME vs TXT)
   </Accordion>
+
   <Accordion title="Check Domain Name Format">
     Some DNS providers automatically append your domain name to records. For example:
 
@@ -50,6 +162,7 @@ If your domain verification is stuck or failing, try these steps:
 
     Check your provider's documentation for the correct format.
   </Accordion>
+
   <Accordion title="Wait Longer for Propagation">
     DNS propagation typically takes:
 
@@ -59,6 +172,7 @@ If your domain verification is stuck or failing, try these steps:
 
     Be patient and try verifying again after waiting.
   </Accordion>
+
   <Accordion title="Delete and Re-add Records">
     If records still aren't working:
 
@@ -76,22 +190,25 @@ If your domain verification is stuck or failing, try these steps:
   <Accordion title="Cloudflare">
     - Log in to Cloudflare dashboard
     - Select your domain
-    - Go to **DNS** \> **Records**
+    - Go to **DNS** > **Records**
     - Click **Add record**
     - Set **Proxy status** to "DNS only" (gray cloud)
   </Accordion>
+
   <Accordion title="GoDaddy">
     - Log in to GoDaddy
-    - Go to **My Products** \> **DNS**
+    - Go to **My Products** > **DNS**
     - Click **Add** to create new records
     - Note: GoDaddy auto-appends your domain
   </Accordion>
+
   <Accordion title="Namecheap">
     - Log in to Namecheap
-    - Go to **Domain List** \> **Manage**
+    - Go to **Domain List** > **Manage**
     - Go to **Advanced DNS** tab
     - Click **Add New Record**
   </Accordion>
+
   <Accordion title="AWS Route53">
     - Open Route53 console
     - Select your hosted zone

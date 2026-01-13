@@ -18,10 +18,11 @@
             "group": "Getting Started",
             "pages": [
               "index",
-              "domain",
+             "domain",
               "/api-keys"
             ]
           },
+          
           {
             "group": "Quickstart",
             "pages": [
@@ -35,16 +36,18 @@
               "transactional-emails/email-activity",
               "transactional-emails/variables",
               "transactional-emails/troubleshooting"
+              
             ]
           },
+        
+          
           {
             "group": "Marketing Emails",
             "pages": [
-              "marketing-emails/campaigns",
-              "marketing-emails/sender",
+               "marketing-emails/campaigns",
+               "marketing-emails/sender",
               {
                 "group": "Contacts",
-                "icon": "book-user",
                 "pages": [
                   "marketing-emails/contacts/introduction",
                   "marketing-emails/contacts/import-csv",
@@ -56,14 +59,13 @@
               "/automations"
             ]
           },
-          {
+            {
             "group": "Others",
             "pages": [
               "others/suppressions",
               "others/unsubscribe-groups",
               {
                 "group": "Webhooks",
-                "icon": "webhook",
                 "pages": [
                   "others/webhooks/introduction",
                   "others/webhooks/event-type",
@@ -76,6 +78,7 @@
           }
         ]
       },
+         
       {
         "tab": "API Reference",
         "groups": [
@@ -152,6 +155,7 @@
         ]
       }
     ]
+   
   },
   "logo": {
     "light": "/logo/light.svg",
