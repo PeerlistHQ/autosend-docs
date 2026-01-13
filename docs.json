@@ -194,7 +194,14 @@
   "footer": {
     "socials": {
       "x": "https://x.com/AutoSendEmail",
-      "github": "https://github.com/peerlisthq"
+      "github": "https://github.com/PeerlistHQ/autosend-docs/tree/main",
+      "website": "https://autosend.com"
+    }
+  },
+  "background": {
+    "color": {
+      "light": "#FAFAF9",
+      "dark": "#292524"
     }
   }
 }
