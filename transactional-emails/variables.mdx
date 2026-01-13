@@ -1,7 +1,8 @@
 ---
-title: 'What are Variables in AutoSend?'
-description: 'Variables let you personalize your transactional emails by dynamically inserting data such as a recipient’s name, order details, or verification link into your email templates.'
-sidebarTitle: 'Variables'
+title: "What are Variables in AutoSend?"
+description: "Variables let you personalize your transactional emails by dynamically inserting data such as a recipient’s name, order details, or verification link into your email templates."
+sidebarTitle: "Variables"
+icon: "brackets-curly"
 ---
 
 Instead of hardcoding values, you can use placeholders that AutoSend replaces with actual data when sending the email via API.
@@ -57,18 +58,16 @@ Hi Robert,
 
 Welcome to AutoSend! You can log in to your account using the link below:
 https://app.autosend.io/login
-
 ```
 
 ---
 
 ## Supported Variable Syntax
 
-AutoSend uses **double curly braces `{{variable_name}}`** to identify variables inside email templates.
+AutoSend uses **`double curly braces {{variable_name}}`** to identify variables inside email templates.
 
 <Info>
-	Variable names can include letters, numbers, and underscores, but must start with a letter (e.g.,
-	`{{ first_name }}`, `{{ orderTotal }}`).
+  Variable names can include letters, numbers, and underscores, but must start with a letter (e.g., `{{ first_name }}`, `{{ orderTotal }}`).
 </Info>
 
 ---
@@ -165,8 +164,7 @@ If you have any questions, we'll reach out to you at robert@example.com.
 ```
 
 <Note>
-	Nested variables are only available with transactional emails. They are not supported in email
-	campaigns or automation emails.
+  Nested variables are only available with transactional emails. They are not supported in email campaigns or automation emails.
 </Note>
 
 ---

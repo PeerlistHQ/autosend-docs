@@ -2,6 +2,7 @@
 title: "Troubleshooting"
 description: "Common issues and solutions for email templates, rendering, and delivery problems."
 sidebarTitle: "Troubleshooting"
+icon: "toolbox"
 ---
 
 ## Template Not Rendering Correctly
@@ -11,21 +12,36 @@ sidebarTitle: "Troubleshooting"
     **Solutions:**
 
     <ul>
-      <li>Verify you're passing `dynamicData` in your API request</li>
-      <li>Ensure the dynamic data is a valid JSON object</li>
-      <li>Check for typos in variable names</li>
+    <li>
+    Verify you're passing dynamicData in your API request</li>
+
+     <li>
+    Ensure the dynamic data is a valid JSON object</li>
+
+     <li>
+    Check for typos in variable names</li>
+
     </ul>
   </Accordion>
-
   <Accordion title="Issue: HTML/CSS not displaying properly">
     **Solutions:**
 
     <ul>
-      <li>Test in multiple email clients (Gmail, Outlook, etc.)</li>
-      <li>Use inline styles instead of `<style>` tags when possible</li>
-      <li>Avoid external CSS files</li>
-      <li>Use tables for layout instead of divs</li>
-      <li>Check for unclosed HTML tags</li>
+    <li>
+    Test in multiple email clients (Gmail, Outlook, etc.)</li>
+
+     <li>
+    Use inline styles instead of \<style\> tags when possible</li>
+
+     <li>
+    Avoid external CSS files</li>
+
+     <li>
+    Use tables for layout instead of divs</li>
+
+     <li>
+    Check for unclosed HTML tags</li>
+
     </ul>
   </Accordion>
 </AccordionGroup>
@@ -39,10 +55,18 @@ sidebarTitle: "Troubleshooting"
     **Solutions:**
 
     <ul>
-      <li>Verify the Template ID is correct</li>
-      <li>Ensure the template belongs to your project</li>
-      <li>Check that the template hasn't been deleted</li>
-      <li>Confirm you're using the correct API key for the project</li>
+    <li>
+    Verify the Template ID is correct</li>
+
+     <li>
+    Ensure the template belongs to your project</li>
+
+     <li>
+    Check that the template hasn't been deleted</li>
+
+     <li>
+    Confirm you're using the correct API key for the project</li>
+
     </ul>
   </Accordion>
 </AccordionGroup>
@@ -54,11 +78,17 @@ sidebarTitle: "Troubleshooting"
     **Solutions:**
 
     <ul>
-      <li>Subject line is required for all templates</li>
-      <li>Add a subject line in the code editor</li>
-      <li>
-        Subject can include dynamic variables: `Order #{{ order_id }} Confirmed`
-      </li>
+    <li>
+    Subject line is required for all templates</li>
+
+     <li>
+    Add a subject line in the code editor</li>
+
+    <li>
+    Subject can include dynamic variables: `Order #{{ order_id }} Confirmed`
+
+    </li>
+
     </ul>
   </Accordion>
 </AccordionGroup>
@@ -70,10 +100,18 @@ sidebarTitle: "Troubleshooting"
     **Solutions:**
 
     <ul>
-      <li>Verify you have at least one verified domain in your project</li>
-      <li>Check that you've entered valid recipient email addresses</li>
-      <li>Ensure your template has both a subject and HTML content</li>
-      <li>Try with fewer recipients (maximum 5 for test emails)</li>
+    <li>
+    Verify you have at least one verified domain in your project</li>
+
+     <li>
+    Check that you've entered valid recipient email addresses</li>
+
+     <li>
+    Ensure your template has both a subject and HTML content</li>
+
+     <li>
+    Try with fewer recipients (maximum 5 for test emails)</li>
+
     </ul>
   </Accordion>
 </AccordionGroup>
@@ -85,10 +123,18 @@ sidebarTitle: "Troubleshooting"
     **Solutions:**
 
     <ul>
-      <li>Check that Test Variables JSON is valid (no syntax errors)</li>
-      <li>Ensure variables match those used in template</li>
-      <li>Try refreshing the page</li>
-      <li>Clear your browser cache</li>
+    <li>
+    Check that Test Variables JSON is valid (no syntax errors)</li>
+
+     <li>
+    Ensure variables match those used in template</li>
+
+     <li>
+    Try refreshing the page</li>
+
+     <li>
+    Clear your browser cache</li>
+
     </ul>
   </Accordion>
 </AccordionGroup>

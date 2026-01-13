@@ -1,11 +1,9 @@
 ---
-title: 'Upsert Contact'
-openapi: 'POST /contacts/email'
+title: "Upsert Contact"
+openapi: "POST /contacts/email"
 ---
 
 <RequestExample>
-
-
 
 ```bash cURL
 curl --request POST \
@@ -24,6 +22,7 @@ curl --request POST \
   }
 }'
 ```
+
 
 ```python Python
 import requests
@@ -51,6 +50,7 @@ response = requests.post(url, json=payload, headers=headers)
 print(response.json())
 ```
 
+
 ```javascript JavaScript
 fetch('https://api.autosend.com/v1/contacts/email', {
   method: 'POST',
@@ -74,6 +74,7 @@ fetch('https://api.autosend.com/v1/contacts/email', {
   .then(data => console.log(data))
   .catch(error => console.error('Error:', error));
 ```
+
 
 ```php PHP
 <?php
@@ -107,6 +108,7 @@ curl_close($ch);
 echo $response;
 ?>
 ```
+
 
 ```go Go
 package main
@@ -150,6 +152,7 @@ func main() {
     fmt.Println("Response Status:", resp.Status)
 }
 ```
+
 
 ```java Java
 import java.io.OutputStream;
@@ -195,6 +198,7 @@ public class UpsertContact {
 }
 ```
 
+
 ```ruby Ruby
 require 'net/http'
 require 'json'
@@ -225,8 +229,6 @@ response = http.request(request)
 puts response.body
 ```
 
-
-
 </RequestExample>
 
 <ResponseExample>
@@ -254,46 +256,52 @@ puts response.body
 
 </ResponseExample>
 
---- 
+---
+
 #### Authorizations
-<ParamField path="Authorizations" type="string | header"  required>
+
+<ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
 </ParamField>
 
 ### Body
+
 Contact information to create or update
 
-<ParamField path="email" type="string<email>"  required>
+<ParamField path="email" type="string<email>" required>
   Valid email address (automatically normalized to lowercase)
-  
+
   Example: `"john.doe@example.com"`
 </ParamField>
 
-<ParamField path="firstName" type="string" >
+<ParamField path="firstName" type="string">
   Contact's first name
-  
+
   Example: `"John"`
 </ParamField>
 
-<ParamField path="lastName" type="string" >
+<ParamField path="lastName" type="string">
   Contact's last name
-  
+
   Example: `"Doe"`
 </ParamField>
 
-<ParamField path="userId" type="string" >
+<ParamField path="userId" type="string">
   Your application's user identifier
-  
+
   Example: `"user_12345"`
 </ParamField>
 
-<ParamField path="customFields" type="object" >
+<ParamField path="customFields" type="object">
   Key-value pairs for custom contact attributes
-   <Expandable title="child attributes">
 
-  <ResponseField name="customFields.{key}" type="string" />
+  <Expandable title="child attributes">
+    <ResponseField name="customFields.{key}" type="string">
+      
+    </ResponseField>
   </Expandable>
-  Example: 
+  Example:
+
   ```jsx
   {
     "company": "Acme Corp",
@@ -305,81 +313,74 @@ Contact information to create or update
 
 #### Response
 
-<span className='text-sm'>Contact created or updated successfully</span>
+<span className="text-sm">
+Contact created or updated successfully</span>
 
 <ResponseField name="success" type="boolean">
   Indicates if the request was successful
-  
+
   Example: `true`
 </ResponseField>
 
 <ResponseField name="data" type="object">
   <Expandable title="child attributes">
-  <ResponseField name="data.id" type="string">
-    Contact ID
-    
-    Example: `"507f1f77bcf86cd799439011"`
-  </ResponseField>
-  
-  <ResponseField name="data.email" type="string">
-    Contact email address
-    
-    Example: `"john.doe@example.com"`
-  </ResponseField>
-  
-  <ResponseField name="data.firstName" type="string">
-    Contact's first name
-    
-    Example: `"John"`
-  </ResponseField>
-  
-  <ResponseField name="data.lastName" type="string">
-    Contact's last name
-    
-    Example: `"Doe"`
-  </ResponseField>
-  
-  <ResponseField name="data.userId" type="string">
-    Your application's user identifier
-    
-    Example: `"user_12345"`
-  </ResponseField>
-  
-  <ResponseField name="data.customFields" type="object">
-    Custom contact attributes
+    <ResponseField name="data.id" type="string">
+      Contact ID
 
-     <Expandable title="child attributes">
+      Example: `"507f1f77bcf86cd799439011"`
+    </ResponseField>
+    <ResponseField name="data.email" type="string">
+      Contact email address
 
-  <ResponseField name="customFields.{key}" type="string" />
-  </Expandable>
-    
-    Example: 
-    ```jsx
-    {
-      "company": "Acme Corp",
-      "role": "Developer",
-      "plan": "premium"
-    }
-    ```
-  </ResponseField>
-  
-  <ResponseField name="data.createdAt" type="string">
-    Contact creation timestamp
-    
-    Example: `"2024-01-15T10:30:00.000Z"`
-  </ResponseField>
-  
-  <ResponseField name="data.updatedAt" type="string">
-    Contact last update timestamp
-    
-    Example: `"2024-01-15T10:30:00.000Z"`
-  </ResponseField>
-  
-  <ResponseField name="data.projectId" type="string">
-    Project ID that the contact belongs to
-    
-    Example: `"229f1f77bcf86cd9273048038"`
-  </ResponseField>
+      Example: `"john.doe@example.com"`
+    </ResponseField>
+    <ResponseField name="data.firstName" type="string">
+      Contact's first name
+
+      Example: `"John"`
+    </ResponseField>
+    <ResponseField name="data.lastName" type="string">
+      Contact's last name
+
+      Example: `"Doe"`
+    </ResponseField>
+    <ResponseField name="data.userId" type="string">
+      Your application's user identifier
+
+      Example: `"user_12345"`
+    </ResponseField>
+    <ResponseField name="data.customFields" type="object">
+      Custom contact attributes
+
+      <Expandable title="child attributes">
+        <ResponseField name="customFields.{key}" type="string">
+          
+        </ResponseField>
+      </Expandable>
+      Example:
+
+      ```jsx
+      {
+        "company": "Acme Corp",
+        "role": "Developer",
+        "plan": "premium"
+      }
+      ```
+    </ResponseField>
+    <ResponseField name="data.createdAt" type="string">
+      Contact creation timestamp
+
+      Example: `"2024-01-15T10:30:00.000Z"`
+    </ResponseField>
+    <ResponseField name="data.updatedAt" type="string">
+      Contact last update timestamp
+
+      Example: `"2024-01-15T10:30:00.000Z"`
+    </ResponseField>
+    <ResponseField name="data.projectId" type="string">
+      Project ID that the contact belongs to
+
+      Example: `"229f1f77bcf86cd9273048038"`
+    </ResponseField>
   </Expandable>
 </ResponseField>
-

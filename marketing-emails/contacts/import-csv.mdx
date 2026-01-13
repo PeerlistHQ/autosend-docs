@@ -1,85 +1,13 @@
 ---
-title: 'Import Contacts via CSV'
+title: "Import Contacts via CSV"
 sidebarTitle: "Import via CSV"
+icon: "file-csv"
 ---
 
 import { IMAGES } from '/snippets/images.mdx';
-
 
 Bulk import contacts into AutoSend using a CSV file.
 
 1. From the Marketing Emails section, click on the **Contacts** tab
 2. Go to **Lists and Segments.**
-3. Click on **Add Contacts > Import via CSV**.
-
-<Frame>
-  <img 
-  src={IMAGES.csvContactDetails}
-  alt="Import CSV"
-  
-/>
-</Frame>
-
-<Steps>
-<Step title="Upload CSV" titleSize='h3'>
-
-1. Select your CSV file.
-2. In **Save in,** chose which list you want to add these contacts to. If needed, you can create a new list directly from this dropdown.
-3. Click **Next**
-
-<Frame>
-  <img 
-  src={IMAGES.importCsv}
-  alt="Import CSV"
-  width={400}
-  height={600}
-  className="w-full"
-/>
-</Frame>
-
-</Step>
-
-<Step title="Map the Fields" titleSize='h3'>
-
-AutoSend will show you a preview of your CSV columns.
-
-Map each column to the corresponding contact field — e.g., “First Name” → `first_name`.
-
-If a field doesn’t exist yet, you can create a new custom field directly from this screen.
-
-<Frame>
-  <img 
-  src={IMAGES.mapFields}
-  alt="Map Fields"
-  width={400}
-  height={600}
-  className="w-full"
-/>
-</Frame>
-</Step>
-
-<Step title="Save and Refresh" titleSize='h3'>
-
-Once mapping is complete, click **Start Importing**.
-
-Your import will begin processing in the background.
-
-You’ll receive an confirmation email once the import is complete, including:
-
-- Total Contacts in the CSV
-- Contacts successfully imported
-- Contacts failed to import
-- Contacts skipped
-- Duplicates
-
-<Frame>
-  <img 
-  src={IMAGES.importSuccess}
-  alt="Import Success"
-  width={400}
-  height={600}
-  className="w-full"
-/>
-</Frame>
-</Step>
-</Steps>
+3. Click on **Add Contacts \> Import via CSV**.

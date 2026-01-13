@@ -2,6 +2,7 @@
 title: "Email Activity"
 description: "Track delivery, performance, and troubleshoot issues for your transactional emails."
 sidebarTitle: "Email Activity"
+icon: "envelopes"
 ---
 
 import { IMAGES } from '/snippets/images.mdx';
@@ -9,17 +10,14 @@ import { IMAGES } from '/snippets/images.mdx';
 **Email Activity** gives you a complete view of all transactional emails sent through your AutoSend account. It helps you track delivery, performance, and troubleshoot issues related to your transactional email workflows.
 
 <Frame>
-  <img src='/images/email-activity.png'
-  alt="Email Activity Home"  />
+  ![Email Activity Home](/images/email-activity.png)
 </Frame>
-
 
 Every time a transactional email is sent from your AutoSend account, whether it’s a password reset, order confirmation, or notification, it appears in your **Email Activity** view.
 
 You can monitor each message’s status, delivery details, and engagement (if applicable).
 
 The **Email Activity** section acts as your go-to audit log for transactional messages, helping you ensure reliable email delivery and visibility across your system.
-
 
 ## What You Can See
 
@@ -34,36 +32,27 @@ Each entry in the Email Activity list includes:
 
 You can click on an individual email record to view the Event History and Details like activity logs, including SMTP response codes, bounce reasons, or event timelines (send → delivery → open → click, etc., depending on available tracking).
 
-
-<Frame>
-  <img src={IMAGES.emailActivityClicks}
-  alt="Email activity clicks" />
-</Frame>
-
 ---
 
 ## Email Activity Filters
 
 You can filter your email activity by multiple criteria to quickly identify patterns, troubleshoot issues, and analyze performance.
+
 <Frame>
-  <img src='/images/email-activity-filter.png' alt="Email Activity Filter Modal" />
+  ![Email Activity Filter Modal](/images/email-activity-filter.png)
 </Frame>
 
-
- ### Filter Options
+### Filter Options
 
 - **Status Filters**: Filter by email delivery and engagement status
   - Delivery lifecycle: Sent, Delivered, Bounced
   - Engagement: Opened, Clicked
   - Issues: Complained, Suppressed, Failed
-
 - **Email Source**: Filter by email template or campaign to see activity for specific email types
-
 - **Sending Domain**: Filter emails sent from specific verified domains
-
 - **API Key**: Filter emails sent using specific API keys for better organization and tracking
 
---- 
+---
 
 ## Why It’s Useful
 
