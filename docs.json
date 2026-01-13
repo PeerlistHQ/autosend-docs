@@ -26,7 +26,14 @@
           {
             "group": "Quickstart",
             "pages": [
-              "quickstart/email-using-api"
+              "quickstart/email-using-api",
+              {
+                "group": "SMTP",
+                "pages": [
+                  "quickstart/smtp/introduction",
+                  "quickstart/smtp/supabase"
+                ]
+              }
             ]
           },
           {
