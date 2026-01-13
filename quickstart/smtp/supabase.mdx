@@ -26,14 +26,17 @@ Before you begin, make sure you have:
     2. Select your project
     3. Navigate to **Authentication**
     4. Under Notifications, you will see **Email** Section.
-    4. Go to **SMTP Settings** tab.
+    5. Go to **SMTP Settings** tab.
+  
+  <Frame>![Supabase Step 1](/images/smtp/supabase-step-1.png)</Frame>
   </Step>
   <Step title="Enable Custom SMTP" titleSize="h3">
     Toggle **Enable Custom SMTP** to enable the SMTP configuration form.
+    
+    <Frame>![Supabase Step 1](/images/smtp/supabase-step-2.png)</Frame>
   </Step>
   <Step title="Enter SMTP Credentials" titleSize="h3">
     Fill in the following settings:
-
     | Field | Value |
     |-------|-------|
     | **Sender email** | `noreply@yourdomain.com` (must match your verified domain) |
@@ -42,11 +45,8 @@ Before you begin, make sure you have:
     | **Port number** | `587` |
     | **Username** | autosend |
     | **Password** | AutoSend API key secret |
-
-    <Frame>
-      <img src="/images/smtp/supabase-smtp-settings.png" alt="Supabase SMTP configuration screen" />
-    </Frame>
-
+    
+    <Frame>![Supabase Step 1](/images/smtp/supabase-step-3.png)</Frame>
   </Step>
   <Step title="Save Settings" titleSize="h3">
     Click **Save** to apply your SMTP configuration.
@@ -144,6 +144,7 @@ For more advanced use cases, you can use Supabase Edge Functions with the AutoSe
 	title='Edge Functions Integration'
 	icon='bolt'
 	iconType='duotone'
-	href='/guides/supabase-edge-functions'>
+	href='/guides/supabase-edge-functions'
+	horizontal>
 	Learn how to send emails from Supabase Edge Functions using the AutoSend API
 </Card>
