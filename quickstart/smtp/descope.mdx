@@ -1,0 +1,116 @@
+---
+title: 'How to send email with AutoSend SMTP and Descope?'
+description: 'Configure Descope to send authentication emails through AutoSend SMTP.'
+sidebarTitle: 'Descope'
+---
+
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+<Frame>![AutoSend x Descope](/images/smtp/autosendxdescope.jpg)</Frame>
+
+Descope uses email for authentication flows like OTP verification, magic links, and password resets. By default, Descope uses its built-in email delivery, but you can configure it to use AutoSend SMTP for better deliverability and email tracking.
+
+## Prerequisites
+
+Before you begin, make sure you have:
+
+- A [Descope project](https://app.descope.com/)
+- A <a href={APP_PATHS.domainConfiguration}>verified domain</a> in AutoSend
+
+## Configuration
+
+<Steps>
+  <Step title="Open Descope Connectors" titleSize="h3">
+    1. Go to your [Descope Console](https://app.descope.com/)
+    2. Navigate to **Connectors** in the sidebar.
+
+  <Frame>![AutoSend x Descope](/images/smtp/descope-step-1.png)</Frame>
+  </Step>
+  <Step title="Search SMTP Connector" titleSize="h3">
+    1. Search for **SMTP**
+    2. Click the SMTP card to create a new SMTP connector.
+  
+  <Frame>![AutoSend x Descope](/images/smtp/descope-step-2.png)</Frame>
+  </Step>
+  <Step title="Enter SMTP Credentials" titleSize="h3">
+    Fill in the following settings:
+    | Field | Value |
+    |-------|-------|
+    | **Connector Name** | `AutoSend` (or your preferred name) |
+    | **Server Hostname** | `smtp.autosend.com` |
+    | **SMTP Port** | `587` |
+    | **Username** | `autosend` |
+    | **Password** | Your AutoSend API key (AS_xxx) |
+    | **Sender Address** | `noreply@yourdomain.com` (must match your verified domain) |
+    | **Sender Name** | Your app name (e.g., "MyApp") |
+  
+  <Frame>![AutoSend x Descope](/images/smtp/descope-step-3.png)</Frame>
+  </Step>
+  <Step title="Test Configuration" titleSize="h3">
+    Click the **Test** button to verify your SMTP configuration is working correctly. Check the Test Results panel for success or error details.
+    <Frame>![AutoSend x Descope](/images/smtp/descope-step-4.png)</Frame>
+  </Step>
+  <Step title="Save Connector" titleSize="h3">
+    Click **Create** to save your SMTP connector.
+  </Step>
+  <Step title="Use in Authentication Flows" titleSize="h3">
+    1. Navigate to **Flows** in Descope
+    2. Select or create your authentication flow
+    3. Add a connector action where email sending is needed
+    4. Select your AutoSend SMTP connector
+    5. Configure the email recipient (typically `{{user.email}}`)
+  </Step>
+</Steps>
+
+## Dynamic Values
+
+Descope supports dynamic values in sender fields using template syntax:
+
+- **Sender Address/Name**: Use `{{options_<value>}}` format for dynamic sender configuration
+- **Recipient**: Set the `To` field dynamically with `{{user.email}}`
+
+Refer to Descope's [Dynamic Values documentation](https://docs.descope.com/flows/dynamic-keys) to learn how to set dynamic values when using messaging connectors.
+
+## Troubleshooting
+
+<AccordionGroup>
+	<Accordion title='Emails not being sent'>
+		- Verify your SMTP credentials are correct
+		- Check that your sender email domain is verified in AutoSend
+		- Ensure the sender address matches a verified domain
+		- Check Descope connector test results for specific errors
+	</Accordion>
+	<Accordion title='Authentication failed'>
+		- Double-check your API key is correct
+		- Ensure you're using `autosend` as the username
+		- Verify your API key is active in the AutoSend dashboard
+	</Accordion>
+	<Accordion title='Connection errors'>
+		- Verify the hostname is `smtp.autosend.com`
+		- Try using port `465` with implicit TLS if port `587` fails
+		- Check if your network blocks outbound SMTP connections
+	</Accordion>
+	<Accordion title='Emails going to spam'>
+		- Ensure your domain has proper DNS records (SPF, DKIM, DMARC)
+		- Use a professional sender name, not just "noreply"
+		- Check your domain reputation in AutoSend
+	</Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+	<Card title='Verify Your Domain' icon='shield-check' href='/domain'>
+		Set up SPF, DKIM, and DMARC for better deliverability
+	</Card>
+	<Card title='Email Activity' icon='list' href='/transactional-emails/email-activity'>
+		Monitor your email delivery and engagement
+	</Card>
+	<Card title='Webhooks' icon='webhook' href='/others/webhooks/introduction'>
+		Set up webhooks to track email events in real-time
+	</Card>
+	<Card title='SMTP Introduction' icon='envelope' href='/quickstart/smtp/introduction'>
+		Learn more about AutoSend SMTP configuration
+	</Card>
+</CardGroup>
