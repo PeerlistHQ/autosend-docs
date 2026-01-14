@@ -11,7 +11,9 @@ import { APP_PATHS } from '/snippets/appPaths.mdx';
 This guide shows you how to integrate AutoSend with [Better Auth](https://www.better-auth.com) to send authentication emails. Better Auth is a framework-agnostic authentication library for TypeScript that supports email verification, password reset, and OTP-based authentication.
 
 <Info>
-For general Better Auth setup and configuration, see the [Better Auth documentation](https://www.better-auth.com/docs). This guide focuses specifically on integrating AutoSend as your email provider.
+	For general Better Auth setup and configuration, see the [Better Auth
+	documentation](https://www.better-auth.com/docs). This guide focuses specifically on integrating
+	AutoSend as your email provider.
 </Info>
 
 You'll learn how to configure:
@@ -30,7 +32,8 @@ Before you begin, make sure you have:
 - Node.js 18+ installed
 
 <Note>
-	You must send emails from a verified domain to ensure deliverability. <a href={APP_PATHS.domainConfiguration}>Learn how to configure your domain</a>.
+	You must send emails from a verified domain to ensure deliverability.{' '}
+	<a href={APP_PATHS.domainConfiguration}>Learn how to configure your domain</a>.
 </Note>
 
 ## Installation
@@ -54,7 +57,7 @@ npm install better-auth
     ```
 
     <Info>
-      Get your API key from the <a href={APP_PATHS.apiKey}>API Keys</a> page in your AutoSend dashboard.
+      Get your API key from the [API Keys](https://autosend.com/settings/api-key) page in your AutoSend dashboard.
     </Info>
 
   </Step>
@@ -188,48 +191,49 @@ For client-side setup (sending OTPs, verifying codes), see the [Better Auth Emai
 
 When running on serverless platforms (Vercel, AWS Lambda, Cloudflare Workers), ensure email sending completes before the function terminates.
 
-### Vercel
+<Tabs>
+  <Tab title="Vercel">
+    Use `waitUntil` to ensure the email is sent:
 
-Use `waitUntil` to ensure the email is sent:
+    ```typescript
+    import { waitUntil } from '@vercel/functions';
+    import { sendEmail } from './autosend';
 
-```typescript
-import { waitUntil } from '@vercel/functions';
-import { sendEmail } from './autosend';
+    // In your Better Auth config
+    sendVerificationEmail: async ({ user, url }) => {
+      waitUntil(
+        sendEmail({
+          to: user.email,
+          templateId: 'tmpl_verify_email',
+          dynamicData: {
+            userName: user.name || 'there',
+            verificationUrl: url,
+          },
+        })
+      );
+    };
+    ```
+  </Tab>
+  <Tab title="Cloudflare Workers">
+    Use the `ctx.waitUntil` method:
 
-// In your Better Auth config
-sendVerificationEmail: async ({ user, url }) => {
-	waitUntil(
-		sendEmail({
-			to: user.email,
-			templateId: 'tmpl_verify_email',
-			dynamicData: {
-				userName: user.name || 'there',
-				verificationUrl: url,
-			},
-		})
-	);
-};
-```
-
-### Cloudflare Workers
-
-Use the `ctx.waitUntil` method:
-
-```typescript
-sendVerificationEmail: async ({ user, url }) => {
-	// Access ExecutionContext from your request handler
-	ctx.waitUntil(
-		sendEmail({
-			to: user.email,
-			templateId: 'tmpl_verify_email',
-			dynamicData: {
-				userName: user.name || 'there',
-				verificationUrl: url,
-			},
-		})
-	);
-};
-```
+    ```typescript
+    sendVerificationEmail: async ({ user, url }) => {
+      // Access ExecutionContext from your request handler
+      ctx.waitUntil(
+        sendEmail({
+          to: user.email,
+          templateId: 'tmpl_verify_email',
+          dynamicData: {
+            userName: user.name || 'there',
+            verificationUrl: url,
+          },
+        })
+      );
+    };
+    ```
+  </Tab>
+</Tabs>
 
 ## Troubleshooting
 
@@ -237,7 +241,7 @@ sendVerificationEmail: async ({ user, url }) => {
   <Accordion title="Domain not verified">
     If you receive a "Domain not verified" error, ensure your sending domain is properly configured in AutoSend.
 
-    **Solution:** Go to your <a href={APP_PATHS.domainConfiguration}>Domain Settings</a> and complete the DNS verification process.
+    **Solution:** Go to your [Domain Settings](https://autosend.com/settings/domains) and complete the DNS verification process.
 
   </Accordion>
   <Accordion title="Invalid API key">
@@ -245,7 +249,7 @@ sendVerificationEmail: async ({ user, url }) => {
 
     **Solution:**
     1. Check your `.env` file has the correct `AUTOSEND_API_KEY`
-    2. Verify the key in your <a href={APP_PATHS.apiKey}>API Keys</a> dashboard
+    2. Verify the key in your [API Keys](https://autosend.com/settings/api-key) dashboard
     3. Ensure the key hasn't been revoked
 
   </Accordion>
@@ -258,9 +262,9 @@ sendVerificationEmail: async ({ user, url }) => {
   <Accordion title="Email not delivered">
     If emails aren't being delivered:
 
-    1. Check the <a href={APP_PATHS.emailActivity}>Email Activity</a> dashboard for delivery status
+    1. Check the [Email Activity](https://autosend.com/email-activities) dashboard for delivery status
     2. Verify the recipient email is valid
-    3. Check if the email is in <a href={APP_PATHS.suppressions}>Suppressions</a>
+    3. Check if the email is in [Suppressions](https://autosend.com/suppressions/global)
     4. Review the <a href={APP_PATHS.transactionalTroubleshooting}>Troubleshooting Guide</a> for common issues
 
   </Accordion>
@@ -268,7 +272,18 @@ sendVerificationEmail: async ({ user, url }) => {
 
 ## Next Steps
 
-- <a href={APP_PATHS.emailTemplates}>Create email templates</a> in AutoSend for consistent branding
-- <a href={APP_PATHS.webhookIntroduction}>Set up webhooks</a> to track email delivery status
-- <a href={APP_PATHS.domainConfiguration}>Configure your domain</a> for better email deliverability
-- <a href={APP_PATHS.emailActivity}>Monitor email activity</a> in your dashboard
+<Columns cols={2}>
+	<Card title='Email Templates' icon='file-code' iconType='duotone' href={APP_PATHS.emailTemplates}>
+		Create reusable, personalized email templates for transactional emails.
+	</Card>
+	<Card title='Webhooks' icon='webhook' iconType='duotone' href={APP_PATHS.webhookIntroduction}>
+		Use webhooks to notify your application about email and contact events in real-time.
+	</Card>
+	<Card title='Sending Domain' icon='globe' iconType='duotone' href={APP_PATHS.domainConfiguration}>
+		Here's a step-by-step guide on how to verify and authenticate domain on AutoSend for sending
+		emails.
+	</Card>
+	<Card title='Email Activity' icon='chart-line' iconType='duotone' href={APP_PATHS.emailActivity}>
+		Track delivery, performance, and troubleshoot issues for your transactional emails.
+	</Card>
+</Columns>
