@@ -1,0 +1,274 @@
+---
+title: 'Send emails with Better Auth'
+sidebarTitle: 'Better Auth'
+description: 'Learn how to send authentication emails using AutoSend with Better Auth for email verification, password reset, and OTP.'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+## Overview
+
+This guide shows you how to integrate AutoSend with [Better Auth](https://www.better-auth.com) to send authentication emails. Better Auth is a framework-agnostic authentication library for TypeScript that supports email verification, password reset, and OTP-based authentication.
+
+<Info>
+For general Better Auth setup and configuration, see the [Better Auth documentation](https://www.better-auth.com/docs). This guide focuses specifically on integrating AutoSend as your email provider.
+</Info>
+
+You'll learn how to configure:
+
+- **Email Verification** - Send verification links when users sign up
+- **Password Reset** - Send password reset links
+- **Email OTP** - Send one-time passwords for passwordless authentication
+
+## Prerequisites
+
+Before you begin, make sure you have:
+
+- An [AutoSend account](https://autosend.com/) with an <a href={APP_PATHS.apiKey}>API key</a>
+- A <a href={APP_PATHS.domainConfiguration}>verified domain</a> configured in AutoSend
+- A project using Better Auth (v1.0 or later)
+- Node.js 18+ installed
+
+<Note>
+	You must send emails from a verified domain to ensure deliverability. <a href={APP_PATHS.domainConfiguration}>Learn how to configure your domain</a>.
+</Note>
+
+## Installation
+
+Install Better Auth in your project if you haven't already:
+
+```bash
+npm install better-auth
+```
+
+## Integration
+
+<Steps>
+  <Step title="Set Environment Variables" titleSize="h3">
+    Add the required environment variables to your `.env` file:
+
+    ```bash .env
+    AUTOSEND_API_KEY=your_autosend_api_key_here
+    FROM_EMAIL=noreply@yourdomain.com
+    FROM_NAME=Your App Name
+    ```
+
+    <Info>
+      Get your API key from the <a href={APP_PATHS.apiKey}>API Keys</a> page in your AutoSend dashboard.
+    </Info>
+
+  </Step>
+  <Step title="Create AutoSend Email Helper" titleSize="h3">
+    Create a helper function to send emails via the <a href={APP_PATHS.sendEmail}>AutoSend API</a> using templates:
+
+    ```typescript lib/autosend.ts
+    const AUTOSEND_API_KEY = process.env.AUTOSEND_API_KEY!;
+    const FROM_EMAIL = process.env.FROM_EMAIL || "noreply@yourdomain.com";
+    const FROM_NAME = process.env.FROM_NAME || "Your App";
+
+    interface SendEmailOptions {
+      to: string;
+      templateId: string;
+      dynamicData: Record<string, string>;
+    }
+
+    export async function sendEmail({ to, templateId, dynamicData }: SendEmailOptions) {
+      const response = await fetch("https://api.autosend.com/v1/mails/send", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${AUTOSEND_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: {
+            email: FROM_EMAIL,
+            name: FROM_NAME,
+          },
+          to: {
+            email: to,
+          },
+          templateId,
+          dynamicData,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to send email");
+      }
+
+      return response.json();
+    }
+    ```
+
+  </Step>
+  <Step title="Create Email Templates" titleSize="h3">
+    Create email templates in your [AutoSend dashboard](https://app.autosend.com) for each authentication flow:
+
+    | Template | Suggested ID | Variables |
+    |----------|--------------|-----------|
+    | Email verification | `tmpl_verify_email` | `{{userName}}`, `{{verificationUrl}}` |
+    | Password reset | `tmpl_password_reset` | `{{userName}}`, `{{resetUrl}}` |
+    | Sign-in OTP | `tmpl_otp_signin` | `{{otp}}` |
+    | Verification OTP | `tmpl_otp_verify` | `{{otp}}` |
+    | Password reset OTP | `tmpl_otp_reset` | `{{otp}}` |
+
+    Learn more about <a href={APP_PATHS.templateVariables}>template variables</a>.
+
+  </Step>
+  <Step title="Configure Better Auth" titleSize="h3">
+    Wire up your Better Auth configuration to send emails through AutoSend:
+
+    ```typescript lib/auth.ts
+    import { betterAuth } from "better-auth";
+    import { emailOTP } from "better-auth/plugins";
+    import { sendEmail } from "./autosend";
+
+    export const auth = betterAuth({
+      // ... your database and other configuration
+
+      emailVerification: {
+        sendOnSignUp: true,
+        sendVerificationEmail: async ({ user, url }) => {
+          sendEmail({
+            to: user.email,
+            templateId: "tmpl_verify_email",
+            dynamicData: {
+              userName: user.name || "there",
+              verificationUrl: url,
+            },
+          });
+        },
+      },
+
+      emailAndPassword: {
+        enabled: true,
+        sendResetPassword: async ({ user, url }) => {
+          sendEmail({
+            to: user.email,
+            templateId: "tmpl_password_reset",
+            dynamicData: {
+              userName: user.name || "there",
+              resetUrl: url,
+            },
+          });
+        },
+      },
+
+      plugins: [
+        emailOTP({
+          sendVerificationOTP: async ({ email, otp, type }) => {
+            const templateIds = {
+              "sign-in": "tmpl_otp_signin",
+              "email-verification": "tmpl_otp_verify",
+              "forget-password": "tmpl_otp_reset",
+            };
+
+            sendEmail({
+              to: email,
+              templateId: templateIds[type],
+              dynamicData: { otp },
+            });
+          },
+        }),
+      ],
+    });
+    ```
+
+    <Warning>
+      Don't await email sending to prevent timing attacks. This ensures response time doesn't reveal whether an email was sent.
+    </Warning>
+
+  </Step>
+</Steps>
+
+For client-side setup (sending OTPs, verifying codes), see the [Better Auth Email OTP documentation](https://www.better-auth.com/docs/plugins/email-otp).
+
+## Serverless Considerations
+
+When running on serverless platforms (Vercel, AWS Lambda, Cloudflare Workers), ensure email sending completes before the function terminates.
+
+### Vercel
+
+Use `waitUntil` to ensure the email is sent:
+
+```typescript
+import { waitUntil } from '@vercel/functions';
+import { sendEmail } from './autosend';
+
+// In your Better Auth config
+sendVerificationEmail: async ({ user, url }) => {
+	waitUntil(
+		sendEmail({
+			to: user.email,
+			templateId: 'tmpl_verify_email',
+			dynamicData: {
+				userName: user.name || 'there',
+				verificationUrl: url,
+			},
+		})
+	);
+};
+```
+
+### Cloudflare Workers
+
+Use the `ctx.waitUntil` method:
+
+```typescript
+sendVerificationEmail: async ({ user, url }) => {
+	// Access ExecutionContext from your request handler
+	ctx.waitUntil(
+		sendEmail({
+			to: user.email,
+			templateId: 'tmpl_verify_email',
+			dynamicData: {
+				userName: user.name || 'there',
+				verificationUrl: url,
+			},
+		})
+	);
+};
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Domain not verified">
+    If you receive a "Domain not verified" error, ensure your sending domain is properly configured in AutoSend.
+
+    **Solution:** Go to your <a href={APP_PATHS.domainConfiguration}>Domain Settings</a> and complete the DNS verification process.
+
+  </Accordion>
+  <Accordion title="Invalid API key">
+    A 401 error indicates your API key is invalid or missing.
+
+    **Solution:**
+    1. Check your `.env` file has the correct `AUTOSEND_API_KEY`
+    2. Verify the key in your <a href={APP_PATHS.apiKey}>API Keys</a> dashboard
+    3. Ensure the key hasn't been revoked
+
+  </Accordion>
+  <Accordion title="Rate limit exceeded">
+    If you're sending too many emails, you may hit rate limits.
+
+    **Solution:** Review the <a href={APP_PATHS.rateLimit}>Rate Limits</a> documentation and implement appropriate throttling in your application.
+
+  </Accordion>
+  <Accordion title="Email not delivered">
+    If emails aren't being delivered:
+
+    1. Check the <a href={APP_PATHS.emailActivity}>Email Activity</a> dashboard for delivery status
+    2. Verify the recipient email is valid
+    3. Check if the email is in <a href={APP_PATHS.suppressions}>Suppressions</a>
+    4. Review the <a href={APP_PATHS.transactionalTroubleshooting}>Troubleshooting Guide</a> for common issues
+
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+- <a href={APP_PATHS.emailTemplates}>Create email templates</a> in AutoSend for consistent branding
+- <a href={APP_PATHS.webhookIntroduction}>Set up webhooks</a> to track email delivery status
+- <a href={APP_PATHS.domainConfiguration}>Configure your domain</a> for better email deliverability
+- <a href={APP_PATHS.emailActivity}>Monitor email activity</a> in your dashboard
