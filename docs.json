@@ -115,7 +115,7 @@
 				"groups": [
 					{
 						"group": "Getting started",
-						"pages": ["guides/supabase-edge-functions"]
+						"pages": ["guides/supabase-edge-functions", "guides/better-auth"]
 					}
 				]
 			},
