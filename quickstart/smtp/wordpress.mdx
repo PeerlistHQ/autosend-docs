@@ -1,0 +1,130 @@
+---
+title: 'How to send emails from WordPress with SMTP'
+description: 'Configure WordPress to send emails through AutoSend SMTP.'
+sidebarTitle: 'WordPress'
+---
+
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+<Frame>![AutoSend x WordPress](/images/smtp/autosendxwordpress.jpg)</Frame>
+
+WordPress relies on the PHP `mail()` function to send emails by default, which often results in poor deliverability or emails not being sent at all. By configuring WordPress to use AutoSend SMTP, you ensure reliable delivery for password resets, user notifications, contact form submissions, and WooCommerce order emails.
+
+## Prerequisites
+
+<Card title='Verified Domain' icon='globe' href={APP_PATHS.domainConfiguration} horizontal>
+	Verify your sending domain in Domain Settings
+</Card>
+
+## Configuration
+
+<Steps>
+  <Step title="Install WP Mail SMTP Plugin" titleSize="h3">
+    Install and activate the [WP Mail SMTP](https://wordpress.org/plugins/wp-mail-smtp/) plugin from your WordPress dashboard.
+  </Step>
+  <Step title="Access WP Mail SMTP Settings" titleSize="h3">
+    Navigate to **WP Mail SMTP** > **Settings** in the WordPress admin sidebar.
+
+  </Step>
+  <Step title="Configure From Email and Name" titleSize="h3">
+    In the **Mail** section, configure your sender details:
+
+    | Field | Value |
+    |-------|-------|
+    | **From Email** | Your verified email address (e.g., `hello@yourdomain.com`) |
+    | **From Name** | Your sender name (e.g., `Your Company`) |
+
+    Enable **Force From Email** to ensure WordPress always uses this address.
+
+    <Note>
+    The From Email must use a domain that is verified in AutoSend. For example, if you verified `yourdomain.com`, use an address like `hello@yourdomain.com`.
+    </Note>
+
+    <Frame>![From Email Configuration](/images/smtp/wordpress-step-1.png)</Frame>
+
+  </Step>
+  <Step title="Select Other SMTP as Mailer" titleSize="h3">
+    Scroll down to the **Mailer** section and select **Other SMTP**.
+
+    <Frame>![Select Other SMTP](/images/smtp/wordpress-step-2.png)</Frame>
+
+  </Step>
+  <Step title="Enter SMTP Credentials" titleSize="h3">
+    Fill in the following SMTP settings:
+
+    | Field | Value |
+    |-------|-------|
+    | **SMTP Host** | `smtp.autosend.com` |
+    | **Encryption** | TLS |
+    | **SMTP Port** | `587` (or `465` for SSL) |
+    | **Authentication** | On |
+    | **SMTP Username** | `autosend` |
+    | **SMTP Password** | Your AutoSend API key (AS_xxx) |
+
+    <Note>
+    You can create your SMTP API key in the <a href="https://autosend.com/settings/smtp" target="_blank" rel="noopener noreferrer">AutoSend SMTP Settings</a>.
+    </Note>
+
+    <Frame>![SMTP Credentials](/images/smtp/wordpress-step-3.png)</Frame>
+
+    Click **Save Settings** to save your configuration.
+
+  </Step>
+  <Step title="Send a Test Email" titleSize="h3">
+    1. Go to **WP Mail SMTP** > **Tools** > **Email Test**
+    2. Enter a recipient email address
+    3. Click **Send Email**
+
+    <Frame>![Send Test Email](/images/smtp/wordpress-step-4.png)</Frame>
+
+    You can also check the <a href={AUTOSEND_PATHS.emailActivity} target="_blank" rel="noopener noreferrer">Email Activity</a> dashboard to verify the email was sent through AutoSend.
+
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+<AccordionGroup>
+	<Accordion title='Emails not being sent'>
+		- Verify your SMTP credentials are correct - Check that your sender email domain is verified in
+		AutoSend - Ensure **Force From Email** is enabled in WP Mail SMTP settings - Check if your
+		hosting provider blocks outgoing SMTP connections
+	</Accordion>
+	<Accordion title='Authentication failed'>
+		- Double-check your API key is correct - Ensure you're using `autosend` as the username - Verify
+		your API key is active in the AutoSend dashboard - Make sure there are no extra spaces in the
+		credentials
+	</Accordion>
+	<Accordion title='Connection timeout errors'>
+		- Verify the server address is `smtp.autosend.com` - Try using port `465` with SSL if port `587`
+		fails - Contact your hosting provider to ensure SMTP ports are not blocked - Some shared hosts
+		block outgoing SMTP; consider upgrading to a VPS
+	</Accordion>
+	<Accordion title='Plugin conflicts'>
+		- Deactivate other SMTP or email plugins that may interfere - Check for caching plugins that
+		might cache email settings - Test with a default WordPress theme to rule out theme conflicts
+	</Accordion>
+	<Accordion title='Emails going to spam'>
+		- Ensure your domain has proper DNS records (SPF, DKIM, DMARC) - Use a professional sender name
+		and address - Check your domain reputation in AutoSend - Avoid spam trigger words in your email
+		content
+	</Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+	<Card title='Verify Your Domain' icon='shield-check' href='/domain'>
+		Set up SPF, DKIM, and DMARC for better deliverability
+	</Card>
+	<Card title='Email Activity' icon='list' href='/transactional-emails/email-activity'>
+		Monitor your email delivery and engagement
+	</Card>
+	<Card title='Webhooks' icon='webhook' href='/others/webhooks/introduction'>
+		Set up webhooks to track email events in real-time
+	</Card>
+	<Card title='SMTP Introduction' icon='envelope' href='/quickstart/smtp/introduction'>
+		Learn more about AutoSend SMTP configuration
+	</Card>
+</CardGroup>
