@@ -1,0 +1,127 @@
+---
+title: 'How to send email with AutoSend SMTP and Auth0?'
+description: 'Configure Auth0 to send authentication emails through AutoSend SMTP.'
+sidebarTitle: 'Auth0'
+---
+
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+<Frame>![AutoSend x Auth0](/images/smtp/autosendxauth0.jpg)</Frame>
+
+Auth0 uses email for authentication flows like password resets, email verification, and passwordless login. By default, Auth0 uses its built-in email provider, but you can configure it to use AutoSend SMTP for better deliverability and email tracking.
+
+## Prerequisites
+
+<Card title='Verified Domain' icon='globe' href={APP_PATHS.domainConfiguration} horizontal>
+	Verify your sending domain in Domain Settings
+</Card>
+
+## SMTP Credentials
+
+Use these credentials when configuring Auth0:
+
+| Field             | Value                             |
+| ----------------- | --------------------------------- |
+| **SMTP Host**     | `smtp.autosend.com`               |
+| **SMTP Port**     | `587` (or `465` for implicit TLS) |
+| **SMTP Username** | `autosend`                        |
+| **SMTP Password** | Your AutoSend API key (AS_xxx)    |
+
+## Configuration
+
+<Steps>
+  <Step title="Navigate to Email Provider Settings" titleSize="h3">
+    1. Log in to your [Auth0 Dashboard](https://manage.auth0.com/)
+    2. Go to **Branding** in the sidebar
+    3. Click on **Email Provider**
+
+  <Frame>![Supabase Step 1](/images/smtp/auth0-step-1.png)</Frame>
+  </Step>
+  <Step title="Enable Custom Email Provider" titleSize="h3">
+    Toggle **Use my own email provider** to enable custom SMTP configuration.
+  
+  <Frame>![Supabase Step 2](/images/smtp/auth0-step-2.png)</Frame>
+  </Step>
+  <Step title="Select SMTP Provider" titleSize="h3">
+    Select **SMTP Provider** as your email provider type.
+
+  <Frame>![Supabase Step 3](/images/smtp/auth0-step-3.png)</Frame>
+  </Step>
+  <Step title="Enter SMTP Credentials" titleSize="h3">
+    Fill in the following settings:
+
+    | Field | Value |
+    |-------|-------|
+    | **From** | `noreply@yourdomain.com` (must match your verified domain) |
+    | **SMTP Host** | `smtp.autosend.com` |
+    | **SMTP Port** | `587` |
+    | **SMTP Username** | `autosend` |
+    | **SMTP Password** | Your AutoSend API key (AS_xxx) |
+
+  <Frame>![Supabase Step 4](/images/smtp/auth0-step-4.png)</Frame>
+  </Step>
+  <Step title="Save Configuration" titleSize="h3">
+    Click **Save** to apply your SMTP settings.
+  </Step>
+  <Step title="Send a Test Email" titleSize="h3">
+    After saving, click the **Send Test** button next to the Save button to send a test email and verify your configuration is working.
+
+    You can also check the <a href={AUTOSEND_PATHS.emailActivity} target="_blank" rel="noopener noreferrer">Email Activity</a> dashboard to verify the email was sent through AutoSend.
+
+  <Frame>![Supabase Step 5](/images/smtp/auth0-step-5.png)</Frame>
+  </Step>
+</Steps>
+
+## Email Templates
+
+Auth0 allows you to customize email templates for different authentication scenarios. Navigate to **Branding** → **Email Templates** to modify:
+
+- **Verification Email** - Sent when users need to verify their email address
+- **Welcome Email** - Sent after successful signup
+- **Change Password** - Sent for password reset requests
+- **Blocked Account** - Sent when an account is blocked
+- **Passwordless Email** - Sent for passwordless authentication (magic links/codes)
+
+<Note>
+Auth0 email templates use Liquid syntax for dynamic content. Variables like `{{ user.email }}` and `{{ url }}` are replaced with actual values when the email is sent.
+</Note>
+
+## Troubleshooting
+
+<AccordionGroup>
+	<Accordion title='Emails not being sent'>
+		- Verify your SMTP credentials are correct - Check that your sender email domain is verified in
+		AutoSend - Ensure the From address matches a verified domain - Check Auth0 logs for SMTP
+		connection errors (**Monitoring** → **Logs**)
+	</Accordion>
+	<Accordion title='Authentication failed'>
+		- Double-check your API key is correct - Ensure you're using `autosend` as the username - Verify
+		your API key is active in the AutoSend dashboard
+	</Accordion>
+	<Accordion title='Connection errors'>
+		- Verify the hostname is `smtp.autosend.com` - Try using port `465` with implicit TLS if port
+		`587` fails - Check if your network blocks outbound SMTP connections
+	</Accordion>
+	<Accordion title='Emails going to spam'>
+		- Ensure your domain has proper DNS records (SPF, DKIM, DMARC) - Use a professional sender name,
+		not just "noreply" - Check your domain reputation in AutoSend
+	</Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+	<Card title='Verify Your Domain' icon='shield-check' href='/domain'>
+		Set up SPF, DKIM, and DMARC for better deliverability
+	</Card>
+	<Card title='Email Activity' icon='list' href='/transactional-emails/email-activity'>
+		Monitor your email delivery and engagement
+	</Card>
+	<Card title='Webhooks' icon='webhook' href='/others/webhooks/introduction'>
+		Set up webhooks to track email events in real-time
+	</Card>
+	<Card title='SMTP Introduction' icon='envelope' href='/quickstart/smtp/introduction'>
+		Learn more about AutoSend SMTP configuration
+	</Card>
+</CardGroup>
