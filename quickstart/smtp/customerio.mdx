@@ -1,0 +1,116 @@
+---
+title: 'How to send email with AutoSend SMTP and Customer.io?'
+description: 'Configure Customer.io to send emails through AutoSend SMTP.'
+sidebarTitle: 'Customer.io'
+---
+
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+<Frame>![AutoSend x Customer.io](/images/smtp/autosendxcustomerio.jpg)</Frame>
+
+Customer.io is a messaging platform for marketing, transactional emails, push notifications, and in-app messages. By default, Customer.io uses its built-in email service, but you can configure it to use AutoSend SMTP for better deliverability and email tracking.
+
+## Prerequisites
+
+<Card title='Verified Domain' icon='globe' href={APP_PATHS.domainConfiguration} horizontal>
+	Verify your sending domain in Domain Settings
+</Card>
+
+## Configuration
+
+<Steps>
+  <Step title="Navigate to Email Settings" titleSize="h3">
+    1. Log in to your [Customer.io Dashboard](https://fly.customer.io/)
+    2. Go to **Settings** > **Workspace Settings**
+    3. Click on **Email**
+
+    <Frame>![Supabase Step 1](/images/smtp/customerio-step-1.png)</Frame>
+
+  </Step>
+  <Step title="Add Custom SMTP Server" titleSize="h3">
+    1. Click on **Custom SMTP**
+    2. Select **Add Custom SMTP Server**
+
+    <Frame>![Supabase Step 2](/images/smtp/customerio-step-2.png)</Frame>
+
+  </Step>
+  <Step title="Select SMTP Provider" titleSize="h3">
+    Select **Other SMTP** as your provider type and click **Continue to set up**.
+	
+	<Frame>![Supabase Step 3](/images/smtp/customerio-step-3.png)</Frame>			
+  </Step>
+  <Step title="Enter SMTP Credentials" titleSize="h3">
+    Fill in the following settings:
+
+    | Field | Value |
+    |-------|-------|
+    | **Address** | `smtp.autosend.com` |
+    | **Port** | `587` (or `465` for implicit TLS) |
+    | **Authentication** | Select `Plain` |
+    | **Username** | `autosend` |
+    | **Password** | Your AutoSend API key (AS_xxx) |
+
+    <Frame>![Supabase Step 1](/images/smtp/customerio-step-4.png)</Frame>
+    <Note>
+    Customer.io does not support port 25. Use port 587, 465, or 2525 instead.
+    </Note>
+
+    Click **Finish set up** to save your configuration.
+
+  </Step>
+  <Step title="Add a Sending Domain" titleSize="h3">
+    Before sending emails, add a sending domain in Customer.io that matches your verified domain in AutoSend.
+
+    1. Go to **Settings** → **Workspace Settings** → **Email**
+    2. Under **Sending Domains**, add your domain (e.g., `yourdomain.com`)
+
+    <Frame>![Supabase Step 5](/images/smtp/customerio-step-5.png)</Frame>
+
+  </Step>
+  <Step title="Send a Test Email" titleSize="h3">
+    Create a test campaign or broadcast to verify your SMTP configuration is working correctly.
+
+    You can also check the <a href={AUTOSEND_PATHS.emailActivity} target="_blank" rel="noopener noreferrer">Email Activity</a> dashboard to verify the email was sent through AutoSend.
+
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+<AccordionGroup>
+	<Accordion title='Emails not being sent'>
+		- Verify your SMTP credentials are correct - Check that your sender email domain is verified in
+		AutoSend - Ensure you've added a sending domain in Customer.io - Check Customer.io's delivery
+		logs for SMTP connection errors
+	</Accordion>
+	<Accordion title='Authentication failed'>
+		- Double-check your API key is correct - Ensure you're using `autosend` as the username - Verify
+		your API key is active in the AutoSend dashboard
+	</Accordion>
+	<Accordion title='Connection errors'>
+		- Verify the server address is `smtp.autosend.com` - Try using port `465` or `2525` if port
+		`587` fails - Remember that port 25 is not supported by Customer.io
+	</Accordion>
+	<Accordion title='Emails going to spam'>
+		- Ensure your domain has proper DNS records (SPF, DKIM, DMARC) - Use a professional sender name
+		and address - Check your domain reputation in AutoSend
+	</Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+	<Card title='Verify Your Domain' icon='shield-check' href='/domain'>
+		Set up SPF, DKIM, and DMARC for better deliverability
+	</Card>
+	<Card title='Email Activity' icon='list' href='/transactional-emails/email-activity'>
+		Monitor your email delivery and engagement
+	</Card>
+	<Card title='Webhooks' icon='webhook' href='/others/webhooks/introduction'>
+		Set up webhooks to track email events in real-time
+	</Card>
+	<Card title='SMTP Introduction' icon='envelope' href='/quickstart/smtp/introduction'>
+		Learn more about AutoSend SMTP configuration
+	</Card>
+</CardGroup>
