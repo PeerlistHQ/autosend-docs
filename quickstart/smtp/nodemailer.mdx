@@ -1,0 +1,282 @@
+---
+title: 'How to send emails with Nodemailer and AutoSend SMTP'
+description: 'Send transactional emails from Node.js applications using Nodemailer with AutoSend SMTP.'
+sidebarTitle: 'Nodemailer'
+---
+
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+<Frame>![AutoSend x Nodemailer](/images/smtp/autosendxnodemailer.jpg)</Frame>
+
+[Nodemailer](https://nodemailer.com/) is the most popular email sending library for Node.js. By integrating Nodemailer with AutoSend SMTP, you can send transactional emails from your Node.js applications with reliable delivery, full tracking, and detailed analytics.
+
+## Prerequisites
+
+<CardGroup cols={2}>
+	<Card title='Verified Domain' href='https://autosend.com/settings/domain'>
+		Make sure you have a verified domain added in AutoSend to send emails from.
+	</Card>
+	<Card title='API Key' href='https://autosend.com/settings/api-key'>
+		Create a new API key for SMTP authentication or use the existing one.
+	</Card>
+</CardGroup>
+
+## Configuration
+
+<Steps>
+  <Step title="Install Nodemailer" titleSize="h3">
+    Install the Nodemailer package using your preferred package manager:
+
+    <CodeGroup>
+
+    ```bash npm
+    npm install nodemailer
+    ```
+
+    ```bash yarn
+    yarn add nodemailer
+    ```
+
+    ```bash pnpm
+    pnpm add nodemailer
+    ```
+
+    ```bash bun
+    bun add nodemailer
+    ```
+
+    </CodeGroup>
+
+  </Step>
+  <Step title="Create the SMTP Transporter" titleSize="h3">
+    Configure the Nodemailer transporter with your AutoSend SMTP credentials:
+
+    ```javascript
+    import nodemailer from 'nodemailer';
+
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.autosend.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: 'autosend',
+        pass: 'AS_xxx', // Your AutoSend API key
+      },
+    });
+    ```
+
+    | Field | Value |
+    |-------|-------|
+    | **Host** | `smtp.autosend.com` |
+    | **Port** | `465` (recommended) or `587` |
+    | **Username** | `autosend` |
+    | **Password** | Your AutoSend API key (AS_xxx) |
+    | **Secure** | `true` for port 465, `false` for port 587 |
+
+  </Step>
+  <Step title="Send an Email" titleSize="h3">
+    Use the `sendMail` method to send your email:
+
+    ```javascript
+    const info = await transporter.sendMail({
+      from: 'sender@yourdomain.com',
+      to: 'recipient@example.com',
+      subject: 'Hello from AutoSend',
+      html: '<h1>Welcome!</h1><p>This email was sent via Nodemailer and AutoSend SMTP.</p>',
+    });
+
+    console.log('Message sent:', info.messageId);
+    ```
+
+    <Note>
+    The `from` address must use a domain that is verified in AutoSend. For example, if you verified `yourdomain.com`, use an address like `sender@yourdomain.com`.
+    </Note>
+
+  </Step>
+  <Step title="Verify Delivery" titleSize="h3">
+    Check the <a href={AUTOSEND_PATHS.emailActivity} target="_blank" rel="noopener noreferrer">Email Activity</a> dashboard to verify your email was sent successfully. You'll see delivery status, opens, clicks, and other engagement metrics.
+  </Step>
+</Steps>
+
+---
+
+## Complete Examples
+
+<CodeGroup>
+
+```javascript JavaScript (ES Modules) expandable
+import nodemailer from 'nodemailer';
+
+const transporter = nodemailer.createTransport({
+	host: 'smtp.autosend.com',
+	port: 465,
+	secure: true,
+	auth: {
+		user: 'autosend',
+		pass: 'AS_xxx',
+	},
+});
+
+async function sendEmail() {
+	const info = await transporter.sendMail({
+		from: 'sender@yourdomain.com',
+		to: 'recipient@example.com',
+		subject: 'Hello from AutoSend',
+		html: '<h1>Welcome!</h1><p>This email was sent via Nodemailer and AutoSend SMTP.</p>',
+	});
+
+	console.log('Message sent:', info.messageId);
+}
+
+sendEmail().catch(console.error);
+```
+
+```javascript JavaScript (CommonJS) expandable
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+	host: 'smtp.autosend.com',
+	port: 465,
+	secure: true,
+	auth: {
+		user: 'autosend',
+		pass: 'AS_xxx',
+	},
+});
+
+async function sendEmail() {
+	const info = await transporter.sendMail({
+		from: 'sender@yourdomain.com',
+		to: 'recipient@example.com',
+		subject: 'Hello from AutoSend',
+		html: '<h1>Welcome!</h1><p>This email was sent via Nodemailer and AutoSend SMTP.</p>',
+	});
+
+	console.log('Message sent:', info.messageId);
+}
+
+sendEmail().catch(console.error);
+```
+
+```typescript TypeScript expandable
+import nodemailer from 'nodemailer';
+import type { Transporter } from 'nodemailer';
+
+const transporter: Transporter = nodemailer.createTransport({
+	host: 'smtp.autosend.com',
+	port: 465,
+	secure: true,
+	auth: {
+		user: 'autosend',
+		pass: 'AS_xxx',
+	},
+});
+
+async function sendEmail(): Promise<void> {
+	const info = await transporter.sendMail({
+		from: 'sender@yourdomain.com',
+		to: 'recipient@example.com',
+		subject: 'Hello from AutoSend',
+		html: '<h1>Welcome!</h1><p>This email was sent via Nodemailer and AutoSend SMTP.</p>',
+	});
+
+	console.log('Message sent:', info.messageId);
+}
+
+sendEmail().catch(console.error);
+```
+
+</CodeGroup>
+
+---
+
+## Advanced Usage
+
+### Sending with Attachments
+
+```javascript
+await transporter.sendMail({
+	from: 'sender@yourdomain.com',
+	to: 'recipient@example.com',
+	subject: 'Email with Attachment',
+	html: '<p>Please find the attached file.</p>',
+	attachments: [
+		{
+			filename: 'document.pdf',
+			path: './files/document.pdf',
+		},
+		{
+			filename: 'image.png',
+			content: imageBuffer,
+		},
+	],
+});
+```
+
+### Sending to Multiple Recipients
+
+```javascript
+await transporter.sendMail({
+	from: 'sender@yourdomain.com',
+	to: 'recipient1@example.com, recipient2@example.com',
+	cc: 'cc@example.com',
+	bcc: 'bcc@example.com',
+	subject: 'Hello Everyone',
+	html: '<p>This email is sent to multiple recipients.</p>',
+});
+```
+
+### Plain Text and HTML
+
+```javascript
+await transporter.sendMail({
+	from: 'sender@yourdomain.com',
+	to: 'recipient@example.com',
+	subject: 'Hello from AutoSend',
+	text: 'This is the plain text version of the email.',
+	html: '<h1>Hello!</h1><p>This is the HTML version of the email.</p>',
+});
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+	<Accordion title='Emails not being sent'>
+		- Verify your SMTP credentials are correct - Check that your sender email domain is verified in
+		AutoSend - Ensure the `from` address matches a verified domain - Check your application logs for
+		SMTP connection errors
+	</Accordion>
+	<Accordion title='Authentication failed'>
+		- Double-check your API key is correct - Ensure you're using `autosend` as the username - Verify
+		your API key is active in the AutoSend dashboard - Make sure there are no extra spaces in the
+		credentials
+	</Accordion>
+	<Accordion title='Connection errors'>
+		- Verify the hostname is `smtp.autosend.com` - Try using port `587` with `secure: false` if port
+		`465` fails - Check if your network or firewall blocks outbound SMTP connections - Test
+		connectivity: `telnet smtp.autosend.com 465`
+	</Accordion>
+	<Accordion title='Emails going to spam'>
+		- Ensure your domain has proper DNS records (SPF, DKIM, DMARC) - Use a professional sender name
+		and address - Check your domain reputation in AutoSend - Avoid spam trigger words in your email
+		content
+	</Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+	<Card title='Verify Your Domain' icon='shield-check' href='/domain'>
+		Set up SPF, DKIM, and DMARC for better deliverability
+	</Card>
+	<Card title='Email Activity' icon='list' href='/transactional-emails/email-activity'>
+		Monitor your email delivery and engagement
+	</Card>
+	<Card title='Webhooks' icon='webhook' href='/others/webhooks/introduction'>
+		Set up webhooks to track email events in real-time
+	</Card>
+	<Card title='SMTP Introduction' icon='envelope' href='/quickstart/smtp/introduction'>
+		Learn more about AutoSend SMTP configuration
+	</Card>
+</CardGroup>
