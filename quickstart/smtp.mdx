@@ -7,11 +7,9 @@ sidebarTitle: 'SMTP'
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 
-## Overview
+<Frame>![Supabase Step 1](/images/smtp/autosend-smtp-settings.png)</Frame>
 
-AutoSend provides an SMTP relay service that allows you to send transactional emails using standard SMTP protocols. This is useful when integrating with platforms that require SMTP credentials, such as Supabase, WordPress, or other services that don't support REST APIs.
-
-<Frame>![Supabase Step 1](/images/smtp/smtp-screenshot-1.png)</Frame>
+AutoSend provides an SMTP relay service that allows you to send transactional emails using standard SMTP protocols. This is useful when integrating with platforms that require SMTP credentials, such as [Supabase](/guides/smtp/supabase), [WordPress](/guides/smtp/wordpress), or other services that don't support REST APIs.
 
 ## Prerequisites
 
@@ -303,19 +301,13 @@ AutoSend SMTP works with any platform that supports SMTP configuration:
 
 <AccordionGroup>
 	<Accordion title='Can I see emails sent via SMTP in my dashboard?'>
-		Yes! All emails sent through SMTP appear in your AutoSend Dashboard under the{' '}
-		<a href={AUTOSEND_PATHS.emailActivity} target='_blank' rel='noopener noreferrer'>
-			**Email Activity**
-		</a>{' '}
-		section. You can view delivery status, opens, clicks, and bounces just like API-sent emails.
+		Yes! All emails sent through SMTP appear in your AutoSend Dashboard under the [**Email
+		Activity**](/transactional-emails/email-activity) section. You can view delivery status, opens,
+		clicks, and bounces just like API-sent emails.
 	</Accordion>
 	<Accordion title='What are the rate limits for SMTP?'>
 		SMTP rate limits are the same as the REST API. Your plan's sending limits apply across both SMTP
-		and API. Check your{' '}
-		<a href={AUTOSEND_PATHS.dashboard} target='_blank' rel='noopener noreferrer'>
-			Dashboard
-		</a>{' '}
-		for your current limits.
+		and API. Check your [Dashboard](https://autosend.com/dashboard) for your current limits.
 	</Accordion>
 	<Accordion title='Can I send attachments via SMTP?'>
 		Yes, AutoSend SMTP supports standard MIME attachments. Most SMTP libraries handle attachment
@@ -327,13 +319,12 @@ AutoSend SMTP works with any platform that supports SMTP configuration:
 		performance is excellent.
 	</Accordion>
 	<Accordion title='Do webhooks work with SMTP emails?'>
-		Yes! Webhooks are triggered for all events (delivery, bounce, open, click, etc.) regardless of
-		whether the email was sent via SMTP or the API.
+		Yes! [Webhooks](/others/webhooks/introduction) are triggered for all events (delivery, bounce,
+		open, click, etc.) regardless of whether the email was sent via SMTP or the API.
 	</Accordion>
 	<Accordion title='Can I use multiple sender addresses?'>
 		Yes, you can send from any email address on a verified domain. Simply use the desired sender
-		address in the "From" field. Make sure all sender addresses are properly configured in your
-		domain settings.
+		address in the "From" field.
 	</Accordion>
 </AccordionGroup>
 
