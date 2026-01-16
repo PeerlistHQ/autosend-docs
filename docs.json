@@ -115,21 +115,26 @@
         "hidden": false,
         "groups": [
           {
-            "group": "REST API",
+            "group": "Integrations",
             "pages": [
-              "guides/better-auth",
-              "guides/supabase-edge-functions"
-            ]
-          },
-          {
-            "group": "SMTP",
-            "pages": [
-              "guides/smtp/auth0",
-              "guides/smtp/customerio",
-              "guides/smtp/descope",
-              "guides/smtp/nodemailer",
-              "guides/smtp/supabase",
-              "guides/smtp/wordpress"
+              {
+                "group": "REST API",
+                "pages": [
+                  "guides/better-auth",
+                  "guides/supabase-edge-functions"
+                ]
+              },
+              {
+                "group": "SMTP",
+                "pages": [
+                  "guides/smtp/auth0",
+                  "guides/smtp/customerio",
+                  "guides/smtp/descope",
+                  "guides/smtp/nodemailer",
+                  "guides/smtp/supabase",
+                  "guides/smtp/wordpress"
+                ]
+              }
             ]
           }
         ]
