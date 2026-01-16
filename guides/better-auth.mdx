@@ -6,35 +6,20 @@ description: 'Learn how to send authentication emails using AutoSend with Better
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 
-## Overview
+<Frame>![AutoSend x Better Auth](/images/smtp/autosendxbetterauth.jpg)</Frame>
 
 This guide shows you how to integrate AutoSend with [Better Auth](https://www.better-auth.com) to send authentication emails. Better Auth is a framework-agnostic authentication library for TypeScript that supports email verification, password reset, and OTP-based authentication.
 
-<Info>
-	For general Better Auth setup and configuration, see the [Better Auth
-	documentation](https://www.better-auth.com/docs). This guide focuses specifically on integrating
-	AutoSend as your email provider.
-</Info>
-
-You'll learn how to configure:
-
-- **Email Verification** - Send verification links when users sign up
-- **Password Reset** - Send password reset links
-- **Email OTP** - Send one-time passwords for passwordless authentication
-
 ## Prerequisites
 
-Before you begin, make sure you have:
-
-- An [AutoSend account](https://autosend.com/) with an <a href={APP_PATHS.apiKey}>API key</a>
-- A <a href={APP_PATHS.domainConfiguration}>verified domain</a> configured in AutoSend
-- A project using Better Auth (v1.0 or later)
-- Node.js 18+ installed
-
-<Note>
-	You must send emails from a verified domain to ensure deliverability.{' '}
-	<a href={APP_PATHS.domainConfiguration}>Learn how to configure your domain</a>.
-</Note>
+<CardGroup cols={2}>
+	<Card title='Verified Domain' href='https://autosend.com/settings/domain'>
+		Make sure you have a verified domain added in AutoSend to send emails from.
+	</Card>
+	<Card title='API Key' href='https://autosend.com/settings/api-key'>
+		Create a new API key for SMTP authentication or use the existing one.
+	</Card>
+</CardGroup>
 
 ## Installation
 
@@ -213,6 +198,7 @@ When running on serverless platforms (Vercel, AWS Lambda, Cloudflare Workers), e
       );
     };
     ```
+
   </Tab>
   <Tab title="Cloudflare Workers">
     Use the `ctx.waitUntil` method:
@@ -232,6 +218,7 @@ When running on serverless platforms (Vercel, AWS Lambda, Cloudflare Workers), e
       );
     };
     ```
+
   </Tab>
 </Tabs>
 

@@ -1,7 +1,7 @@
 ---
 title: 'How to send email with AutoSend SMTP'
 description: "Send transactional emails using AutoSend's SMTP relay service. Integrate with any application that supports SMTP."
-sidebarTitle: 'Introduction'
+sidebarTitle: 'SMTP'
 ---
 
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
@@ -15,11 +15,14 @@ AutoSend provides an SMTP relay service that allows you to send transactional em
 
 ## Prerequisites
 
-Before you begin, make sure you have:
-
-<Card title='Verified Domain' icon='globe' href={APP_PATHS.domainConfiguration} horizontal>
-	Verify your sending domain in Domain Settings
-</Card>
+<CardGroup cols={2}>
+	<Card title='Verified Domain' href='https://autosend.com/settings/domain'>
+		Make sure you have a verified domain added in AutoSend to send emails from.
+	</Card>
+	<Card title='API Key' href='https://autosend.com/settings/api-key'>
+		Create a new API key for SMTP authentication or use the existing one.
+	</Card>
+</CardGroup>
 
 ## SMTP Credentials
 
@@ -32,8 +35,6 @@ Use the following credentials to configure your SMTP client:
 | **Username**   | autosend                               |
 | **Password**   | AS_xxxx (Your AutoSend API key secret) |
 | **Encryption** | TLS/SSL (see port guide below)         |
-
-<Note>The API key secret will be generated with the flow of setting up the SMTP.</Note>
 
 ## Port Configuration
 
@@ -48,11 +49,6 @@ AutoSend supports multiple ports to accommodate different network configurations
 	**Which port should I use?** Start with port `587` (STARTTLS) as it's the most widely supported.
 	For implicit TLS, use port `465`.
 </Tip>
-
-<Warning>
-	Always use TLS/SSL encryption when connecting to SMTP. Never send credentials over an unencrypted
-	connection.
-</Warning>
 
 ## Integration Examples
 
@@ -241,13 +237,13 @@ Add `-v` or `-vv` for detailed SMTP conversation logs.
 
 AutoSend SMTP works with any platform that supports SMTP configuration:
 
-<Columns cols={2}>
-	<Card title='Supabase' icon='database' iconType='duotone' href='/quickstart/smtp/supabase'>
-		Configure Supabase Auth to send emails via AutoSend
-	</Card>
-	<Card title='API Integration' icon='code' iconType='duotone' href='/quickstart/email-using-api'>
-		Send emails directly via the AutoSend REST API
-	</Card>
+<Columns cols={3}>
+	<Card title='Auth0' href='/guides/smtp/auth0' />
+	<Card title='Customer.io' href='/guides/smtp/customerio' />
+	<Card title='Descope' href='/guides/smtp/descope' />
+	<Card title='Nodemailer' href='/guides/smtp/nodemailer' />
+	<Card title='Supabase' href='/guides/smtp/supabase' />
+	<Card title='WordPress' href='/guides/smtp/wordpress' />
 </Columns>
 
 ## Troubleshooting

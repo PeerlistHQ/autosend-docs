@@ -1,177 +1,211 @@
 {
-	"$schema": "https://mintlify.com/docs.json",
-	"theme": "mint",
-	"name": "AutoSend Documentation",
-	"description": "AutoSend is an email platform for developers and marketers to send transactional and marketing emails.",
-	"colors": {
-		"primary": "#4F39F6",
-		"light": "#7C86FF",
-		"dark": "#432DD7"
-	},
-	"favicon": "/favicon.svg",
-	"navigation": {
-		"tabs": [
-			{
-				"tab": "Documentation",
-				"groups": [
-					{
-						"group": "Getting Started",
-						"pages": ["index", "domain", "api-keys"]
-					},
-
-					{
-						"group": "Quickstart",
-						"pages": [
-							"quickstart/email-using-api",
-							{
-								"group": "SMTP",
-								"pages": ["quickstart/smtp/introduction", "quickstart/smtp/auth0", "quickstart/smtp/customerio", "quickstart/smtp/descope", "quickstart/smtp/nodemailer", "quickstart/smtp/supabase", "quickstart/smtp/wordpress"]
-							}
-						]
-					},
-					{
-						"group": "Transactional Emails",
-						"pages": [
-							"transactional-emails/email-templates",
-							"transactional-emails/email-activity",
-							"transactional-emails/variables",
-							"transactional-emails/troubleshooting"
-						]
-					},
-
-					{
-						"group": "Marketing Emails",
-						"pages": [
-							"marketing-emails/campaigns",
-							"marketing-emails/sender",
-							{
-								"group": "Contacts",
-								"pages": [
-									"marketing-emails/contacts/introduction",
-									"marketing-emails/contacts/import-csv",
-									"marketing-emails/contacts/lists",
-									"marketing-emails/contacts/segments",
-									"marketing-emails/contacts/custom-fields"
-								]
-							},
-							"/automations"
-						]
-					},
-					{
-						"group": "Others",
-						"pages": [
-							"others/suppressions",
-							"others/unsubscribe-groups",
-							{
-								"group": "Webhooks",
-								"pages": [
-									"others/webhooks/introduction",
-									"others/webhooks/event-type",
-									"others/webhooks/retries",
-									"others/webhooks/verify-requests"
-								]
-							},
-							"others/team"
-						]
-					}
-				]
-			},
-
-			{
-				"tab": "API Reference",
-				"groups": [
-					{
-						"group": "API Reference",
-						"pages": [
-							"api-reference/introduction",
-							"api-reference/errors",
-							"api-reference/rate-limit",
-							"api-reference/best-practices"
-						]
-					},
-					{
-						"group": "Sending",
-						"pages": ["api-reference/mails/send", "api-reference/mails/bulk"]
-					},
-					{
-						"group": "Contacts",
-						"pages": [
-							"api-reference/contacts/create-contacts",
-							"api-reference/contacts/upsert-contact",
-							"api-reference/contacts/remove",
-							"api-reference/contacts/get-contact-by-id",
-							"api-reference/contacts/search-contacts-by-emails",
-							"api-reference/contacts/bulk-update-contacts",
-							"api-reference/contacts/delete-contact-by-user-id",
-							"api-reference/contacts/delete-contact-by-ids",
-							"api-reference/contacts/get-unsubscribe-groups"
-						]
-					}
-				]
-			},
-			{
-				"tab": "Guides",
-				"hidden": false,
-				"groups": [
-					{
-						"group": "Getting started",
-						"pages": ["guides/supabase-edge-functions", "guides/better-auth"]
-					}
-				]
-			},
-			{
-				"tab": "Changelog",
-				"hidden": false,
-				"groups": [
-					{
-						"group": "January 2026",
-						"pages": ["changelog/2026/jan/8"]
-					},
-					{
-						"group": "December 2025",
-						"pages": ["changelog/2025/dec/29", "changelog/2025/dec/16", "changelog/2025/dec/1"]
-					},
-					{
-						"group": "November 2025",
-						"pages": ["changelog/2025/nov/21", "changelog/2025/nov/12", "changelog/2025/nov/1"]
-					}
-				]
-			}
-		]
-	},
-	"logo": {
-		"light": "/logo/light.svg",
-		"dark": "/logo/dark.svg"
-	},
-	"api": {
-		"playground": {
-			"display": "simple"
-		}
-	},
-	"navbar": {
-		"links": [
-			{
-				"label": "Support",
-				"href": "mailto:support@autosend.com"
-			},
-			{
-				"label": "Login",
-				"href": "https://autosend.com/login"
-			}
-		],
-		"primary": {
-			"type": "button",
-			"label": "Sign up",
-			"href": "https://autosend.com/signup"
-		}
-	},
-	"contextual": {
-		"options": ["copy", "view", "chatgpt", "claude", "perplexity", "mcp", "cursor", "vscode"]
-	},
-	"footer": {
-		"socials": {
-			"x": "https://x.com/AutoSendEmail",
-			"github": "https://github.com/peerlisthq"
-		}
-	}
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "AutoSend Documentation",
+  "description": "AutoSend is an email platform for developers and marketers to send transactional and marketing emails.",
+  "colors": {
+    "primary": "#4F39F6",
+    "light": "#7C86FF",
+    "dark": "#432DD7"
+  },
+  "favicon": "/favicon.svg",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "index",
+              "domain",
+              "api-keys"
+            ]
+          },
+          {
+            "group": "Quickstart",
+            "pages": [
+              "quickstart/email-using-api",
+              "quickstart/smtp"
+            ]
+          },
+          {
+            "group": "Transactional Emails",
+            "pages": [
+              "transactional-emails/email-templates",
+              "transactional-emails/email-activity",
+              "transactional-emails/variables",
+              "transactional-emails/troubleshooting"
+            ]
+          },
+          {
+            "group": "Marketing Emails",
+            "pages": [
+              "marketing-emails/campaigns",
+              "marketing-emails/sender",
+              {
+                "group": "Contacts",
+                "pages": [
+                  "marketing-emails/contacts/introduction",
+                  "marketing-emails/contacts/import-csv",
+                  "marketing-emails/contacts/lists",
+                  "marketing-emails/contacts/segments",
+                  "marketing-emails/contacts/custom-fields"
+                ]
+              },
+              "/automations"
+            ]
+          },
+          {
+            "group": "Others",
+            "pages": [
+              "others/suppressions",
+              "others/unsubscribe-groups",
+              {
+                "group": "Webhooks",
+                "pages": [
+                  "others/webhooks/introduction",
+                  "others/webhooks/event-type",
+                  "others/webhooks/retries",
+                  "others/webhooks/verify-requests"
+                ]
+              },
+              "others/team"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "API Reference",
+            "pages": [
+              "api-reference/introduction",
+              "api-reference/errors",
+              "api-reference/rate-limit",
+              "api-reference/best-practices"
+            ]
+          },
+          {
+            "group": "Sending",
+            "pages": [
+              "api-reference/mails/send",
+              "api-reference/mails/bulk"
+            ]
+          },
+          {
+            "group": "Contacts",
+            "pages": [
+              "api-reference/contacts/create-contacts",
+              "api-reference/contacts/upsert-contact",
+              "api-reference/contacts/remove",
+              "api-reference/contacts/get-contact-by-id",
+              "api-reference/contacts/search-contacts-by-emails",
+              "api-reference/contacts/bulk-update-contacts",
+              "api-reference/contacts/delete-contact-by-user-id",
+              "api-reference/contacts/delete-contact-by-ids",
+              "api-reference/contacts/get-unsubscribe-groups"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Guides",
+        "hidden": false,
+        "groups": [
+          {
+            "group": "REST API",
+            "pages": [
+              "guides/better-auth",
+              "guides/supabase-edge-functions"
+            ]
+          },
+          {
+            "group": "SMTP",
+            "pages": [
+              "guides/smtp/auth0",
+              "guides/smtp/customerio",
+              "guides/smtp/descope",
+              "guides/smtp/nodemailer",
+              "guides/smtp/supabase",
+              "guides/smtp/wordpress"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Changelog",
+        "hidden": false,
+        "groups": [
+          {
+            "group": "January 2026",
+            "pages": [
+              "changelog/2026/jan/8"
+            ]
+          },
+          {
+            "group": "December 2025",
+            "pages": [
+              "changelog/2025/dec/29",
+              "changelog/2025/dec/16",
+              "changelog/2025/dec/1"
+            ]
+          },
+          {
+            "group": "November 2025",
+            "pages": [
+              "changelog/2025/nov/21",
+              "changelog/2025/nov/12",
+              "changelog/2025/nov/1"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "api": {
+    "playground": {
+      "display": "simple"
+    }
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "mailto:support@autosend.com"
+      },
+      {
+        "label": "Login",
+        "href": "https://autosend.com/login"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Sign up",
+      "href": "https://autosend.com/signup"
+    }
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com/AutoSendEmail",
+      "github": "https://github.com/peerlisthq"
+    }
+  }
 }
