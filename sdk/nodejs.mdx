@@ -1,0 +1,322 @@
+---
+title: 'AutoSend Node.js SDK'
+description: 'Get started with the official AutoSend Node.js SDK to send emails programmatically.'
+sidebarTitle: 'Node.js'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+
+The official AutoSend Node.js SDK provides a simple and intuitive way to send transactional and marketing emails from your Node.js applications. It includes full TypeScript support and handles authentication, request formatting, and error handling for you.
+
+## Prerequisites
+
+<CardGroup cols={2}>
+	<Card title='Verified Domain' href='https://autosend.com/settings/domain'>
+		Make sure you have a verified domain added in AutoSend to send emails from.
+	</Card>
+	<Card title='API Key' href='https://autosend.com/settings/api-key'>
+		Create an API key to authenticate your SDK requests.
+	</Card>
+</CardGroup>
+
+## Installation
+
+Install the SDK using your preferred package manager:
+
+<CodeGroup>
+
+```bash npm
+npm install autosendjs
+```
+
+```bash yarn
+yarn add autosendjs
+```
+
+```bash pnpm
+pnpm add autosendjs
+```
+
+</CodeGroup>
+
+## Quick Start
+
+Initialize the SDK with your API key:
+
+```typescript
+import { Autosend } from 'autosendjs';
+
+const autosend = new Autosend('AS_xxxxxxxxxxxx');
+```
+
+<Tip>
+	Store your API key in an environment variable (e.g., `AUTOSEND_API_KEY`) rather than hardcoding it
+	in your source code.
+</Tip>
+
+## Configuration Options
+
+The SDK accepts optional configuration parameters:
+
+```typescript
+const autosend = new Autosend('AS_xxxxxxxxxxxx', {
+	baseUrl: 'https://api.autosend.com/v1',
+	timeout: 30000,
+	maxRetries: 3,
+	debug: false,
+});
+```
+
+| Option       | Type    | Default                       | Description                                  |
+| ------------ | ------- | ----------------------------- | -------------------------------------------- |
+| `baseUrl`    | string  | `https://api.autosend.com/v1` | API base URL                                 |
+| `timeout`    | number  | `30000`                       | Request timeout in milliseconds              |
+| `maxRetries` | number  | `3`                           | Number of retry attempts for failed requests |
+| `debug`      | boolean | `false`                       | Enable debug logging                         |
+
+## Sending Emails
+
+### Plain Text Email
+
+```typescript
+await autosend.emails.send({
+	from: { email: 'hello@yourdomain.com' },
+	to: { email: 'user@example.com' },
+	subject: 'Hello World',
+	text: 'Welcome to AutoSend!',
+});
+```
+
+### HTML Email
+
+```typescript
+await autosend.emails.send({
+	from: { email: 'hello@yourdomain.com', name: 'Your Company' },
+	to: { email: 'user@example.com', name: 'John Doe' },
+	subject: 'Welcome to Our Platform',
+	html: '<h1>Welcome!</h1><p>Thanks for signing up.</p>',
+});
+```
+
+### Using Templates
+
+Send emails using a pre-built template with dynamic variables:
+
+```typescript
+await autosend.emails.send({
+	from: { email: 'hello@yourdomain.com' },
+	to: { email: 'user@example.com' },
+	subject: 'Your Order Confirmation',
+	templateId: 'your_template_id',
+	dynamicData: {
+		name: 'Johnrao',
+		orderNumber: '12345',
+		orderTotal: '$99.00',
+	},
+});
+```
+
+<Note>
+	Learn more about creating and managing templates in the [Email
+	Templates](/transactional-emails/email-templates) documentation.
+</Note>
+
+## Bulk Emails
+
+Send multiple emails in a single API call:
+
+```typescript
+await autosend.emails.bulk({
+	emails: [
+		{
+			from: { email: 'hello@yourdomain.com' },
+			to: { email: 'user1@example.com' },
+			subject: 'Hello User 1',
+			html: '<p>Welcome to AutoSend!</p>',
+		},
+		{
+			from: { email: 'hello@yourdomain.com' },
+			to: { email: 'user2@example.com' },
+			subject: 'Hello User 2',
+			html: '<p>Welcome to AutoSend!</p>',
+		},
+	],
+});
+```
+
+<Tip>
+	Bulk sending is more efficient than sending emails individually. Use it when you need to send the
+	same or similar emails to multiple recipients.
+</Tip>
+
+## Sync user data to Contacts on AutoSend
+
+The SDK lets you create, retrieve, update, and delete contacts directly from your code—useful for syncing users from your app, updating [custom fields](/marketing-emails/contacts/custom-fields), or managing [unsubscribe](/others/unsubscribe-groups) preferences.
+
+### Create a Contact
+
+Add a new contact to your AutoSend account. You can assign them to one or more lists and include custom fields for segmentation.
+
+```typescript
+await autosend.contacts.create({
+	email: 'user@example.com',
+	firstName: 'John',
+	lastName: 'Doe',
+	listIds: ['list_abc123'],
+	customFields: {
+		company: 'Acme Inc',
+		plan: 'pro',
+	},
+});
+```
+
+### Get a Contact
+
+Retrieve a contact's details by their ID. This returns their email, name, list memberships, custom fields, and subscription status.
+
+```typescript
+const contact = await autosend.contacts.get('contact_id');
+console.log(contact);
+```
+
+### Create or Update a Contact
+
+Use `upsert` when you're not sure if a contact already exists. If the email exists, it updates the contact; otherwise, it creates a new one. This is ideal for syncing users from your application.
+
+```typescript
+await autosend.contacts.upsert({
+	email: 'user@example.com',
+	firstName: 'Jane',
+	customFields: {
+		plan: 'enterprise',
+	},
+});
+```
+
+### Delete a Contact
+
+Permanently remove a contact from your account. This removes them from all lists and deletes their data.
+
+```typescript
+await autosend.contacts.delete('contact_id');
+```
+
+<Note>
+	Learn more about lists, segments, and custom fields in the
+	[Contacts](/marketing-emails/contacts/introduction) documentation.
+</Note>
+
+## Resend Adapter
+
+If you're migrating from Resend, the SDK provides a compatibility adapter that mirrors the Resend API patterns:
+
+```typescript
+import { Resend } from 'autosendjs/resend';
+
+// Use your AutoSend API key
+const resend = new Resend('AS_xxxxxxxxxxxx');
+
+// Or use the RESEND_API_KEY environment variable
+const resend = new Resend();
+```
+
+<Note>
+	The Resend adapter uses `properties` instead of `customFields` for contacts, and `remove()`
+	instead of `delete()` to match Resend's API conventions.
+</Note>
+
+## TypeScript Support
+
+The SDK is written in TypeScript and provides full type definitions out of the box. All methods, parameters, and responses are fully typed for better developer experience and IDE support.
+
+```typescript
+import { Autosend, SendEmailRequest } from 'autosendjs';
+
+const autosend = new Autosend('AS_xxxxxxxxxxxx');
+
+const emailRequest: SendEmailRequest = {
+	from: { email: 'hello@yourdomain.com' },
+	to: { email: 'user@example.com' },
+	subject: 'Type-safe email',
+	html: '<p>This request is fully typed!</p>',
+};
+
+await autosend.emails.send(emailRequest);
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Authentication failed">
+    **Possible causes:**
+    - Invalid or expired API key
+    - API key not included in the request
+
+    **Solutions:**
+    - Verify your API key in the <a href={AUTOSEND_PATHS.apiKey} target="_blank" rel="noopener noreferrer">Dashboard</a>
+    - Ensure you're passing the API key correctly when initializing the SDK
+    - Check that your API key hasn't been revoked
+
+  </Accordion>
+  <Accordion title="Request timeout">
+    **Possible causes:**
+    - Network connectivity issues
+    - Request payload too large
+
+    **Solutions:**
+    - Increase the timeout in configuration options
+    - Check your network connection
+    - For bulk emails, reduce the batch size
+
+  </Accordion>
+  <Accordion title="Domain not verified">
+    **Possible causes:**
+    - Sending from an unverified domain
+    - DNS records not properly configured
+
+    **Solutions:**
+    - Verify your sending domain in the Dashboard
+    - Ensure SPF and DKIM records are properly set up
+    - Check the [Domain Configuration](/domain) guide
+
+  </Accordion>
+  <Accordion title="Rate limit exceeded">
+    **Possible causes:**
+    - Too many requests in a short period
+
+    **Solutions:**
+    - Implement exponential backoff in your application
+    - Use bulk sending instead of individual requests
+    - Check the [Rate Limits](/api-reference/rate-limit) documentation for your plan's limits
+
+  </Accordion>
+</AccordionGroup>
+
+## Resources
+
+<CardGroup cols={2}>
+	<Card title='GitHub' icon='github' href='https://github.com/autosendhq/autosend-node'>
+		View source code, report issues, and contribute.
+	</Card>
+	<Card title='NPM' icon='npm' href='https://www.npmjs.com/package/autosendjs'>
+		View package details and version history.
+	</Card>
+</CardGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+	<Card title='API Reference' icon='code' href='/api-reference'>
+		Explore the complete API reference for advanced use cases
+	</Card>
+	<Card title='Email Templates' icon='file-code' href='/transactional-emails/email-templates'>
+		Create reusable email templates with dynamic variables
+	</Card>
+	<Card title='Webhooks' icon='webhook' href='/others/webhooks/introduction'>
+		Set up webhooks to track email events in real-time
+	</Card>
+	<Card title='Contact Management' icon='users' href='/marketing-emails/contacts/introduction'>
+		Learn how to manage contacts and lists
+	</Card>
+</CardGroup>
