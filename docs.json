@@ -26,6 +26,12 @@
             "group": "Quickstart",
             "pages": [
               "quickstart/email-using-api",
+              {
+                "group": "SDKs",
+                "pages": [
+                  "sdk/nodejs"
+                ]
+              },
               "quickstart/smtp"
             ]
           },
