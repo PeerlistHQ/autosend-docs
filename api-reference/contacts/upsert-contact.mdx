@@ -302,7 +302,11 @@ Contact information to create or update
   }
   ```
 </ParamField>
+<ParamField path="listIds" type="array">
+  IDs of contact lists - Separate from global contacts. Do not pass segment IDs. This will run Segmentations and Automations for the newly passed contact list ids.
 
+  Example: `["507f1f77bcf86cd799439011"]`
+</ParamField>
 #### Response
 
 <span className='text-sm'>Contact created or updated successfully</span>
@@ -379,6 +383,11 @@ Contact information to create or update
     Project ID that the contact belongs to
     
     Example: `"229f1f77bcf86cd9273048038"`
+  </ResponseField>
+  <ResponseField name="data.listIds" type="array">
+    Contact List IDs
+    
+    Example: `["507f1f77bcf86cd799439011"]`
   </ResponseField>
   </Expandable>
 </ResponseField>

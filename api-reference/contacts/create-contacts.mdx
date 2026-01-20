@@ -286,7 +286,11 @@ Contact information to create
   
   Example: `"user_12345"`
 </ParamField>
-
+<ParamField path="listIds" type="array">
+  IDs of contact lists - Separate from global contacts. Do not pass segment IDs. This will run Segmentation and Automations for the Global contact list and the passed contact list ids.
+  
+  Example: `["507f1f77bcf86cd799439011"]`
+</ParamField>
 <ParamField path="customFields" type="object" >
   Key-value pairs for custom contact attributes
   
@@ -380,6 +384,11 @@ Contact information to create
     Project ID that the contact belongs to
     
     Example: `"229f1f77bcf86cd9273048038"`
+  </ResponseField>
+  <ResponseField name="data.listIds" type="array">
+    Contact List IDs
+    
+    Example: `["507f1f77bcf86cd799439011"]`
   </ResponseField>
   </Expandable>
 </ResponseField>
