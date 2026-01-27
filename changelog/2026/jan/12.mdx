@@ -1,0 +1,39 @@
+---
+title: 'Platform Improvements'
+description: 'Better analytics, faster campaign delivery, and critical bug fixes'
+sidebarTitle: '12 January 2026'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx';
+
+We've shipped major improvements to how you track campaign performance and how quickly your emails reach inboxes. This release focuses on clarity, speed, and reliability.
+
+---
+
+## Improvements
+
+### Improved Analytics
+
+Campaign and automation analytics are now easier to understand and faster to load. Email status tooltips explain what each status means and what action to take. Date/time formatting is now consistent across all views for easier comparison.
+
+### Faster Campaign Delivery
+
+We upgraded our sending infrastructure to improve speed and reliability. Campaigns now reach inboxes faster with fewer delivery errors, especially for large contact lists.
+
+---
+
+## Bug Fixes
+
+We fixed several issues that were causing friction:
+
+1. **Image width in emails** - Fixed images breaking email responsiveness on mobile devices. Images now scale properly regardless of screen size.
+2. **Image library insertion** - Resolved a bug where inserting images from your library would fail silently. Now it just works.
+3. **Segment evaluation queue** - Fixed an issue in the segment evaluation queue that were causing segments to refresh incorrectly.
+
+---
+
+<Info>
+  Your feedback is helping us build the best email platform. Keep it coming at <a href={`mailto:${SUPPORT_EMAIL}`} title="AutoSend support mail">{SUPPORT_EMAIL}</a>.
+</Info>

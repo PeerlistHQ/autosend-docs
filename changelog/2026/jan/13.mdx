@@ -1,0 +1,63 @@
+---
+title: 'Introducing Spam Checker'
+description: 'Catch spam triggers before you hit send'
+sidebarTitle: '13 January 2026'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx';
+
+Let's be honest: you can write the perfect email, nail the copy, and still end up in spam. The frustrating part? Most spam filters don't tell you what went wrong. You're left guessing why your open rates tanked.
+
+We built Spam Checker to fix that. It analyzes your email content in real-time, flags potential issues, and tells you exactly what to change before you send.
+
+<Frame>![Spam Checker](/images/spam-checker-changlog.png)</Frame>
+
+### What's New
+
+1. **Real-time spam analysis** - As you write, Spam Checker scans your content for known spam triggers. No need to run a separate check or switch tools.
+
+2. **Severity scoring** - Issues are categorized as safe, warning, or critical based on how likely they are to trigger spam filters. Focus on what matters most.
+
+3. **Specific issue detection** - We check for excessive caps, suspicious URLs, spam trigger words, urgency language, missing unsubscribe links, and more. Each issue shows exactly where the problem is in your email.
+
+4. **One-click fixes** - Most issues come with suggested replacements. Click "Accept" and the fix is applied instantly. No copy-pasting required.
+
+5. **Works everywhere** - Available in the email builder for campaigns, automations, transactional templates, and compose. Same experience across the board.
+
+### What It Catches
+
+- High-risk spam words like "click here", "buy now", "limited time"
+- Excessive capitalization and punctuation (STOP YELLING!!!)
+- URL shorteners and suspicious links
+- Deceptive claims and urgency language
+- Missing unsubscribe links in marketing emails
+
+That's it. Write better emails, land in more inboxes.
+
+---
+
+## Improvements
+
+1. **Better analytics UI** - Campaign and automation analytics now show clicked status sections. Empty states are cleaner and more helpful.
+
+2. **Pricing slider overhaul** - The plan comparison slider is smoother and more responsive. Demo CTAs in onboarding are more prominent.
+
+---
+
+## Bug Fixes
+
+1. **Send test email background** - Fixed styling issue in the test email modal.
+
+2. **Info icon alignment** - Fixed alignment and null click issue in automation analytics.
+
+3. **Contacts count not updating** - Contact counts now refresh correctly when adding contacts to a list.
+
+4. **Automation card border** - Fixed outline styling on sequence cards.
+
+---
+
+<Info>
+  As always, let us know if you run into issues or have feedback at <a href={`mailto:${SUPPORT_EMAIL}`} title="AutoSend support mail">{SUPPORT_EMAIL}</a>. We're listening to every single suggestion you have.
+</Info>
