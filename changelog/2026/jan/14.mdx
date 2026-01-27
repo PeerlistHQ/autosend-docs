@@ -1,0 +1,56 @@
+---
+title: 'Introducing SMTP Support'
+description: 'Send emails via SMTP instead of the REST API'
+sidebarTitle: '14 January 2026'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx';
+
+You asked, we built it. You can now send emails through AutoSend using SMTP as well as the REST API.
+
+![SMTP Settings](IMAGE_PATH_HERE)
+
+### How It Works
+
+1. **Simple setup** - Go to Settings → SMTP to get your credentials. Host, port, and username are pre-configured. Generate an API key to use as your password.
+
+2. **Standard SMTP** - Connect using `smtp.autosend.com` on port 587 with TLS. Works with any SMTP client, library, or platform that supports standard SMTP.
+
+3. **Same deliverability** - All the benefits of AutoSend's sending infrastructure. Same reputation, same analytics, same reliability.
+
+Perfect for legacy systems, platforms with built-in SMTP support, or if you just prefer SMTP over REST.
+
+---
+
+## Improvements
+
+1. **Better analytics UI** - Campaign and automation analytics now show clicked status sections. Empty states are cleaner and more helpful.
+
+2. **Contact sorting** - You can now sort contacts via the API. Useful for paginating through large contact lists in a specific order.
+
+---
+
+## Bug Fixes
+
+1. **Date filter equals** - Fixed an issue where filtering contacts by an exact date wasn't working correctly.
+
+2. **Campaigns count** - Fixed incorrect campaign counts in the campaigns list.
+
+---
+
+<Info>
+  Your feedback is helping us build the best email platform. Keep it coming at <a href={`mailto:${SUPPORT_EMAIL}`} title="AutoSend support mail">{SUPPORT_EMAIL}</a>.
+</Info>
+
+## Learn More
+
+<Columns cols={2}>
+  <Card title="SMTP Quickstart" icon="bolt" iconType="duotone" href={APP_PATHS.smtpIntroduction}>
+    Learn how to send emails using SMTP with AutoSend.
+  </Card>
+  <Card title="SMTP Integration Guides" icon="plug" iconType="duotone" href={APP_PATHS.smtpIntegrationGuides}>
+    Explore SMTP integration guides for popular platforms and tools.
+  </Card>
+</Columns>

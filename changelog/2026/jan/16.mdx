@@ -1,0 +1,41 @@
+---
+title: 'Improvements and Bug Fixes'
+description: 'Better validation, analytics, and unsubscribe management'
+sidebarTitle: '16 January 2026'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx';
+
+This week's release focuses on polishing the edges. Clearer error messages, better analytics visibility, and a few fixes that were bugging us (and probably you too).
+
+---
+
+## Improvements
+
+1. **Email Automation Landing Page** - We've added a dedicated landing page for email automation. If you're evaluating AutoSend for drip campaigns, onboarding sequences, or triggered emails, this page breaks down exactly what you can do.
+
+2. **Dynamic Validation Errors** - Validation errors now tell you exactly what's wrong and where. Instead of generic "invalid field" messages, you'll see specific feedback for contacts, emails, SMTP settings, and suppression groups. Less guessing, faster fixes.
+
+3. **Unsubscribe Preferences** - The unsubscribe preferences page now shows visible and hidden states for your suppression groups. You can control which groups subscribers see when they manage their preferences, and which ones stay internal.
+
+4. **Open Rate Analytics** - Campaign and automation analytics now include dedicated open rate sections. See your open metrics alongside clicks and deliveries without digging through separate reports.
+
+5. **SMTP API Key Flexibility** - All API key types now work with SMTP authentication. Previously, only certain key types were supported. Now any valid API key works as your SMTP password.
+
+---
+
+## Bug Fixes
+
+1. **Webhook validation errors** - Fixed an issue where validation errors weren't displaying correctly when creating or editing webhooks.
+
+2. **Pricing feature strikethrough** - Features not included in a plan now show proper strikethrough styling in the pricing comparison.
+
+3. **Email status dark mode icons** - Fixed icon visibility issues in dark mode for email status indicators.
+
+---
+
+<Info>
+  As always, let us know if you run into issues or have feedback at <a href={`mailto:${SUPPORT_EMAIL}`} title="AutoSend support mail">{SUPPORT_EMAIL}</a>. We're listening.
+</Info>
