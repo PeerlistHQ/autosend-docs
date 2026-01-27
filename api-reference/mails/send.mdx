@@ -14,11 +14,16 @@ curl --request POST \
   --header 'Content-Type: application/json' \
   --data '{
   "to": {
-    "email": "[email protected]",
+    "email": "to@example.com",
     "name": "Jane Smith"
   },
+  "cc": [
+      {"email": "cc1@example.com", "name": "CC User 1"},
+      {"email": "cc2@example.com", "name": "CC User 2"}
+    ],
+  "bcc": [{"email": "bcc@example.com"}],
   "from": {
-    "email": "[email protected]",
+    "email": "from@yourdomain.com",
     "name": "Your Company"
   },
   "subject": "Welcome to Our Platform!",
@@ -27,7 +32,7 @@ curl --request POST \
     "name": "Jane"
   },
   "replyTo": {
-    "email": "[email protected]"
+    "email": "to@example.com"
   }
 }'
 ```
@@ -44,11 +49,16 @@ headers = {
 
 payload = {
     "to": {
-        "email": "[email protected]",
+        "email": "to@example.com",
         "name": "Jane Smith"
     },
+    "cc": [
+      {"email": "cc1@example.com", "name": "CC User 1"},
+      {"email": "cc2@example.com", "name": "CC User 2"}
+    ],
+    "bcc": [{"email": "bcc@example.com"}],
     "from": {
-        "email": "[email protected]",
+        "email": "from@example.com",
         "name": "Your Company"
     },
     "subject": "Welcome to Our Platform!",
@@ -57,7 +67,7 @@ payload = {
         "name": "Jane"
     },
     "replyTo": {
-        "email": "[email protected]"
+        "email": "to@example.com"
     }
 }
 
@@ -74,11 +84,11 @@ fetch('https://api.autosend.com/v1/mails/send', {
   },
   body: JSON.stringify({
     to: {
-      email: '[email protected]',
+      email: 'to@example.com',
       name: 'Jane Smith'
     },
     from: {
-      email: '[email protected]',
+      email: 'from@example.com',
       name: 'Your Company'
     },
     subject: 'Welcome to Our Platform!',
@@ -87,7 +97,7 @@ fetch('https://api.autosend.com/v1/mails/send', {
       name: 'Jane'
     },
     replyTo: {
-      email: '[email protected]'
+      email: 'to@example.com'
     }
   })
 })
@@ -103,11 +113,11 @@ $url = 'https://api.autosend.com/v1/mails/send';
 
 $data = [
     'to' => [
-        'email' => '[email protected]',
+        'email' => 'to@example.com',
         'name' => 'Jane Smith'
     ],
     'from' => [
-        'email' => '[email protected]',
+        'email' => 'from@example.com',
         'name' => 'Your Company'
     ],
     'subject' => 'Welcome to Our Platform!',
@@ -116,7 +126,7 @@ $data = [
         'name' => 'Jane'
     ],
     'replyTo' => [
-        'email' => '[email protected]'
+        'email' => 'to@example.com'
     ]
 ];
 
@@ -151,11 +161,11 @@ func main() {
     
     payload := map[string]interface{}{
         "to": map[string]string{
-            "email": "[email protected]",
+            "email": "to@example.com",
             "name":  "Jane Smith",
         },
         "from": map[string]string{
-            "email": "[email protected]",
+            "email": "from@example.com",
             "name":  "Your Company",
         },
         "subject": "Welcome to Our Platform!",
@@ -164,7 +174,7 @@ func main() {
             "name": "Jane",
         },
         "replyTo": map[string]string{
-            "email": "[email protected]",
+            "email": "to@example.com",
         },
     }
     
@@ -205,11 +215,11 @@ public class SendEmail {
             
             String jsonInputString = "{\n" +
                 "  \"to\": {\n" +
-                "    \"email\": \"[email protected]\",\n" +
+                "    \"email\": \"to@example.com\",\n" +
                 "    \"name\": \"Jane Smith\"\n" +
                 "  },\n" +
                 "  \"from\": {\n" +
-                "    \"email\": \"[email protected]\",\n" +
+                "    \"email\": \"from@example.com\",\n" +
                 "    \"name\": \"Your Company\"\n" +
                 "  },\n" +
                 "  \"subject\": \"Welcome to Our Platform!\",\n" +
@@ -218,7 +228,7 @@ public class SendEmail {
                 "    \"name\": \"Jane\"\n" +
                 "  },\n" +
                 "  \"replyTo\": {\n" +
-                "    \"email\": \"[email protected]\"\n" +
+                "    \"email\": \"to@example.com\"\n" +
                 "  }\n" +
                 "}";
             
@@ -253,11 +263,11 @@ request['Content-Type'] = 'application/json'
 
 request.body = {
   to: {
-    email: '[email protected]',
+    email: 'to@example.com',
     name: 'Jane Smith'
   },
   from: {
-    email: '[email protected]',
+    email: 'from@example.com',
     name: 'Your Company'
   },
   subject: 'Welcome to Our Platform!',
@@ -266,7 +276,7 @@ request.body = {
     name: 'Jane'
   },
   replyTo: {
-    email: '[email protected]'
+    email: 'to@example.com'
   }
 }.to_json
 
@@ -306,7 +316,7 @@ Email data to send
   <ParamField path="to.email" type="string<email>"  required>
   Email address
   
-  Example: `"[email protected]"`
+  Example: `"to@example.com"`
 </ParamField>
   
   <ParamField path="to.name" type="string" >
@@ -318,13 +328,49 @@ Email data to send
   </Expandable>
 </ParamField>
 
+<ParamField path="cc" type="object[]" >
+  Cc Recipients array of email address and name object
+  <Expandable title="child attributes">
+  <ParamField path="email" type="string<email>"  required>
+  Email address
+  
+  Example: `"cc@example.com"`
+</ParamField>
+  
+  <ParamField path="name" type="string" >
+  Cc User name
+
+  Example: `"Cc User Name"`
+</ParamField>
+ 
+  </Expandable>
+</ParamField>
+
+<ParamField path="bcc" type="array<object>" >
+  Bcc Recipients array of email address and name object
+  <Expandable title="child attributes">
+  <ParamField path="email" type="string<email>"  required>
+  Email address
+  
+  Example: `"bcc@example.com"`
+</ParamField>
+  
+  <ParamField path="name" type="string" >
+  Bcc User name
+
+  Example: `"Bcc User Name"`
+</ParamField>
+ 
+  </Expandable>
+</ParamField>
+
 <ParamField path="from" type="object"  required>
   Sender email address (must be from a verified domain) and name
   <Expandable title="child attributes">
   <ParamField path="from.email" type="string<email>"  required>
   Email address
   
-  Example: `"[email protected]"`
+  Example: `"from@example.com"`
 </ParamField>
   
   <ParamField path="from.name" type="string" >

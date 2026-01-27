@@ -428,6 +428,42 @@ Key-value pairs for template variable substitution (Handlebars syntax)
   ```
 </ParamField>
 
+<ParamField path="cc" type="object[]" >
+  Cc Recipients array of email address and name object
+  <Expandable title="child attributes">
+  <ParamField path="email" type="string<email>"  required>
+  Email address
+  
+  Example: `"cc@example.com"`
+</ParamField>
+  
+  <ParamField path="name" type="string" >
+  Cc User name
+
+  Example: `"Cc User Name"`
+</ParamField>
+ 
+  </Expandable>
+</ParamField>
+
+<ParamField path="bcc" type="object[]" >
+  Bcc Recipients array of email address and name object
+  <Expandable title="child attributes">
+  <ParamField path="email" type="string<email>"  required>
+  Email address
+  
+  Example: `"bcc@example.com"`
+</ParamField>
+  
+  <ParamField path="name" type="string" >
+  Bcc User name
+
+  Example: `"Bcc User Name"`
+</ParamField>
+ 
+  </Expandable>
+</ParamField>
+
   </Expandable>
 </ParamField>
 
