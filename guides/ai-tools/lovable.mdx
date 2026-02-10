@@ -74,9 +74,12 @@ Request body format:
 
 Response format:
 {
-  "success": true,
-  "message": "Email queued successfully",
-  "data": { "emailId": "email_xyz789", "status": "queued" }
+ "success": true,
+  "data": {
+    "emailId": "698afb75ff4bc5466e3a797a",
+    "message": "Email queued successfully.",
+    "totalRecipients": 1
+  }
 }
 
 Create a Supabase Edge Function called "send-email" that:
@@ -87,7 +90,7 @@ Create a Supabase Edge Function called "send-email" that:
 
 The "from" email must use a domain verified in AutoSend.
 
-Docs: https://docs.autosend.com{APP_PATHS.sendingEmail}
+Docs: https://docs.autosend.com/quickstart/email-using-api
 ```
 
     Lovable will generate a Supabase Edge Function and wire it into your app automatically.
@@ -100,20 +103,20 @@ Docs: https://docs.autosend.com{APP_PATHS.sendingEmail}
 
 ## Using Email Templates
 
-If you have created <a href={APP_PATHS.emailTemplates}>email templates</a> in AutoSend, you can send emails using a `template_id` instead of inline HTML. Update the prompt to include:
+If you have created <a href={APP_PATHS.emailTemplates}>email templates</a> in AutoSend, you can send emails using a `templateId` instead of inline HTML. Update the prompt to include:
 
 ```text
-Also support sending emails with a template_id and variables.
+Also support sending emails with a templateId and variables.
 
 Example request body with template:
 {
   "to": { "email": "recipient@example.com", "name": "Jane Doe" },
-  "from": { "email": "hello@mail.yourdomain.com", "name": "Your App Name" },
+  "from": { "email": "hello@yourdomain.com", "name": "Your App Name" },
   "subject": "Welcome!",
-  "template_id": "your_template_id",
-  "variables": {
-    "first_name": "Jane",
-    "login_link": "https://yourapp.com/login"
+  "templateId": "your_template_id",
+  "dynamicData": {
+    "firstName": "Jane",
+    "loginLink": "https://yourapp.com/login"
   }
 }
 ```
