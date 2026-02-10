@@ -1,0 +1,159 @@
+---
+title: "Send Emails with Lovable"
+description: "Add email sending to your Lovable app using AutoSend's email API."
+sidebarTitle: 'Lovable'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { LOVABLE, LOVABLE_DOCS_SUPABASE } from '/snippets/custom-variables.mdx';
+
+## Overview
+
+<a href={LOVABLE} target='_blank'>Lovable</a> is an AI-powered platform that lets you build full-stack web apps from natural language prompts. You can integrate AutoSend into any Lovable project to send transactional emails like welcome emails, password resets, order confirmations, and notifications.
+
+AutoSend works with Lovable through its REST API. Since the API requires an API key, Lovable will use **Supabase Edge Functions** to keep your credentials secure.
+
+## Prerequisites
+
+<CardGroup cols={2}>
+  <Card title='AutoSend Account' href={AUTOSEND_PATHS.signup}>
+    Sign up for an AutoSend account to get started with sending emails.
+  </Card>
+  <Card title='Verified Domain' href={APP_PATHS.domainConfiguration}>
+    Make sure you have a verified domain added in AutoSend to send emails from.
+  </Card>
+  <Card title='API Key' href={APP_PATHS.apiKeys}>
+    Create a new API key from your AutoSend dashboard for authentication.
+  </Card>
+  <Card title='Lovable with Supabase' href={LOVABLE_DOCS_SUPABASE}>
+    Connect Supabase to your Lovable project to use Edge Functions.
+  </Card>
+</CardGroup>
+
+## Integration
+
+<Steps>
+  <Step title="Connect Supabase to your Lovable project" titleSize="h3">
+    Lovable uses Supabase Edge Functions to securely handle API keys. If you haven't connected Supabase yet, click the **Supabase** icon in your Lovable project and follow the authorization steps.
+  </Step>
+
+  <Step title="Add your AutoSend API key as a secret" titleSize="h3">
+    1. In your Lovable project, go to **Supabase > Secrets**
+    2. Add a new secret with the name `AUTOSEND_API_KEY`
+    3. Paste your AutoSend API key as the value
+
+    <Info>
+      Get your API key from the <a href={AUTOSEND_PATHS.apiKey}>API Keys</a> page in your AutoSend dashboard.
+    </Info>
+  </Step>
+
+  <Step title="Prompt Lovable to integrate AutoSend" titleSize="h3">
+    Copy and paste this prompt into Lovable's chat:
+
+```text
+Integrate AutoSend email API for sending transactional emails.
+
+API Details:
+- Base URL: https://api.autosend.com/v1
+- Auth: Bearer token using the AUTOSEND_API_KEY secret
+- Endpoint: POST /mails/send
+- Content-Type: application/json
+
+Request body format:
+{
+  "to": { "email": "recipient@example.com", "name": "Jane Doe" },
+  "from": { "email": "hello@mail.yourdomain.com", "name": "Your App Name" },
+  "subject": "Your subject line",
+  "html": "<h1>Hello!</h1><p>Your email content here.</p>"
+}
+
+Response format:
+{
+  "success": true,
+  "message": "Email queued successfully",
+  "data": { "emailId": "email_xyz789", "status": "queued" }
+}
+
+Create a Supabase Edge Function called "send-email" that:
+1. Reads AUTOSEND_API_KEY from environment secrets
+2. Accepts to, from, subject, and html in the request body
+3. Calls the AutoSend API with Bearer token auth
+4. Returns the response to the client
+
+The "from" email must use a domain verified in AutoSend.
+
+Docs: https://docs.autosend.com{APP_PATHS.sendingEmail}
+```
+
+    Lovable will generate a Supabase Edge Function and wire it into your app automatically.
+  </Step>
+
+  <Step title="Test your integration" titleSize="h3">
+    Once Lovable finishes generating the code, trigger the email flow in your app (for example, submitting a contact form). Check your <a href={APP_PATHS.emailActivity}>Email Activity</a> in the AutoSend dashboard to confirm the email was delivered.
+  </Step>
+</Steps>
+
+## Using Email Templates
+
+If you have created <a href={APP_PATHS.emailTemplates}>email templates</a> in AutoSend, you can send emails using a `template_id` instead of inline HTML. Update the prompt to include:
+
+```text
+Also support sending emails with a template_id and variables.
+
+Example request body with template:
+{
+  "to": { "email": "recipient@example.com", "name": "Jane Doe" },
+  "from": { "email": "hello@mail.yourdomain.com", "name": "Your App Name" },
+  "subject": "Welcome!",
+  "template_id": "your_template_id",
+  "variables": {
+    "first_name": "Jane",
+    "login_link": "https://yourapp.com/login"
+  }
+}
+```
+
+## Example Use Cases
+
+Here are some common ways to use AutoSend in your Lovable apps:
+
+- **Contact forms** that send a confirmation email to the user and a notification to your team
+- **User signup flows** with welcome emails or email verification
+- **Order confirmations** and shipping notifications for e-commerce apps
+- **Password reset emails** triggered from your auth flow
+- **Newsletter signups** that send a double opt-in confirmation
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Emails are not being sent">
+    Make sure your `AUTOSEND_API_KEY` is correctly added in Supabase Secrets. Also verify that your sending domain is verified in AutoSend by checking **Settings > Domains** in your dashboard.
+  </Accordion>
+  <Accordion title="Getting a 401 Unauthorized error">
+    Double-check that the Edge Function is reading the secret correctly. The Authorization header should be `Bearer YOUR_API_KEY` with no extra spaces or quotes.
+  </Accordion>
+  <Accordion title="Emails landing in spam">
+    Make sure you have completed domain verification including SPF, DKIM, and DMARC records. We recommend using a subdomain like `mail.yourdomain.com` for sending. See our <a href={APP_PATHS.domainConfiguration}>domain setup guide</a> for details.
+  </Accordion>
+  <Accordion title="Lovable shows build errors">
+    Lovable may sometimes show false positive build errors. Always test your app live by triggering the actual email flow. If the Edge Function deploys successfully in Supabase, the integration is likely working.
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Email Templates" icon="envelope" href={APP_PATHS.emailTemplates}>
+    Create reusable email templates with dynamic variables.
+  </Card>
+  <Card title="Email Activity" icon="chart-line" href={APP_PATHS.emailActivity}>
+    Monitor delivery status and engagement for all emails.
+  </Card>
+  <Card title="API Reference" icon="code" href={APP_PATHS.apiReferenceIntroduction}>
+    Full API documentation with all endpoints and parameters.
+  </Card>
+  <Card title="Variables" icon="brackets-curly" href={APP_PATHS.templateVariables}>
+    Personalize emails with dynamic variables.
+  </Card>
+</CardGroup>
