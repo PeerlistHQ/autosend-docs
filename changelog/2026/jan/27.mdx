@@ -1,0 +1,97 @@
+---
+title: 'Dashboard Redesign and Landing Page Refresh'
+description: 'Your AutoSend dashboard just got a major upgrade, plus a brand new landing page'
+sidebarTitle: '27 January 2026'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx';
+
+Let's be honest. Logging into your email platform should feel productive, not overwhelming. You want to see what matters: your key metrics, active campaigns, and what's new. No hunting through menus, no scrolling past irrelevant data.
+
+We've redesigned the <a href={AUTOSEND_PATHS.dashboard} target="_blank" title="Dashboard">dashboard</a> from the ground up and launched a fresh new landing page that better showcases what AutoSend can do.
+
+<Frame>
+<img src="/images/dashboard-changelog.png" alt="AutoSend dashboard" />
+</Frame>
+
+## What's New
+
+### 1. Dashboard That Actually Shows What You Need
+
+Your dashboard now surfaces everything important right when you log in:
+
+- **Analytics at a glance**: Key metrics like sends, opens, clicks, and bounces front and center. No more digging through reports.
+- **Active campaigns first**: See what's scheduled or running right now.
+- **Product updates**: Stay in the loop with the latest features and improvements we've shipped, without checking our changelog manually.
+
+The new dashboard is designed to answer your first question every time you log in: "What's happening with my emails?"
+
+<a href={AUTOSEND_PATHS.dashboard} target="_blank" rel="noopener noreferrer">Check out your dashboard →</a>
+
+### 2. Fresh Landing Page
+
+We've completely redesigned our landing page with a modern look that better explains what AutoSend does. New interactive sections, smoother animations, and a clearer story about how we help you send better emails.
+
+If you're curious or know someone who might benefit from AutoSend, check it out at <a href="https://autosend.com" target="_blank" rel="noopener noreferrer">autosend.com</a>.
+
+---
+
+## More Improvements
+
+### Faster CSV Imports
+
+Importing large contact lists just got way faster. Upload your CSV and get back to work. We'll let you know when it's done.
+
+
+### User ID Support in CSV Imports
+
+You can now import user IDs along with your contact data. Perfect if you're syncing contacts from your own database and want to maintain consistent identifiers across systems.
+
+Check the <a href={APP_PATHS.contactsImportCsv} target="_blank" rel="noopener noreferrer">CSV Import Guide</a> for details.
+
+### List-Unsubscribe Header
+
+We've added the standard `List-Unsubscribe` header to all emails sent through AutoSend. This helps email clients like Gmail and Apple Mail show one-click unsubscribe buttons, improving deliverability and keeping you compliant with email best practices.
+
+It just works. No configuration needed.
+
+---
+
+## Fixes
+
+We've also squashed a handful of bugs this release:
+
+- Fixed campaign analytics not refreshing properly when switching between campaigns
+- Resolved dark mode styling issues with the payment alert banner
+- Improved link formatting in the email builder for better reliability
+
+---
+
+
+<Info>
+  As always, let us know if you run into issues or have feedback at <a href={`mailto:${SUPPORT_EMAIL}`} title="AutoSend support mail">{SUPPORT_EMAIL}</a>. We're listening (and probably already working on the next thing you didn't know you needed).
+</Info>
+
+## Learn More
+
+<Columns cols={2}>
+  <Card title="Dashboard" icon="chart-line" iconType="duotone" href={AUTOSEND_PATHS.dashboard}>
+    Your new command center for email analytics and active campaigns.
+  </Card>
+
+  <Card title="Import Contacts" icon="file-csv" iconType="duotone" href={APP_PATHS.contactsImportCsv}>
+    Learn how to import contacts with CSV files, including user IDs.
+  </Card>
+
+  <Card title="Campaigns" icon="paper-plane" iconType="duotone" href={APP_PATHS.campaigns}>
+    Create and manage your email campaigns.
+  </Card>
+
+  <Card title="API Reference" icon="code" iconType="duotone" href={APP_PATHS.apiReference}>
+    Explore the AutoSend API and start sending emails programmatically.
+  </Card>
+</Columns>
+
+---

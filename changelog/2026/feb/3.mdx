@@ -1,0 +1,64 @@
+---
+title: 'Quick Create Menu and Performance Improvements'
+description: 'Create campaigns and automations from anywhere, plus faster analytics'
+sidebarTitle: '3 February 2026'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx';
+
+We shipped some quality-of-life improvements this week. Faster workflows, cleaner analytics, and a few important fixes.
+
+## What's New
+
+### Quick Create Menu
+
+Create campaigns and automations from the dashboard itself. Click the "+" button on top right corner to access a quick create menu without navigating away from your current page.
+
+### Faster Campaign and Analytics Loading
+
+We've optimized how we fetch campaigns and analytics data. Dashboards load faster, and switching between views is noticeably snappier. Behind the scenes, we added caching for workflow analytics and streamlined campaign queries.
+
+**Additional improvements:**
+- Separated worker services for email sending, validation, and webhooks to handle higher loads independently
+- Lazy loading for past and failed campaigns to reduce initial page load times
+- Automatic favicon support when project logos aren't uploaded
+
+---
+
+## Fixes
+
+We've also squashed a few bugs:
+
+- Fixed invited users being redirected to the welcome screen instead of their team's workspace
+- Resolved analytics text alignment issues that made numbers hard to read
+- Added SMTP rate limiting API to prevent sending spikes and improve deliverability
+
+---
+
+<Info>
+  As always, let us know if you run into issues or have feedback at <a href={`mailto:${SUPPORT_EMAIL}`} title="AutoSend support mail">{SUPPORT_EMAIL}</a>. We're listening (and probably already working on the next thing you didn't know you needed).
+</Info>
+
+## Learn More
+
+<Columns cols={2}>
+  <Card title="Dashboard" icon="chart-line" iconType="duotone" href={AUTOSEND_PATHS.dashboard}>
+    Your command center for email analytics and active campaigns.
+  </Card>
+
+  <Card title="Campaigns" icon="paper-plane" iconType="duotone" href={APP_PATHS.campaigns}>
+    Create and manage your email campaigns.
+  </Card>
+
+  <Card title="Automations" icon="bolt" iconType="duotone" href={AUTOSEND_PATHS.automations}>
+    Set up automated email workflows.
+  </Card>
+
+  <Card title="API Reference" icon="code" iconType="duotone" href={APP_PATHS.apiReference}>
+    Explore the AutoSend API documentation.
+  </Card>
+</Columns>
+
+---

@@ -1,0 +1,71 @@
+---
+title: 'CC and BCC Support: Send to Multiple Recipients'
+description: 'Keep everyone in the loop with native CC and BCC support in AutoSend'
+sidebarTitle: '21 January 2026'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx';
+
+Whether you're sending order confirmations that need to reach both the customer and their accountant, or project updates that involve multiple stakeholders, keeping everyone in the loop just got a whole lot easier.
+
+We've added native CC (Carbon Copy) and BCC (Blind Carbon Copy) support across AutoSend.
+
+## What's New
+
+**1. Send to Multiple Recipients**
+
+Add CC and BCC recipients to any email you send through AutoSend. Whether you're using our API or SMTP relay, you can now include multiple people in your communications without sending separate emails.
+
+**2. Full Email Activity Tracking**
+
+Every CC and BCC recipient gets tracked individually in your email activity dashboard. See opens, clicks, bounces, and complaints for each recipient separately. No more wondering if that BCC'd manager actually read your email.
+
+**3. Smart Suppression Handling**
+
+When a TO recipient is suppressed, we automatically suppress the CC and BCC recipients too. But if you need to send anyway, we've got you covered with bypass options (more on that below).
+
+**4. Proper Bounce and Complaint Attribution**
+
+Bounces and complaints from CC/BCC recipients are now correctly attributed to the right email address. You'll know exactly who bounced and who complained, so you can keep your lists clean.
+
+
+---
+
+## More Improvements
+
+### Cleaner Campaign Dashboard
+
+Your campaign dashboard now automatically shows active campaigns at the top and hides past campaigns to reduce visual clutter. Focus on what matters right now, without scrolling through old campaigns you've already completed.
+
+### Filter Contacts by List ID
+
+Added `contactListId` parameter to the contacts API. Now you can filter contacts by specific lists when fetching through the API, making it easier to build integrations and custom workflows.
+
+Check the <a href={APP_PATHS.apiReference} target="_blank" rel="noopener noreferrer">API Reference</a> for details.
+
+### Bypass Suppressions
+
+Sometimes you need to send an email even if the recipient is on your suppression list. Maybe it's a password reset, maybe it's critical account information. Whatever the reason, you can now bypass suppressions on a per-email basis.
+
+---
+
+## Fixes
+
+We've also squashed several payment-related bugs this release:
+
+- Fixed proration calculations for plan upgrades and downgrades
+- Resolved issues with payment cancellations not reflecting correctly
+- Fixed billing cycle date updates after plan changes
+- Improved invoice generation reliability
+
+---
+
+
+<Info>
+  As always, let us know if you run into issues or have feedback at <a href={`mailto:${SUPPORT_EMAIL}`} title="AutoSend support mail">{SUPPORT_EMAIL}</a>. We're listening (and probably already working on the next thing you didn't know you needed).
+</Info>
+
+---
+

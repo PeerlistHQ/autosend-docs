@@ -150,8 +150,16 @@
         "hidden": false,
         "groups": [
           {
+            "group": "February 2026",
+            "pages": [
+              "changelog/2026/feb/3"
+            ]
+          },
+          {
             "group": "January 2026",
             "pages": [
+              "changelog/2026/jan/27",
+              "changelog/2026/jan/21",
               "changelog/2026/jan/16",
               "changelog/2026/jan/14",
               "changelog/2026/jan/13",
