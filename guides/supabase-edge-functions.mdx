@@ -1,12 +1,18 @@
 ---
-title: "Send emails with Supabase Edge Functions"
-sidebarTitle: "Supabase Edge Functions"
-description: "Learn how to send transactional emails from Supabase Edge Functions using AutoSend."
+title: 'Send emails with Supabase Edge Functions'
+sidebarTitle: 'Supabase Edge Functions'
+description: 'Learn how to send transactional emails from Supabase Edge Functions using AutoSend.'
 ---
 
 ## Overview
 
 This guide shows you how to integrate AutoSend with Supabase Edge Functions to send emails for authentication, notifications, and other transactional use cases. Edge Functions run at the edge, close to your users, making them perfect for handling email operations with low latency.
+
+<Tip>
+	AutoSend has an official [integration with
+	Supabase](https://supabase.com/partners/integrations/AutoSend). For a less technical setup, you
+	can also use [SMTP to integrate with Supabase](/guides/smtp/supabase).
+</Tip>
 
 ## Prerequisites
 
@@ -26,15 +32,16 @@ Before you begin, make sure you have:
     ```bash
     # Login to Supabase
     supabase login
-    
+
     # Initialize your project (if not already done)
     supabase init
-    
+
     # Create a new Edge Function
     supabase functions new autosend
     ```
 
     This creates a new function in `supabase/functions/autosend/index.ts`.
+
   </Step>
   <Step title="Install Dependencies" titleSize="h3">
     Edge Functions support importing from standard URLs. No package installation needed!
@@ -45,23 +52,23 @@ Before you begin, make sure you have:
     ```tsx expandable
     import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
     import { corsHeaders } from '../_shared/cors.ts'
-    
+
     serve(async (req) => {
       // Handle CORS preflight requests
       if (req.method === 'OPTIONS') {
         return new Response('ok', { headers: corsHeaders })
       }
-    
+
       try {
         const { to, from, subject, html, templateId, dynamicData } = await req.json()
-    
+
         // Get AutoSend API key from environment variables
         const autoSendApiKey = Deno.env.get('AUTOSEND_API_KEY')
-    
+
         if (!autoSendApiKey) {
           throw new Error('AUTOSEND_API_KEY not configured')
         }
-    
+
         // Prepare email payload
         const emailPayload: any = {
           to: {
@@ -73,7 +80,7 @@ Before you begin, make sure you have:
             name: from.name || undefined
           }
         }
-    
+
         // Add template or HTML content
         if (templateId) {
           emailPayload.templateId = templateId
@@ -84,7 +91,7 @@ Before you begin, make sure you have:
           emailPayload.subject = subject
           emailPayload.html = html
         }
-    
+
         // Send email via AutoSend API
         const response = await fetch('https://api.autosend.com/v1/mails/send', {
           method: 'POST',
@@ -94,13 +101,13 @@ Before you begin, make sure you have:
           },
           body: JSON.stringify(emailPayload)
         })
-    
+
         const data = await response.json()
-    
+
         if (!response.ok) {
           throw new Error(data.message || 'Failed to send email')
         }
-    
+
         return new Response(
           JSON.stringify({
             success: true,
@@ -126,6 +133,7 @@ Before you begin, make sure you have:
       }
     })
     ```
+
   </Step>
   <Step title="Create Shared CORS Configuration" titleSize="h3">
     Create a file at `supabase/functions/_shared/cors.ts`:
@@ -136,6 +144,7 @@ Before you begin, make sure you have:
       'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
     }
     ```
+
   </Step>
   <Step title="New Step" titleSize="h3">
     Create a `.env` file in your project root (for local development):
@@ -149,6 +158,7 @@ Before you begin, make sure you have:
     ```bash
     supabase secrets set AUTOSEND_API_KEY=your_autosend_api_key_here
     ```
+
   </Step>
   <Step title="Run Locally" titleSize="h3">
     Test your function locally before deploying:
@@ -158,6 +168,7 @@ Before you begin, make sure you have:
     ```
 
     The function will be available at: `http://localhost:54321/functions/v1/autosend`
+
   </Step>
   <Step title="Test Your Function" titleSize="h3">
     Send a test request using cURL:
@@ -179,6 +190,7 @@ Before you begin, make sure you have:
         "html": "<h1>Hello John!</h1><p>Welcome aboard!</p>"
       }'
     ```
+
   </Step>
   <Step title="Deploy to Production" titleSize="h3">
     Once tested, deploy your function:
@@ -192,6 +204,7 @@ Before you begin, make sure you have:
     ```
     https://YOUR_PROJECT_REF.supabase.co/functions/v1/autosend
     ```
+
   </Step>
 </Steps>
 
@@ -382,11 +395,12 @@ You can use AutoSend to send custom authentication emails by integrating with Su
 
        ```
        https://YOUR_PROJECT_REF.supabase.co/functions/v1/send-auth-email
-       
+
        ```
     4. Configure the secret (optional but recommended)
 
     Now all Supabase Auth emails will be sent through AutoSend!
+
   </Step>
 </Steps>
 
@@ -395,82 +409,82 @@ You can use AutoSend to send custom authentication emails by integrating with Su
 Implement robust error handling for production:
 
 ```tsx expandable
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 
 serve(async (req) => {
-  try {
-    const payload = await req.json()
+	try {
+		const payload = await req.json();
 
-    // Validate required fields
-    if (!payload.to?.email) {
-      throw new Error('Recipient email is required')
-    }
+		// Validate required fields
+		if (!payload.to?.email) {
+			throw new Error('Recipient email is required');
+		}
 
-    if (!payload.from?.email) {
-      throw new Error('Sender email is required')
-    }
+		if (!payload.from?.email) {
+			throw new Error('Sender email is required');
+		}
 
-    const autoSendApiKey = Deno.env.get('AUTOSEND_API_KEY')
+		const autoSendApiKey = Deno.env.get('AUTOSEND_API_KEY');
 
-    if (!autoSendApiKey) {
-      throw new Error('AutoSend API key not configured')
-    }
+		if (!autoSendApiKey) {
+			throw new Error('AutoSend API key not configured');
+		}
 
-    const response = await fetch('https://api.autosend.com/v1/mails/send', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${autoSendApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload)
-    })
+		const response = await fetch('https://api.autosend.com/v1/mails/send', {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${autoSendApiKey}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(payload),
+		});
 
-    const data = await response.json()
+		const data = await response.json();
 
-    // Handle AutoSend API errors
-    if (!response.ok) {
-      console.error('AutoSend API Error:', data)
+		// Handle AutoSend API errors
+		if (!response.ok) {
+			console.error('AutoSend API Error:', data);
 
-      switch (response.status) {
-        case 400:
-          throw new Error(`Validation error: ${data.message}`)
-        case 401:
-          throw new Error('Invalid API key')
-        case 403:
-          throw new Error('Domain not verified or insufficient permissions')
-        case 429:
-          throw new Error('Rate limit exceeded. Please try again later.')
-        default:
-          throw new Error(data.message || 'Failed to send email')
-      }
-    }
+			switch (response.status) {
+				case 400:
+					throw new Error(`Validation error: ${data.message}`);
+				case 401:
+					throw new Error('Invalid API key');
+				case 403:
+					throw new Error('Domain not verified or insufficient permissions');
+				case 429:
+					throw new Error('Rate limit exceeded. Please try again later.');
+				default:
+					throw new Error(data.message || 'Failed to send email');
+			}
+		}
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        emailId: data.data.emailId,
-        status: data.data.status
-      }),
-      {
-        headers: { 'Content-Type': 'application/json' },
-        status: 200,
-      },
-    )
-  } catch (error) {
-    console.error('Function Error:', error)
+		return new Response(
+			JSON.stringify({
+				success: true,
+				emailId: data.data.emailId,
+				status: data.data.status,
+			}),
+			{
+				headers: { 'Content-Type': 'application/json' },
+				status: 200,
+			},
+		);
+	} catch (error) {
+		console.error('Function Error:', error);
 
-    return new Response(
-      JSON.stringify({
-        success: false,
-        error: error.message
-      }),
-      {
-        headers: { 'Content-Type': 'application/json' },
-        status: 400,
-      },
-    )
-  }
-})
+		return new Response(
+			JSON.stringify({
+				success: false,
+				error: error.message,
+			}),
+			{
+				headers: { 'Content-Type': 'application/json' },
+				status: 400,
+			},
+		);
+	}
+});
 ```
 
 ## Best Practices
@@ -482,10 +496,11 @@ serve(async (req) => {
     ```tsx
     // ✅ Good
     const apiKey = Deno.env.get('AUTOSEND_API_KEY')
-    
+
     // ❌ Bad - Never hardcode
     const apiKey = 'as_123456789'
     ```
+
   </Accordion>
   <Accordion title="Validate Email Addresses">
     Validate email formats before sending:
@@ -495,11 +510,12 @@ serve(async (req) => {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       return emailRegex.test(email)
     }
-    
+
     if (!isValidEmail(payload.to.email)) {
       throw new Error('Invalid email address')
     }
     ```
+
   </Accordion>
   <Accordion title="Implement Rate Limiting">
     Protect your function from abuse:
@@ -511,6 +527,7 @@ serve(async (req) => {
       throw new Error('Rate limit exceeded')
     }
     ```
+
   </Accordion>
   <Accordion title="Use Verified Domains">
     Always send from verified domains in AutoSend to ensure deliverability. \
