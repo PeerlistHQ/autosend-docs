@@ -1,21 +1,25 @@
 ---
-title: 'Connect AutoSend MCP to ChatGPT'
-description: 'Set up AutoSend MCP server as a connector in ChatGPT.'
-sidebarTitle: 'ChatGPT'
+title: "Connect AutoSend MCP to ChatGPT"
+description: "Set up AutoSend MCP server as a connector in ChatGPT."
+sidebarTitle: "ChatGPT"
 ---
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 
+<Frame>
+  ![Autosend Mcp Chatgpt](/images/autosend-mcp-chatgpt.jpg)
+</Frame>
+
 ## Setup
 
 <Steps>
-  <Step title="Enable Developer Mode" titleSize="h3">
-    Go to **Settings > Connectors > Advanced settings** and enable **Developer mode**.
+  <Step titleSize="h3" title="Enable Developer Mode">
+    Go to **Settings \> Connectors \> Advanced settings** and enable **Developer mode**.
   </Step>
-  <Step title="Create a connector" titleSize="h3">
+  <Step titleSize="h3" title="Create a connector">
     Open **Settings**, go to the **Connectors** tab, and click **Create** to add a new connector.
   </Step>
-  <Step title="Configure AutoSend" titleSize="h3">
+  <Step titleSize="h3" title="Configure AutoSend">
     Enter the following details:
 
     - **Name:** `AutoSend`
@@ -24,7 +28,7 @@ import { APP_PATHS } from '/snippets/appPaths.mdx';
 
     Click **Create**.
   </Step>
-  <Step title="Authorize" titleSize="h3">
+  <Step titleSize="h3" title="Authorize">
     The AutoSend connector will appear in the composer's Developer mode tool. Follow the OAuth prompt to log in to your AutoSend account.
   </Step>
 </Steps>
@@ -36,10 +40,10 @@ import { APP_PATHS } from '/snippets/appPaths.mdx';
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="MCP Server Overview" icon="server" href={APP_PATHS.aiMcpServer}>
+  <Card icon="server" href="APP_PATHS.aiMcpServer" title="MCP Server Overview">
     See all available tools, guided workflows, and examples.
   </Card>
-  <Card title="AutoSend Skills" icon="wand-magic-sparkles" href={APP_PATHS.aiSkills}>
+  <Card icon="wand-magic-sparkles" href="APP_PATHS.aiSkills" title="AutoSend Skills">
     Install skill files for additional AI agent context.
   </Card>
 </CardGroup>

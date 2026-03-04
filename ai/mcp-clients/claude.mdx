@@ -1,7 +1,7 @@
 ---
-title: 'Connect AutoSend MCP to Claude'
-description: 'Set up AutoSend MCP server in Claude Desktop and Claude Code.'
-sidebarTitle: 'Claude'
+title: "Connect AutoSend MCP to Claude"
+description: "Set up AutoSend MCP server in Claude Desktop and Claude Code."
+sidebarTitle: "Claude"
 ---
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
@@ -9,20 +9,43 @@ import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
 import { CLAUDE_CODE } from '/snippets/custom-variables.mdx';
 
 <Frame>
-  <img src="/images/ai-tools/claude-code.png" alt="Claude" />
+  ![Autosend Mcp Claude](/images/autosend-mcp-claude.jpg)
 </Frame>
 
 ## Claude Desktop
 
 <Steps>
-  <Step title="Open Connectors" titleSize="h3">
+  <Step titleSize="h3" title="Open Connectors">
     Open Claude Desktop and click **Customize** in the top-left corner, then click **Connectors**.
+
+    <Frame>
+      ![Screenshot 2026 03 04 At 11 46 25 AM](/images/Screenshot2026-03-04at11.46.25AM.png)
+    </Frame>
   </Step>
-  <Step title="Add AutoSend" titleSize="h3">
-    Click the **+** button and select **Add custom connector**. Enter the name as `AutoSend` and the URL as `https://mcp.autosend.com/`.
+  <Step titleSize="h3" title="Add AutoSend">
+    Click the **\+** button and select **Add custom connector**.
+
+    <Frame>
+      ![Screenshot 2026 03 04 At 11 51 48 AM](/images/Screenshot2026-03-04at11.51.48AM.png)
+    </Frame>
+     
   </Step>
-  <Step title="Authorize" titleSize="h3">
-    Follow the OAuth prompt to log in to your AutoSend account.
+  <Step titleSize="h3" title="Add custo connector">
+    Enter the name as `AutoSend` and the URL as `https://mcp.autosend.com/`.
+
+    <Frame>
+      ![Screenshot 2026 03 04 At 11 53 48 AM](/images/Screenshot2026-03-04at11.53.48AM-1.png)
+    </Frame>
+  </Step>
+  <Step titleSize="h3" title="Connect and Authorize">
+    Click on the **Connect** and follow the OAuth prompt to log in to your AutoSend account.
+
+    <Frame>
+      ![Screenshot 2026 03 04 At 11 54 17 AM](/images/Screenshot2026-03-04at11.54.17AM-1.png)
+    </Frame>
+    <Frame>
+      ![AutoSend OAuth Screen](/images/Screenshot2026-03-04at11.56.14AM.png)
+    </Frame>
   </Step>
 </Steps>
 
@@ -43,10 +66,10 @@ When you first use the MCP tools, Claude Code will open your browser to authoriz
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="MCP Server Overview" icon="server" href={APP_PATHS.aiMcpServer}>
+  <Card icon="server" href="APP_PATHS.aiMcpServer" title="MCP Server Overview">
     See all available tools, guided workflows, and examples.
   </Card>
-  <Card title="AutoSend Skills" icon="wand-magic-sparkles" href={APP_PATHS.aiSkills}>
+  <Card icon="wand-magic-sparkles" href="APP_PATHS.aiSkills" title="AutoSend Skills">
     Install skill files for additional AI agent context.
   </Card>
 </CardGroup>
