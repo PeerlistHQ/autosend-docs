@@ -1,0 +1,149 @@
+---
+title: "Integrate AutoSend with v0"
+description: "Integrate AutoSend email sending into your v0 project."
+sidebarTitle: "v0"
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { V0 } from '/snippets/custom-variables.mdx';
+
+## Overview
+
+<a href={V0} target="_blank">v0</a> is Vercel's AI-powered tool for generating UI components and full-stack applications. You can integrate AutoSend into your v0 project to send transactional emails like welcome emails, password resets, order confirmations, and notifications.
+
+## Prerequisites
+
+<CardGroup cols={2}>
+  <Card title="AutoSend Account" href={AUTOSEND_PATHS.signup}>
+    Sign up for an AutoSend account to get started with sending emails.
+  </Card>
+  <Card title="Verified Domain" href={APP_PATHS.domainConfiguration}>
+    Make sure you have a verified domain added in AutoSend.
+  </Card>
+  <Card title="API Key" href={APP_PATHS.apiKeys}>
+    Create a new API key from your AutoSend dashboard.
+  </Card>
+  <Card title="v0 Account" href={V0}>
+    Sign up for v0 to start building.
+  </Card>
+</CardGroup>
+
+## Integration
+
+<Steps>
+  <Step title="Prompt v0 to integrate AutoSend" titleSize="h3">
+    Copy and paste this prompt into v0's chat:
+
+```text
+Integrate AutoSend email API for sending transactional emails.
+
+API Details:
+- Base URL: https://api.autosend.com/v1
+- Auth: Bearer token using API key stored in environment variable AUTOSEND_API_KEY
+- Endpoint: POST /mails/send
+- Content-Type: application/json
+
+Request body format:
+{
+  "to": { "email": "recipient@example.com", "name": "Jane Doe" },
+  "from": { "email": "hello@mail.yourdomain.com", "name": "Your App Name" },
+  "subject": "Your subject line",
+  "html": "<h1>Hello!</h1><p>Your email content here.</p>"
+}
+
+Response format:
+{
+  "success": true,
+  "data": {
+    "emailId": "698afb75ff4bc5466e3a797a",
+    "message": "Email queued successfully.",
+    "totalRecipients": 1
+  }
+}
+
+Create a Next.js API route (app/api/send-email/route.ts) that:
+1. Reads AUTOSEND_API_KEY from process.env
+2. Accepts to, from, subject, and html in the request body
+3. Calls the AutoSend API with Bearer token auth
+4. Returns the response to the client
+
+The "from" email must use a domain verified in AutoSend.
+
+Docs: https://docs.autosend.com/quickstart/email-using-api
+```
+
+    <Info>
+      v0 will generate the API route and any UI components needed for your email flow.
+    </Info>
+  </Step>
+
+  <Step title="Add your API key" titleSize="h3">
+    When you deploy your v0 project to Vercel, add `AUTOSEND_API_KEY` as an environment variable in your Vercel project settings.
+
+    For local development, add it to your `.env.local` file:
+
+    ```bash .env.local
+    AUTOSEND_API_KEY=your_api_key_here
+    ```
+
+    <Info>
+      Get your API key from the <a href={AUTOSEND_PATHS.apiKey}>API Keys</a> page in your AutoSend dashboard.
+    </Info>
+  </Step>
+
+  <Step title="Test your integration" titleSize="h3">
+    Trigger the email flow in your app (for example, submitting a contact form). Check your <a href={AUTOSEND_PATHS.emailActivity} target="_blank">Email Activity</a> in the AutoSend dashboard to confirm the email was delivered.
+  </Step>
+</Steps>
+
+## Using Email Templates
+
+If you have created <a href={APP_PATHS.emailTemplates}>email templates</a> in AutoSend, you can send emails using a `templateId` instead of inline HTML. Update the prompt to include:
+
+```text
+Also support sending emails with a templateId and variables.
+
+Example request body with template:
+{
+  "to": { "email": "recipient@example.com", "name": "Jane Doe" },
+  "from": { "email": "hello@yourdomain.com", "name": "Your App Name" },
+  "subject": "Welcome!",
+  "templateId": "your_template_id",
+  "dynamicData": {
+    "firstName": "Jane",
+    "loginLink": "https://yourapp.com/login"
+  }
+}
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Emails are not being sent">
+    Make sure your `AUTOSEND_API_KEY` is set in your Vercel environment variables (for production) or `.env.local` (for local development). Also verify that your sending domain is verified in AutoSend.
+  </Accordion>
+  <Accordion title="Getting a 401 Unauthorized error">
+    Double-check that the API route is reading the API key correctly from `process.env.AUTOSEND_API_KEY`. The Authorization header should be `Bearer YOUR_API_KEY`.
+  </Accordion>
+  <Accordion title="Emails landing in spam">
+    Make sure you have completed domain verification including SPF, DKIM, and DMARC records. We recommend using a subdomain like `mail.yourdomain.com` for sending. See our <a href={APP_PATHS.domainConfiguration}>domain setup guide</a> for details.
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Email Templates" icon="envelope" href={APP_PATHS.emailTemplates}>
+    Create reusable email templates with dynamic variables.
+  </Card>
+  <Card title="Email Activity" icon="chart-line" href={APP_PATHS.emailActivity}>
+    Monitor delivery status and engagement for all emails.
+  </Card>
+  <Card title="API Reference" icon="code" href={APP_PATHS.apiReferenceIntroduction}>
+    Full API documentation with all endpoints and parameters.
+  </Card>
+  <Card title="Variables" icon="brackets-curly" href={APP_PATHS.templateVariables}>
+    Personalize emails with dynamic variables.
+  </Card>
+</CardGroup>

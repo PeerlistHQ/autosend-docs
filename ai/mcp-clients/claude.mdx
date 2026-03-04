@@ -1,0 +1,52 @@
+---
+title: 'Connect AutoSend MCP to Claude'
+description: 'Set up AutoSend MCP server in Claude Desktop and Claude Code.'
+sidebarTitle: 'Claude'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { CLAUDE_CODE } from '/snippets/custom-variables.mdx';
+
+<Frame>
+  <img src="/images/ai-tools/claude-code.png" alt="Claude" />
+</Frame>
+
+## Claude Desktop
+
+<Steps>
+  <Step title="Open Connectors" titleSize="h3">
+    Open Claude Desktop and click **Customize** in the top-left corner, then click **Connectors**.
+  </Step>
+  <Step title="Add AutoSend" titleSize="h3">
+    Click the **+** button and select **Add custom connector**. Enter the name as `AutoSend` and the URL as `https://mcp.autosend.com/`.
+  </Step>
+  <Step title="Authorize" titleSize="h3">
+    Follow the OAuth prompt to log in to your AutoSend account.
+  </Step>
+</Steps>
+
+<Info>
+  Claude Desktop does not support remote MCP servers via the `claude_desktop_config.json` file. You must add remote servers through **Connectors**.
+</Info>
+
+## Claude Code
+
+Run the following command in your terminal:
+
+```bash
+claude mcp add autosend --transport http https://mcp.autosend.com/
+```
+
+When you first use the MCP tools, Claude Code will open your browser to authorize the connection with your AutoSend account.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="MCP Server Overview" icon="server" href={APP_PATHS.aiMcpServer}>
+    See all available tools, guided workflows, and examples.
+  </Card>
+  <Card title="AutoSend Skills" icon="wand-magic-sparkles" href={APP_PATHS.aiSkills}>
+    Install skill files for additional AI agent context.
+  </Card>
+</CardGroup>
