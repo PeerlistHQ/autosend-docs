@@ -1,32 +1,34 @@
 ---
-title: "Integrate AutoSend with Replit"
-description: "Add email capabilities to your Replit project using AutoSend."
-sidebarTitle: "Replit"
+title: 'Integrate AutoSend with Replit'
+description: 'Add email capabilities to your Replit project using AutoSend.'
+sidebarTitle: 'Replit'
 ---
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
 import { REPLIT } from '/snippets/custom-variables.mdx';
 
-## Overview
+<Frame>
+	<img src='/images/ai-tools/autosendxreplit.jpg' alt='Replit' />
+</Frame>
 
-<a href={REPLIT} target="_blank">Replit</a> is a collaborative, AI-powered development platform that lets you build and deploy apps from your browser. You can integrate AutoSend into any Replit project to send transactional emails like welcome emails, password resets, order confirmations, and notifications.
+Replit is a collaborative, AI-powered development platform that lets you build and deploy apps from your browser. You can integrate AutoSend into any Replit project to send transactional emails like welcome emails, password resets, order confirmations, and notifications.
 
 ## Prerequisites
 
 <CardGroup cols={2}>
-  <Card title="AutoSend Account" href={AUTOSEND_PATHS.signup}>
-    Sign up for an AutoSend account to get started with sending emails.
-  </Card>
-  <Card title="Verified Domain" href={APP_PATHS.domainConfiguration}>
-    Make sure you have a verified domain added in AutoSend.
-  </Card>
-  <Card title="API Key" href={APP_PATHS.apiKeys}>
-    Create a new API key from your AutoSend dashboard.
-  </Card>
-  <Card title="Replit Account" href={REPLIT}>
-    Sign up for Replit to start building.
-  </Card>
+	<Card title='AutoSend Account' href={AUTOSEND_PATHS.signup}>
+		Sign up for an AutoSend account to get started with sending emails.
+	</Card>
+	<Card title='Verified Domain' href={APP_PATHS.domainConfiguration}>
+		Make sure you have a verified domain added in AutoSend.
+	</Card>
+	<Card title='API Key' href={APP_PATHS.apiKeys}>
+		Create a new API key from your AutoSend dashboard.
+	</Card>
+	<Card title='Replit Account' href={REPLIT}>
+		Sign up for Replit to start building.
+	</Card>
 </CardGroup>
 
 ## Integration
@@ -40,6 +42,7 @@ import { REPLIT } from '/snippets/custom-variables.mdx';
     <Info>
       Get your API key from the <a href={AUTOSEND_PATHS.apiKey}>API Keys</a> page in your AutoSend dashboard.
     </Info>
+
   </Step>
 
   <Step title="Prompt Replit Agent to integrate AutoSend" titleSize="h3">
@@ -86,6 +89,7 @@ Docs: https://docs.autosend.com/quickstart/email-using-api
     <Info>
       Replit Agent will generate the backend code and connect it to your app.
     </Info>
+
   </Step>
 
   <Step title="Test your integration" titleSize="h3">
@@ -130,16 +134,16 @@ Example request body with template:
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="Email Templates" icon="envelope" href={APP_PATHS.emailTemplates}>
-    Create reusable email templates with dynamic variables.
-  </Card>
-  <Card title="Email Activity" icon="chart-line" href={APP_PATHS.emailActivity}>
-    Monitor delivery status and engagement for all emails.
-  </Card>
-  <Card title="API Reference" icon="code" href={APP_PATHS.apiReferenceIntroduction}>
-    Full API documentation with all endpoints and parameters.
-  </Card>
-  <Card title="Variables" icon="brackets-curly" href={APP_PATHS.templateVariables}>
-    Personalize emails with dynamic variables.
-  </Card>
+	<Card title='Email Templates' icon='envelope' href={APP_PATHS.emailTemplates}>
+		Create reusable email templates with dynamic variables.
+	</Card>
+	<Card title='Email Activity' icon='chart-line' href={APP_PATHS.emailActivity}>
+		Monitor delivery status and engagement for all emails.
+	</Card>
+	<Card title='API Reference' icon='code' href={APP_PATHS.apiReferenceIntroduction}>
+		Full API documentation with all endpoints and parameters.
+	</Card>
+	<Card title='Variables' icon='brackets-curly' href={APP_PATHS.templateVariables}>
+		Personalize emails with dynamic variables.
+	</Card>
 </CardGroup>

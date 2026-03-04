@@ -1,5 +1,5 @@
 ---
-title: "Integrate AutoSend with Lovable"
+title: 'Integrate AutoSend with Lovable'
 description: "Add email sending to your Lovable app using AutoSend's email API."
 sidebarTitle: 'Lovable'
 ---
@@ -8,31 +8,30 @@ import { APP_PATHS } from '/snippets/appPaths.mdx';
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
 import { LOVABLE, LOVABLE_DOCS_SUPABASE } from '/snippets/custom-variables.mdx';
 
-## Overview
-
-<a href={LOVABLE} target='_blank'>Lovable</a> is an AI-powered platform that lets you build full-stack web apps from natural language prompts. You can integrate AutoSend into any Lovable project to send transactional emails like welcome emails, password resets, order confirmations, and notifications.
-
 <Frame>
-  <img src="/images/ai-tools/lovable.jpg" alt='Lovable' />
+	<img src='/images/ai-tools/autosendxlovable.jpg' alt='Lovable' />
 </Frame>
+
+Lovable is an AI-powered platform that lets you build full-stack web apps from natural language prompts. You can integrate AutoSend into any Lovable project to send transactional emails like welcome emails,
+password resets, order confirmations, and notifications.
 
 AutoSend works with Lovable through its REST API. Since the API requires an API key, Lovable will use **Supabase Edge Functions** to keep your credentials secure.
 
 ## Prerequisites
 
 <CardGroup cols={2}>
-  <Card title='AutoSend Account' href={AUTOSEND_PATHS.signup}>
-    Sign up for an AutoSend account to get started with sending emails.
-  </Card>
-  <Card title='Verified Domain' href={APP_PATHS.domainConfiguration}>
-    Make sure you have a verified domain added in AutoSend to send emails from.
-  </Card>
-  <Card title='API Key' href={APP_PATHS.apiKeys}>
-    Create a new API key from your AutoSend dashboard for authentication.
-  </Card>
-  <Card title='Lovable with Supabase' href={LOVABLE_DOCS_SUPABASE}>
-    Connect Supabase to your Lovable project to use Edge Functions.
-  </Card>
+	<Card title='AutoSend Account' href={AUTOSEND_PATHS.signup}>
+		Sign up for an AutoSend account to get started with sending emails.
+	</Card>
+	<Card title='Verified Domain' href={APP_PATHS.domainConfiguration}>
+		Make sure you have a verified domain added in AutoSend to send emails from.
+	</Card>
+	<Card title='API Key' href={APP_PATHS.apiKeys}>
+		Create a new API key from your AutoSend dashboard for authentication.
+	</Card>
+	<Card title='Lovable with Supabase' href={LOVABLE_DOCS_SUPABASE}>
+		Connect Supabase to your Lovable project to use Edge Functions.
+	</Card>
 </CardGroup>
 
 ## Integration
@@ -50,6 +49,7 @@ AutoSend works with Lovable through its REST API. Since the API requires an API 
     <Info>
       Get your API key from the <a href={AUTOSEND_PATHS.apiKey}>API Keys</a> page in your AutoSend dashboard.
     </Info>
+
   </Step>
 
   <Step title="Prompt Lovable to integrate AutoSend" titleSize="h3">
@@ -153,16 +153,16 @@ Here are some common ways to use AutoSend in your Lovable apps:
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="Email Templates" icon="envelope" href={APP_PATHS.emailTemplates}>
-    Create reusable email templates with dynamic variables.
-  </Card>
-  <Card title="Email Activity" icon="chart-line" href={APP_PATHS.emailActivity}>
-    Monitor delivery status and engagement for all emails.
-  </Card>
-  <Card title="API Reference" icon="code" href={APP_PATHS.apiReferenceIntroduction}>
-    Full API documentation with all endpoints and parameters.
-  </Card>
-  <Card title="Variables" icon="brackets-curly" href={APP_PATHS.templateVariables}>
-    Personalize emails with dynamic variables.
-  </Card>
+	<Card title='Email Templates' icon='envelope' href={APP_PATHS.emailTemplates}>
+		Create reusable email templates with dynamic variables.
+	</Card>
+	<Card title='Email Activity' icon='chart-line' href={APP_PATHS.emailActivity}>
+		Monitor delivery status and engagement for all emails.
+	</Card>
+	<Card title='API Reference' icon='code' href={APP_PATHS.apiReferenceIntroduction}>
+		Full API documentation with all endpoints and parameters.
+	</Card>
+	<Card title='Variables' icon='brackets-curly' href={APP_PATHS.templateVariables}>
+		Personalize emails with dynamic variables.
+	</Card>
 </CardGroup>

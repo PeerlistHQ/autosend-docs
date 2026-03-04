@@ -1,15 +1,13 @@
 ---
-title: "AutoSend MCP Server"
+title: 'AutoSend MCP Server'
 description: "Connect AutoSend's MCP server to AI tools for managing campaigns, templates, contacts, senders, and more."
-sidebarTitle: "Introduction"
+sidebarTitle: 'Introduction'
 ---
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
 
-<Frame>
-  ![Autosend Mcp](/images/autosend-mcp-1.jpg)
-</Frame>
+<Frame>![Autosend MCP](/images/ai-tools/autosend-mcp.jpg)</Frame>
 
 The AutoSend MCP (Model Context Protocol) server lets you manage email campaigns, templates, contacts, and senders directly from AI assistants like Claude, Cursor, Codex, Antigravity, and other MCP-compatible clients.
 
@@ -29,15 +27,15 @@ Instead of switching between your AI assistant and the AutoSend dashboard, you c
 ## Prerequisites
 
 <CardGroup cols={2}>
-  <Card href="AUTOSEND_PATHS.signup" title="AutoSend Account">
-    Sign up for an AutoSend account to get started.
-  </Card>
-  <Card href="APP_PATHS.domainConfiguration" title="Verified Domain">
-    Add and verify a domain in AutoSend to send emails from.
-  </Card>
-  <Card href="APP_PATHS.sender" title="Verified Sender">
-    Set up at least one verified sender for sending emails.
-  </Card>
+	<Card href='AUTOSEND_PATHS.signup' title='AutoSend Account'>
+		Sign up for an AutoSend account to get started.
+	</Card>
+	<Card href='APP_PATHS.domainConfiguration' title='Verified Domain'>
+		Add and verify a domain in AutoSend to send emails from.
+	</Card>
+	<Card href='APP_PATHS.sender' title='Verified Sender'>
+		Set up at least one verified sender for sending emails.
+	</Card>
 </CardGroup>
 
 ## Connecting to AutoSend MCP
@@ -47,30 +45,30 @@ AutoSend MCP uses a streamable HTTP transport with OAuth 2.0 authentication. Whe
 Choose your AI client to get started:
 
 <CardGroup cols={2}>
-  <Card icon="/images/ai-tools/claude-code.png" href="APP_PATHS.mcpClaude" title="Claude">
-    Claude Desktop and Claude Code
-  </Card>
-  <Card icon="/images/ai-tools/cursor.png" href="APP_PATHS.mcpCursor" title="Cursor">
-    Settings UI or config file setup
-  </Card>
-  <Card icon="/images/ai-tools/copilot.png" href="APP_PATHS.mcpCopilot" title="Copilot">
-    VS Code with GitHub Copilot
-  </Card>
-  <Card icon="/images/ai-tools/windsurf.png" href="APP_PATHS.mcpWindsurf" title="Windsurf">
-    Windsurf MCP configuration
-  </Card>
-  <Card icon="/images/ai-tools/codex.png" href="APP_PATHS.mcpCodex" title="Codex CLI">
-    OpenAI Codex command line
-  </Card>
-  <Card icon="/images/ai-tools/antigravity.png" href="APP_PATHS.mcpAntigravity" title="Antigravity">
-    Google Antigravity setup
-  </Card>
-  <Card icon="/images/ai-tools/chatgpt.png" href="APP_PATHS.mcpChatgpt" title="ChatGPT">
-    ChatGPT connector setup
-  </Card>
-  <Card icon="/images/ai-tools/raycast.png" href="APP_PATHS.mcpRaycast" title="Raycast">
-    Raycast MCP extension
-  </Card>
+	<Card icon='/images/ai-tools/claude-code.png' href='APP_PATHS.mcpClaude' title='Claude'>
+		Claude Desktop and Claude Code
+	</Card>
+	<Card icon='/images/ai-tools/cursor.png' href='APP_PATHS.mcpCursor' title='Cursor'>
+		Settings UI or config file setup
+	</Card>
+	<Card icon='/images/ai-tools/copilot.png' href='APP_PATHS.mcpCopilot' title='Copilot'>
+		VS Code with GitHub Copilot
+	</Card>
+	<Card icon='/images/ai-tools/windsurf.png' href='APP_PATHS.mcpWindsurf' title='Windsurf'>
+		Windsurf MCP configuration
+	</Card>
+	<Card icon='/images/ai-tools/codex.png' href='APP_PATHS.mcpCodex' title='Codex CLI'>
+		OpenAI Codex command line
+	</Card>
+	<Card icon='/images/ai-tools/antigravity.png' href='APP_PATHS.mcpAntigravity' title='Antigravity'>
+		Google Antigravity setup
+	</Card>
+	<Card icon='/images/ai-tools/chatgpt.png' href='APP_PATHS.mcpChatgpt' title='ChatGPT'>
+		ChatGPT connector setup
+	</Card>
+	<Card icon='/images/ai-tools/raycast.png' href='APP_PATHS.mcpRaycast' title='Raycast'>
+		Raycast MCP extension
+	</Card>
 </CardGroup>
 
 ## Authentication
@@ -157,7 +155,9 @@ A step-by-step workflow to create a reusable email template:
 | `context` | string | No       | Initial context about the template purpose |
 
 <Info>
-  Both prompts support an **auto mode**. Say "auto", "take over", or "just do it" at any point, and the assistant will make reasonable decisions for all remaining steps without asking for confirmation.
+	Both prompts support an **auto mode**. Say "auto", "take over", or "just do it" at any point, and
+	the assistant will make reasonable decisions for all remaining steps without asking for
+	confirmation.
 </Info>
 
 ## Example Conversations
@@ -191,7 +191,8 @@ Here are some things you can ask your AI assistant once AutoSend MCP is connecte
 ## Important Notes
 
 <Note>
-  All campaigns created through MCP are saved as drafts. You must publish or send them from the AutoSend dashboard. This is a safety measure to prevent accidental sends.
+	All campaigns created through MCP are saved as drafts. You must publish or send them from the
+	AutoSend dashboard. This is a safety measure to prevent accidental sends.
 </Note>
 
 - **Template variables** - Use Handlebars syntax (`{{variableName}}`) for dynamic content. Variable names must start with a letter and can include letters, numbers, and underscores.
@@ -202,16 +203,16 @@ Here are some things you can ask your AI assistant once AutoSend MCP is connecte
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card icon="wand-magic-sparkles" href="APP_PATHS.aiSkills" title="AutoSend Skills">
-    Install skill files for additional AI agent context.
-  </Card>
-  <Card icon="code" href="APP_PATHS.apiReferenceIntroduction" title="API Reference">
-    Full API documentation with all endpoints and parameters.
-  </Card>
-  <Card icon="bullhorn" href="APP_PATHS.campaigns" title="Campaigns">
-    Learn more about creating and managing email campaigns.
-  </Card>
-  <Card icon="envelope" href="APP_PATHS.emailTemplates" title="Email Templates">
-    Create reusable email templates with dynamic variables.
-  </Card>
+	<Card icon='wand-magic-sparkles' href='APP_PATHS.aiSkills' title='AutoSend Skills'>
+		Install skill files for additional AI agent context.
+	</Card>
+	<Card icon='code' href='APP_PATHS.apiReferenceIntroduction' title='API Reference'>
+		Full API documentation with all endpoints and parameters.
+	</Card>
+	<Card icon='bullhorn' href='APP_PATHS.campaigns' title='Campaigns'>
+		Learn more about creating and managing email campaigns.
+	</Card>
+	<Card icon='envelope' href='APP_PATHS.emailTemplates' title='Email Templates'>
+		Create reusable email templates with dynamic variables.
+	</Card>
 </CardGroup>

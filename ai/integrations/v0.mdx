@@ -1,32 +1,34 @@
 ---
-title: "Integrate AutoSend with v0"
-description: "Integrate AutoSend email sending into your v0 project."
-sidebarTitle: "v0"
+title: 'Integrate AutoSend with v0'
+description: 'Integrate AutoSend email sending into your v0 project.'
+sidebarTitle: 'v0'
 ---
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
 import { V0 } from '/snippets/custom-variables.mdx';
 
-## Overview
+<Frame>
+	<img src='/images/ai-tools/autosendxv0.jpg' alt='v0' />
+</Frame>
 
-<a href={V0} target="_blank">v0</a> is Vercel's AI-powered tool for generating UI components and full-stack applications. You can integrate AutoSend into your v0 project to send transactional emails like welcome emails, password resets, order confirmations, and notifications.
+v0 is Vercel's AI-powered tool for generating UI components and full-stack applications. You can integrate AutoSend into your v0 project to send transactional emails like welcome emails, password resets, order confirmations, and notifications.
 
 ## Prerequisites
 
 <CardGroup cols={2}>
-  <Card title="AutoSend Account" href={AUTOSEND_PATHS.signup}>
-    Sign up for an AutoSend account to get started with sending emails.
-  </Card>
-  <Card title="Verified Domain" href={APP_PATHS.domainConfiguration}>
-    Make sure you have a verified domain added in AutoSend.
-  </Card>
-  <Card title="API Key" href={APP_PATHS.apiKeys}>
-    Create a new API key from your AutoSend dashboard.
-  </Card>
-  <Card title="v0 Account" href={V0}>
-    Sign up for v0 to start building.
-  </Card>
+	<Card title='AutoSend Account' href={AUTOSEND_PATHS.signup}>
+		Sign up for an AutoSend account to get started with sending emails.
+	</Card>
+	<Card title='Verified Domain' href={APP_PATHS.domainConfiguration}>
+		Make sure you have a verified domain added in AutoSend.
+	</Card>
+	<Card title='API Key' href={APP_PATHS.apiKeys}>
+		Create a new API key from your AutoSend dashboard.
+	</Card>
+	<Card title='v0 Account' href={V0}>
+		Sign up for v0 to start building.
+	</Card>
 </CardGroup>
 
 ## Integration
@@ -76,6 +78,7 @@ Docs: https://docs.autosend.com/quickstart/email-using-api
     <Info>
       v0 will generate the API route and any UI components needed for your email flow.
     </Info>
+
   </Step>
 
   <Step title="Add your API key" titleSize="h3">
@@ -90,6 +93,7 @@ Docs: https://docs.autosend.com/quickstart/email-using-api
     <Info>
       Get your API key from the <a href={AUTOSEND_PATHS.apiKey}>API Keys</a> page in your AutoSend dashboard.
     </Info>
+
   </Step>
 
   <Step title="Test your integration" titleSize="h3">
@@ -120,30 +124,35 @@ Example request body with template:
 ## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title="Emails are not being sent">
-    Make sure your `AUTOSEND_API_KEY` is set in your Vercel environment variables (for production) or `.env.local` (for local development). Also verify that your sending domain is verified in AutoSend.
-  </Accordion>
-  <Accordion title="Getting a 401 Unauthorized error">
-    Double-check that the API route is reading the API key correctly from `process.env.AUTOSEND_API_KEY`. The Authorization header should be `Bearer YOUR_API_KEY`.
-  </Accordion>
-  <Accordion title="Emails landing in spam">
-    Make sure you have completed domain verification including SPF, DKIM, and DMARC records. We recommend using a subdomain like `mail.yourdomain.com` for sending. See our <a href={APP_PATHS.domainConfiguration}>domain setup guide</a> for details.
-  </Accordion>
+	<Accordion title='Emails are not being sent'>
+		Make sure your `AUTOSEND_API_KEY` is set in your Vercel environment variables (for production)
+		or `.env.local` (for local development). Also verify that your sending domain is verified in
+		AutoSend.
+	</Accordion>
+	<Accordion title='Getting a 401 Unauthorized error'>
+		Double-check that the API route is reading the API key correctly from
+		`process.env.AUTOSEND_API_KEY`. The Authorization header should be `Bearer YOUR_API_KEY`.
+	</Accordion>
+	<Accordion title='Emails landing in spam'>
+		Make sure you have completed domain verification including SPF, DKIM, and DMARC records. We
+		recommend using a subdomain like `mail.yourdomain.com` for sending. See our{' '}
+		<a href={APP_PATHS.domainConfiguration}>domain setup guide</a> for details.
+	</Accordion>
 </AccordionGroup>
 
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="Email Templates" icon="envelope" href={APP_PATHS.emailTemplates}>
-    Create reusable email templates with dynamic variables.
-  </Card>
-  <Card title="Email Activity" icon="chart-line" href={APP_PATHS.emailActivity}>
-    Monitor delivery status and engagement for all emails.
-  </Card>
-  <Card title="API Reference" icon="code" href={APP_PATHS.apiReferenceIntroduction}>
-    Full API documentation with all endpoints and parameters.
-  </Card>
-  <Card title="Variables" icon="brackets-curly" href={APP_PATHS.templateVariables}>
-    Personalize emails with dynamic variables.
-  </Card>
+	<Card title='Email Templates' icon='envelope' href={APP_PATHS.emailTemplates}>
+		Create reusable email templates with dynamic variables.
+	</Card>
+	<Card title='Email Activity' icon='chart-line' href={APP_PATHS.emailActivity}>
+		Monitor delivery status and engagement for all emails.
+	</Card>
+	<Card title='API Reference' icon='code' href={APP_PATHS.apiReferenceIntroduction}>
+		Full API documentation with all endpoints and parameters.
+	</Card>
+	<Card title='Variables' icon='brackets-curly' href={APP_PATHS.templateVariables}>
+		Personalize emails with dynamic variables.
+	</Card>
 </CardGroup>
