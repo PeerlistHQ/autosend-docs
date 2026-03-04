@@ -1,0 +1,218 @@
+---
+title: 'AutoSend MCP Server'
+description: "Connect AutoSend's MCP server to AI tools for managing campaigns, templates, contacts, senders, and more."
+sidebarTitle: 'Introduction'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+
+## Overview
+
+The AutoSend MCP (Model Context Protocol) server lets you manage email campaigns, templates, contacts, and senders directly from AI assistants like Claude, Cursor, Codex, Antigravity, and other MCP-compatible clients.
+
+It's a remote MCP server with OAuth that gives AI tools secure access to your AutoSend project, available at:
+
+```html
+https://mcp.autosend.com/
+```
+
+Instead of switching between your AI assistant and the AutoSend dashboard, you can use natural language to:
+
+- Create and manage email campaigns
+- Design and update email templates
+- Browse your contact lists and segments
+- Look up verified senders and suppression groups
+
+## Prerequisites
+
+<CardGroup cols={2}>
+	<Card title='AutoSend Account' href={AUTOSEND_PATHS.signup}>
+		Sign up for an AutoSend account to get started.
+	</Card>
+	<Card title='Verified Domain' href={APP_PATHS.domainConfiguration}>
+		Add and verify a domain in AutoSend to send emails from.
+	</Card>
+	<Card title='Verified Sender' href={APP_PATHS.sender}>
+		Set up at least one verified sender for sending emails.
+	</Card>
+</CardGroup>
+
+## Connecting to AutoSend MCP
+
+AutoSend MCP uses a streamable HTTP transport with OAuth 2.0 authentication. When you add the server to your MCP client, the client handles the OAuth authorization flow automatically. You just need to log in to your AutoSend account when prompted.
+
+Choose your AI client to get started:
+
+<CardGroup cols={2}>
+	<Card title='Claude' icon='/images/ai-tools/claude-code.png' href={APP_PATHS.mcpClaude}>
+		Claude Desktop and Claude Code
+	</Card>
+	<Card title='Cursor' icon='/images/ai-tools/cursor.png' href={APP_PATHS.mcpCursor}>
+		Settings UI or config file setup
+	</Card>
+	<Card title='Copilot' icon='/images/ai-tools/copilot.png' href={APP_PATHS.mcpCopilot}>
+		VS Code with GitHub Copilot
+	</Card>
+	<Card title='Windsurf' icon='/images/ai-tools/windsurf.png' href={APP_PATHS.mcpWindsurf}>
+		Windsurf MCP configuration
+	</Card>
+	<Card title='Codex CLI' icon='/images/ai-tools/codex.png' href={APP_PATHS.mcpCodex}>
+		OpenAI Codex command line
+	</Card>
+	<Card title='Antigravity' icon='/images/ai-tools/antigravity.png' href={APP_PATHS.mcpAntigravity}>
+		Google Antigravity setup
+	</Card>
+	<Card title='ChatGPT' icon='/images/ai-tools/chatgpt.png' href={APP_PATHS.mcpChatgpt}>
+		ChatGPT connector setup
+	</Card>
+	<Card title='Raycast' icon='/images/ai-tools/raycast.png' href={APP_PATHS.mcpRaycast}>
+		Raycast MCP extension
+	</Card>
+</CardGroup>
+
+## Authentication
+
+AutoSend MCP uses **OAuth 2.0** to securely connect to your account. You don't need to manage any API keys or tokens yourself. Your MCP client handles everything automatically.
+
+When you first connect, you'll be redirected to AutoSend to log in and authorize the connection. Once authorized, your client stores the credentials and refreshes them as needed. Each connection is scoped to a single AutoSend project, so your data stays isolated and secure.
+
+## Available Tools
+
+AutoSend MCP exposes 17 tools across 5 categories. Your AI assistant automatically uses the right tools based on your requests.
+
+### Lists & Segments
+
+| Tool                     | Description                                                   |
+| ------------------------ | ------------------------------------------------------------- |
+| `get_lists_and_segments` | Fetch your contact lists and segments for targeting campaigns |
+
+### Templates
+
+| Tool               | Description                                       |
+| ------------------ | ------------------------------------------------- |
+| `list_templates`   | List all email templates in your account          |
+| `search_templates` | Search templates by name, content, or type        |
+| `get_template`     | Get a specific template by ID                     |
+| `create_template`  | Create a new email template using HTML            |
+| `update_template`  | Update an existing template's content or settings |
+| `delete_template`  | Permanently delete a template                     |
+
+### Senders
+
+| Tool           | Description                               |
+| -------------- | ----------------------------------------- |
+| `list_senders` | List all verified senders in your account |
+| `get_sender`   | Get details of a specific verified sender |
+
+### Suppression Groups
+
+| Tool                      | Description                                 |
+| ------------------------- | ------------------------------------------- |
+| `list_suppression_groups` | List suppression (unsubscribe) groups       |
+| `get_suppression_group`   | Get details of a specific suppression group |
+
+### Campaigns
+
+| Tool                 | Description                                                   |
+| -------------------- | ------------------------------------------------------------- |
+| `list_campaigns`     | List campaigns with optional filters by status, name, or date |
+| `get_campaign`       | Get details of a specific campaign including metrics          |
+| `create_campaign`    | Create a draft campaign with HTML content in one call         |
+| `update_campaign`    | Update an existing draft campaign's settings or content       |
+| `delete_campaign`    | Permanently delete a campaign                                 |
+| `duplicate_campaign` | Duplicate an existing campaign as a new draft                 |
+
+## Guided Workflows
+
+AutoSend MCP includes two guided workflow prompts that walk your AI assistant through multi-step processes. These prompts provide structured instructions so the assistant gathers the right information and calls the right tools in sequence.
+
+### `create-campaign`
+
+A step-by-step workflow to create a draft email campaign:
+
+1. **Gathers data** - Fetches your lists, segments, senders, and suppression groups
+2. **Asks for details** - Campaign purpose, target audience, sender, unsubscribe group, subject line, and preview text
+3. **Designs the email** - Proposes a template structure and generates responsive HTML
+4. **Creates the draft** - Calls `create_campaign` to create the template and campaign together
+5. **Reviews** - Shows a summary with the campaign ID and next steps
+
+| Argument  | Type   | Required | Description                                |
+| --------- | ------ | -------- | ------------------------------------------ |
+| `context` | string | No       | Initial context about the campaign purpose |
+
+### `create-template`
+
+A step-by-step workflow to create a reusable email template:
+
+1. **Understands purpose** - Asks about template type (marketing or transactional), audience, brand style, and sections
+2. **Designs HTML** - Generates responsive email HTML following email client compatibility best practices
+3. **Creates the template** - Calls `create_template` with all metadata
+4. **Reviews** - Shows a summary with the template ID and next steps
+
+| Argument  | Type   | Required | Description                                |
+| --------- | ------ | -------- | ------------------------------------------ |
+| `context` | string | No       | Initial context about the template purpose |
+
+<Info>
+	Both prompts support an **auto mode**. Say "auto", "take over", or "just do it" at any point, and
+	the assistant will make reasonable decisions for all remaining steps without asking for
+	confirmation.
+</Info>
+
+## Example Conversations
+
+Here are some things you can ask your AI assistant once AutoSend MCP is connected:
+
+**Campaign management:**
+
+- "Create a newsletter campaign for our March product updates"
+- "Show me all draft campaigns"
+- "Duplicate the Black Friday campaign and update it for our spring sale"
+- "Delete the test campaign I created yesterday"
+
+**Template management:**
+
+- "Create a transactional template for order confirmation emails"
+- "Search for templates related to onboarding"
+- "Update the welcome email template with a new header design"
+
+**Looking up data:**
+
+- "List all my contact segments and their sizes"
+- "Show me my verified senders"
+- "What suppression groups do I have?"
+
+**End-to-end workflows:**
+
+- "I want to send a product launch announcement to our Premium Users segment. Walk me through it."
+- "Help me create a reusable welcome email template with the recipient's first name and company"
+
+## Important Notes
+
+<Note>
+	All campaigns created through MCP are saved as drafts. You must publish or send them from the
+	AutoSend dashboard. This is a safety measure to prevent accidental sends.
+</Note>
+
+- **Template variables** - Use Handlebars syntax (`{{variableName}}`) for dynamic content. Variable names must start with a letter and can include letters, numbers, and underscores.
+- **Character limits** - Campaign name: 200 characters, subject line: 988 characters, preview text: 140 characters.
+- **Email HTML** - The MCP server's guided workflows generate email-safe HTML using table-based layouts, inline CSS, and responsive design patterns that work across all major email clients.
+- **Scoped access** - Each MCP connection is scoped to a single AutoSend project and organization. The server cannot access data from other projects.
+
+## Next Steps
+
+<CardGroup cols={2}>
+	<Card title='AutoSend Skills' icon='wand-magic-sparkles' href={APP_PATHS.aiSkills}>
+		Install skill files for additional AI agent context.
+	</Card>
+	<Card title='API Reference' icon='code' href={APP_PATHS.apiReferenceIntroduction}>
+		Full API documentation with all endpoints and parameters.
+	</Card>
+	<Card title='Campaigns' icon='bullhorn' href={APP_PATHS.campaigns}>
+		Learn more about creating and managing email campaigns.
+	</Card>
+	<Card title='Email Templates' icon='envelope' href={APP_PATHS.emailTemplates}>
+		Create reusable email templates with dynamic variables.
+	</Card>
+</CardGroup>

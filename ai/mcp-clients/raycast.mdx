@@ -1,0 +1,38 @@
+---
+title: 'Connect AutoSend MCP to Raycast'
+description: 'Set up AutoSend MCP server in Raycast.'
+sidebarTitle: 'Raycast'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+## Setup
+
+<Steps>
+  <Step title="Install Server" titleSize="h3">
+    Open Raycast and run the **Install Server** command.
+  </Step>
+  <Step title="Configure AutoSend" titleSize="h3">
+    Enter the following details:
+
+    - **Name:** `AutoSend`
+    - **Transport:** HTTP
+    - **URL:** `https://mcp.autosend.com/`
+
+    Click **Install**.
+  </Step>
+  <Step title="Authorize" titleSize="h3">
+    Follow the OAuth prompt to log in to your AutoSend account.
+  </Step>
+</Steps>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="MCP Server Overview" icon="server" href={APP_PATHS.aiMcpServer}>
+    See all available tools, guided workflows, and examples.
+  </Card>
+  <Card title="AutoSend Skills" icon="wand-magic-sparkles" href={APP_PATHS.aiSkills}>
+    Install skill files for additional AI agent context.
+  </Card>
+</CardGroup>

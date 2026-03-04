@@ -1,0 +1,336 @@
+---
+title: 'AutoSend Skill'
+description: 'Install the AutoSend skill to give AI coding agents context about the AutoSend email API.'
+sidebarTitle: 'Skill'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { SKILLS_SH } from '/snippets/custom-variables.mdx';
+
+## Overview
+
+The AutoSend skill gives AI coding agents the context they need to send transactional emails, manage contacts, and use templates via the AutoSend REST API. Once installed, your AI agent can generate accurate integration code without any additional prompting.
+
+The skill is distributed through <a href={SKILLS_SH} target="_blank">skills.sh</a> and can be installed with a single command.
+
+## Installation
+
+<Steps>
+  <Step title="Run the install command" titleSize="h3">
+    Run the following command in your project root:
+
+    ```bash
+    npx skills add https://github.com/autosendhq/skills --skill AutoSend
+    ```
+
+    This automatically detects your AI coding agent and installs the skill file in the correct location.
+
+  </Step>
+
+  <Step title="Set up your API key" titleSize="h3">
+    Set your AutoSend API key as an environment variable:
+
+    ```bash
+    export AUTOSEND_API_KEY=as_your_key_here
+    ```
+
+    Or add it to your `.env` file:
+
+    ```bash .env
+    AUTOSEND_API_KEY=as_your_key_here
+    ```
+
+    <Info>
+      Get your API key from the <a href={AUTOSEND_PATHS.apiKey}>API Keys</a> page in your AutoSend dashboard under **Settings > API Keys > Generate API Key**.
+    </Info>
+
+  </Step>
+
+  <Step title="Verify the installation" titleSize="h3">
+    Ask your AI agent to send an email using AutoSend. It should generate code that uses the correct API endpoint, authentication, and request format without any additional prompting.
+
+    **Example prompt:**
+    ```text
+    Send a welcome email to a new user using AutoSend. The user's email is in the `user.email` variable.
+    ```
+
+  </Step>
+</Steps>
+
+## Supported Platforms
+
+The AutoSend skill works with the following AI coding agents:
+
+| Platform           | Skill File Location          |
+| ------------------ | ---------------------------- |
+| **Cursor**         | `.cursor/rules/autosend.mdc` |
+| **Claude Code**    | `.claude/CLAUDE.md`          |
+| **Codex**          | `.codex/skills/`             |
+| **Antigravity**    | `.agent/skills/`             |
+| **Windsurf**       | `.windsurfrules`             |
+| **OpenCode**       | Agent-specific config        |
+| **Gemini CLI**     | Agent-specific config        |
+| **GitHub Copilot** | Agent-specific config        |
+| **Amp**            | Agent-specific config        |
+| **Kimi CLI**       | Agent-specific config        |
+
+The `npx skills add` command automatically detects which agent you're using and places the skill file in the right location.
+
+## Sample Prompts
+
+After installing the skill, your AI coding agent has full context about the AutoSend API. Here are some prompts to get started:
+
+```text
+Send a welcome email to new users after signup using AutoSend.
+```
+
+```text
+When a user registers, save their contact info to AutoSend with their name and email
+so we can send them marketing campaigns later.
+```
+
+```text
+Create an API route that sends an order confirmation email using an AutoSend template
+with dynamic variables for orderNumber, customerName, and orderTotal.
+```
+
+```text
+Add a function to upsert a contact in AutoSend whenever a user updates their profile,
+and add them to the "newsletter" list.
+```
+
+## Prerequisites
+
+Before using the AutoSend API in your project, make sure you have:
+
+<Steps>
+  <Step title="Create an AutoSend account" titleSize="h3">
+    <a href={AUTOSEND_PATHS.signup} target="_blank">Sign up</a> at autosend.com to get started.
+  </Step>
+  <Step title="Add a sending domain" titleSize="h3">
+    Go to **Settings > Domains > Add Domain** and select your AWS region.
+  </Step>
+  <Step title="Configure DNS records" titleSize="h3">
+    Copy the generated DNS records (DKIM, SPF, DMARC) and add them to your DNS provider.
+  </Step>
+  <Step title="Verify domain ownership" titleSize="h3">
+    Click **Verify Ownership** in the AutoSend dashboard. Wait 5–30 minutes for the status to turn green. See the <a href={APP_PATHS.domainConfiguration}>domain setup guide</a> for details.
+  </Step>
+  <Step title="Generate an API key" titleSize="h3">
+    Go to **Settings > API Keys > Generate API Key** in your <a href={AUTOSEND_PATHS.dashboard} target="_blank">AutoSend dashboard</a>.
+  </Step>
+  <Step title="Set the environment variable" titleSize="h3">
+    ```bash
+    export AUTOSEND_API_KEY=as_your_key_here
+    ```
+  </Step>
+</Steps>
+
+## What's Included
+
+The skill provides your AI agent with full context about the AutoSend API, including authentication, endpoints, request/response formats, and error handling.
+
+### Authentication
+
+| Detail           | Value                                                   |
+| ---------------- | ------------------------------------------------------- |
+| **Base URL**     | `https://api.autosend.com/v1`                           |
+| **Auth Header**  | `Authorization: Bearer YOUR_API_KEY`                    |
+| **Content-Type** | `application/json` (required for all POST/PUT requests) |
+
+### Email Operations
+
+#### Send Email — `POST /v1/mails/send`
+
+Send a single transactional email.
+
+| Parameter     | Type   | Required | Description                                                    |
+| ------------- | ------ | -------- | -------------------------------------------------------------- |
+| `from`        | object | Yes      | Sender — `{ "email": "...", "name": "..." }`                   |
+| `to`          | object | Yes      | Recipient — `{ "email": "...", "name": "..." }`                |
+| `subject`     | string | Yes      | Email subject line                                             |
+| `html`        | string | No       | HTML body                                                      |
+| `text`        | string | No       | Plain text body                                                |
+| `templateId`  | string | No       | Template ID (replaces html/text)                               |
+| `dynamicData` | object | No       | Template variable substitutions                                |
+| `cc`          | array  | No       | CC recipients — `[{ "email": "...", "name": "..." }]`          |
+| `bcc`         | array  | No       | BCC recipients — `[{ "email": "...", "name": "..." }]`         |
+| `replyTo`     | object | No       | Reply-to address — `{ "email": "...", "name": "..." }`         |
+| `attachments` | array  | No       | File attachments — `[{ "filename": "...", "content": "..." }]` |
+
+**Response:**
+
+```json
+{
+	"success": true,
+	"data": { "emailId": "email_abc123" }
+}
+```
+
+#### Send with Template — `POST /v1/mails/send` with `templateId`
+
+Use a template instead of inline HTML, with dynamic variables for personalization.
+
+| Parameter     | Type   | Required | Description                            |
+| ------------- | ------ | -------- | -------------------------------------- |
+| `templateId`  | string | Yes      | Template identifier                    |
+| `dynamicData` | object | No       | Key-value pairs for template variables |
+
+**Common template IDs:**
+
+| Template           | ID                        | Typical Variables                                                |
+| ------------------ | ------------------------- | ---------------------------------------------------------------- |
+| Order Confirmation | `tmpl_order_confirmation` | `orderNumber`, `customerName`, `orderTotal`, `estimatedDelivery` |
+| Welcome Email      | `tmpl_welcome`            | `firstName`, `activationLink`, `supportEmail`                    |
+| Password Reset     | `tmpl_password_reset`     | `resetLink`, `expiresIn`                                         |
+
+**Example request:**
+
+```json
+{
+	"from": { "email": "hello@mail.yourdomain.com", "name": "Your App" },
+	"to": { "email": "recipient@example.com", "name": "Jane Doe" },
+	"subject": "Welcome!",
+	"templateId": "tmpl_welcome",
+	"dynamicData": {
+		"firstName": "Jane",
+		"activationLink": "https://yourapp.com/activate"
+	}
+}
+```
+
+#### Bulk Send — `POST /v1/mails/bulk`
+
+Send to up to 100 recipients in a single API call.
+
+| Parameter     | Type   | Required | Description                                           |
+| ------------- | ------ | -------- | ----------------------------------------------------- |
+| `from`        | object | Yes      | Shared sender — `{ "email": "...", "name": "..." }`   |
+| `subject`     | string | No       | Shared subject (required unless template provides it) |
+| `html`        | string | No       | Shared HTML body                                      |
+| `text`        | string | No       | Shared plain text body                                |
+| `templateId`  | string | No       | Template ID for templated emails                      |
+| `dynamicData` | object | No       | Shared default template variables                     |
+| `recipients`  | array  | Yes      | Array of recipient objects (max 100)                  |
+
+**Recipient object:**
+
+| Parameter     | Type   | Required | Description                                |
+| ------------- | ------ | -------- | ------------------------------------------ |
+| `email`       | string | Yes      | Recipient email address                    |
+| `name`        | string | No       | Recipient display name                     |
+| `dynamicData` | object | No       | Per-recipient variables (overrides shared) |
+| `cc`          | array  | No       | Per-recipient CC                           |
+| `bcc`         | array  | No       | Per-recipient BCC                          |
+
+**Response:**
+
+```json
+{
+	"success": true,
+	"data": {
+		"batchId": "batch_abc123",
+		"totalRecipients": 2,
+		"successCount": 2,
+		"failedCount": 0
+	}
+}
+```
+
+### Contact Management
+
+#### Create Contact — `POST /v1/contacts`
+
+| Parameter      | Type   | Required | Description                                          |
+| -------------- | ------ | -------- | ---------------------------------------------------- |
+| `email`        | string | Yes      | Contact email address                                |
+| `firstName`    | string | No       | Contact first name                                   |
+| `lastName`     | string | No       | Contact last name                                    |
+| `userId`       | string | No       | External user ID                                     |
+| `listIds`      | array  | No       | Lists to add contact to — `["list_abc", "list_xyz"]` |
+| `customFields` | object | No       | Custom field values                                  |
+
+**Response:**
+
+```json
+{
+	"success": true,
+	"data": {
+		"id": "contact_abc123",
+		"email": "user@example.com",
+		"firstName": "Jane",
+		"lastName": "Smith",
+		"listIds": ["list_abc"],
+		"customFields": {},
+		"createdAt": "2025-01-15T00:00:00Z",
+		"updatedAt": "2025-01-15T00:00:00Z"
+	}
+}
+```
+
+#### Get Contact — `GET /v1/contacts/:id`
+
+| Parameter | Type   | Required | Description                 |
+| --------- | ------ | -------- | --------------------------- |
+| `id`      | string | Yes      | Contact ID (path parameter) |
+
+**Response:** Returns the full contact object (same shape as Create Contact response).
+
+#### Upsert Contact — `POST /v1/contacts/email`
+
+Creates a new contact or updates an existing one by email address. If the contact exists, it updates the record; otherwise it creates a new contact.
+
+| Parameter      | Type   | Required | Description             |
+| -------------- | ------ | -------- | ----------------------- |
+| `email`        | string | Yes      | Contact email address   |
+| `firstName`    | string | No       | Contact first name      |
+| `lastName`     | string | No       | Contact last name       |
+| `userId`       | string | No       | External user ID        |
+| `listIds`      | array  | No       | Lists to add contact to |
+| `customFields` | object | No       | Custom field values     |
+
+**Response:** Returns the full contact object (same shape as Create Contact response).
+
+#### Delete Contact — `DELETE /v1/contacts/:id`
+
+| Parameter | Type   | Required | Description                 |
+| --------- | ------ | -------- | --------------------------- |
+| `id`      | string | Yes      | Contact ID (path parameter) |
+
+**Response:**
+
+```json
+{
+	"success": true
+}
+```
+
+### Error Codes
+
+| Status | Code                  | Description                                 |
+| ------ | --------------------- | ------------------------------------------- |
+| 400    | `VALIDATION_FAILED`   | Bad request — missing or invalid parameters |
+| 401    | `UNAUTHORIZED`        | Invalid or missing API key                  |
+| 402    | `PAYMENT_REQUIRED`    | Plan upgrade needed                         |
+| 403    | `FORBIDDEN`           | Insufficient permissions                    |
+| 404    | `NOT_FOUND`           | Resource not found                          |
+| 429    | `RATE_LIMIT_EXCEEDED` | Too many requests — retry with backoff      |
+| 500    | `SERVER_ERROR`        | Internal server error                       |
+
+## Next Steps
+
+<CardGroup cols={2}>
+	<Card title='MCP Server' icon='server' href={APP_PATHS.aiMcpServer}>
+		Connect AutoSend's MCP server for direct API access from your AI tools.
+	</Card>
+	<Card title='API Reference' icon='code' href={APP_PATHS.apiReferenceIntroduction}>
+		Full API documentation with all endpoints and parameters.
+	</Card>
+	<Card title='Domain Setup' icon='globe' href={APP_PATHS.domainConfiguration}>
+		Add and verify your sending domain.
+	</Card>
+	<Card title='API Keys' icon='key' href={APP_PATHS.apiKeys}>
+		Generate and manage your API keys.
+	</Card>
+</CardGroup>

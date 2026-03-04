@@ -1,0 +1,35 @@
+---
+title: 'Connect AutoSend MCP to Codex CLI'
+description: 'Set up AutoSend MCP server in OpenAI Codex CLI.'
+sidebarTitle: 'Codex CLI'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { CODEX } from '/snippets/custom-variables.mdx';
+
+<Frame>
+  <img src="/images/ai-tools/codex.png" alt="Codex CLI" />
+</Frame>
+
+## Setup
+
+<a href={CODEX} target="_blank">Codex CLI</a> is OpenAI's local coding agent that runs directly from your terminal.
+
+Run the following command to add AutoSend MCP:
+
+```bash
+codex mcp add autosend --url https://mcp.autosend.com/
+```
+
+When adding the MCP server, Codex will detect OAuth support and open your browser to authorize the connection with your AutoSend account.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="MCP Server Overview" icon="server" href={APP_PATHS.aiMcpServer}>
+    See all available tools, guided workflows, and examples.
+  </Card>
+  <Card title="AutoSend Skills" icon="wand-magic-sparkles" href={APP_PATHS.aiSkills}>
+    Install skill files for additional AI agent context.
+  </Card>
+</CardGroup>

@@ -1,0 +1,145 @@
+---
+title: "Integrate AutoSend with Replit"
+description: "Add email capabilities to your Replit project using AutoSend."
+sidebarTitle: "Replit"
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { REPLIT } from '/snippets/custom-variables.mdx';
+
+## Overview
+
+<a href={REPLIT} target="_blank">Replit</a> is a collaborative, AI-powered development platform that lets you build and deploy apps from your browser. You can integrate AutoSend into any Replit project to send transactional emails like welcome emails, password resets, order confirmations, and notifications.
+
+## Prerequisites
+
+<CardGroup cols={2}>
+  <Card title="AutoSend Account" href={AUTOSEND_PATHS.signup}>
+    Sign up for an AutoSend account to get started with sending emails.
+  </Card>
+  <Card title="Verified Domain" href={APP_PATHS.domainConfiguration}>
+    Make sure you have a verified domain added in AutoSend.
+  </Card>
+  <Card title="API Key" href={APP_PATHS.apiKeys}>
+    Create a new API key from your AutoSend dashboard.
+  </Card>
+  <Card title="Replit Account" href={REPLIT}>
+    Sign up for Replit to start building.
+  </Card>
+</CardGroup>
+
+## Integration
+
+<Steps>
+  <Step title="Add your API key as a secret" titleSize="h3">
+    1. In your Replit project, open the **Secrets** tab (lock icon in the sidebar)
+    2. Add a new secret with the key `AUTOSEND_API_KEY`
+    3. Paste your AutoSend API key as the value
+
+    <Info>
+      Get your API key from the <a href={AUTOSEND_PATHS.apiKey}>API Keys</a> page in your AutoSend dashboard.
+    </Info>
+  </Step>
+
+  <Step title="Prompt Replit Agent to integrate AutoSend" titleSize="h3">
+    Copy and paste this prompt into Replit's AI chat:
+
+```text
+Integrate AutoSend email API for sending transactional emails.
+
+API Details:
+- Base URL: https://api.autosend.com/v1
+- Auth: Bearer token using the AUTOSEND_API_KEY secret
+- Endpoint: POST /mails/send
+- Content-Type: application/json
+
+Request body format:
+{
+  "to": { "email": "recipient@example.com", "name": "Jane Doe" },
+  "from": { "email": "hello@mail.yourdomain.com", "name": "Your App Name" },
+  "subject": "Your subject line",
+  "html": "<h1>Hello!</h1><p>Your email content here.</p>"
+}
+
+Response format:
+{
+  "success": true,
+  "data": {
+    "emailId": "698afb75ff4bc5466e3a797a",
+    "message": "Email queued successfully.",
+    "totalRecipients": 1
+  }
+}
+
+Create a server-side endpoint that:
+1. Reads AUTOSEND_API_KEY from environment secrets
+2. Accepts to, from, subject, and html in the request body
+3. Calls the AutoSend API with Bearer token auth
+4. Returns the response to the client
+
+The "from" email must use a domain verified in AutoSend.
+
+Docs: https://docs.autosend.com/quickstart/email-using-api
+```
+
+    <Info>
+      Replit Agent will generate the backend code and connect it to your app.
+    </Info>
+  </Step>
+
+  <Step title="Test your integration" titleSize="h3">
+    Trigger the email flow in your app (for example, submitting a contact form). Check your <a href={AUTOSEND_PATHS.emailActivity} target="_blank">Email Activity</a> in the AutoSend dashboard to confirm the email was delivered.
+  </Step>
+</Steps>
+
+## Using Email Templates
+
+If you have created <a href={APP_PATHS.emailTemplates}>email templates</a> in AutoSend, you can send emails using a `templateId` instead of inline HTML. Update the prompt to include:
+
+```text
+Also support sending emails with a templateId and variables.
+
+Example request body with template:
+{
+  "to": { "email": "recipient@example.com", "name": "Jane Doe" },
+  "from": { "email": "hello@yourdomain.com", "name": "Your App Name" },
+  "subject": "Welcome!",
+  "templateId": "your_template_id",
+  "dynamicData": {
+    "firstName": "Jane",
+    "loginLink": "https://yourapp.com/login"
+  }
+}
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Emails are not being sent">
+    Make sure your `AUTOSEND_API_KEY` is correctly added in Replit Secrets. Also verify that your sending domain is verified in AutoSend by checking **Settings > Domains** in your dashboard.
+  </Accordion>
+  <Accordion title="Getting a 401 Unauthorized error">
+    Double-check that your code is reading the secret correctly. The Authorization header should be `Bearer YOUR_API_KEY` with no extra spaces or quotes.
+  </Accordion>
+  <Accordion title="Emails landing in spam">
+    Make sure you have completed domain verification including SPF, DKIM, and DMARC records. We recommend using a subdomain like `mail.yourdomain.com` for sending. See our <a href={APP_PATHS.domainConfiguration}>domain setup guide</a> for details.
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Email Templates" icon="envelope" href={APP_PATHS.emailTemplates}>
+    Create reusable email templates with dynamic variables.
+  </Card>
+  <Card title="Email Activity" icon="chart-line" href={APP_PATHS.emailActivity}>
+    Monitor delivery status and engagement for all emails.
+  </Card>
+  <Card title="API Reference" icon="code" href={APP_PATHS.apiReferenceIntroduction}>
+    Full API documentation with all endpoints and parameters.
+  </Card>
+  <Card title="Variables" icon="brackets-curly" href={APP_PATHS.templateVariables}>
+    Personalize emails with dynamic variables.
+  </Card>
+</CardGroup>

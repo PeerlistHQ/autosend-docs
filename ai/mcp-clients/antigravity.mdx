@@ -1,0 +1,40 @@
+---
+title: 'Connect AutoSend MCP to Antigravity'
+description: 'Set up AutoSend MCP server in Google Antigravity.'
+sidebarTitle: 'Antigravity'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { ANTIGRAVITY } from '/snippets/custom-variables.mdx';
+
+<Frame>
+  <img src="/images/ai-tools/antigravity.png" alt="Antigravity" />
+</Frame>
+
+## Setup
+
+<a href={ANTIGRAVITY} target="_blank">Antigravity</a> is Google's AI-powered coding environment. To connect AutoSend MCP, add the following configuration to your `~/.gemini/settings.json` file:
+
+```json
+{
+  "mcpServers": {
+    "autosend": {
+      "command": "npx",
+      "args": ["mcp-remote", "https://mcp.autosend.com/"]
+    }
+  }
+}
+```
+
+Restart your environment to apply the configuration. When prompted, follow the OAuth flow to authorize access to your AutoSend account.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="MCP Server Overview" icon="server" href={APP_PATHS.aiMcpServer}>
+    See all available tools, guided workflows, and examples.
+  </Card>
+  <Card title="AutoSend Skills" icon="wand-magic-sparkles" href={APP_PATHS.aiSkills}>
+    Install skill files for additional AI agent context.
+  </Card>
+</CardGroup>

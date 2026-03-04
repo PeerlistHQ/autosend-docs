@@ -1,0 +1,51 @@
+---
+title: 'Connect AutoSend MCP to VS Code (Copilot)'
+description: 'Set up AutoSend MCP server in VS Code with GitHub Copilot.'
+sidebarTitle: 'Copilot'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+## Option 1: Using Command Palette
+
+<Steps>
+  <Step title="Open Command Palette" titleSize="h3">
+    Press `Ctrl+Shift+P` on Windows/Linux or `Cmd+Shift+P` on macOS to open the Command Palette.
+  </Step>
+  <Step title="Add MCP Server" titleSize="h3">
+    Run **MCP: Add Server** and select **HTTP**.
+  </Step>
+  <Step title="Configure the server" titleSize="h3">
+    Enter the URL as `https://mcp.autosend.com/` and the name as `AutoSend`. Select **Global** or **Workspace** depending on your needs.
+  </Step>
+  <Step title="Authorize" titleSize="h3">
+    Start the server and follow the OAuth prompt to log in to your AutoSend account.
+  </Step>
+</Steps>
+
+## Option 2: Using config file
+
+Add the following to your `.vscode/mcp.json` file:
+
+```json
+{
+  "servers": {
+    "autosend": {
+      "url": "https://mcp.autosend.com/"
+    }
+  }
+}
+```
+
+Start the server and follow the OAuth prompt to log in to your AutoSend account.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="MCP Server Overview" icon="server" href={APP_PATHS.aiMcpServer}>
+    See all available tools, guided workflows, and examples.
+  </Card>
+  <Card title="AutoSend Skills" icon="wand-magic-sparkles" href={APP_PATHS.aiSkills}>
+    Install skill files for additional AI agent context.
+  </Card>
+</CardGroup>
