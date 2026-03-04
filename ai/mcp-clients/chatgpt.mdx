@@ -1,0 +1,45 @@
+---
+title: 'Connect AutoSend MCP to ChatGPT'
+description: 'Set up AutoSend MCP server as a connector in ChatGPT.'
+sidebarTitle: 'ChatGPT'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+## Setup
+
+<Steps>
+  <Step title="Enable Developer Mode" titleSize="h3">
+    Go to **Settings > Connectors > Advanced settings** and enable **Developer mode**.
+  </Step>
+  <Step title="Create a connector" titleSize="h3">
+    Open **Settings**, go to the **Connectors** tab, and click **Create** to add a new connector.
+  </Step>
+  <Step title="Configure AutoSend" titleSize="h3">
+    Enter the following details:
+
+    - **Name:** `AutoSend`
+    - **MCP server URL:** `https://mcp.autosend.com/`
+    - **Authentication:** `OAuth`
+
+    Click **Create**.
+  </Step>
+  <Step title="Authorize" titleSize="h3">
+    The AutoSend connector will appear in the composer's Developer mode tool. Follow the OAuth prompt to log in to your AutoSend account.
+  </Step>
+</Steps>
+
+<Info>
+  MCP connectors in ChatGPT are available for Pro and Plus accounts on the web.
+</Info>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="MCP Server Overview" icon="server" href={APP_PATHS.aiMcpServer}>
+    See all available tools, guided workflows, and examples.
+  </Card>
+  <Card title="AutoSend Skills" icon="wand-magic-sparkles" href={APP_PATHS.aiSkills}>
+    Install skill files for additional AI agent context.
+  </Card>
+</CardGroup>

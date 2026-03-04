@@ -1,0 +1,56 @@
+---
+title: 'Connect AutoSend MCP to Cursor'
+description: 'Set up AutoSend MCP server in Cursor to manage emails with AI.'
+sidebarTitle: 'Cursor'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { CURSOR } from '/snippets/custom-variables.mdx';
+
+<Frame>
+  <img src="/images/ai-tools/cursor.png" alt="Cursor" />
+</Frame>
+
+## Option 1: Using Settings UI
+
+<Steps>
+  <Step title="Open Settings" titleSize="h3">
+    Open <a href={CURSOR} target="_blank">Cursor</a> and navigate to **Settings**.
+  </Step>
+  <Step title="Add MCP Server" titleSize="h3">
+    Go to the **MCP** section and click **Add new MCP server**.
+  </Step>
+  <Step title="Configure the server" titleSize="h3">
+    Set the type to **URL** and enter `https://mcp.autosend.com/`.
+  </Step>
+  <Step title="Authorize" titleSize="h3">
+    Cursor will display a **Needs login** prompt. Click on it to authorize Cursor to access your AutoSend account.
+  </Step>
+</Steps>
+
+## Option 2: Using config file
+
+Add the following to your project-specific or global `.cursor/mcp.json` file:
+
+```json
+{
+  "mcpServers": {
+    "autosend": {
+      "url": "https://mcp.autosend.com/"
+    }
+  }
+}
+```
+
+Once the server is added, Cursor will display a **Needs login** prompt. Click on it to authorize Cursor to access your AutoSend account.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="MCP Server Overview" icon="server" href={APP_PATHS.aiMcpServer}>
+    See all available tools, guided workflows, and examples.
+  </Card>
+  <Card title="AutoSend Skills" icon="wand-magic-sparkles" href={APP_PATHS.aiSkills}>
+    Install skill files for additional AI agent context.
+  </Card>
+</CardGroup>
