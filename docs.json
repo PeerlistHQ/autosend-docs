@@ -21,12 +21,30 @@
 					{
 						"group": "Quickstart",
 						"pages": [
-							"quickstart/email-using-api",
+							{
+								"group": "Email API",
+								"pages": [
+									"quickstart/email-using-api",
+									"guides/better-auth",
+									"guides/supabase-edge-functions"
+								]
+							},
 							{
 								"group": "SDKs",
 								"pages": ["sdk/nodejs"]
 							},
-							"quickstart/smtp"
+							{
+								"group": "SMTP",
+								"pages": [
+									"quickstart/smtp",
+									"guides/smtp/auth0",
+									"guides/smtp/customerio",
+									"guides/smtp/descope",
+									"guides/smtp/nodemailer",
+									"guides/smtp/supabase",
+									"guides/smtp/wordpress"
+								]
+							}
 						]
 					},
 					{
@@ -147,7 +165,7 @@
 			},
 			{
 				"tab": "Guides",
-				"hidden": false,
+				"hidden": true,
 				"groups": [
 					{
 						"group": "Integrations",

@@ -1,7 +1,7 @@
 ---
 title: 'How to send email with AutoSend SMTP'
 description: "Send transactional emails using AutoSend's SMTP relay service. Integrate with any application that supports SMTP."
-sidebarTitle: 'SMTP'
+sidebarTitle: 'Introduction'
 ---
 
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
@@ -167,6 +167,31 @@ func main() {
 
 </CodeGroup>
 
+## Platform Integrations
+
+AutoSend SMTP works with any platform that supports SMTP configuration:
+
+<CardGroup cols={2}>
+	<Card title='Auth0' href='/guides/smtp/auth0' icon='/images/guides/auth0.png'>
+		Send authentication emails through AutoSend SMTP.
+	</Card>
+	<Card title='Customer.io' href='/guides/smtp/customerio' icon='/images/guides/customerio.png'>
+		Send emails from Customer.io through AutoSend SMTP.
+	</Card>
+	<Card title='Descope' href='/guides/smtp/descope' icon='/images/guides/descope.png'>
+		Send authentication emails from Descope through AutoSend SMTP.
+	</Card>
+	<Card title='Nodemailer' href='/guides/smtp/nodemailer' icon='/images/guides/nodemailer.png'>
+		Send emails from Node.js apps using Nodemailer with AutoSend SMTP.
+	</Card>
+	<Card title='Supabase' href='/guides/smtp/supabase' icon='/images/guides/supabase.png'>
+		Send auth emails from Supabase through AutoSend SMTP.
+	</Card>
+	<Card title='WordPress' href='/guides/smtp/wordpress' icon='/images/guides/wordpress.png'>
+		Configure WordPress to send emails through AutoSend SMTP.
+	</Card>
+</CardGroup>
+
 ## Testing with Swaks
 
 [Swaks](https://www.jetmore.org/john/code/swaks/) (Swiss Army Knife for SMTP) is a powerful command-line tool for testing SMTP configurations.
@@ -230,19 +255,6 @@ swaks --to recipient@example.com \
 ```
 
 Add `-v` or `-vv` for detailed SMTP conversation logs.
-
-## Platform Integrations
-
-AutoSend SMTP works with any platform that supports SMTP configuration:
-
-<Columns cols={3}>
-	<Card title='Auth0' href='/guides/smtp/auth0' />
-	<Card title='Customer.io' href='/guides/smtp/customerio' />
-	<Card title='Descope' href='/guides/smtp/descope' />
-	<Card title='Nodemailer' href='/guides/smtp/nodemailer' />
-	<Card title='Supabase' href='/guides/smtp/supabase' />
-	<Card title='WordPress' href='/guides/smtp/wordpress' />
-</Columns>
 
 ## Troubleshooting
 
