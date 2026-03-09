@@ -4,6 +4,8 @@ description: 'Access official AutoSend brand assets including logos, icons, and 
 sidebarTitle: 'Brand Kit'
 ---
 
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+
 <Frame>
 	<img src='/images/autosend-brand-kit-cover.png' alt='AutoSend Logo Kit Preview' />
 </Frame>
@@ -12,7 +14,7 @@ sidebarTitle: 'Brand Kit'
 	title='Download Logo Kit (zip)'
 	icon='download'
 	iconType='duotone'
-	href='/AutoSendLogoKit.zip'
+	href={AUTOSEND_PATHS.logoKit}
 	horizontal>
 	Download official AutoSend logos in SVG and PNG formats, available in both light and dark themes.
 	Use only the official colors for the wordmark.
