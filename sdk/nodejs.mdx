@@ -128,20 +128,10 @@ Send multiple emails in a single API call:
 
 ```typescript
 await autosend.emails.bulk({
-	emails: [
-		{
-			from: { email: 'hello@yourdomain.com' },
-			to: { email: 'user1@example.com' },
-			subject: 'Hello User 1',
-			html: '<p>Welcome to AutoSend!</p>',
-		},
-		{
-			from: { email: 'hello@yourdomain.com' },
-			to: { email: 'user2@example.com' },
-			subject: 'Hello User 2',
-			html: '<p>Welcome to AutoSend!</p>',
-		},
-	],
+	from: { email: 'you@example.com' },
+	subject: 'Hello',
+	html: '<p>Welcome!</p>',
+	recipients: [{ email: 'user1@gmail.com' }, { email: 'user2@gmail.com' }],
 });
 ```
 
