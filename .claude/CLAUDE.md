@@ -101,10 +101,11 @@ sidebarTitle: "Sidebar Label"  # Optional, use when sidebar needs shorter text
 
 ### Links and Variables
 
-- Use snippet variables for internal paths: `APP_PATHS.apiKey`
+- **Always use `APP_PATHS` for internal links** — never hardcode internal paths directly. Import and use `APP_PATHS` with JSX anchor syntax: `<a href={APP_PATHS.domainWarmup}>link text</a>`
 - Use snippet variables for external URLs: `AUTOSEND_PATHS.dashboard`
 - Never hardcode URLs that exist in snippets
 - Import from snippets: `import { APP_PATHS } from '/snippets/appPaths.mdx'`
+- If a page doesn't already import `APP_PATHS`, add the import after the frontmatter before using it
 
 ### Images
 
