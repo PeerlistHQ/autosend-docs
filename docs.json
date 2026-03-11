@@ -71,7 +71,8 @@
 									"marketing-emails/contacts/custom-fields"
 								]
 							},
-							"/automations"
+							"/automations",
+							"marketing-emails/domain-warmup"
 						]
 					},
 					{
