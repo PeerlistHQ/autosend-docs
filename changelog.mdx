@@ -1,9 +1,27 @@
 ---
-title: "Changelog"
-description: "The latest updates, improvements, and fixes shipped to AutoSend."
-sidebarTitle: "Changelog"
+title: 'Changelog'
+description: 'The latest updates, improvements, and fixes shipped to AutoSend.'
+sidebarTitle: 'Changelog'
 rss: true
 ---
+
+<Update label="March 10, 2026">
+
+## NEW: Domain warmup is now built into AutoSend.
+
+If you've ever started sending on a new domain and wondered why your open rates were tanking, this is for you.
+
+<Frame>![Quick create menu](/images/changelog/autosend-gradual-send.jpg)</Frame>
+
+We just shipped **Gradual Send**. It's a new sending mode that automatically ramps up your email volume over time, so mailbox providers get familiar with you before you hit them with your full list.
+
+You pick a starting volume, choose how fast you want to grow, set a start date, and that's it. AutoSend builds out your daily send schedule and shows you a chart of exactly what will go out and when. If your bounce or complaint rate spikes, it pauses automatically.
+
+No manual scheduling. No spreadsheets. No sending five small campaigns just to warm up a domain.
+
+You'll find it under "When to send?" the next time you set up a campaign. Highly recommend it if you're on a new domain or sending to a cold list for the first time.
+
+</Update>
 
 <Update label="February 03, 2026">
 
@@ -11,15 +29,14 @@ rss: true
 
 We shipped quality-of-life improvements this week. Faster workflows, cleaner analytics, and a few important fixes.
 
-<Frame>
-![Quick create menu](/images/quick-create-menu.png)
-</Frame>
+<Frame>![Quick create menu](/images/quick-create-menu.png)</Frame>
 
 **Quick Create Menu**: Create campaigns and automations directly from the dashboard. Click the "+" button in the top right corner without navigating away from your current page.
 
 **Faster Campaign and Analytics Loading**: Dashboards load faster with caching for workflow analytics and streamlined campaign queries. Separated worker services for email sending, validation, and webhooks handle higher loads independently. Lazy loading for past and failed campaigns reduces initial page load times.
 
 ### Fixes:
+
 - Fixed invited users being redirected to the welcome screen instead of their team's workspace
 - Resolved analytics text alignment issues that made numbers hard to read
 - Added SMTP rate limiting API to prevent sending spikes and improve deliverability
@@ -32,9 +49,7 @@ We shipped quality-of-life improvements this week. Faster workflows, cleaner ana
 
 The dashboard has been redesigned from the ground up and a fresh new landing page has launched.
 
-<Frame>
-![AutoSend dashboard](/images/dashboard-changelog.png)
-</Frame>
+<Frame>![AutoSend dashboard](/images/dashboard-changelog.png)</Frame>
 
 **Dashboard Redesign**: Your dashboard now surfaces key metrics (sends, opens, clicks, bounces), active campaigns, and product updates right when you log in. No more digging through reports.
 
@@ -47,6 +62,7 @@ The dashboard has been redesigned from the ground up and a fresh new landing pag
 **List-Unsubscribe Header**: The standard `List-Unsubscribe` header is now included in all emails, enabling one-click unsubscribe buttons in Gmail and Apple Mail. No configuration needed.
 
 ### Fixes:
+
 - Fixed campaign analytics not refreshing when switching between campaigns
 - Resolved dark mode styling issues with the payment alert banner
 - Improved link formatting in the email builder
@@ -74,6 +90,7 @@ Native CC and BCC support is now available across AutoSend.
 **Bypass Suppressions**: Send an email to a suppressed recipient on a per-email basis for critical communications like password resets.
 
 ### Fixes:
+
 - Fixed proration calculations for plan upgrades and downgrades
 - Resolved issues with payment cancellations not reflecting correctly
 - Fixed billing cycle date updates after plan changes
@@ -97,6 +114,7 @@ This release focuses on polishing the edges. Clearer errors, better analytics vi
 **SMTP API Key Flexibility**: All API key types now work with SMTP authentication. Any valid API key works as your SMTP password.
 
 ### Fixes:
+
 - Fixed webhook validation errors not displaying correctly when creating or editing webhooks
 - Fixed pricing feature strikethrough styling for plans
 - Fixed icon visibility issues in dark mode for email status indicators
@@ -109,9 +127,7 @@ This release focuses on polishing the edges. Clearer errors, better analytics vi
 
 You can now send emails through AutoSend using SMTP as well as the REST API.
 
-<Frame>
-![SMTP settings](/images/smtp/autosend-smtp-settings.png)
-</Frame>
+<Frame>![SMTP settings](/images/smtp/autosend-smtp-settings.png)</Frame>
 
 **Simple Setup**: Go to Settings → SMTP to get your credentials. Host, port, and username are pre-configured. Generate an API key to use as your password.
 
@@ -120,10 +136,12 @@ You can now send emails through AutoSend using SMTP as well as the REST API.
 **Same Deliverability**: All the benefits of AutoSend's sending infrastructure: same reputation, same analytics, same reliability. Perfect for legacy systems or platforms with built-in SMTP support.
 
 ### Improvements:
+
 - Campaign and automation analytics now show clicked status sections with cleaner empty states
 - You can now sort contacts via the API for paginating large lists in a specific order
 
 ### Fixes:
+
 - Fixed date filter equals not working correctly when filtering contacts by an exact date
 - Fixed incorrect campaign counts in the campaigns list
 
@@ -135,9 +153,7 @@ You can now send emails through AutoSend using SMTP as well as the REST API.
 
 Spam Checker analyzes your email content in real-time, flags potential issues, and tells you exactly what to change before you send.
 
-<Frame>
-![Spam Checker](/images/spam-checker-changlog.png)
-</Frame>
+<Frame>![Spam Checker](/images/spam-checker-changlog.png)</Frame>
 
 **Real-time spam analysis**: As you write, Spam Checker scans your content for known spam triggers.
 
@@ -150,6 +166,7 @@ Spam Checker analyzes your email content in real-time, flags potential issues, a
 **Works everywhere**: Available in the email builder for campaigns, automations, transactional templates, and compose.
 
 ### Fixes:
+
 - Fixed styling issue in the test email modal
 - Fixed alignment and null click issue in automation analytics
 - Fixed contact counts not refreshing correctly when adding contacts to a list
@@ -168,6 +185,7 @@ Major improvements to how you track campaign performance and how quickly emails 
 **Faster Campaign Delivery**: Upgraded sending infrastructure improves speed and reliability. Campaigns reach inboxes faster with fewer delivery errors, especially for large contact lists.
 
 ### Fixes:
+
 - Fixed images breaking email responsiveness on mobile devices
 - Resolved a bug where inserting images from your library would fail silently
 - Fixed segment evaluation queue causing segments to refresh incorrectly
@@ -197,6 +215,7 @@ Major improvements to the email builder, better webhook tracking, new analytics 
 **Optimized webhook payloads**: Reduced payload size by stripping unnecessary data. Faster processing, less bandwidth, and cleaner logs.
 
 ### Fixes:
+
 - Email activity modal viewport
 - Unsubscribe group undefined error
 - Image link focus behavior
@@ -215,9 +234,7 @@ Major improvements to the email builder, better webhook tracking, new analytics 
 
 Email automation is now live in AutoSend. Create triggered sequences with visual workflows, tracking, and unsubscribe group management.
 
-<Frame>
-![Email Automations in AutoSend](/images/automation-changelog.jpeg)
-</Frame>
+<Frame>![Email Automations in AutoSend](/images/automation-changelog.jpeg)</Frame>
 
 **Visual Builder**: Design automation flows in a drag-and-drop interface. See your entire sequence with entry points, wait steps, and email blocks connected in order.
 
@@ -239,9 +256,7 @@ Email automation is now live in AutoSend. Create triggered sequences with visual
 
 AutoSend now supports teams. Invite your team for full platform access with no permission levels to configure.
 
-<Frame>
-![Teams in AutoSend](/images/team.png)
-</Frame>
+<Frame>![Teams in AutoSend](/images/team.png)</Frame>
 
 **Invite Your Team**: Head to [Settings → Team](https://autosend.com/settings/team) to invite as many people as you need.
 
@@ -257,9 +272,7 @@ AutoSend now supports teams. Invite your team for full platform access with no p
 
 A free email template builder with markdown support. Create responsive emails without coding.
 
-<Frame>
-![Compose by AutoSend](/images/compose-og.webp)
-</Frame>
+<Frame>![Compose by AutoSend](/images/compose-og.webp)</Frame>
 
 **Markdown support**: Write emails the same way you write docs or READMEs. If you've written markdown before, you already know how to use Compose.
 
@@ -281,9 +294,7 @@ A free email template builder with markdown support. Create responsive emails wi
 
 Filter and analyze your email activity by status, templates, domain, and API key.
 
-<Frame>
-![Email Activity Filter Modal](/images/autosend-email-activity-changelog.jpeg)
-</Frame>
+<Frame>![Email Activity Filter Modal](/images/autosend-email-activity-changelog.jpeg)</Frame>
 
 **Status Filters**: Filter by delivery lifecycle (Sent, Delivered, Bounced), engagement (Opened, Clicked), or issues (Complained, Suppressed, Failed).
 
@@ -303,13 +314,12 @@ Combine multiple filters to narrow down your search and get precise insights int
 
 Two of the most requested features: webhooks management and email attachments.
 
-<Frame>
-![Create new webhook](/images/create-new-webhook.png)
-</Frame>
+<Frame>![Create new webhook](/images/create-new-webhook.png)</Frame>
 
 **Webhooks**: Listen to real-time email events directly in your app. Available on Pro 10k plans and above.
 
 Events you can track:
+
 - Delivery lifecycle: `email.sent`, `email.delivered`, `email.deferred`
 - Engagement: `email.opened`, `email.clicked`
 - Issues: `email.bounced`, `email.spam_reported`
@@ -319,6 +329,7 @@ Events you can track:
 **Email Attachments**: Attach files via base64 upload, S3 file paths, or external URLs. Up to 20 attachments per email, 40MB per file.
 
 ### Fixes:
+
 - Fixed pricing page data issues during onboarding.
 
 </Update>
