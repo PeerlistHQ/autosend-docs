@@ -1,0 +1,284 @@
+---
+title: 'Get Template'
+sidebarTitle: 'Get Template'
+openapi: 'GET /templates/{templateId}'
+---
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request GET \
+  --url https://api.autosend.com/v1/templates/A-abc123def456ghi789jk \
+  --header 'Authorization: Bearer <token>'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/templates/A-abc123def456ghi789jk"
+
+headers = {
+    "Authorization": "Bearer <token>"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/templates/A-abc123def456ghi789jk', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer <token>'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$templateId = 'A-abc123def456ghi789jk';
+$url = "https://api.autosend.com/v1/templates/{$templateId}";
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer <token>'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/templates/A-abc123def456ghi789jk"
+
+    req, _ := http.NewRequest("GET", url, nil)
+    req.Header.Set("Authorization", "Bearer <token>")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class GetTemplate {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/templates/A-abc123def456ghi789jk");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Authorization", "Bearer <token>");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+            con.disconnect();
+
+            System.out.println(content.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/templates/A-abc123def456ghi789jk')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Get.new(uri)
+request['Authorization'] = 'Bearer <token>'
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "templateId": "A-abc123def456ghi789jk",
+    "templateName": "Welcome Email",
+    "description": "Welcome email for new users",
+    "subject": "Welcome to {{companyName}}, {{firstName}}!",
+    "previewText": "We are glad to have you on board",
+    "emailTemplate": "<h1>Welcome, {{firstName}}!</h1><p>Thanks for joining {{companyName}}.</p>",
+    "plainTextTemplate": "Welcome, {{firstName}}! Thanks for joining {{companyName}}.",
+    "templateType": "transactional",
+    "builderType": "code",
+    "dynamicVariables": {
+      "firstName": "string",
+      "companyName": "string"
+    },
+    "createdAt": "2026-01-15T10:30:00.000Z",
+    "updatedAt": "2026-02-20T14:45:00.000Z"
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="templateId" type="string" required>
+  The unique identifier of the template.
+
+  Example: `"A-abc123def456ghi789jk"`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Template retrieved successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The template object
+
+  <Expandable title="child attributes">
+  <ResponseField name="data.templateId" type="string">
+    Unique template identifier
+
+    Example: `"A-abc123def456ghi789jk"`
+  </ResponseField>
+
+  <ResponseField name="data.templateName" type="string">
+    Name of the template
+
+    Example: `"Welcome Email"`
+  </ResponseField>
+
+  <ResponseField name="data.description" type="string">
+    Template description
+
+    Example: `"Welcome email for new users"`
+  </ResponseField>
+
+  <ResponseField name="data.subject" type="string">
+    Email subject line
+
+    Example: `"Welcome to {{companyName}}, {{firstName}}!"`
+  </ResponseField>
+
+  <ResponseField name="data.previewText" type="string">
+    Email preview text
+
+    Example: `"We are glad to have you on board"`
+  </ResponseField>
+
+  <ResponseField name="data.emailTemplate" type="string">
+    HTML content of the template
+  </ResponseField>
+
+  <ResponseField name="data.plainTextTemplate" type="string">
+    Plain text version of the template
+  </ResponseField>
+
+  <ResponseField name="data.templateType" type="string">
+    Type of template: `transactional` or `marketing`
+
+    Example: `"transactional"`
+  </ResponseField>
+
+  <ResponseField name="data.builderType" type="string">
+    Builder type used: `code` or `visual`
+
+    Example: `"code"`
+  </ResponseField>
+
+  <ResponseField name="data.dynamicVariables" type="object">
+    Dynamic variables used in the template
+  </ResponseField>
+
+  <ResponseField name="data.sender" type="object">
+    Sender information (if a sender is associated)
+
+    <Expandable title="child attributes">
+    <ResponseField name="sender.id" type="string">
+      Sender ID
+    </ResponseField>
+
+    <ResponseField name="sender.name" type="string">
+      Sender name
+    </ResponseField>
+
+    <ResponseField name="sender.email" type="string">
+      Sender email address
+    </ResponseField>
+
+    <ResponseField name="sender.replyTo" type="string">
+      Sender reply-to address
+    </ResponseField>
+    </Expandable>
+  </ResponseField>
+
+  <ResponseField name="data.createdAt" type="string">
+    ISO 8601 timestamp of creation
+
+    Example: `"2026-01-15T10:30:00.000Z"`
+  </ResponseField>
+
+  <ResponseField name="data.updatedAt" type="string">
+    ISO 8601 timestamp of last update
+
+    Example: `"2026-02-20T14:45:00.000Z"`
+  </ResponseField>
+  </Expandable>
+</ResponseField>

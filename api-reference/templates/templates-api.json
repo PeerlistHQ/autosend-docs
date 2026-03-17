@@ -1,0 +1,56 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AutoSend API",
+    "description": "AutoSend REST API for managing email templates",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.autosend.com/v1"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/templates": {
+      "get": {
+        "summary": "List Templates",
+        "description": "Retrieves all templates for the authenticated project. Optionally filter by template type and limit the number of results."
+      },
+      "post": {
+        "summary": "Create Template",
+        "description": "Creates a new email template. Templates can be either transactional or marketing type, and built using code (HTML) or the visual builder."
+      }
+    },
+    "/templates/search": {
+      "get": {
+        "summary": "Search Templates",
+        "description": "Search templates by name, subject, or template ID with pagination support."
+      }
+    },
+    "/templates/{templateId}": {
+      "get": {
+        "summary": "Get Template",
+        "description": "Retrieves a single template by its template ID."
+      },
+      "put": {
+        "summary": "Update Template",
+        "description": "Updates an existing template. All fields are optional — only provided fields will be updated."
+      },
+      "delete": {
+        "summary": "Delete Template",
+        "description": "Soft deletes a template by its template ID. The template will no longer appear in listings or be usable for sending emails."
+      }
+    },
+    "/templates/{templateId}/preview-text": {
+      "patch": {
+        "summary": "Update Preview Text",
+        "description": "Updates only the preview text (preheader) of a template. The preview text is automatically injected into the template HTML."
+      }
+    }
+  }
+}

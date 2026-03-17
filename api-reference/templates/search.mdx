@@ -1,0 +1,358 @@
+---
+title: 'Search Templates'
+sidebarTitle: 'Search Templates'
+openapi: 'GET /templates/search'
+---
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request GET \
+  --url 'https://api.autosend.com/v1/templates/search?query=welcome&templateType=transactional&page=1&limit=10' \
+  --header 'Authorization: Bearer <token>'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/templates/search"
+
+headers = {
+    "Authorization": "Bearer <token>"
+}
+
+params = {
+    "query": "welcome",
+    "templateType": "transactional",
+    "page": 1,
+    "limit": 10
+}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```javascript JavaScript
+const params = new URLSearchParams({
+  query: 'welcome',
+  templateType: 'transactional',
+  page: '1',
+  limit: '10'
+});
+
+fetch(`https://api.autosend.com/v1/templates/search?${params}`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer <token>'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$params = http_build_query([
+    'query' => 'welcome',
+    'templateType' => 'transactional',
+    'page' => 1,
+    'limit' => 10
+]);
+
+$url = "https://api.autosend.com/v1/templates/search?{$params}";
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer <token>'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/templates/search?query=welcome&templateType=transactional&page=1&limit=10"
+
+    req, _ := http.NewRequest("GET", url, nil)
+    req.Header.Set("Authorization", "Bearer <token>")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class SearchTemplates {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/templates/search?query=welcome&templateType=transactional&page=1&limit=10");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Authorization", "Bearer <token>");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+            con.disconnect();
+
+            System.out.println(content.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/templates/search?query=welcome&templateType=transactional&page=1&limit=10')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Get.new(uri)
+request['Authorization'] = 'Bearer <token>'
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "templates": [
+      {
+        "templateId": "A-abc123def456ghi789jk",
+        "templateName": "Welcome Email",
+        "description": "Welcome email for new users",
+        "subject": "Welcome to Our Platform!",
+        "previewText": "We're glad to have you on board",
+        "templateType": "transactional",
+        "builderType": "code",
+        "createdAt": "2026-01-15T10:30:00.000Z",
+        "updatedAt": "2026-02-20T14:45:00.000Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 10,
+      "total": 1,
+      "pages": 1
+    }
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Query Parameters
+
+<ParamField path="query" type="string">
+  Search query string. Searches across template name, subject, and template ID.
+
+  Example: `"welcome"`
+</ParamField>
+
+<ParamField path="templateType" type="string">
+  Filter templates by type.
+
+  Allowed values: `transactional`, `marketing`
+
+  Example: `"transactional"`
+</ParamField>
+
+<ParamField path="templateName" type="string">
+  Filter by exact template name.
+
+  Example: `"Welcome Email"`
+</ParamField>
+
+<ParamField path="subject" type="string">
+  Filter by subject line.
+
+  Example: `"Welcome"`
+</ParamField>
+
+<ParamField path="templateId" type="string">
+  Filter by template ID.
+
+  Example: `"A-abc123def456ghi789jk"`
+</ParamField>
+
+<ParamField path="page" type="integer">
+  Page number for pagination (starts at 1).
+
+  Minimum: `1`
+
+  Example: `1`
+</ParamField>
+
+<ParamField path="limit" type="integer">
+  Number of results per page.
+
+  Range: `1` - `100`
+
+  Example: `10`
+</ParamField>
+
+<ParamField path="sortBy" type="string">
+  Field to sort results by.
+
+  Default: `"createdAt"`
+
+  Example: `"createdAt"`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Templates search results</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="child attributes">
+  <ResponseField name="data.templates" type="object[]">
+    Array of matching template objects
+
+    <Expandable title="child attributes">
+    <ResponseField name="templateId" type="string">
+      Unique template identifier
+
+      Example: `"A-abc123def456ghi789jk"`
+    </ResponseField>
+
+    <ResponseField name="templateName" type="string">
+      Name of the template
+
+      Example: `"Welcome Email"`
+    </ResponseField>
+
+    <ResponseField name="description" type="string">
+      Template description
+
+      Example: `"Welcome email for new users"`
+    </ResponseField>
+
+    <ResponseField name="subject" type="string">
+      Email subject line
+
+      Example: `"Welcome to Our Platform!"`
+    </ResponseField>
+
+    <ResponseField name="previewText" type="string">
+      Email preview text
+
+      Example: `"We're glad to have you on board"`
+    </ResponseField>
+
+    <ResponseField name="templateType" type="string">
+      Type of template
+
+      Example: `"transactional"`
+    </ResponseField>
+
+    <ResponseField name="builderType" type="string">
+      Builder type used
+
+      Example: `"code"`
+    </ResponseField>
+
+    <ResponseField name="createdAt" type="string">
+      ISO 8601 timestamp of creation
+
+      Example: `"2026-01-15T10:30:00.000Z"`
+    </ResponseField>
+
+    <ResponseField name="updatedAt" type="string">
+      ISO 8601 timestamp of last update
+
+      Example: `"2026-02-20T14:45:00.000Z"`
+    </ResponseField>
+    </Expandable>
+  </ResponseField>
+
+  <ResponseField name="data.pagination" type="object">
+    Pagination metadata
+
+    <Expandable title="child attributes">
+    <ResponseField name="pagination.page" type="integer">
+      Current page number
+
+      Example: `1`
+    </ResponseField>
+
+    <ResponseField name="pagination.limit" type="integer">
+      Results per page
+
+      Example: `10`
+    </ResponseField>
+
+    <ResponseField name="pagination.total" type="integer">
+      Total number of matching templates
+
+      Example: `1`
+    </ResponseField>
+
+    <ResponseField name="pagination.pages" type="integer">
+      Total number of pages
+
+      Example: `1`
+    </ResponseField>
+    </Expandable>
+  </ResponseField>
+  </Expandable>
+</ResponseField>

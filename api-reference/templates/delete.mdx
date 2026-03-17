@@ -1,0 +1,171 @@
+---
+title: 'Delete Template'
+sidebarTitle: 'Delete Template'
+openapi: 'DELETE /templates/{templateId}'
+---
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request DELETE \
+  --url https://api.autosend.com/v1/templates/A-abc123def456ghi789jk \
+  --header 'Authorization: Bearer <token>'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/templates/A-abc123def456ghi789jk"
+
+headers = {
+    "Authorization": "Bearer <token>"
+}
+
+response = requests.delete(url, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/templates/A-abc123def456ghi789jk', {
+  method: 'DELETE',
+  headers: {
+    'Authorization': 'Bearer <token>'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$templateId = 'A-abc123def456ghi789jk';
+$url = "https://api.autosend.com/v1/templates/{$templateId}";
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer <token>'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/templates/A-abc123def456ghi789jk"
+
+    req, _ := http.NewRequest("DELETE", url, nil)
+    req.Header.Set("Authorization", "Bearer <token>")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    fmt.Println("Response Status:", resp.Status)
+}
+```
+
+```java Java
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class DeleteTemplate {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/templates/A-abc123def456ghi789jk");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("DELETE");
+            con.setRequestProperty("Authorization", "Bearer <token>");
+
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+
+            con.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/templates/A-abc123def456ghi789jk')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Delete.new(uri)
+request['Authorization'] = 'Bearer <token>'
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "message": "Template successfully deleted."
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="templateId" type="string" required>
+  The unique identifier of the template to delete.
+
+  Example: `"A-abc123def456ghi789jk"`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Template deleted successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Confirmation message
+
+  Example: `"Template successfully deleted."`
+</ResponseField>
