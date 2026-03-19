@@ -1,0 +1,599 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Autosend Campaigns API",
+    "version": "1.0.0",
+    "description": "API endpoints for managing marketing campaigns in Autosend."
+  },
+  "servers": [
+    {
+      "url": "https://api.autosend.com/v1",
+      "description": "Production"
+    }
+  ],
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Bearer authentication header of the form Bearer <token>, where <token> is your auth token."
+      }
+    },
+    "schemas": {
+      "Campaign": {
+        "type": "object",
+        "properties": {
+          "campaignId": {
+            "type": "string",
+            "description": "Unique identifier for the campaign (MongoDB ObjectId).",
+            "example": "60d5ec49f1b2c72d9c8b4567"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name of the campaign.",
+            "example": "Spring Sale Newsletter"
+          },
+          "subject": {
+            "type": "string",
+            "description": "Email subject line.",
+            "example": "Don't miss our Spring Sale!"
+          },
+          "previewText": {
+            "type": "string",
+            "description": "Preview text shown in email clients.",
+            "example": "Up to 50% off this weekend only"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["draft", "scheduled", "sending", "sending_gradual", "paused", "sent", "failed", "aborted"],
+            "description": "Current status of the campaign.",
+            "example": "draft"
+          },
+          "sendMode": {
+            "type": "string",
+            "enum": ["immediate", "scheduled", "gradual"],
+            "description": "How the campaign is delivered.",
+            "example": "immediate"
+          },
+          "trackingClick": {
+            "type": "boolean",
+            "description": "Whether click tracking is enabled.",
+            "example": true
+          },
+          "trackingOpen": {
+            "type": "boolean",
+            "description": "Whether open tracking is enabled.",
+            "example": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-03-01T10:00:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-03-15T14:30:00.000Z"
+          }
+        }
+      },
+      "CampaignBody": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "Display name of the campaign."
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 998,
+            "description": "Email subject line."
+          },
+          "previewText": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Preview text shown in email clients."
+          },
+          "from": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "format": "email",
+                "description": "Sender email address."
+              },
+              "name": {
+                "type": "string",
+                "maxLength": 200,
+                "description": "Sender display name."
+              }
+            }
+          },
+          "fromSenderId": {
+            "type": "string",
+            "description": "MongoDB ObjectId of a saved sender identity."
+          },
+          "replyTo": {
+            "type": "string",
+            "format": "email",
+            "description": "Reply-to email address."
+          },
+          "templateId": {
+            "type": "string",
+            "description": "ID of the email template to use."
+          },
+          "toLists": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "List/segment IDs to send the campaign to."
+          },
+          "excludeLists": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "List/segment IDs to exclude from sending."
+          },
+          "unsubscribeGroupId": {
+            "type": "string",
+            "description": "ID of the unsubscribe group."
+          },
+          "sendNow": {
+            "type": "boolean",
+            "description": "If true, send the campaign immediately."
+          },
+          "scheduledAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 date-time to schedule the campaign."
+          },
+          "sendToGlobalList": {
+            "type": "boolean",
+            "description": "If true, send to the entire global contact list."
+          },
+          "publish": {
+            "type": "boolean",
+            "description": "If true, publish/finalize the campaign."
+          },
+          "trackingClick": {
+            "type": "boolean",
+            "description": "Enable or disable click tracking."
+          },
+          "trackingOpen": {
+            "type": "boolean",
+            "description": "Enable or disable open tracking."
+          },
+          "sendMode": {
+            "type": "string",
+            "enum": ["immediate", "scheduled", "gradual"],
+            "description": "How the campaign is delivered."
+          },
+          "gradualStrategy": {
+            "type": "string",
+            "enum": ["fixed", "1.25x", "1.5x", "1.75x", "2x"],
+            "description": "Gradual send growth strategy (used when sendMode is 'gradual')."
+          },
+          "dailyBatchSize": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Number of emails to send per day in gradual mode."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Timezone string for scheduled sending."
+          }
+        }
+      },
+      "SuccessResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": true },
+          "data": { "type": "object" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": false },
+          "message": { "type": "string" },
+          "code": { "type": "string" }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/campaigns": {
+      "post": {
+        "operationId": "createCampaign",
+        "summary": "Create a new campaign",
+        "description": "Creates a new marketing campaign. MCP access allowed.",
+        "tags": ["Campaigns"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  { "$ref": "#/components/schemas/CampaignBody" },
+                  {
+                    "required": ["name", "subject"],
+                    "properties": {
+                      "defaultCampaign": {
+                        "type": "boolean",
+                        "description": "Mark as default campaign (create only)."
+                      },
+                      "builderType": {
+                        "type": "string",
+                        "description": "Campaign builder type (create only)."
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Campaign created successfully.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "listCampaigns",
+        "summary": "List campaigns",
+        "description": "Retrieves a paginated list of campaigns with optional filtering. MCP access allowed.",
+        "tags": ["Campaigns"],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["draft", "scheduled", "sending", "sending_gradual", "paused", "sent", "failed", "aborted"]
+            },
+            "description": "Filter by campaign status."
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filter by campaign name (partial match)."
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": { "type": "integer", "minimum": 1 },
+            "description": "Page number for pagination."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": { "type": "integer", "minimum": 1, "maximum": 100 },
+            "description": "Number of results per page (1–100)."
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": { "type": "string", "format": "date-time" },
+            "description": "Filter campaigns created on or after this ISO 8601 date."
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "schema": { "type": "string", "format": "date-time" },
+            "description": "Filter campaigns created on or before this ISO 8601 date."
+          },
+          {
+            "name": "includeCounts",
+            "in": "query",
+            "schema": { "type": "string", "enum": ["true", "false"] },
+            "description": "Include recipient/send counts in the response."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of campaigns returned successfully.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/campaigns/{campaignId}": {
+      "get": {
+        "operationId": "getCampaign",
+        "summary": "Get a campaign by ID",
+        "description": "Retrieves a single campaign by its ID. MCP access allowed.",
+        "tags": ["Campaigns"],
+        "parameters": [
+          {
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "MongoDB ObjectId of the campaign."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Campaign returned successfully.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Campaign not found.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateCampaign",
+        "summary": "Update a campaign",
+        "description": "Updates fields on an existing campaign. MCP access allowed.",
+        "tags": ["Campaigns"],
+        "parameters": [
+          {
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "MongoDB ObjectId of the campaign."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CampaignBody" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Campaign updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Campaign not found.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteCampaign",
+        "summary": "Delete a campaign",
+        "description": "Permanently deletes a campaign by ID. MCP access allowed.",
+        "tags": ["Campaigns"],
+        "parameters": [
+          {
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "MongoDB ObjectId of the campaign."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Campaign deleted successfully.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Campaign not found.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/campaigns/{campaignId}/duplicate": {
+      "post": {
+        "operationId": "duplicateCampaign",
+        "summary": "Duplicate a campaign",
+        "description": "Creates a copy of an existing campaign. MCP access allowed.",
+        "tags": ["Campaigns"],
+        "parameters": [
+          {
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "MongoDB ObjectId of the campaign to duplicate."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Campaign duplicated successfully.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Campaign not found.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/campaigns/{campaignId}/abort": {
+      "post": {
+        "operationId": "abortCampaign",
+        "summary": "Abort a campaign",
+        "description": "Aborts a campaign that is currently sending. MCP access is blocked for this endpoint.",
+        "tags": ["Campaigns"],
+        "parameters": [
+          {
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "MongoDB ObjectId of the campaign."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Campaign aborted successfully.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Campaign not found.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/campaigns/{campaignId}/pause": {
+      "post": {
+        "operationId": "pauseCampaign",
+        "summary": "Pause a campaign",
+        "description": "Pauses a campaign that is currently sending. MCP access is blocked for this endpoint.",
+        "tags": ["Campaigns"],
+        "parameters": [
+          {
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "MongoDB ObjectId of the campaign."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Campaign paused successfully.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Campaign not found.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/campaigns/{campaignId}/resume": {
+      "post": {
+        "operationId": "resumeCampaign",
+        "summary": "Resume a campaign",
+        "description": "Resumes a paused campaign. MCP access is blocked for this endpoint.",
+        "tags": ["Campaigns"],
+        "parameters": [
+          {
+            "name": "campaignId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "MongoDB ObjectId of the campaign."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Campaign resumed successfully.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Campaign not found.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

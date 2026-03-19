@@ -1,0 +1,197 @@
+---
+title: 'Create Suppression Group'
+sidebarTitle: 'Create Suppression Group'
+openapi: 'POST /suppression-groups'
+---
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url 'https://api.autosend.com/v1/suppression-groups' \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "name": "Marketing Unsubscribes",
+    "description": "Users who opted out of marketing",
+    "active": true
+  }'
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://api.autosend.com/v1/suppression-groups",
+    headers={
+        "Authorization": "Bearer <token>",
+        "Content-Type": "application/json",
+    },
+    json={
+        "name": "Marketing Unsubscribes",
+        "description": "Users who opted out of marketing",
+        "active": True,
+    },
+)
+print(response.json())
+```
+
+```javascript JavaScript
+const response = await fetch(
+  "https://api.autosend.com/v1/suppression-groups",
+  {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer <token>",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: "Marketing Unsubscribes",
+      description: "Users who opted out of marketing",
+      active: true,
+    }),
+  }
+);
+const data = await response.json();
+console.log(data);
+```
+
+```php PHP
+<?php
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, "https://api.autosend.com/v1/suppression-groups");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+    "name" => "Marketing Unsubscribes",
+    "description" => "Users who opted out of marketing",
+    "active" => true,
+]));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    "Authorization: Bearer <token>",
+    "Content-Type: application/json",
+]);
+$response = curl_exec($ch);
+curl_close($ch);
+echo $response;
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    payload, _ := json.Marshal(map[string]interface{}{
+        "name":        "Marketing Unsubscribes",
+        "description": "Users who opted out of marketing",
+        "active":      true,
+    })
+
+    req, _ := http.NewRequest("POST", "https://api.autosend.com/v1/suppression-groups", bytes.NewBuffer(payload))
+    req.Header.Set("Authorization", "Bearer <token>")
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, _ := client.Do(req)
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.net.URI;
+import java.net.http.*;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        String body = """
+            {
+              "name": "Marketing Unsubscribes",
+              "description": "Users who opted out of marketing",
+              "active": true
+            }
+            """;
+
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("https://api.autosend.com/v1/suppression-groups"))
+            .header("Authorization", "Bearer <token>")
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(body))
+            .build();
+
+        HttpResponse<String> response = HttpClient.newHttpClient()
+            .send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+    }
+}
+```
+
+```ruby Ruby
+require "net/http"
+require "uri"
+require "json"
+
+uri = URI("https://api.autosend.com/v1/suppression-groups")
+req = Net::HTTP::Post.new(uri)
+req["Authorization"] = "Bearer <token>"
+req["Content-Type"] = "application/json"
+req.body = {
+  name: "Marketing Unsubscribes",
+  description: "Users who opted out of marketing",
+  active: true,
+}.to_json
+
+response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req) }
+puts response.body
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "id": "sg_abc123def456",
+    "name": "Marketing Unsubscribes",
+    "description": "Users who opted out of marketing",
+    "active": true,
+    "isGlobal": false
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+#### Body
+<ParamField body="name" type="string" required>
+  The display name of the suppression group. Must be between 1 and 200 characters.
+</ParamField>
+
+<ParamField body="description" type="string">
+  An optional human-readable description of the suppression group.
+</ParamField>
+
+<ParamField body="active" type="boolean">
+  Whether the suppression group is active. Defaults to `true` if not specified.
+</ParamField>
+
+<ParamField body="isActive" type="boolean">
+  Alias for `active`. When both are provided, the value of `isActive` takes precedence.
+</ParamField>

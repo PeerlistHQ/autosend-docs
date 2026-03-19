@@ -1,0 +1,626 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Suppression Groups API",
+    "version": "1.0.0",
+    "description": "Manage suppression groups and suppression entries. Suppression groups let you categorize unsubscribes, bounces, and spam complaints so that you can control which emails are sent to which contacts."
+  },
+  "servers": [
+    {
+      "url": "https://api.autosend.com/v1",
+      "description": "Production"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Bearer authentication header of the form `Bearer <token>`, where `<token>` is your auth token."
+      }
+    },
+    "schemas": {
+      "SuppressionGroup": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "sg_abc123def456"
+          },
+          "name": {
+            "type": "string",
+            "example": "Marketing Unsubscribes"
+          },
+          "description": {
+            "type": "string",
+            "example": "Users who opted out of marketing"
+          },
+          "active": {
+            "type": "boolean",
+            "example": true
+          },
+          "isGlobal": {
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "SuppressionEntry": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "entry_xyz789"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "groupId": {
+            "type": "string",
+            "example": "sg_abc123def456"
+          },
+          "reason": {
+            "type": "string",
+            "example": "unsubscribed"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-02-01T09:00:00.000Z"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/suppression-groups": {
+      "get": {
+        "summary": "List Suppression Groups",
+        "operationId": "listSuppressionGroups",
+        "description": "Returns all suppression groups for the current project. Optionally filter to only global groups or include global groups alongside project-specific ones.",
+        "parameters": [
+          {
+            "name": "onlyGlobal",
+            "in": "query",
+            "required": false,
+            "description": "When `true`, returns only global suppression groups.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "includeGlobal",
+            "in": "query",
+            "required": false,
+            "description": "When `true`, includes global suppression groups in the results alongside project-specific ones.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of suppression groups.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/SuppressionGroup" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Suppression Group",
+        "operationId": "createSuppressionGroup",
+        "description": "Creates a new suppression group.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200,
+                    "example": "Marketing Unsubscribes"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Users who opted out of marketing"
+                  },
+                  "active": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "isActive": {
+                    "type": "boolean",
+                    "example": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The created suppression group.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": { "$ref": "#/components/schemas/SuppressionGroup" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/suppression-groups/{groupId}": {
+      "get": {
+        "summary": "Get Suppression Group",
+        "operationId": "getSuppressionGroup",
+        "description": "Returns a single suppression group by its ID.",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "description": "The unique identifier of the suppression group.",
+            "schema": {
+              "type": "string",
+              "example": "sg_abc123def456"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The suppression group.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": { "$ref": "#/components/schemas/SuppressionGroup" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update Suppression Group",
+        "operationId": "updateSuppressionGroup",
+        "description": "Updates an existing suppression group.",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "description": "The unique identifier of the suppression group to update.",
+            "schema": {
+              "type": "string",
+              "example": "sg_abc123def456"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200,
+                    "example": "Marketing Unsubscribes"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Users who opted out of marketing"
+                  },
+                  "active": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "isActive": {
+                    "type": "boolean",
+                    "example": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The updated suppression group.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": { "$ref": "#/components/schemas/SuppressionGroup" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Suppression Group",
+        "operationId": "deleteSuppressionGroup",
+        "description": "Permanently deletes a suppression group by its ID.",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "description": "The unique identifier of the suppression group to delete.",
+            "schema": {
+              "type": "string",
+              "example": "sg_abc123def456"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deletion confirmation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string", "example": "Suppression group deleted successfully." }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/suppression-groups/email/entries": {
+      "post": {
+        "summary": "Get Email Suppression Groups",
+        "operationId": "getEmailSuppressionGroups",
+        "description": "Returns all suppression groups that contain the given email address.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Suppression groups containing the email address.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/SuppressionGroup" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/suppression-groups/entries": {
+      "post": {
+        "summary": "Search Suppression Entries",
+        "operationId": "searchSuppressionEntries",
+        "description": "Searches suppression entries with optional filters and pagination.",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "groupId": {
+                    "type": "string",
+                    "example": "sg_abc123def456"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "example": "unsubscribed"
+                  },
+                  "page": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "example": 1
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100,
+                    "example": 20
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": "example.com"
+                  },
+                  "startDate": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2026-01-01T00:00:00.000Z"
+                  },
+                  "endDate": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2026-03-01T00:00:00.000Z"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@example.com"
+                  },
+                  "isGlobal": {
+                    "type": "boolean",
+                    "example": false
+                  },
+                  "includeContact": {
+                    "type": "boolean",
+                    "example": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Paginated list of suppression entries.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "entries": {
+                          "type": "array",
+                          "items": { "$ref": "#/components/schemas/SuppressionEntry" }
+                        },
+                        "total": { "type": "integer", "example": 142 },
+                        "page": { "type": "integer", "example": 1 },
+                        "limit": { "type": "integer", "example": 20 }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/suppression-groups/entries/all": {
+      "post": {
+        "summary": "Get All Suppression Entries",
+        "operationId": "getAllSuppressionEntries",
+        "description": "Returns all suppression entries without pagination. Useful for exporting or bulk processing.",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "groupId": {
+                    "type": "string",
+                    "example": "sg_abc123def456"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "example": "unsubscribed"
+                  },
+                  "isGlobal": {
+                    "type": "boolean",
+                    "example": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "All matching suppression entries.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/SuppressionEntry" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/suppression-groups/emails/suppress": {
+      "post": {
+        "summary": "Bulk Suppress Emails",
+        "operationId": "bulkSuppressEmails",
+        "description": "Adds one or more email addresses to a suppression group.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["emails"],
+                "properties": {
+                  "emails": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "example": ["user@example.com", "another@example.com"]
+                  },
+                  "groupId": {
+                    "type": "string",
+                    "example": "sg_abc123def456"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "example": "unsubscribed"
+                  },
+                  "isGlobal": {
+                    "type": "boolean",
+                    "example": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Emails suppressed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "suppressed": { "type": "integer", "example": 2 }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/suppression-groups/emails/unsuppress": {
+      "put": {
+        "summary": "Bulk Unsuppress Emails",
+        "operationId": "bulkUnsuppressEmails",
+        "description": "Removes one or more email addresses from a suppression group. Provide either `emails` or `ids` (or both).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "emails": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "example": ["user@example.com"]
+                  },
+                  "ids": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": ["entry_xyz789"]
+                  },
+                  "groupId": {
+                    "type": "string",
+                    "example": "sg_abc123def456"
+                  },
+                  "isGlobal": {
+                    "type": "boolean",
+                    "example": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Emails unsuppressed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "unsuppressed": { "type": "integer", "example": 1 }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
