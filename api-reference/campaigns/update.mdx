@@ -201,7 +201,7 @@ puts JSON.parse(response.body)
 ### Path Parameters
 
 <ParamField path="campaignId" type="string" required>
-  The MongoDB ObjectId of the campaign to update.
+  The id of the campaign to update.
 </ParamField>
 
 ### Body
@@ -234,7 +234,7 @@ All body fields are optional. Only the fields provided will be updated.
 </ParamField>
 
 <ParamField body="fromSenderId" type="string">
-  MongoDB ObjectId of a saved sender identity.
+  id of a saved sender identity.
 </ParamField>
 
 <ParamField body="replyTo" type="string">

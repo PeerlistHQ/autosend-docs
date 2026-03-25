@@ -116,18 +116,63 @@ puts response.body
 ```json Response
 {
   "success": true,
-  "message": "Domain verification status updated",
   "data": {
-    "id": "60d5ec49f1b2c72d9c8b1111",
-    "domain": "example.com",
-    "verificationStatus": "PENDING",
+    "domain": {
+      "id": "60d5ec49f1b2c72d9c8b1111",
+      "domainName": "example.com",
+      "verificationStatus": "VERIFIED",
+      "ownershipVerified": true,
+      "dkimEnabled": true,
+      "mailFromEnabled": false,
+      "dmarcEnabled": false,
+      "dnsRecords": {
+        "ownership": {
+          "name": "_autosend-verify.example.com",
+          "value": "autosend-verify-cfdbf714dbec4584b82b925bfff91770",
+          "type": "TXT",
+          "purpose": "Domain ownership verification"
+        },
+        "dkim": {
+          "name": "autosend._domainkey.example.com",
+          "value": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ...",
+          "type": "TXT",
+          "purpose": "DKIM authentication"
+        },
+        "mailFrom": [
+          {
+            "name": "mail.example.com",
+            "value": "feedback-smtp.us-east-1.amazonses.com",
+            "type": "MX",
+            "purpose": "Mail-from domain",
+            "priority": 10
+          },
+          {
+            "name": "mail.example.com",
+            "value": "v=spf1 include:amazonses.com ~all",
+            "type": "TXT",
+            "purpose": "SPF record for mail-from domain"
+          }
+        ],
+        "dmarc": {
+          "name": "_dmarc.example.com",
+          "value": "v=DMARC1; p=none;",
+          "type": "TXT",
+          "purpose": "DMARC policy"
+        }
+      },
+      "createdAt": "2026-01-05T10:00:00.000Z",
+      "lastCheckedAt": "2026-03-25T07:05:29.525Z",
+      "regionKey": "us-east-1",
+      "verificationInProgress": false
+    },
+    "verificationInProgress": true,
     "ownershipVerified": true,
-    "dkimEnabled": false,
+    "verificationStatus": "VERIFIED",
+    "dkimEnabled": true,
     "mailFromEnabled": false,
-    "dmarcEnabled": false,
-    "createdAt": "2026-01-05T10:00:00.000Z",
-    "updatedAt": "2026-03-19T09:15:00.000Z"
-  }
+    "dmarcEnabled": false
+  },
+  "message": "Domain verification status updated"
 }
 ```
 
@@ -141,7 +186,7 @@ puts response.body
 
 #### Path Parameters
 <ParamField path="domainId" type="string" required>
-  The MongoDB ObjectId of the domain to verify.
+  The id of the domain to verify.
 </ParamField>
 
 #### Response
@@ -155,20 +200,74 @@ puts response.body
 </ResponseField>
 
 <ResponseField name="data" type="object">
-  The domain's state **at the time the request was received**, before the background verification completes. DNS record flags (`ownershipVerified`, `dkimEnabled`, `mailFromEnabled`, `dmarcEnabled`) only ever move from `false` to `true` — they are never reverted.
+  Contains the full domain object and top-level verification status summary fields.
 
-  <Expandable title="Domain object">
-    <ResponseField name="id" type="string">
-      Unique identifier for the domain (MongoDB ObjectId).
+  <Expandable title="Data object">
+    <ResponseField name="domain" type="object">
+      The full domain object with updated verification state.
+
+      <Expandable title="Domain object">
+        <ResponseField name="id" type="string">
+          Unique identifier for the domain (id).
+        </ResponseField>
+        <ResponseField name="domainName" type="string">
+          The domain name (e.g. `example.com`).
+        </ResponseField>
+        <ResponseField name="verificationStatus" type="string">
+          Overall domain verification status. One of `PENDING_CONFIGURATION`, `PENDING`, or `VERIFIED`.
+        </ResponseField>
+        <ResponseField name="ownershipVerified" type="boolean">
+          Whether the TXT ownership record has been verified.
+        </ResponseField>
+        <ResponseField name="dkimEnabled" type="boolean">
+          Whether DKIM CNAME records have been verified.
+        </ResponseField>
+        <ResponseField name="mailFromEnabled" type="boolean">
+          Whether the MAIL FROM MX/TXT records have been verified.
+        </ResponseField>
+        <ResponseField name="dmarcEnabled" type="boolean">
+          Whether a DMARC TXT record has been detected.
+        </ResponseField>
+        <ResponseField name="dnsRecords" type="object">
+          DNS records required for domain verification.
+
+          <Expandable title="DNS Records object">
+            <ResponseField name="ownership" type="object">
+              TXT record for domain ownership verification. Contains `name`, `value`, `type`, and `purpose` fields.
+            </ResponseField>
+            <ResponseField name="dkim" type="object">
+              TXT record for DKIM authentication. Contains `name`, `value`, `type`, and `purpose` fields.
+            </ResponseField>
+            <ResponseField name="mailFrom" type="array">
+              Array of MX and TXT records for the MAIL FROM domain. Each record contains `name`, `value`, `type`, `purpose`, and optionally `priority` fields.
+            </ResponseField>
+            <ResponseField name="dmarc" type="object">
+              TXT record for DMARC policy. Contains `name`, `value`, `type`, and `purpose` fields.
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+        <ResponseField name="createdAt" type="string">
+          ISO 8601 timestamp of when the domain was added.
+        </ResponseField>
+        <ResponseField name="lastCheckedAt" type="string">
+          ISO 8601 timestamp of the last DNS verification check.
+        </ResponseField>
+        <ResponseField name="regionKey" type="string">
+          The AWS region key where the domain is configured (e.g. `us-east-1`).
+        </ResponseField>
+        <ResponseField name="verificationInProgress" type="boolean">
+          Whether a DNS verification check is currently in progress for this domain.
+        </ResponseField>
+      </Expandable>
     </ResponseField>
-    <ResponseField name="domain" type="string">
-      The domain name.
-    </ResponseField>
-    <ResponseField name="verificationStatus" type="string">
-      Current overall verification status. One of `PENDING_CONFIGURATION`, `PENDING`, or `VERIFIED`. This value reflects the state before the background job completes — poll `GET /domains/{domainId}` for updates.
+    <ResponseField name="verificationInProgress" type="boolean">
+      Whether verification is currently in progress.
     </ResponseField>
     <ResponseField name="ownershipVerified" type="boolean">
       Whether the TXT ownership record has been verified.
+    </ResponseField>
+    <ResponseField name="verificationStatus" type="string">
+      Overall domain verification status. One of `PENDING_CONFIGURATION`, `PENDING`, or `VERIFIED`.
     </ResponseField>
     <ResponseField name="dkimEnabled" type="boolean">
       Whether DKIM CNAME records have been verified.
@@ -178,12 +277,6 @@ puts response.body
     </ResponseField>
     <ResponseField name="dmarcEnabled" type="boolean">
       Whether a DMARC TXT record has been detected.
-    </ResponseField>
-    <ResponseField name="createdAt" type="string">
-      ISO 8601 timestamp of when the domain was added.
-    </ResponseField>
-    <ResponseField name="updatedAt" type="string">
-      ISO 8601 timestamp of the last status update.
     </ResponseField>
   </Expandable>
 </ResponseField>

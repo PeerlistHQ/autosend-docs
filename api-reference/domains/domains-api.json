@@ -325,7 +325,7 @@
         "name": "domainId",
         "in": "path",
         "required": true,
-        "description": "The MongoDB ObjectId of the domain.",
+        "description": "The id of the domain.",
         "schema": {
           "type": "string",
           "pattern": "^[a-f\\d]{24}$",
@@ -339,7 +339,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Unique identifier for the domain (MongoDB ObjectId).",
+            "description": "Unique identifier for the domain (id).",
             "example": "60d5ec49f1b2c72d9c8b1111"
           },
           "domain": {

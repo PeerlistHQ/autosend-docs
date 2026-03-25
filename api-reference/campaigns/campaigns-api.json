@@ -30,7 +30,7 @@
         "properties": {
           "campaignId": {
             "type": "string",
-            "description": "Unique identifier for the campaign (MongoDB ObjectId).",
+            "description": "Unique identifier for the campaign (id).",
             "example": "60d5ec49f1b2c72d9c8b4567"
           },
           "name": {
@@ -119,7 +119,7 @@
           },
           "fromSenderId": {
             "type": "string",
-            "description": "MongoDB ObjectId of a saved sender identity."
+            "description": "Id of a saved sender identity."
           },
           "replyTo": {
             "type": "string",
@@ -350,7 +350,7 @@
             "in": "path",
             "required": true,
             "schema": { "type": "string" },
-            "description": "MongoDB ObjectId of the campaign."
+            "description": "Id of the campaign."
           }
         ],
         "responses": {
@@ -383,7 +383,7 @@
             "in": "path",
             "required": true,
             "schema": { "type": "string" },
-            "description": "MongoDB ObjectId of the campaign."
+            "description": "Id of the campaign."
           }
         ],
         "requestBody": {
@@ -432,7 +432,7 @@
             "in": "path",
             "required": true,
             "schema": { "type": "string" },
-            "description": "MongoDB ObjectId of the campaign."
+            "description": "Id of the campaign."
           }
         ],
         "responses": {
@@ -467,7 +467,7 @@
             "in": "path",
             "required": true,
             "schema": { "type": "string" },
-            "description": "MongoDB ObjectId of the campaign to duplicate."
+            "description": "Id of the campaign to duplicate."
           }
         ],
         "responses": {
@@ -502,7 +502,7 @@
             "in": "path",
             "required": true,
             "schema": { "type": "string" },
-            "description": "MongoDB ObjectId of the campaign."
+            "description": "Id of the campaign."
           }
         ],
         "responses": {
@@ -537,7 +537,7 @@
             "in": "path",
             "required": true,
             "schema": { "type": "string" },
-            "description": "MongoDB ObjectId of the campaign."
+            "description": "Id of the campaign."
           }
         ],
         "responses": {
@@ -572,7 +572,7 @@
             "in": "path",
             "required": true,
             "schema": { "type": "string" },
-            "description": "MongoDB ObjectId of the campaign."
+            "description": "Id of the campaign."
           }
         ],
         "responses": {
