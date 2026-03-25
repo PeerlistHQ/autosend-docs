@@ -1,0 +1,468 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Autosend Domains API",
+    "description": "Manage your domains associated with your Autosend project. Domains are used to send email via AutoSend. After adding a domain you must configure DNS records and trigger verification before it can be used for sending.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.autosend.com/v1",
+      "description": "Production"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/domains": {
+      "get": {
+        "summary": "List Domains",
+        "description": "Returns all your domains added to the project, including their current verification status and DNS record states.",
+        "operationId": "listDomains",
+        "tags": ["Domains"],
+        "responses": {
+          "200": {
+            "description": "A list of your domains for the project.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Domain"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "id": "60d5ec49f1b2c72d9c8b1111",
+                      "domain": "example.com",
+                      "verificationStatus": "VERIFIED",
+                      "ownershipVerified": true,
+                      "dkimEnabled": true,
+                      "mailFromEnabled": true,
+                      "dmarcEnabled": false,
+                      "createdAt": "2026-01-05T10:00:00.000Z",
+                      "updatedAt": "2026-03-10T14:20:00.000Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add Domain",
+        "description": "Adds a new domain to the project. The domain must be a bare domain or subdomain (no protocol, no path). After adding the domain, configure the returned DNS records in your DNS provider and call the verify endpoint to trigger verification.",
+        "operationId": "addDomain",
+        "tags": ["Domains"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["domain"],
+                "properties": {
+                  "domain": {
+                    "type": "string",
+                    "description": "A valid domain name (e.g. example.com or mail.example.com). Must not include a protocol (http://) or path. Maximum 253 characters.",
+                    "example": "example.com"
+                  },
+                  "regionKey": {
+                    "type": "string",
+                    "description": "AutoSend region key where your domain will be configured (e.g. us-east-1). Defaults to the project's primary region if omitted.",
+                    "example": "us-east-1"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Domain added successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Domain"
+                    }
+                  }
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "60d5ec49f1b2c72d9c8b2222",
+                    "domain": "example.com",
+                    "verificationStatus": "PENDING_CONFIGURATION",
+                    "ownershipVerified": false,
+                    "dkimEnabled": false,
+                    "mailFromEnabled": false,
+                    "dmarcEnabled": false,
+                    "createdAt": "2026-03-19T08:00:00.000Z",
+                    "updatedAt": "2026-03-19T08:00:00.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "409": {
+            "description": "Domain already exists in the project.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "success": false,
+                  "message": "Domain already exists"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/domains/{domainId}": {
+      "get": {
+        "summary": "Get Domain",
+        "description": "Returns a single domain by its ID, including its current verification status and DNS record states.",
+        "operationId": "getDomain",
+        "tags": ["Domains"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/domainId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested domain.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Domain"
+                    }
+                  }
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "60d5ec49f1b2c72d9c8b1111",
+                    "domain": "example.com",
+                    "verificationStatus": "VERIFIED",
+                    "ownershipVerified": true,
+                    "dkimEnabled": true,
+                    "mailFromEnabled": true,
+                    "dmarcEnabled": false,
+                    "createdAt": "2026-01-05T10:00:00.000Z",
+                    "updatedAt": "2026-03-10T14:20:00.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Domain",
+        "description": "Removes a domain from the project. This action cannot be undone. Any senders or campaigns using this domain may be affected.",
+        "operationId": "deleteDomain",
+        "tags": ["Domains"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/domainId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Domain removed successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    }
+                  }
+                },
+                "example": {
+                  "success": true,
+                  "data": null
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domains/{domainId}/verify": {
+      "post": {
+        "summary": "Verify Domain",
+        "description": "Triggers a background check of the domain's DNS records and verification state. ",
+        "operationId": "verifyDomain",
+        "tags": ["Domains"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/domainId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current domain state returned immediately. Verification is running in the background.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Domain verification status updated"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Domain"
+                    }
+                  }
+                },
+                "example": {
+                  "success": true,
+                  "message": "Domain verification status updated",
+                  "data": {
+                    "id": "60d5ec49f1b2c72d9c8b1111",
+                    "domain": "example.com",
+                    "verificationStatus": "PENDING",
+                    "ownershipVerified": true,
+                    "dkimEnabled": false,
+                    "mailFromEnabled": false,
+                    "dmarcEnabled": false,
+                    "createdAt": "2026-01-05T10:00:00.000Z",
+                    "updatedAt": "2026-03-19T09:15:00.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "API key issued from the Autosend dashboard. Pass as `Authorization: Bearer <token>`."
+      }
+    },
+    "parameters": {
+      "domainId": {
+        "name": "domainId",
+        "in": "path",
+        "required": true,
+        "description": "The id of the domain.",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-f\\d]{24}$",
+          "example": "60d5ec49f1b2c72d9c8b1111"
+        }
+      }
+    },
+    "schemas": {
+      "Domain": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the domain (id).",
+            "example": "60d5ec49f1b2c72d9c8b1111"
+          },
+          "domain": {
+            "type": "string",
+            "description": "The domain name.",
+            "example": "example.com"
+          },
+          "verificationStatus": {
+            "type": "string",
+            "enum": ["PENDING_CONFIGURATION", "PENDING", "VERIFIED"],
+            "description": "Overall domain verification status. `PENDING_CONFIGURATION` — DNS records not yet detected. `PENDING` — DNS records detected, domain verification in progress. `VERIFIED` — domain is fully verified and ready to send.",
+            "example": "VERIFIED"
+          },
+          "ownershipVerified": {
+            "type": "boolean",
+            "description": "Whether the TXT ownership record has been verified. Once `true`, never reverts to `false`.",
+            "example": true
+          },
+          "dkimEnabled": {
+            "type": "boolean",
+            "description": "Whether DKIM CNAME records have been verified. Once `true`, never reverts to `false`.",
+            "example": true
+          },
+          "mailFromEnabled": {
+            "type": "boolean",
+            "description": "Whether the MAIL FROM MX/TXT records have been verified. Once `true`, never reverts to `false`.",
+            "example": true
+          },
+          "dmarcEnabled": {
+            "type": "boolean",
+            "description": "Whether a DMARC TXT record has been detected. Once `true`, never reverts to `false`.",
+            "example": false
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp of when the domain was added.",
+            "example": "2026-01-05T10:00:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp of the last status update.",
+            "example": "2026-03-10T14:20:00.000Z"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Invalid request body or parameters.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "success": false,
+              "message": "domain must be a valid domain name"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Missing or invalid Bearer token.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "success": false,
+              "message": "Unauthorized"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Domain not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "success": false,
+              "message": "Domain not found"
+            }
+          }
+        }
+      },
+      "RateLimited": {
+        "description": "Too many verification requests. Wait before retrying.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "success": false,
+              "message": "Too many requests, please try again later"
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Domains",
+      "description": "Manage AutoSend domains for your Autosend project."
+    }
+  ]
+}

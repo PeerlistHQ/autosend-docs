@@ -142,20 +142,22 @@ puts response.body
 ```json Response
 {
   "success": true,
-  "data": [
-    {
-      "id": "60d5ec49f1b2c72d9c8b4567",
-      "email": "hello@example.com",
-      "name": "Example Team",
-      "replyTo": "support@example.com"
-    },
-    {
-      "id": "60d5ec49f1b2c72d9c8b4568",
-      "email": "noreply@example.com",
-      "name": "No Reply",
-      "replyTo": ""
-    }
-  ]
+  "data": {
+    "senders": [
+      {
+        "id": "60d5ec49f1b2c72d9c8b4567",
+        "email": "hello@example.com",
+        "name": "Example Team",
+        "replyTo": "support@example.com"
+      },
+      {
+        "id": "60d5ec49f1b2c72d9c8b4568",
+        "email": "noreply@example.com",
+        "name": "No Reply",
+        "replyTo": ""
+      }
+    ]
+  }
 }
 ```
 
@@ -177,32 +179,38 @@ puts response.body
   Example: `true`
 </ResponseField>
 
-<ResponseField name="data" type="object[]">
-  Array of sender objects
+<ResponseField name="data" type="object">
+  Response data object
 
   <Expandable title="child attributes">
-  <ResponseField name="id" type="string">
-    Unique sender identifier (MongoDB ObjectId)
+  <ResponseField name="senders" type="object[]">
+    Array of sender objects
 
-    Example: `"60d5ec49f1b2c72d9c8b4567"`
-  </ResponseField>
+    <Expandable title="child attributes">
+    <ResponseField name="id" type="string">
+      Unique sender identifier (id)
 
-  <ResponseField name="email" type="string">
-    Sender email address. The domain must be verified on the project.
+      Example: `"60d5ec49f1b2c72d9c8b4567"`
+    </ResponseField>
 
-    Example: `"hello@example.com"`
-  </ResponseField>
+    <ResponseField name="email" type="string">
+      Sender email address. The domain must be verified on the project.
 
-  <ResponseField name="name" type="string">
-    Display name for the sender
+      Example: `"hello@example.com"`
+    </ResponseField>
 
-    Example: `"Example Team"`
-  </ResponseField>
+    <ResponseField name="name" type="string">
+      Display name for the sender
 
-  <ResponseField name="replyTo" type="string">
-    Reply-to email address. Empty string if not set.
+      Example: `"Example Team"`
+    </ResponseField>
 
-    Example: `"support@example.com"`
+    <ResponseField name="replyTo" type="string">
+      Reply-to email address. Empty string if not set.
+
+      Example: `"support@example.com"`
+    </ResponseField>
+    </Expandable>
   </ResponseField>
   </Expandable>
 </ResponseField>

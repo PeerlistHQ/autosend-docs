@@ -1,0 +1,397 @@
+---
+title: 'Create Campaign'
+sidebarTitle: 'Create Campaign'
+openapi: 'POST /campaigns'
+---
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url 'https://api.autosend.com/v1/campaigns' \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "name": "Spring Sale Newsletter",
+    "subject": "Don'\''t miss our Spring Sale!",
+    "previewText": "Up to 50% off this weekend only",
+    "from": {
+      "email": "hello@example.com",
+      "name": "Example Team"
+    },
+    "replyTo": "support@example.com",
+    "templateId": "60d5ec49f1b2c72d9c8b1234",
+    "toLists": ["60d5ec49f1b2c72d9c8b0001"],
+    "sendMode": "immediate",
+    "trackingClick": true,
+    "trackingOpen": true
+  }'
+```
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/campaigns"
+headers = {
+    "Authorization": "Bearer <token>",
+    "Content-Type": "application/json"
+}
+payload = {
+    "name": "Spring Sale Newsletter",
+    "subject": "Don't miss our Spring Sale!",
+    "previewText": "Up to 50% off this weekend only",
+    "from": {
+        "email": "hello@example.com",
+        "name": "Example Team"
+    },
+    "replyTo": "support@example.com",
+    "templateId": "60d5ec49f1b2c72d9c8b1234",
+    "toLists": ["60d5ec49f1b2c72d9c8b0001"],
+    "sendMode": "immediate",
+    "trackingClick": True,
+    "trackingOpen": True
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+```javascript JavaScript
+const response = await fetch('https://api.autosend.com/v1/campaigns', {
+  method: 'POST',
+  headers: {
+    Authorization: 'Bearer <token>',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    name: 'Spring Sale Newsletter',
+    subject: "Don't miss our Spring Sale!",
+    previewText: 'Up to 50% off this weekend only',
+    from: {
+      email: 'hello@example.com',
+      name: 'Example Team',
+    },
+    replyTo: 'support@example.com',
+    templateId: '60d5ec49f1b2c72d9c8b1234',
+    toLists: ['60d5ec49f1b2c72d9c8b0001'],
+    sendMode: 'immediate',
+    trackingClick: true,
+    trackingOpen: true,
+  }),
+});
+const data = await response.json();
+console.log(data);
+```
+```php PHP
+<?php
+$curl = curl_init();
+curl_setopt_array($curl, [
+  CURLOPT_URL => 'https://api.autosend.com/v1/campaigns',
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_POST => true,
+  CURLOPT_POSTFIELDS => json_encode([
+    'name' => 'Spring Sale Newsletter',
+    'subject' => "Don't miss our Spring Sale!",
+    'previewText' => 'Up to 50% off this weekend only',
+    'from' => [
+      'email' => 'hello@example.com',
+      'name' => 'Example Team',
+    ],
+    'replyTo' => 'support@example.com',
+    'templateId' => '60d5ec49f1b2c72d9c8b1234',
+    'toLists' => ['60d5ec49f1b2c72d9c8b0001'],
+    'sendMode' => 'immediate',
+    'trackingClick' => true,
+    'trackingOpen' => true,
+  ]),
+  CURLOPT_HTTPHEADER => [
+    'Authorization: Bearer <token>',
+    'Content-Type: application/json',
+  ],
+]);
+$response = curl_exec($curl);
+curl_close($curl);
+echo $response;
+```
+```go Go
+package main
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+)
+
+func main() {
+	payload := map[string]interface{}{
+		"name":        "Spring Sale Newsletter",
+		"subject":     "Don't miss our Spring Sale!",
+		"previewText": "Up to 50% off this weekend only",
+		"from": map[string]string{
+			"email": "hello@example.com",
+			"name":  "Example Team",
+		},
+		"replyTo":       "support@example.com",
+		"templateId":    "60d5ec49f1b2c72d9c8b1234",
+		"toLists":       []string{"60d5ec49f1b2c72d9c8b0001"},
+		"sendMode":      "immediate",
+		"trackingClick": true,
+		"trackingOpen":  true,
+	}
+	body, _ := json.Marshal(payload)
+
+	req, _ := http.NewRequest("POST", "https://api.autosend.com/v1/campaigns", bytes.NewBuffer(body))
+	req.Header.Set("Authorization", "Bearer <token>")
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, _ := client.Do(req)
+	defer resp.Body.Close()
+	respBody, _ := io.ReadAll(resp.Body)
+	fmt.Println(string(respBody))
+}
+```
+```java Java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        String body = """
+            {
+              "name": "Spring Sale Newsletter",
+              "subject": "Don't miss our Spring Sale!",
+              "previewText": "Up to 50% off this weekend only",
+              "from": { "email": "hello@example.com", "name": "Example Team" },
+              "replyTo": "support@example.com",
+              "templateId": "60d5ec49f1b2c72d9c8b1234",
+              "toLists": ["60d5ec49f1b2c72d9c8b0001"],
+              "sendMode": "immediate",
+              "trackingClick": true,
+              "trackingOpen": true
+            }
+            """;
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("https://api.autosend.com/v1/campaigns"))
+            .header("Authorization", "Bearer <token>")
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(body))
+            .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+    }
+}
+```
+```ruby Ruby
+require 'net/http'
+require 'uri'
+require 'json'
+
+uri = URI('https://api.autosend.com/v1/campaigns')
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(uri)
+request['Authorization'] = 'Bearer <token>'
+request['Content-Type'] = 'application/json'
+request.body = {
+  name: 'Spring Sale Newsletter',
+  subject: "Don't miss our Spring Sale!",
+  previewText: 'Up to 50% off this weekend only',
+  from: { email: 'hello@example.com', name: 'Example Team' },
+  replyTo: 'support@example.com',
+  templateId: '60d5ec49f1b2c72d9c8b1234',
+  toLists: ['60d5ec49f1b2c72d9c8b0001'],
+  sendMode: 'immediate',
+  trackingClick: true,
+  trackingOpen: true
+}.to_json
+
+response = http.request(request)
+puts JSON.parse(response.body)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "campaignId": "60d5ec49f1b2c72d9c8b4567",
+    "name": "Spring Sale Newsletter",
+    "subject": "Don't miss our Spring Sale!",
+    "previewText": "Up to 50% off this weekend only",
+    "status": "draft",
+    "sendMode": "immediate",
+    "from": {
+      "email": "hello@example.com",
+      "name": "Example Team"
+    },
+    "replyTo": "support@example.com",
+    "templateId": "60d5ec49f1b2c72d9c8b1234",
+    "toLists": ["60d5ec49f1b2c72d9c8b0001"],
+    "excludeLists": [],
+    "trackingClick": true,
+    "trackingOpen": true,
+    "createdAt": "2026-03-01T10:00:00.000Z",
+    "updatedAt": "2026-03-01T10:00:00.000Z"
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Body
+
+<ParamField body="name" type="string" required>
+  Display name of the campaign. Between 1 and 200 characters.
+</ParamField>
+
+<ParamField body="subject" type="string" required>
+  Email subject line. Between 1 and 998 characters.
+</ParamField>
+
+<ParamField body="previewText" type="string">
+  Preview text shown in email clients before the message is opened. Maximum 200 characters.
+</ParamField>
+
+<ParamField body="from" type="object">
+  Sender identity to use for this campaign.
+
+  <Expandable title="from">
+    <ParamField body="from.email" type="string">
+      Sender email address. Must be a valid email.
+    </ParamField>
+    <ParamField body="from.name" type="string">
+      Sender display name. Maximum 200 characters.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="fromSenderId" type="string">
+  id of a saved sender identity. Mutually usable with `from`.
+</ParamField>
+
+<ParamField body="replyTo" type="string">
+  Reply-to email address. Must be a valid email.
+</ParamField>
+
+<ParamField body="templateId" type="string">
+  ID of the email template to use for this campaign.
+</ParamField>
+
+<ParamField body="toLists" type="array">
+  Array of list or segment IDs to send the campaign to.
+</ParamField>
+
+<ParamField body="excludeLists" type="array">
+  Array of list or segment IDs to exclude from sending.
+</ParamField>
+
+<ParamField body="unsubscribeGroupId" type="string">
+  ID of the unsubscribe group to associate with this campaign.
+</ParamField>
+
+<ParamField body="sendNow" type="boolean">
+  If `true`, the campaign will be sent immediately upon creation.
+</ParamField>
+
+<ParamField body="scheduledAt" type="string">
+  ISO 8601 date-time string at which to schedule the campaign for sending.
+</ParamField>
+
+<ParamField body="sendToGlobalList" type="boolean">
+  If `true`, the campaign is sent to all contacts in the global list.
+</ParamField>
+
+<ParamField body="publish" type="boolean">
+  If `true`, publishes and finalizes the campaign.
+</ParamField>
+
+<ParamField body="trackingClick" type="boolean">
+  Enable or disable click tracking for this campaign.
+</ParamField>
+
+<ParamField body="trackingOpen" type="boolean">
+  Enable or disable open tracking for this campaign.
+</ParamField>
+
+<ParamField body="sendMode" type="string">
+  Delivery mode. One of: `immediate`, `scheduled`, `gradual`.
+</ParamField>
+
+<ParamField body="gradualStrategy" type="string">
+  Growth strategy for gradual sending. One of: `fixed`, `1.25x`, `1.5x`, `1.75x`, `2x`. Required when `sendMode` is `gradual`.
+</ParamField>
+
+<ParamField body="dailyBatchSize" type="integer">
+  Number of emails to send per day in gradual mode. Must be at least `1`.
+</ParamField>
+
+<ParamField body="timezone" type="string">
+  Timezone string (e.g. `America/New_York`) for scheduled or gradual sending.
+</ParamField>
+
+<ParamField body="defaultCampaign" type="boolean">
+  Mark this campaign as the default campaign. Applies to create only.
+</ParamField>
+
+<ParamField body="builderType" type="string">
+  Identifies the campaign builder type used to create this campaign. Applies to create only.
+</ParamField>
+
+#### Response
+<span className='text-sm'>Returns the newly created campaign object.</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates whether the request was successful.
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The created campaign object.
+
+  <Expandable title="data">
+    <ResponseField name="campaignId" type="string">
+      Unique identifier of the new campaign.
+    </ResponseField>
+    <ResponseField name="name" type="string">
+      Display name of the campaign.
+    </ResponseField>
+    <ResponseField name="subject" type="string">
+      Email subject line.
+    </ResponseField>
+    <ResponseField name="previewText" type="string">
+      Preview text shown in email clients.
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      Initial status of the campaign, typically `draft`.
+    </ResponseField>
+    <ResponseField name="sendMode" type="string">
+      Delivery mode: `immediate`, `scheduled`, or `gradual`.
+    </ResponseField>
+    <ResponseField name="trackingClick" type="boolean">
+      Whether click tracking is enabled.
+    </ResponseField>
+    <ResponseField name="trackingOpen" type="boolean">
+      Whether open tracking is enabled.
+    </ResponseField>
+    <ResponseField name="createdAt" type="string">
+      ISO 8601 timestamp when the campaign was created.
+    </ResponseField>
+    <ResponseField name="updatedAt" type="string">
+      ISO 8601 timestamp when the campaign was last updated.
+    </ResponseField>
+  </Expandable>
+</ResponseField>

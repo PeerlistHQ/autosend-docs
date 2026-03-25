@@ -1,0 +1,157 @@
+---
+title: 'List Suppression Groups'
+sidebarTitle: 'List Suppression Groups'
+openapi: 'GET /suppression-groups'
+---
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url 'https://api.autosend.com/v1/suppression-groups?includeGlobal=true' \
+  --header 'Authorization: Bearer <token>'
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://api.autosend.com/v1/suppression-groups",
+    params={"includeGlobal": True},
+    headers={"Authorization": "Bearer <token>"},
+)
+print(response.json())
+```
+
+```javascript JavaScript
+const response = await fetch(
+  "https://api.autosend.com/v1/suppression-groups?includeGlobal=true",
+  {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer <token>",
+    },
+  }
+);
+const data = await response.json();
+console.log(data);
+```
+
+```php PHP
+<?php
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, "https://api.autosend.com/v1/suppression-groups?includeGlobal=true");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    "Authorization: Bearer <token>",
+]);
+$response = curl_exec($ch);
+curl_close($ch);
+echo $response;
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    req, _ := http.NewRequest("GET", "https://api.autosend.com/v1/suppression-groups?includeGlobal=true", nil)
+    req.Header.Set("Authorization", "Bearer <token>")
+
+    client := &http.Client{}
+    resp, _ := client.Do(req)
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.net.URI;
+import java.net.http.*;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("https://api.autosend.com/v1/suppression-groups?includeGlobal=true"))
+            .header("Authorization", "Bearer <token>")
+            .GET()
+            .build();
+
+        HttpResponse<String> response = HttpClient.newHttpClient()
+            .send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+    }
+}
+```
+
+```ruby Ruby
+require "net/http"
+require "uri"
+
+uri = URI("https://api.autosend.com/v1/suppression-groups?includeGlobal=true")
+req = Net::HTTP::Get.new(uri)
+req["Authorization"] = "Bearer <token>"
+
+response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req) }
+puts response.body
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "groups": [
+      {
+        "id": "69044947cc370f8a63845236",
+        "groupId": "20XWO",
+        "name": "Marketing Unsubscribes",
+        "description": "Users who opted out of marketing",
+        "isGlobal": false,
+        "isActive": true,
+        "createdAt": "2025-10-31T05:29:43.906Z",
+        "updatedAt": "2026-02-27T10:16:26.095Z",
+        "suppressionCount": 0
+      },
+      {
+        "id": "69c3a0c19278fca074bebb74",
+        "groupId": "B43YU",
+        "name": "Bounced Addresses",
+        "description": "Hard bounces from transactional sends",
+        "isGlobal": true,
+        "isActive": true,
+        "createdAt": "2026-03-25T08:45:53.085Z",
+        "updatedAt": "2026-03-25T08:45:53.085Z",
+        "suppressionCount": 196
+      }
+    ]
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+#### Query Parameters
+<ParamField query="onlyGlobal" type="boolean">
+  When `true`, returns only global suppression groups, excluding any project-specific groups.
+</ParamField>
+
+<ParamField query="includeGlobal" type="boolean">
+  When `true`, includes global suppression groups in the results alongside project-specific groups.
+</ParamField>

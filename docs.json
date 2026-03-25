@@ -142,7 +142,53 @@
               "api-reference/senders/create",
               "api-reference/senders/delete"
             ]
-		  }
+		  },
+          {
+            "group": "Campaigns",
+            "pages": [
+              "api-reference/campaigns/list",
+              "api-reference/campaigns/get",
+              "api-reference/campaigns/create",
+              "api-reference/campaigns/update",
+              "api-reference/campaigns/duplicate",
+              "api-reference/campaigns/pause",
+              "api-reference/campaigns/resume",
+              "api-reference/campaigns/abort",
+              "api-reference/campaigns/delete"
+            ]
+          },
+          {
+            "group": "Custom Fields",
+            "pages": [
+              "api-reference/custom-fields/list",
+              "api-reference/custom-fields/get-by-name",
+              "api-reference/custom-fields/create",
+              "api-reference/custom-fields/delete"
+            ]
+          },
+          {
+            "group": "Domains",
+            "pages": [
+              "api-reference/domains/list",
+              "api-reference/domains/get",
+              "api-reference/domains/add",
+              "api-reference/domains/verify",
+              "api-reference/domains/delete"
+            ]
+          },
+          {
+            "group": "Suppression Groups",
+            "pages": [
+              "api-reference/suppression-groups/list",
+              "api-reference/suppression-groups/get",
+              "api-reference/suppression-groups/create",
+              "api-reference/suppression-groups/update",
+              "api-reference/suppression-groups/delete",
+              "api-reference/suppression-groups/search-entries",
+              "api-reference/suppression-groups/bulk-suppress",
+              "api-reference/suppression-groups/bulk-unsuppress"
+            ]
+          }
         ]
       },
       {

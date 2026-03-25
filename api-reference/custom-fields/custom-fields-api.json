@@ -1,0 +1,381 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Custom Fields API",
+    "description": "API for managing custom contact fields in an Autosend project. Custom fields let you define dynamic attributes that are attached to every contact in your project. Reserved built-in field names cannot be used when creating custom fields.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.autosend.com/v1"
+    }
+  ],
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "paths": {
+    "/custom-fields": {
+      "get": {
+        "summary": "List custom fields",
+        "description": "Returns all custom fields defined for the authenticated project. Pass `includeReservedFields=false` to omit the built-in fields (email, firstName, lastName, createdAt, userId) from the response.",
+        "operationId": "listCustomFields",
+        "tags": ["Custom Fields"],
+        "parameters": [
+          {
+            "name": "includeReservedFields",
+            "in": "query",
+            "required": false,
+            "description": "Whether to include the built-in reserved fields in the response. Defaults to `true`.",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Custom fields retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Custom fields retrieved successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "customFields": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/CustomField"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a custom field",
+        "description": "Creates a new custom field for the authenticated project. The `fieldName` must be unique within the project and must not conflict with any reserved built-in field name.",
+        "operationId": "createCustomField",
+        "tags": ["Custom Fields"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCustomFieldRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Custom field created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Custom field created successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CustomField"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error — missing required fields, invalid type, or reserved field name",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "409": {
+            "description": "A custom field with the given name already exists in this project",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/custom-fields/fieldName/{customFieldName}": {
+      "get": {
+        "summary": "Get custom field by name",
+        "description": "Retrieves a single custom field by its `fieldName`.",
+        "operationId": "getCustomFieldByName",
+        "tags": ["Custom Fields"],
+        "parameters": [
+          {
+            "name": "customFieldName",
+            "in": "path",
+            "required": true,
+            "description": "The `fieldName` of the custom field to retrieve.",
+            "schema": {
+              "type": "string",
+              "example": "planTier"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Custom field retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Custom field retrieved successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CustomField"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete custom field by name",
+        "description": "Permanently deletes a custom field by its `fieldName`. This action cannot be undone. Any contact data stored against this field will no longer be accessible via the field definition.",
+        "operationId": "deleteCustomFieldByName",
+        "tags": ["Custom Fields"],
+        "parameters": [
+          {
+            "name": "customFieldName",
+            "in": "path",
+            "required": true,
+            "description": "The `fieldName` of the custom field to delete.",
+            "schema": {
+              "type": "string",
+              "example": "planTier"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Custom field deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Custom field deleted successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CustomField"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "API Key"
+      }
+    },
+    "schemas": {
+      "CustomField": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the custom field.",
+            "example": "60d5ec49f1b2c72d9c8b9999"
+          },
+          "fieldName": {
+            "type": "string",
+            "description": "The programmatic name of the field. Used as the merge tag key.",
+            "example": "planTier"
+          },
+          "fieldType": {
+            "type": "string",
+            "enum": ["string", "number", "date"],
+            "description": "The data type of the field.",
+            "example": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "description": "A human-readable description of the field's purpose.",
+            "example": "The user's subscription tier"
+          },
+          "defaultValue": {
+            "nullable": true,
+            "description": "The value to use when a contact does not have an explicit value for this field.",
+            "example": "free"
+          },
+          "isReserved": {
+            "type": "boolean",
+            "description": "Whether this is a built-in reserved field. Reserved fields cannot be deleted.",
+            "example": false
+          },
+          "disabled": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Whether this field is disabled for editing. Only applicable to certain reserved fields.",
+            "example": false
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp of when the field was created.",
+            "example": "2026-01-10T08:00:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp of when the field was last updated.",
+            "example": "2026-01-10T08:00:00.000Z"
+          }
+        }
+      },
+      "CreateCustomFieldRequest": {
+        "type": "object",
+        "required": ["fieldName", "fieldType"],
+        "properties": {
+          "fieldName": {
+            "type": "string",
+            "description": "The programmatic name for the custom field. Must be unique within the project and must not be a reserved name.",
+            "example": "planTier"
+          },
+          "fieldType": {
+            "type": "string",
+            "enum": ["string", "number", "date"],
+            "description": "The data type of the custom field.",
+            "example": "string"
+          },
+          "description": {
+            "type": "string",
+            "description": "A human-readable description of the field's purpose.",
+            "example": "The user's subscription tier"
+          },
+          "defaultValue": {
+            "description": "A fallback value used when a contact does not have an explicit value for this field.",
+            "example": "free"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "message": {
+            "type": "string",
+            "example": "An error occurred"
+          },
+          "code": {
+            "type": "string",
+            "example": "ERROR_CODE"
+          }
+        }
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Missing or invalid Bearer token",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "success": false,
+              "message": "Unauthorized",
+              "code": "UNAUTHORIZED"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "The requested custom field was not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "success": false,
+              "message": "Custom field not found",
+              "code": "CUSTOM_FIELD_NOT_FOUND"
+            }
+          }
+        }
+      }
+    }
+  }
+}

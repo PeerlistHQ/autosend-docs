@@ -218,7 +218,7 @@ puts response.body
 Sender data for creating a new authenticated sender. The email domain must match a verified domain on the project.
 
 <ParamField path="email" type="string" required>
-  Email address for the sender. The domain portion must match a verified SES domain on the project.
+  Email address for the sender. The domain portion must match a verified domain on the project.
 
   Must be a valid email address.
 
@@ -300,7 +300,7 @@ Sender data for creating a new authenticated sender. The email domain must match
 #### Error Responses
 
 <ResponseField name="400 - Domain not verified" type="object">
-  Returned when the sender's email domain does not match any verified SES domain on the project.
+  Returned when the sender's email domain does not match any verified domain on the project.
 
   ```json
   {
