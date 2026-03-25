@@ -13,7 +13,7 @@ curl --request POST \
   --header 'Content-Type: application/json' \
   --data '{
     "emails": ["user@example.com", "another@example.com"],
-    "groupId": "sg_abc123def456",
+    "groupId": "AB12C3",
     "reason": "unsubscribed",
     "isGlobal": false
   }'
@@ -30,7 +30,7 @@ response = requests.post(
     },
     json={
         "emails": ["user@example.com", "another@example.com"],
-        "groupId": "sg_abc123def456",
+        "groupId": "AB12C3",
         "reason": "unsubscribed",
         "isGlobal": False,
     },
@@ -49,7 +49,7 @@ const response = await fetch(
     },
     body: JSON.stringify({
       emails: ["user@example.com", "another@example.com"],
-      groupId: "sg_abc123def456",
+      groupId: "AB12C3",
       reason: "unsubscribed",
       isGlobal: false,
     }),
@@ -67,7 +67,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
     "emails"   => ["user@example.com", "another@example.com"],
-    "groupId"  => "sg_abc123def456",
+    "groupId"  => "AB12C3",
     "reason"   => "unsubscribed",
     "isGlobal" => false,
 ]));
@@ -94,7 +94,7 @@ import (
 func main() {
     payload, _ := json.Marshal(map[string]interface{}{
         "emails":   []string{"user@example.com", "another@example.com"},
-        "groupId":  "sg_abc123def456",
+        "groupId":  "AB12C3",
         "reason":   "unsubscribed",
         "isGlobal": false,
     })
@@ -121,7 +121,7 @@ public class Main {
         String body = """
             {
               "emails": ["user@example.com", "another@example.com"],
-              "groupId": "sg_abc123def456",
+              "groupId": "AB12C3",
               "reason": "unsubscribed",
               "isGlobal": false
             }
@@ -152,7 +152,7 @@ req["Authorization"] = "Bearer <token>"
 req["Content-Type"] = "application/json"
 req.body = {
   emails:   ["user@example.com", "another@example.com"],
-  groupId:  "sg_abc123def456",
+  groupId:  "AB12C3",
   reason:   "unsubscribed",
   isGlobal: false,
 }.to_json

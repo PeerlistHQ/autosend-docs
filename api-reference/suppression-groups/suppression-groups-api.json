@@ -30,7 +30,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "example": "sg_abc123def456"
+            "example": "AB12C3"
           },
           "name": {
             "type": "string",
@@ -64,7 +64,7 @@
           },
           "groupId": {
             "type": "string",
-            "example": "sg_abc123def456"
+            "example": "AB12C3"
           },
           "reason": {
             "type": "string",
@@ -191,7 +191,7 @@
             "description": "The unique identifier of the suppression group.",
             "schema": {
               "type": "string",
-              "example": "sg_abc123def456"
+              "example": "AB12C3"
             }
           }
         ],
@@ -224,7 +224,7 @@
             "description": "The unique identifier of the suppression group to update.",
             "schema": {
               "type": "string",
-              "example": "sg_abc123def456"
+              "example": "AB12C3"
             }
           }
         ],
@@ -287,7 +287,7 @@
             "description": "The unique identifier of the suppression group to delete.",
             "schema": {
               "type": "string",
-              "example": "sg_abc123def456"
+              "example": "AB12C3"
             }
           }
         ],
@@ -367,7 +367,7 @@
                 "properties": {
                   "groupId": {
                     "type": "string",
-                    "example": "sg_abc123def456"
+                    "example": "AB12C3"
                   },
                   "reason": {
                     "type": "string",
@@ -459,7 +459,7 @@
                 "properties": {
                   "groupId": {
                     "type": "string",
-                    "example": "sg_abc123def456"
+                    "example": "AB12C3"
                   },
                   "reason": {
                     "type": "string",
@@ -519,7 +519,7 @@
                   },
                   "groupId": {
                     "type": "string",
-                    "example": "sg_abc123def456"
+                    "example": "AB12C3"
                   },
                   "reason": {
                     "type": "string",
@@ -588,7 +588,7 @@
                   },
                   "groupId": {
                     "type": "string",
-                    "example": "sg_abc123def456"
+                    "example": "AB12C3"
                   },
                   "isGlobal": {
                     "type": "boolean",

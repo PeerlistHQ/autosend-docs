@@ -12,7 +12,7 @@ curl --request POST \
   --header 'Authorization: Bearer <token>' \
   --header 'Content-Type: application/json' \
   --data '{
-    "groupId": "sg_abc123def456",
+    "groupId": "AB12C3",
     "reason": "unsubscribed",
     "isGlobal": false
   }'
@@ -28,7 +28,7 @@ response = requests.post(
         "Content-Type": "application/json",
     },
     json={
-        "groupId": "sg_abc123def456",
+        "groupId": "AB12C3",
         "reason": "unsubscribed",
         "isGlobal": False,
     },
@@ -46,7 +46,7 @@ const response = await fetch(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      groupId: "sg_abc123def456",
+      groupId: "AB12C3",
       reason: "unsubscribed",
       isGlobal: false,
     }),
@@ -63,7 +63,7 @@ curl_setopt($ch, CURLOPT_URL, "https://api.autosend.com/v1/suppression-groups/en
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
-    "groupId"  => "sg_abc123def456",
+    "groupId"  => "AB12C3",
     "reason"   => "unsubscribed",
     "isGlobal" => false,
 ]));
@@ -89,7 +89,7 @@ import (
 
 func main() {
     payload, _ := json.Marshal(map[string]interface{}{
-        "groupId":  "sg_abc123def456",
+        "groupId":  "AB12C3",
         "reason":   "unsubscribed",
         "isGlobal": false,
     })
@@ -115,7 +115,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         String body = """
             {
-              "groupId": "sg_abc123def456",
+              "groupId": "AB12C3",
               "reason": "unsubscribed",
               "isGlobal": false
             }
@@ -145,7 +145,7 @@ req = Net::HTTP::Post.new(uri)
 req["Authorization"] = "Bearer <token>"
 req["Content-Type"] = "application/json"
 req.body = {
-  groupId:  "sg_abc123def456",
+  groupId:  "AB12C3",
   reason:   "unsubscribed",
   isGlobal: false,
 }.to_json
@@ -165,14 +165,14 @@ puts response.body
     {
       "id": "entry_xyz789",
       "email": "user@example.com",
-      "groupId": "sg_abc123def456",
+      "groupId": "AB12C3",
       "reason": "unsubscribed",
       "createdAt": "2026-02-01T09:00:00.000Z"
     },
     {
       "id": "entry_abc001",
       "email": "another@example.com",
-      "groupId": "sg_abc123def456",
+      "groupId": "AB12C3",
       "reason": "unsubscribed",
       "createdAt": "2026-02-15T14:30:00.000Z"
     }

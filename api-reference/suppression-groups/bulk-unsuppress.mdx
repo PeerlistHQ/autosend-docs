@@ -13,7 +13,7 @@ curl --request PUT \
   --header 'Content-Type: application/json' \
   --data '{
     "emails": ["user@example.com"],
-    "groupId": "sg_abc123def456"
+    "groupId": "AB12C3"
   }'
 ```
 
@@ -28,7 +28,7 @@ response = requests.put(
     },
     json={
         "emails": ["user@example.com"],
-        "groupId": "sg_abc123def456",
+        "groupId": "AB12C3",
     },
 )
 print(response.json())
@@ -45,7 +45,7 @@ const response = await fetch(
     },
     body: JSON.stringify({
       emails: ["user@example.com"],
-      groupId: "sg_abc123def456",
+      groupId: "AB12C3",
     }),
   }
 );
@@ -61,7 +61,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
     "emails"  => ["user@example.com"],
-    "groupId" => "sg_abc123def456",
+    "groupId" => "AB12C3",
 ]));
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     "Authorization: Bearer <token>",
@@ -86,7 +86,7 @@ import (
 func main() {
     payload, _ := json.Marshal(map[string]interface{}{
         "emails":  []string{"user@example.com"},
-        "groupId": "sg_abc123def456",
+        "groupId": "AB12C3",
     })
 
     req, _ := http.NewRequest("PUT", "https://api.autosend.com/v1/suppression-groups/emails/unsuppress", bytes.NewBuffer(payload))
@@ -111,7 +111,7 @@ public class Main {
         String body = """
             {
               "emails": ["user@example.com"],
-              "groupId": "sg_abc123def456"
+              "groupId": "AB12C3"
             }
             """;
 
@@ -140,7 +140,7 @@ req["Authorization"] = "Bearer <token>"
 req["Content-Type"] = "application/json"
 req.body = {
   emails:  ["user@example.com"],
-  groupId: "sg_abc123def456",
+  groupId: "AB12C3",
 }.to_json
 
 response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req) }
