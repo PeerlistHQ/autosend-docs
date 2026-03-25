@@ -3,6 +3,9 @@ title: 'Create Contact'
 openapi: 'POST /contacts'
 ---
 
+import {AUTOSEND_PATHS} from '/snippets/autosendPaths.mdx'
+import {APP_PATHS} from '/snippets/appPaths.mdx'
+
 <RequestExample>
 
 
@@ -282,17 +285,20 @@ Contact information to create
 </ParamField>
 
 <ParamField path="userId" type="string" >
-  Your application's user identifier
+  An optional reference field to store your application's user ID. Use this to map your internal users to AutoSend contacts.
   
   Example: `"user_12345"`
 </ParamField>
 <ParamField path="listIds" type="array">
-  IDs of contact lists - Separate from global contacts. Do not pass segment IDs. This will run Segmentation and Automations for the Global contact list and the passed contact list ids.
+  IDs of the contact lists to add this contact to. You can find list IDs in your <a href={AUTOSEND_PATHS.contactsPage} target='_blank' title='Automations'>AutoSend Dashboard</a>. 
+  
+  Do not pass segment IDs here. Segments are computed automatically based on contact field values. Adding a contact to a list will also trigger any live automations associated with that list.
   
   Example: `["507f1f77bcf86cd799439011"]`
 </ParamField>
 <ParamField path="customFields" type="object" >
-  Key-value pairs for custom contact attributes
+
+  Key-value pairs for custom contact attributes. There are four supported value types: `string`, `number`, `boolean`, and `date`. Learn more about <a href={APP_PATHS.customFieldAPIRef} target='_blank' title='Automations'>custom fields</a>.
   
    <Expandable title="child attributes">
 
@@ -301,10 +307,11 @@ Contact information to create
 
   Example: 
   ```jsx
-  {
+  customFields: {
     "company": "Acme Corp",
-    "role": "Developer",
-    "plan": "premium"
+    "isPremium": true,
+    "loginCount": 42,
+    "trialEndsAt": "2024-03-01"
   }
   ```
 </ParamField>

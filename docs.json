@@ -127,6 +127,15 @@
             ]
           },
           {
+            "group": "Custom Fields",
+            "pages": [
+              "api-reference/custom-fields/list",
+              "api-reference/custom-fields/get-by-name",
+              "api-reference/custom-fields/create",
+              "api-reference/custom-fields/delete"
+            ]
+          },
+          {
             "group": "Templates",
             "pages": [
               "api-reference/templates/get",
@@ -136,15 +145,15 @@
               "api-reference/templates/search"
             ]
           },
-		  {
-			"group": "Senders",
+          {
+            "group": "Senders",
             "pages": [
               "api-reference/senders/list",
               "api-reference/senders/get",
               "api-reference/senders/create",
               "api-reference/senders/delete"
             ]
-		  },
+          },
           {
             "group": "Campaigns",
             "pages": [
@@ -157,15 +166,6 @@
               "api-reference/campaigns/resume",
               "api-reference/campaigns/abort",
               "api-reference/campaigns/delete"
-            ]
-          },
-          {
-            "group": "Custom Fields",
-            "pages": [
-              "api-reference/custom-fields/list",
-              "api-reference/custom-fields/get-by-name",
-              "api-reference/custom-fields/create",
-              "api-reference/custom-fields/delete"
             ]
           },
           {

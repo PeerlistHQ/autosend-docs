@@ -500,7 +500,7 @@ Key-value pairs for template variable substitution (Handlebars syntax)
   </Expandable>
 </ParamField>
 
-<ParamField path="subject" type="string" >
+<ParamField path="subject" type="string" required>
   Email subject line (max 998 characters). Required if not using templateId.
   
   Maximum length: `998`
@@ -525,10 +525,8 @@ Key-value pairs for template variable substitution (Handlebars syntax)
   Provide the values for these variables in the `dynamicData` field (either at the root level for all recipients, or per recipient).
   
   Example: 
-  ```html  
-  <h1>Hello {{firstName}}!</h1>\n
-  <p>Your order #{{orderNumber}} has been shipped.</p>\n
-  <p>Total: {{orderTotal}}</p> 
+  ```jsx  
+  html: "<p>Hello {{firstName}}! Sending this email via AutoSend.</p>"
   ```
 </ParamField>
 
@@ -537,12 +535,12 @@ Key-value pairs for template variable substitution (Handlebars syntax)
   
   Example: 
   ```jsx
-  {
-  "name": "Valued Customer",
-  "firstName": "Valued",
-  "orderNumber": "ORD-12345",
-  "orderTotal": "$99.99"
-}
+  dynamicData: {
+    "name": "Valued Customer",
+    "firstName": "Valued",
+    "orderNumber": "ORD-12345",
+    "orderTotal": "$99.99"
+  }
   ```
 </ParamField>
 
@@ -555,7 +553,7 @@ Key-value pairs for template variable substitution (Handlebars syntax)
 <ParamField path="templateId" type="string" >
   ID of the email template to use. Required if not providing html/text.
   
-  Example: `"tmpl_abc123"`
+  Example: `"A-abc123"`
 </ParamField>
 
 <ParamField path="replyTo" type="object" >

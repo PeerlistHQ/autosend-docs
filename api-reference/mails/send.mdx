@@ -3,6 +3,8 @@ title: 'Send Email'
 openapi: 'POST /mails/send'
 ---
 
+import { APP_PATHS } from '/snippets/appPaths.mdx'
+
 <RequestExample>
 
 
@@ -314,6 +316,8 @@ Email data to send
 
 <ParamField path="to" type="object"  required>
   Recipient email address and name
+
+  To send to multiple recipients, use the <a href={APP_PATHS.bulkSendEmail}>send bulk email</a> endpoint.
   <Expandable title="child attributes">
   <ParamField path="to.email" type="string<email>"  required>
   Email address
@@ -387,7 +391,7 @@ Email data to send
   </Expandable>
 </ParamField>
 
-<ParamField path="subject" type="string" >
+<ParamField path="subject" type="string" required>
   Email subject line (max 998 characters). Required if not using templateId.
   
   Maximum length: `998`
@@ -412,24 +416,22 @@ Email data to send
   Provide the values for these variables in the `dynamicData` field.
   
   Example: 
-  ```html  
-  <h1>Hello {{firstName}}!</h1>\n
-  <p>Your order #{{orderNumber}} has been shipped.</p>\n
-  <p>Total: {{orderTotal}}</p> 
+  ```jsx  
+  html: "<p>Hello {{firstName}}! Sending this email via AutoSend.</p>"
   ```
 </ParamField>
 
 <ParamField path="dynamicData" type="object" >
-  Key-value pairs for template variable substitution (Handlebars syntax)
+  Key-value pairs for template variable substitution (Handlebars syntax) 
   
   Example: 
   ```jsx
-  {
-  "name": "Jane",
-  "firstName": "Jane",
-  "orderNumber": "ORD-12345",
-  "orderTotal": "$99.99"
-}
+  dynamicData: {
+    "name": "Jane",
+    "firstName": "Jane",
+    "orderNumber": "ORD-12345",
+    "orderTotal": "$99.99"
+  }
   ```
 </ParamField>
 
@@ -442,7 +444,7 @@ Email data to send
 <ParamField path="templateId" type="string" >
   ID of the email template to use. Required if not providing html/text.
   
-  Example: `"tmpl_abc123"`
+  Example: `"A-abc123"`
 </ParamField>
 
 <ParamField path="replyTo" type="object" >
@@ -466,11 +468,11 @@ Email data to send
   Example: 
   ```jsx
   {
-  "name": "Jane",
-  "firstName": "Jane",
-  "orderNumber": "ORD-12345",
-  "orderTotal": "$99.99"
-}
+      "name": "Jane",
+      "firstName": "Jane",
+      "orderNumber": "ORD-12345",
+      "orderTotal": "$99.99"
+  }
  ```
 </ParamField>
 
@@ -514,10 +516,31 @@ Email data to send
 </ParamField>
 
   </Expandable>
+
+  <Expandable title="all supported types">
+    `.adp`	`.app`	`.asp`	`.bas`	`.bat`
+    `.cer`	`.chm`	`.cmd`	`.com`	`.cpl`
+    `.crt`	`.csh`	`.der`	`.exe`	`.fxp`
+    `.gadget`	`.hlp`	`.hta`	`.inf`	`.ins`
+    `.isp`	`.its`	`.js`	`.jse`	`.ksh`
+    `.lib`	`.lnk`	`.mad`	`.maf`	`.mag`
+    `.mam`	`.maq`	`.mar`	`.mas`	`.mat`
+    `.mau`	`.mav`	`.maw`	`.mda`	`.mdb`
+    `.mde`	`.mdt`	`.mdw`	`.mdz`	`.msc`
+    `.msh`	`.msh1`	`.msh2`	`.mshxml`	`.msh1xml`
+    `.msh2xml`	`.msi`	`.msp`	`.mst`	`.ops`
+    `.pcd`	`.pif`	`.plg`	`.prf`	`.prg`
+    `.reg`	`.scf`	`.scr`	`.sct`	`.shb`
+    `.shs`	`.sys`	`.ps1`	`.ps1xml`	`.ps2`
+    `.ps2xml`	`.psc1`	`.psc2`	`.tmp`	`.url`
+    `.vb`	`.vbe`	`.vbs`	`.vps`	`.vsmacros`
+    `.vss`	`.vst`	`.vsw`	`.vxd`	`.ws`
+    `.wsc`	`.wsf`	`.wsh`	`.xnk`
+  </Expandable>
   
   Example:
   ```jsx
-  [
+  attachments: [
     {
       "fileName": "attachment.pdf",
       "content": "base64-encoded-content",
@@ -525,28 +548,6 @@ Email data to send
     }
   ]
   ```
-
-## What attachment types are not supported?
-
-`.adp`	`.app`	`.asp`	`.bas`	`.bat`
-`.cer`	`.chm`	`.cmd`	`.com`	`.cpl`
-`.crt`	`.csh`	`.der`	`.exe`	`.fxp`
-`.gadget`	`.hlp`	`.hta`	`.inf`	`.ins`
-`.isp`	`.its`	`.js`	`.jse`	`.ksh`
-`.lib`	`.lnk`	`.mad`	`.maf`	`.mag`
-`.mam`	`.maq`	`.mar`	`.mas`	`.mat`
-`.mau`	`.mav`	`.maw`	`.mda`	`.mdb`
-`.mde`	`.mdt`	`.mdw`	`.mdz`	`.msc`
-`.msh`	`.msh1`	`.msh2`	`.mshxml`	`.msh1xml`
-`.msh2xml`	`.msi`	`.msp`	`.mst`	`.ops`
-`.pcd`	`.pif`	`.plg`	`.prf`	`.prg`
-`.reg`	`.scf`	`.scr`	`.sct`	`.shb`
-`.shs`	`.sys`	`.ps1`	`.ps1xml`	`.ps2`
-`.ps2xml`	`.psc1`	`.psc2`	`.tmp`	`.url`
-`.vb`	`.vbe`	`.vbs`	`.vps`	`.vsmacros`
-`.vss`	`.vst`	`.vsw`	`.vxd`	`.ws`
-`.wsc`	`.wsf`	`.wsh`	`.xnk`
-
 </ParamField>
 
 #### Response
