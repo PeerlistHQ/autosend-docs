@@ -48,7 +48,7 @@ const response = await fetch(
     body: JSON.stringify({
       name: "Marketing Unsubscribes",
       description: "Users who opted out of marketing",
-      active: true,
+      isActive: true,
     }),
   }
 );
@@ -65,7 +65,7 @@ curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
     "name" => "Marketing Unsubscribes",
     "description" => "Users who opted out of marketing",
-    "active" => true,
+    "isActive" => true,
 ]));
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     "Authorization: Bearer <token>",
@@ -91,7 +91,7 @@ func main() {
     payload, _ := json.Marshal(map[string]interface{}{
         "name":        "Marketing Unsubscribes",
         "description": "Users who opted out of marketing",
-        "active":      true,
+        "isActive":      true,
     })
 
     req, _ := http.NewRequest("POST", "https://api.autosend.com/v1/suppression-groups", bytes.NewBuffer(payload))
@@ -147,7 +147,7 @@ req["Content-Type"] = "application/json"
 req.body = {
   name: "Marketing Unsubscribes",
   description: "Users who opted out of marketing",
-  active: true,
+  isActive: true,
 }.to_json
 
 response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req) }
@@ -188,10 +188,6 @@ puts response.body
   An optional human-readable description of the suppression group.
 </ParamField>
 
-<ParamField body="active" type="boolean">
-  Whether the suppression group is active. Defaults to `true` if not specified.
-</ParamField>
-
 <ParamField body="isActive" type="boolean">
-  Alias for `active`. When both are provided, the value of `isActive` takes precedence.
+  Whether the suppression group is active. Defaults to `true` if not specified.
 </ParamField>

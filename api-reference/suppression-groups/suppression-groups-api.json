@@ -40,10 +40,6 @@
             "type": "string",
             "example": "Users who opted out of marketing"
           },
-          "active": {
-            "type": "boolean",
-            "example": true
-          },
           "isGlobal": {
             "type": "boolean",
             "example": false
@@ -147,10 +143,7 @@
                     "type": "string",
                     "example": "Users who opted out of marketing"
                   },
-                  "active": {
-                    "type": "boolean",
-                    "example": true
-                  },
+
                   "isActive": {
                     "type": "boolean",
                     "example": true
@@ -245,10 +238,7 @@
                     "type": "string",
                     "example": "Users who opted out of marketing"
                   },
-                  "active": {
-                    "type": "boolean",
-                    "example": true
-                  },
+          
                   "isActive": {
                     "type": "boolean",
                     "example": true
