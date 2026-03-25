@@ -1,0 +1,253 @@
+---
+title: 'Get Domain'
+description: 'Retrieve the details and verification status of a specific domain using the AutoSend API.'
+sidebarTitle: 'Get Domain'
+openapi: 'GET /domains/{domainId}'
+---
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111 \
+  --header 'Authorization: Bearer <token>'
+```
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111"
+
+headers = {"Authorization": "Bearer <token>"}
+
+response = requests.get(url, headers=headers)
+
+print(response.json())
+```
+```javascript JavaScript
+const response = await fetch(
+  "https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111",
+  {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer <token>",
+    },
+  }
+);
+
+const data = await response.json();
+console.log(data);
+```
+```php PHP
+<?php
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+  CURLOPT_URL => "https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111",
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_HTTPHEADER => [
+    "Authorization: Bearer <token>",
+  ],
+]);
+
+$response = curl_exec($curl);
+curl_close($curl);
+
+echo $response;
+```
+```go Go
+package main
+
+import (
+  "fmt"
+  "io"
+  "net/http"
+)
+
+func main() {
+  req, _ := http.NewRequest("GET", "https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111", nil)
+  req.Header.Set("Authorization", "Bearer <token>")
+
+  client := &http.Client{}
+  resp, _ := client.Do(req)
+  defer resp.Body.Close()
+
+  body, _ := io.ReadAll(resp.Body)
+  fmt.Println(string(body))
+}
+```
+```java Java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+HttpClient client = HttpClient.newHttpClient();
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111"))
+    .header("Authorization", "Bearer <token>")
+    .GET()
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+System.out.println(response.body());
+```
+```ruby Ruby
+require "net/http"
+require "uri"
+
+uri = URI.parse("https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111")
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Get.new(uri.request_uri)
+request["Authorization"] = "Bearer <token>"
+
+response = http.request(request)
+puts response.body
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "id": "60d5ec49f1b2c72d9c8b1111",
+    "domainName": "example.com",
+    "verificationStatus": "VERIFIED",
+    "ownershipVerified": true,
+    "dkimEnabled": true,
+    "mailFromEnabled": true,
+    "dmarcEnabled": true,
+    "dnsRecords": {
+      "ownership": {
+        "name": "_autosend-verify.example.com",
+        "value": "autosend-verify-cfdbf714dbec4584b82b925bfff91770",
+        "type": "TXT",
+        "purpose": "Domain ownership verification"
+      },
+      "dkim": {
+        "name": "autosend._domainkey.example.com",
+        "value": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ...",
+        "type": "TXT",
+        "purpose": "DKIM authentication"
+      },
+      "mailFrom": [
+        {
+          "name": "mail.example.com",
+          "value": "feedback-smtp.us-east-1.amazonses.com",
+          "type": "MX",
+          "purpose": "Mail-from domain",
+          "priority": 10
+        },
+        {
+          "name": "mail.example.com",
+          "value": "v=spf1 include:amazonses.com ~all",
+          "type": "TXT",
+          "purpose": "SPF record for mail-from domain"
+        }
+      ],
+      "dmarc": {
+        "name": "_dmarc.example.com",
+        "value": "v=DMARC1; p=none;",
+        "type": "TXT",
+        "purpose": "DMARC policy"
+      }
+    },
+    "createdAt": "2026-01-05T10:00:00.000Z",
+    "lastCheckedAt": "2026-03-10T14:20:00.000Z",
+    "verifiedAt": "2026-01-05T12:00:00.000Z",
+    "regionKey": "us-east-1",
+    "verificationInProgress": false
+  }
+}
+```
+
+</ResponseExample>
+
+#### Authorizations
+<ParamField path="Authorization" type="string | header" required>
+  Bearer authentication header of the form `Bearer <token>`, where `<token>` is your API key.
+</ParamField>
+
+#### Path Parameters
+<ParamField path="domainId" type="string" required>
+  The id of the domain to retrieve.
+</ParamField>
+
+#### Response
+
+<ResponseField name="success" type="boolean">
+  Indicates whether the request was successful.
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The requested domain object.
+
+  <Expandable title="Domain object">
+    <ResponseField name="id" type="string">
+      Unique identifier for the domain (id).
+    </ResponseField>
+    <ResponseField name="domainName" type="string">
+      The domain name (e.g. `example.com`).
+    </ResponseField>
+    <ResponseField name="verificationStatus" type="string">
+      Overall domain verification status. One of `PENDING_CONFIGURATION`, `PENDING`, or `VERIFIED`.
+    </ResponseField>
+    <ResponseField name="ownershipVerified" type="boolean">
+      Whether the TXT ownership record has been verified. Once `true`, never reverts to `false`.
+    </ResponseField>
+    <ResponseField name="dkimEnabled" type="boolean">
+      Whether DKIM CNAME records have been verified. Once `true`, never reverts to `false`.
+    </ResponseField>
+    <ResponseField name="mailFromEnabled" type="boolean">
+      Whether the MAIL FROM MX/TXT records have been verified. Once `true`, never reverts to `false`.
+    </ResponseField>
+    <ResponseField name="dmarcEnabled" type="boolean">
+      Whether a DMARC TXT record has been detected. Once `true`, never reverts to `false`.
+    </ResponseField>
+    <ResponseField name="dnsRecords" type="object">
+      DNS records required for domain verification.
+
+      <Expandable title="DNS Records object">
+        <ResponseField name="ownership" type="object">
+          TXT record for domain ownership verification. Contains `name`, `value`, `type`, and `purpose` fields.
+        </ResponseField>
+        <ResponseField name="dkim" type="object">
+          TXT record for DKIM authentication. Contains `name`, `value`, `type`, and `purpose` fields.
+        </ResponseField>
+        <ResponseField name="mailFrom" type="array">
+          Array of MX and TXT records for the MAIL FROM domain. Each record contains `name`, `value`, `type`, `purpose`, and optionally `priority` fields.
+        </ResponseField>
+        <ResponseField name="dmarc" type="object">
+          TXT record for DMARC policy. Contains `name`, `value`, `type`, and `purpose` fields.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="createdAt" type="string">
+      ISO 8601 timestamp of when the domain was added.
+    </ResponseField>
+    <ResponseField name="lastCheckedAt" type="string">
+      ISO 8601 timestamp of the last DNS verification check.
+    </ResponseField>
+    <ResponseField name="verifiedAt" type="string">
+      ISO 8601 timestamp of when the domain was verified. Only present for verified domains.
+    </ResponseField>
+    <ResponseField name="regionKey" type="string">
+      The AWS region key where the domain is configured (e.g. `us-east-1`).
+    </ResponseField>
+    <ResponseField name="verificationInProgress" type="boolean">
+      Whether a DNS verification check is currently in progress.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+#### Errors
+
+<ResponseField name="404" type="object">
+  Returned when no domain with the given `domainId` exists in the project.
+</ResponseField>

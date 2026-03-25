@@ -1,0 +1,374 @@
+---
+title: 'Update Template'
+description: "Update an existing email template's content, subject, or settings using the AutoSend API."
+sidebarTitle: 'Update Template'
+openapi: 'PUT /templates/{templateId}'
+---
+
+<RequestExample>
+
+```bash cURL
+curl --request PUT \
+  --url https://api.autosend.com/v1/templates/A-abc123def456ghi789jk \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "templateName": "Updated Welcome Email",
+  "subject": "Welcome aboard, {{firstName}}!",
+  "emailTemplate": "<h1>Hey {{firstName}}!</h1><p>We are excited to have you at {{companyName}}.</p>",
+  "previewText": "Your journey starts here"
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/templates/A-abc123def456ghi789jk"
+
+headers = {
+    "Authorization": "Bearer <token>",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "templateName": "Updated Welcome Email",
+    "subject": "Welcome aboard, {{firstName}}!",
+    "emailTemplate": "<h1>Hey {{firstName}}!</h1><p>We are excited to have you at {{companyName}}.</p>",
+    "previewText": "Your journey starts here"
+}
+
+response = requests.put(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/templates/A-abc123def456ghi789jk', {
+  method: 'PUT',
+  headers: {
+    'Authorization': 'Bearer <token>',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    templateName: 'Updated Welcome Email',
+    subject: 'Welcome aboard, {{firstName}}!',
+    emailTemplate: '<h1>Hey {{firstName}}!</h1><p>We are excited to have you at {{companyName}}.</p>',
+    previewText: 'Your journey starts here'
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$templateId = 'A-abc123def456ghi789jk';
+$url = "https://api.autosend.com/v1/templates/{$templateId}";
+
+$data = [
+    'templateName' => 'Updated Welcome Email',
+    'subject' => 'Welcome aboard, {{firstName}}!',
+    'emailTemplate' => '<h1>Hey {{firstName}}!</h1><p>We are excited to have you at {{companyName}}.</p>',
+    'previewText' => 'Your journey starts here'
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer <token>',
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/templates/A-abc123def456ghi789jk"
+
+    payload := map[string]interface{}{
+        "templateName":  "Updated Welcome Email",
+        "subject":       "Welcome aboard, {{firstName}}!",
+        "emailTemplate": "<h1>Hey {{firstName}}!</h1><p>We are excited to have you at {{companyName}}.</p>",
+        "previewText":   "Your journey starts here",
+    }
+
+    jsonData, _ := json.Marshal(payload)
+
+    req, _ := http.NewRequest("PUT", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer <token>")
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    fmt.Println("Response Status:", resp.Status)
+}
+```
+
+```java Java
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class UpdateTemplate {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/templates/A-abc123def456ghi789jk");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("PUT");
+            con.setRequestProperty("Authorization", "Bearer <token>");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+
+            String jsonInputString = "{\n" +
+                "  \"templateName\": \"Updated Welcome Email\",\n" +
+                "  \"subject\": \"Welcome aboard, {{firstName}}!\",\n" +
+                "  \"emailTemplate\": \"<h1>Hey {{firstName}}!</h1><p>We are excited to have you at {{companyName}}.</p>\",\n" +
+                "  \"previewText\": \"Your journey starts here\"\n" +
+                "}";
+
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/templates/A-abc123def456ghi789jk')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Put.new(uri.path)
+request['Authorization'] = 'Bearer <token>'
+request['Content-Type'] = 'application/json'
+
+request.body = {
+  templateName: 'Updated Welcome Email',
+  subject: 'Welcome aboard, {{firstName}}!',
+  emailTemplate: '<h1>Hey {{firstName}}!</h1><p>We are excited to have you at {{companyName}}.</p>',
+  previewText: 'Your journey starts here'
+}.to_json
+
+response = http.request(request)
+puts response.body
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "templateId": "A-abc123def456ghi789jk",
+    "templateName": "Updated Welcome Email",
+    "description": "Welcome email for new users",
+    "subject": "Welcome aboard, {{firstName}}!",
+    "previewText": "Your journey starts here",
+    "emailTemplate": "<h1>Hey {{firstName}}!</h1><p>We are excited to have you at {{companyName}}.</p>",
+    "templateType": "transactional",
+    "builderType": "code",
+    "createdAt": "2026-01-15T10:30:00.000Z",
+    "updatedAt": "2026-03-17T14:45:00.000Z"
+  }
+}
+```
+
+</ResponseExample>
+
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="templateId" type="string" required>
+  The unique identifier of the template to update.
+
+  Example: `"A-abc123def456ghi789jk"`
+</ParamField>
+
+### Body
+Template fields to update. All fields are optional — only provided fields will be updated.
+
+<ParamField path="templateName" type="string">
+  Name of the template (max 90 characters).
+
+  Maximum length: `90`
+
+  Example: `"Updated Welcome Email"`
+</ParamField>
+
+<ParamField path="subject" type="string">
+  Email subject line (max 988 characters). Supports Handlebars template variables.
+
+  Maximum length: `988`
+
+  Example: `"Welcome aboard, {{firstName}}!"`
+</ParamField>
+
+<ParamField path="description" type="string">
+  Short description of the template (max 140 characters).
+
+  Maximum length: `140`
+
+  Example: `"Updated welcome email for new users"`
+</ParamField>
+
+<ParamField path="previewText" type="string">
+  Email preview text / preheader (max 140 characters).
+
+  Maximum length: `140`
+
+  Example: `"Your journey starts here"`
+</ParamField>
+
+<ParamField path="emailTemplate" type="string">
+  HTML content of the email template. Supports Handlebars syntax for dynamic variables.
+
+  Example:
+  ```html
+  <h1>Hey {{firstName}}!</h1>
+  <p>We are excited to have you at {{companyName}}.</p>
+  ```
+</ParamField>
+
+<ParamField path="templateType" type="string">
+  Type of the template.
+
+  Allowed values: `transactional`, `marketing`
+
+  Example: `"transactional"`
+</ParamField>
+
+<ParamField path="dynamicVariables" type="object">
+  Dynamic variables configuration for the template.
+
+  Example:
+  ```json
+  {
+    "firstName": "string",
+    "companyName": "string"
+  }
+  ```
+</ParamField>
+
+<ParamField path="senderId" type="string">
+  ID of the sender to associate with this template. The sender must belong to the same project.
+
+  Example: `"60d5ec49f1b2c72d9c8b4567"`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Template updated successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The updated template object
+
+  <Expandable title="child attributes">
+  <ResponseField name="data.templateId" type="string">
+    Unique template identifier
+
+    Example: `"A-abc123def456ghi789jk"`
+  </ResponseField>
+
+  <ResponseField name="data.templateName" type="string">
+    Name of the template
+
+    Example: `"Updated Welcome Email"`
+  </ResponseField>
+
+  <ResponseField name="data.description" type="string">
+    Template description
+
+    Example: `"Welcome email for new users"`
+  </ResponseField>
+
+  <ResponseField name="data.subject" type="string">
+    Email subject line
+
+    Example: `"Welcome aboard, {{firstName}}!"`
+  </ResponseField>
+
+  <ResponseField name="data.previewText" type="string">
+    Email preview text
+
+    Example: `"Your journey starts here"`
+  </ResponseField>
+
+  <ResponseField name="data.emailTemplate" type="string">
+    HTML content of the template
+  </ResponseField>
+
+  <ResponseField name="data.templateType" type="string">
+    Type of template
+
+    Example: `"transactional"`
+  </ResponseField>
+
+  <ResponseField name="data.builderType" type="string">
+    Builder type used
+
+    Example: `"code"`
+  </ResponseField>
+
+  <ResponseField name="data.createdAt" type="string">
+    ISO 8601 timestamp of creation
+
+    Example: `"2026-01-15T10:30:00.000Z"`
+  </ResponseField>
+
+  <ResponseField name="data.updatedAt" type="string">
+    ISO 8601 timestamp of last update
+
+    Example: `"2026-03-17T14:45:00.000Z"`
+  </ResponseField>
+  </Expandable>
+</ResponseField>

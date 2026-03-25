@@ -1,0 +1,293 @@
+---
+title: 'Add Domain'
+description: 'Add a new sending domain to your account for email authentication using the AutoSend API.'
+sidebarTitle: 'Add Domain'
+openapi: 'POST /domains'
+---
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/domains \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "domain": "example.com",
+    "regionKey": "us-east-1"
+  }'
+```
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/domains"
+
+headers = {
+    "Authorization": "Bearer <token>",
+    "Content-Type": "application/json",
+}
+
+payload = {
+    "domain": "example.com",
+    "regionKey": "us-east-1",
+}
+
+response = requests.post(url, json=payload, headers=headers)
+
+print(response.json())
+```
+```javascript JavaScript
+const response = await fetch("https://api.autosend.com/v1/domains", {
+  method: "POST",
+  headers: {
+    Authorization: "Bearer <token>",
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    domain: "example.com",
+    regionKey: "us-east-1",
+  }),
+});
+
+const data = await response.json();
+console.log(data);
+```
+```php PHP
+<?php
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+  CURLOPT_URL => "https://api.autosend.com/v1/domains",
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_POST => true,
+  CURLOPT_POSTFIELDS => json_encode([
+    "domain" => "example.com",
+    "regionKey" => "us-east-1",
+  ]),
+  CURLOPT_HTTPHEADER => [
+    "Authorization: Bearer <token>",
+    "Content-Type: application/json",
+  ],
+]);
+
+$response = curl_exec($curl);
+curl_close($curl);
+
+echo $response;
+```
+```go Go
+package main
+
+import (
+  "bytes"
+  "encoding/json"
+  "fmt"
+  "io"
+  "net/http"
+)
+
+func main() {
+  payload, _ := json.Marshal(map[string]string{
+    "domain":    "example.com",
+    "regionKey": "us-east-1",
+  })
+
+  req, _ := http.NewRequest("POST", "https://api.autosend.com/v1/domains", bytes.NewBuffer(payload))
+  req.Header.Set("Authorization", "Bearer <token>")
+  req.Header.Set("Content-Type", "application/json")
+
+  client := &http.Client{}
+  resp, _ := client.Do(req)
+  defer resp.Body.Close()
+
+  body, _ := io.ReadAll(resp.Body)
+  fmt.Println(string(body))
+}
+```
+```java Java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+HttpClient client = HttpClient.newHttpClient();
+
+String body = "{\"domain\": \"example.com\", \"regionKey\": \"us-east-1\"}";
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.autosend.com/v1/domains"))
+    .header("Authorization", "Bearer <token>")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(body))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+System.out.println(response.body());
+```
+```ruby Ruby
+require "net/http"
+require "uri"
+require "json"
+
+uri = URI.parse("https://api.autosend.com/v1/domains")
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(uri.request_uri)
+request["Authorization"] = "Bearer <token>"
+request["Content-Type"] = "application/json"
+request.body = JSON.generate({ domain: "example.com", regionKey: "us-east-1" })
+
+response = http.request(request)
+puts response.body
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "id": "60d5ec49f1b2c72d9c8b2222",
+    "domainName": "example.com",
+    "verificationStatus": "PENDING_CONFIGURATION",
+    "ownershipVerified": false,
+    "dkimEnabled": false,
+    "mailFromEnabled": false,
+    "dmarcEnabled": false,
+    "dnsRecords": {
+      "ownership": {
+        "name": "_autosend-verify.example.com",
+        "value": "autosend-verify-d3b3f3481f3541b1b1d96e401ad89c91",
+        "type": "TXT",
+        "purpose": "Domain ownership verification"
+      },
+      "dkim": {
+        "name": "autosend._domainkey.example.com",
+        "value": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQ...",
+        "type": "TXT",
+        "purpose": "DKIM authentication"
+      },
+      "mailFrom": [
+        {
+          "name": "asend.example.com",
+          "value": "feedback-smtp.us-east-1.amazonses.com",
+          "type": "MX",
+          "purpose": "Mail-from domain",
+          "priority": 10
+        },
+        {
+          "name": "asend.example.com",
+          "value": "v=spf1 include:amazonses.com ~all",
+          "type": "TXT",
+          "purpose": "SPF record for mail-from domain"
+        }
+      ],
+      "dmarc": {
+        "name": "_dmarc.example.com",
+        "value": "v=DMARC1; p=none;",
+        "type": "TXT",
+        "purpose": "DMARC policy"
+      }
+    },
+    "createdAt": "2026-03-19T08:00:00.000Z",
+    "lastCheckedAt": "2026-03-19T08:00:00.000Z",
+    "regionKey": "us-east-1",
+    "verificationInProgress": false
+  }
+}
+```
+
+</ResponseExample>
+
+#### Authorizations
+<ParamField path="Authorization" type="string | header" required>
+  Bearer authentication header of the form `Bearer <token>`, where `<token>` is your API key.
+</ParamField>
+
+#### Body
+
+<ParamField body="domain" type="string" required>
+  A valid domain name to add (e.g. `example.com` or `mail.example.com`). Must not include a protocol (`http://`), a path, or a trailing slash. Maximum 253 characters.
+</ParamField>
+
+<ParamField body="regionKey" type="string">
+  The AutoSend region key where your email service will be configured for this domain (e.g. `us-east-1`, `ap-south-1`, `us-east-2`). If omitted, the project's primary region is used.
+</ParamField>
+
+#### Response
+
+<ResponseField name="success" type="boolean">
+  Indicates whether the request was successful.
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The newly created domain object. The initial `verificationStatus` is always `PENDING_CONFIGURATION`. Configure the required DNS records in your DNS provider and then call `POST /domains/{domainId}/verify` to start verification.
+
+  <Expandable title="Domain object">
+    <ResponseField name="id" type="string">
+      Unique identifier for the domain (id). Use this as `domainId` in subsequent requests.
+    </ResponseField>
+    <ResponseField name="domainName" type="string">
+      The domain name that was added.
+    </ResponseField>
+    <ResponseField name="verificationStatus" type="string">
+      Always `PENDING_CONFIGURATION` on creation.
+    </ResponseField>
+    <ResponseField name="ownershipVerified" type="boolean">
+      Always `false` on creation.
+    </ResponseField>
+    <ResponseField name="dkimEnabled" type="boolean">
+      Always `false` on creation.
+    </ResponseField>
+    <ResponseField name="mailFromEnabled" type="boolean">
+      Always `false` on creation.
+    </ResponseField>
+    <ResponseField name="dmarcEnabled" type="boolean">
+      Always `false` on creation.
+    </ResponseField>
+    <ResponseField name="dnsRecords" type="object">
+      DNS records to configure in your DNS provider before calling verify.
+
+      <Expandable title="DNS Records object">
+        <ResponseField name="ownership" type="object">
+          TXT record for domain ownership verification. Contains `name`, `value`, `type`, and `purpose` fields.
+        </ResponseField>
+        <ResponseField name="dkim" type="object">
+          TXT record for DKIM authentication. Contains `name`, `value`, `type`, and `purpose` fields.
+        </ResponseField>
+        <ResponseField name="mailFrom" type="array">
+          Array of MX and TXT records for the MAIL FROM domain. Each record contains `name`, `value`, `type`, `purpose`, and optionally `priority` fields.
+        </ResponseField>
+        <ResponseField name="dmarc" type="object">
+          TXT record for DMARC policy. Contains `name`, `value`, `type`, and `purpose` fields.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="createdAt" type="string">
+      ISO 8601 timestamp of when the domain was added.
+    </ResponseField>
+    <ResponseField name="lastCheckedAt" type="string">
+      ISO 8601 timestamp of the last DNS verification check.
+    </ResponseField>
+    <ResponseField name="regionKey" type="string">
+      The region key where the domain is configured (e.g. `us-east-1`).
+    </ResponseField>
+    <ResponseField name="verificationInProgress" type="boolean">
+      Whether a DNS verification check is currently in progress. Always `false` on creation.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+#### Errors
+
+<ResponseField name="400" type="object">
+  Returned when the `domain` field is missing, empty, exceeds 253 characters, or is not a valid domain name (e.g. includes a protocol or path).
+</ResponseField>
+
+<ResponseField name="409" type="object">
+  Returned when the domain has already been added to this project.
+</ResponseField>

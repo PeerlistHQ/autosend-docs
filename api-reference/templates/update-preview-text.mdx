@@ -1,0 +1,261 @@
+---
+title: 'Update Preview Text'
+description: 'Update the preview text of an email template using the AutoSend API.'
+sidebarTitle: 'Update Preview Text'
+openapi: 'PATCH /templates/{templateId}/preview-text'
+---
+
+<RequestExample>
+
+```bash cURL
+curl --request PATCH \
+  --url https://api.autosend.com/v1/templates/A-abc123def456ghi789jk/preview-text \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "previewText": "Don'\''t miss out on our latest updates"
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/templates/A-abc123def456ghi789jk/preview-text"
+
+headers = {
+    "Authorization": "Bearer <token>",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "previewText": "Don't miss out on our latest updates"
+}
+
+response = requests.patch(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/templates/A-abc123def456ghi789jk/preview-text', {
+  method: 'PATCH',
+  headers: {
+    'Authorization': 'Bearer <token>',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    previewText: "Don't miss out on our latest updates"
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$templateId = 'A-abc123def456ghi789jk';
+$url = "https://api.autosend.com/v1/templates/{$templateId}/preview-text";
+
+$data = [
+    'previewText' => "Don't miss out on our latest updates"
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer <token>',
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/templates/A-abc123def456ghi789jk/preview-text"
+
+    payload := map[string]string{
+        "previewText": "Don't miss out on our latest updates",
+    }
+
+    jsonData, _ := json.Marshal(payload)
+
+    req, _ := http.NewRequest("PATCH", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer <token>")
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    fmt.Println("Response Status:", resp.Status)
+}
+```
+
+```java Java
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class UpdatePreviewText {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/templates/A-abc123def456ghi789jk/preview-text");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("PATCH");
+            con.setRequestProperty("Authorization", "Bearer <token>");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+
+            String jsonInputString = "{\"previewText\": \"Don't miss out on our latest updates\"}";
+
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/templates/A-abc123def456ghi789jk/preview-text')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Patch.new(uri.path)
+request['Authorization'] = 'Bearer <token>'
+request['Content-Type'] = 'application/json'
+
+request.body = {
+  previewText: "Don't miss out on our latest updates"
+}.to_json
+
+response = http.request(request)
+puts response.body
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "templateId": "A-abc123def456ghi789jk",
+    "templateName": "Welcome Email",
+    "description": "Welcome email for new users",
+    "subject": "Welcome to Our Platform!",
+    "previewText": "Don't miss out on our latest updates",
+    "templateType": "transactional",
+    "builderType": "code",
+    "createdAt": "2026-01-15T10:30:00.000Z",
+    "updatedAt": "2026-03-17T14:45:00.000Z"
+  }
+}
+```
+
+</ResponseExample>
+
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="templateId" type="string" required>
+  The unique identifier of the template.
+
+  Example: `"A-abc123def456ghi789jk"`
+</ParamField>
+
+### Body
+
+<ParamField path="previewText" type="string" required>
+  Email preview text / preheader (max 140 characters). This text is automatically injected into the template HTML and shown in email clients before the email is opened.
+
+  Maximum length: `140`
+
+  Example: `"Don't miss out on our latest updates"`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Preview text updated successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The updated template object
+
+  <Expandable title="child attributes">
+  <ResponseField name="data.templateId" type="string">
+    Unique template identifier
+
+    Example: `"A-abc123def456ghi789jk"`
+  </ResponseField>
+
+  <ResponseField name="data.templateName" type="string">
+    Name of the template
+
+    Example: `"Welcome Email"`
+  </ResponseField>
+
+  <ResponseField name="data.previewText" type="string">
+    Updated preview text
+
+    Example: `"Don't miss out on our latest updates"`
+  </ResponseField>
+
+  <ResponseField name="data.createdAt" type="string">
+    ISO 8601 timestamp of creation
+
+    Example: `"2026-01-15T10:30:00.000Z"`
+  </ResponseField>
+
+  <ResponseField name="data.updatedAt" type="string">
+    ISO 8601 timestamp of last update
+
+    Example: `"2026-03-17T14:45:00.000Z"`
+  </ResponseField>
+  </Expandable>
+</ResponseField>

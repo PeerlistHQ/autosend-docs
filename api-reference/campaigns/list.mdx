@@ -1,0 +1,261 @@
+---
+title: 'List Campaigns'
+description: 'List all campaigns in your account with optional filtering and pagination using the AutoSend API.'
+sidebarTitle: 'List Campaigns'
+openapi: 'GET /campaigns'
+---
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url 'https://api.autosend.com/v1/campaigns?status=draft&page=1&limit=20' \
+  --header 'Authorization: Bearer <token>'
+```
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/campaigns"
+params = {
+    "status": "draft",
+    "page": 1,
+    "limit": 20
+}
+headers = {"Authorization": "Bearer <token>"}
+
+response = requests.get(url, params=params, headers=headers)
+print(response.json())
+```
+```javascript JavaScript
+const response = await fetch(
+  'https://api.autosend.com/v1/campaigns?status=draft&page=1&limit=20',
+  {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer <token>',
+    },
+  }
+);
+const data = await response.json();
+console.log(data);
+```
+```php PHP
+<?php
+$curl = curl_init();
+curl_setopt_array($curl, [
+  CURLOPT_URL => 'https://api.autosend.com/v1/campaigns?status=draft&page=1&limit=20',
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_HTTPHEADER => [
+    'Authorization: Bearer <token>',
+  ],
+]);
+$response = curl_exec($curl);
+curl_close($curl);
+echo $response;
+```
+```go Go
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+)
+
+func main() {
+	req, _ := http.NewRequest("GET", "https://api.autosend.com/v1/campaigns?status=draft&page=1&limit=20", nil)
+	req.Header.Set("Authorization", "Bearer <token>")
+
+	client := &http.Client{}
+	resp, _ := client.Do(req)
+	defer resp.Body.Close()
+	body, _ := io.ReadAll(resp.Body)
+	fmt.Println(string(body))
+}
+```
+```java Java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("https://api.autosend.com/v1/campaigns?status=draft&page=1&limit=20"))
+            .header("Authorization", "Bearer <token>")
+            .GET()
+            .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+    }
+}
+```
+```ruby Ruby
+require 'net/http'
+require 'uri'
+require 'json'
+
+uri = URI('https://api.autosend.com/v1/campaigns')
+uri.query = URI.encode_www_form(status: 'draft', page: 1, limit: 20)
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Get.new(uri)
+request['Authorization'] = 'Bearer <token>'
+
+response = http.request(request)
+puts JSON.parse(response.body)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "campaigns": [
+      {
+        "campaignId": "60d5ec49f1b2c72d9c8b4567",
+        "name": "Spring Sale Newsletter",
+        "subject": "Don't miss our Spring Sale!",
+        "previewText": "Up to 50% off this weekend only",
+        "status": "draft",
+        "sendMode": "immediate",
+        "trackingClick": true,
+        "trackingOpen": true,
+        "createdAt": "2026-03-01T10:00:00.000Z",
+        "updatedAt": "2026-03-15T14:30:00.000Z"
+      },
+      {
+        "campaignId": "60d5ec49f1b2c72d9c8b4568",
+        "name": "Welcome Series - Week 1",
+        "subject": "Welcome to Autosend!",
+        "previewText": "Get started in minutes",
+        "status": "sent",
+        "sendMode": "scheduled",
+        "trackingClick": true,
+        "trackingOpen": true,
+        "createdAt": "2026-02-15T08:00:00.000Z",
+        "updatedAt": "2026-02-20T09:45:00.000Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 20,
+      "total": 2,
+      "totalPages": 1
+    }
+  }
+}
+```
+
+</ResponseExample>
+
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Query Parameters
+
+<ParamField query="status" type="string">
+  Filter campaigns by status. One of: `draft`, `scheduled`, `sending`, `sending_gradual`, `paused`, `sent`, `failed`, `aborted`.
+</ParamField>
+
+<ParamField query="name" type="string">
+  Filter campaigns by name. Supports partial matching.
+</ParamField>
+
+<ParamField query="page" type="integer">
+  Page number for pagination. Must be at least `1`. Defaults to `1`.
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Number of results to return per page. Must be between `1` and `100`. Defaults to `20`.
+</ParamField>
+
+<ParamField query="startDate" type="string">
+  ISO 8601 date-time string. Only campaigns created on or after this date are returned.
+</ParamField>
+
+<ParamField query="endDate" type="string">
+  ISO 8601 date-time string. Only campaigns created on or before this date are returned.
+</ParamField>
+
+<ParamField query="includeCounts" type="string">
+  Whether to include recipient and send counts in each campaign object. Pass `"true"` or `"false"`.
+</ParamField>
+
+#### Response
+<span className='text-sm'>Returns a paginated list of campaign objects.</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates whether the request was successful.
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Response payload.
+
+  <Expandable title="data">
+    <ResponseField name="campaigns" type="array">
+      Array of campaign objects.
+
+      <Expandable title="campaign">
+        <ResponseField name="campaignId" type="string">
+          Unique identifier of the campaign.
+        </ResponseField>
+        <ResponseField name="name" type="string">
+          Display name of the campaign.
+        </ResponseField>
+        <ResponseField name="subject" type="string">
+          Email subject line.
+        </ResponseField>
+        <ResponseField name="previewText" type="string">
+          Preview text shown in email clients.
+        </ResponseField>
+        <ResponseField name="status" type="string">
+          Current status of the campaign.
+        </ResponseField>
+        <ResponseField name="sendMode" type="string">
+          How the campaign is delivered: `immediate`, `scheduled`, or `gradual`.
+        </ResponseField>
+        <ResponseField name="trackingClick" type="boolean">
+          Whether click tracking is enabled.
+        </ResponseField>
+        <ResponseField name="trackingOpen" type="boolean">
+          Whether open tracking is enabled.
+        </ResponseField>
+        <ResponseField name="createdAt" type="string">
+          ISO 8601 timestamp when the campaign was created.
+        </ResponseField>
+        <ResponseField name="updatedAt" type="string">
+          ISO 8601 timestamp when the campaign was last updated.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="pagination" type="object">
+      Pagination metadata.
+
+      <Expandable title="pagination">
+        <ResponseField name="page" type="integer">
+          Current page number.
+        </ResponseField>
+        <ResponseField name="limit" type="integer">
+          Number of results per page.
+        </ResponseField>
+        <ResponseField name="total" type="integer">
+          Total number of matching campaigns.
+        </ResponseField>
+        <ResponseField name="totalPages" type="integer">
+          Total number of pages.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>

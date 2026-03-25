@@ -1,0 +1,318 @@
+---
+title: 'Create Sender'
+description: 'Create a new sender identity with email address and display name using the AutoSend API.'
+sidebarTitle: 'Create Sender'
+openapi: 'POST /senders'
+---
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/senders \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "email": "hello@example.com",
+  "name": "Example Team",
+  "replyTo": "support@example.com"
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/senders"
+
+headers = {
+    "Authorization": "Bearer <token>",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "email": "hello@example.com",
+    "name": "Example Team",
+    "replyTo": "support@example.com"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/senders', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer <token>',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    email: 'hello@example.com',
+    name: 'Example Team',
+    replyTo: 'support@example.com'
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/senders';
+
+$data = [
+    'email' => 'hello@example.com',
+    'name' => 'Example Team',
+    'replyTo' => 'support@example.com'
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer <token>',
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/senders"
+
+    payload := map[string]interface{}{
+        "email":   "hello@example.com",
+        "name":    "Example Team",
+        "replyTo": "support@example.com",
+    }
+
+    jsonData, _ := json.Marshal(payload)
+
+    req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer <token>")
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    fmt.Println("Response Status:", resp.Status)
+}
+```
+
+```java Java
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class CreateSender {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/senders");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Authorization", "Bearer <token>");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+
+            String jsonInputString = "{\n" +
+                "  \"email\": \"hello@example.com\",\n" +
+                "  \"name\": \"Example Team\",\n" +
+                "  \"replyTo\": \"support@example.com\"\n" +
+                "}";
+
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/senders')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(uri.path)
+request['Authorization'] = 'Bearer <token>'
+request['Content-Type'] = 'application/json'
+
+request.body = {
+  email: 'hello@example.com',
+  name: 'Example Team',
+  replyTo: 'support@example.com'
+}.to_json
+
+response = http.request(request)
+puts response.body
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "sender": {
+      "id": "60d5ec49f1b2c72d9c8b4567",
+      "email": "hello@example.com",
+      "name": "Example Team",
+      "replyTo": "support@example.com"
+    },
+    "projectId": "60d5ec49f1b2c72d9c8b1234"
+  },
+  "message": "Authenticated sender added successfully"
+}
+```
+
+</ResponseExample>
+
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Body
+Sender data for creating a new authenticated sender. The email domain must match a verified domain on the project.
+
+<ParamField path="email" type="string" required>
+  Email address for the sender. The domain portion must match a verified domain on the project.
+
+  Must be a valid email address.
+
+  Example: `"hello@example.com"`
+</ParamField>
+
+<ParamField path="name" type="string">
+  Display name for the sender (max 200 characters). Shown as the "from" name in recipients' email clients.
+
+  Maximum length: `200`
+
+  Example: `"Example Team"`
+</ParamField>
+
+<ParamField path="replyTo" type="string">
+  Reply-to email address. When recipients reply to emails from this sender, replies go to this address.
+
+  Must be a valid email address.
+
+  Example: `"support@example.com"`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Sender created successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="child attributes">
+  <ResponseField name="data.sender" type="object">
+    The created sender object
+
+    <Expandable title="child attributes">
+    <ResponseField name="sender.id" type="string">
+      Unique sender identifier
+
+      Example: `"60d5ec49f1b2c72d9c8b4567"`
+    </ResponseField>
+
+    <ResponseField name="sender.email" type="string">
+      Sender email address
+
+      Example: `"hello@example.com"`
+    </ResponseField>
+
+    <ResponseField name="sender.name" type="string">
+      Display name for the sender
+
+      Example: `"Example Team"`
+    </ResponseField>
+
+    <ResponseField name="sender.replyTo" type="string">
+      Reply-to email address
+
+      Example: `"support@example.com"`
+    </ResponseField>
+    </Expandable>
+  </ResponseField>
+
+  <ResponseField name="data.projectId" type="string">
+    ID of the project the sender belongs to
+
+    Example: `"60d5ec49f1b2c72d9c8b1234"`
+  </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Confirmation message
+
+  Example: `"Authenticated sender added successfully"`
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="400 - Domain not verified" type="object">
+  Returned when the sender's email domain does not match any verified domain on the project.
+
+  ```json
+  {
+    "success": false,
+    "error": "A verified domain is required before adding an authenticated sender"
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="409 - Duplicate sender" type="object">
+  Returned when a sender with the same email already exists on the project.
+
+  ```json
+  {
+    "success": false,
+    "error": "An authenticated sender with this email already exists"
+  }
+  ```
+</ResponseField>

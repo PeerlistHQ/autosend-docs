@@ -1,0 +1,205 @@
+---
+title: 'Get Sender'
+description: 'Retrieve the details of a specific sender identity by ID using the AutoSend API.'
+sidebarTitle: 'Get Sender'
+openapi: 'GET /senders/{senderId}'
+---
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://api.autosend.com/v1/senders/60d5ec49f1b2c72d9c8b4567 \
+  --header 'Authorization: Bearer <token>'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/senders/60d5ec49f1b2c72d9c8b4567"
+
+headers = {
+    "Authorization": "Bearer <token>"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/senders/60d5ec49f1b2c72d9c8b4567', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer <token>'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$senderId = '60d5ec49f1b2c72d9c8b4567';
+$url = "https://api.autosend.com/v1/senders/{$senderId}";
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer <token>'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/senders/60d5ec49f1b2c72d9c8b4567"
+
+    req, _ := http.NewRequest("GET", url, nil)
+    req.Header.Set("Authorization", "Bearer <token>")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class GetSender {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/senders/60d5ec49f1b2c72d9c8b4567");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Authorization", "Bearer <token>");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+            con.disconnect();
+
+            System.out.println(content.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/senders/60d5ec49f1b2c72d9c8b4567')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Get.new(uri)
+request['Authorization'] = 'Bearer <token>'
+
+response = http.request(request)
+puts response.body
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "id": "60d5ec49f1b2c72d9c8b4567",
+    "email": "hello@example.com",
+    "name": "Example Team",
+    "replyTo": "support@example.com"
+  }
+}
+```
+
+</ResponseExample>
+
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="senderId" type="string" required>
+  The unique identifier of the sender (id).
+
+  Example: `"60d5ec49f1b2c72d9c8b4567"`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Sender retrieved successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The sender object
+
+  <Expandable title="child attributes">
+  <ResponseField name="data.id" type="string">
+    Unique sender identifier
+
+    Example: `"60d5ec49f1b2c72d9c8b4567"`
+  </ResponseField>
+
+  <ResponseField name="data.email" type="string">
+    Sender email address
+
+    Example: `"hello@example.com"`
+  </ResponseField>
+
+  <ResponseField name="data.name" type="string">
+    Display name for the sender
+
+    Example: `"Example Team"`
+  </ResponseField>
+
+  <ResponseField name="data.replyTo" type="string">
+    Reply-to email address
+
+    Example: `"support@example.com"`
+  </ResponseField>
+  </Expandable>
+</ResponseField>

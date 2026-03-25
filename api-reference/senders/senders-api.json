@@ -1,0 +1,40 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AutoSend API",
+    "description": "AutoSend REST API for managing authenticated senders",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.autosend.com/v1"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/senders": {
+      "get": {
+        "summary": "List Senders",
+        "description": "Retrieves all authenticated senders for the project."
+      },
+      "post": {
+        "summary": "Create Sender",
+        "description": "Creates a new authenticated sender. The sender's email domain must match a verified domain on the project."
+      }
+    },
+    "/senders/{senderId}": {
+      "get": {
+        "summary": "Get Sender",
+        "description": "Retrieves a single authenticated sender by its ID."
+      },
+      "delete": {
+        "summary": "Delete Sender",
+        "description": "Deletes an authenticated sender. The sender cannot be deleted if it is in use by active campaigns or workflow automations."
+      }
+    }
+  }
+}
