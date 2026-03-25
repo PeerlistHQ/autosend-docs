@@ -110,22 +110,32 @@ puts response.body
 ```json Response
 {
   "success": true,
-  "data": [
-    {
-      "id": "AB12C3",
-      "name": "Marketing Unsubscribes",
-      "description": "Users who opted out of marketing",
-      "isActive": true,
-      "isGlobal": false
-    },
-    {
-      "id": "sg_def456ghi789",
-      "name": "Bounced Addresses",
-      "description": "Hard bounces from transactional sends",
-      "isActive": true,
-      "isGlobal": true
-    }
-  ]
+  "data": {
+    "groups": [
+      {
+        "id": "69044947cc370f8a63845236",
+        "groupId": "20XWO",
+        "name": "Marketing Unsubscribes",
+        "description": "Users who opted out of marketing",
+        "isGlobal": false,
+        "isActive": true,
+        "createdAt": "2025-10-31T05:29:43.906Z",
+        "updatedAt": "2026-02-27T10:16:26.095Z",
+        "suppressionCount": 0
+      },
+      {
+        "id": "69c3a0c19278fca074bebb74",
+        "groupId": "B43YU",
+        "name": "Bounced Addresses",
+        "description": "Hard bounces from transactional sends",
+        "isGlobal": true,
+        "isActive": true,
+        "createdAt": "2026-03-25T08:45:53.085Z",
+        "updatedAt": "2026-03-25T08:45:53.085Z",
+        "suppressionCount": 196
+      }
+    ]
+  }
 }
 ```
 

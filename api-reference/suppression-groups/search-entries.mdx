@@ -185,23 +185,28 @@ puts response.body
   "data": {
     "entries": [
       {
-        "id": "entry_xyz789",
+        "id": "69b28d3f806d99a2a35e4f1d",
         "email": "user@example.com",
         "groupId": "AB12C3",
-        "reason": "unsubscribed",
-        "createdAt": "2026-02-01T09:00:00.000Z"
+        "reason": "BOUNCE",
+        "createdAt": "2026-03-12T09:54:07.697Z",
+        "updatedAt": "2026-03-12T09:54:07.697Z"
       },
       {
-        "id": "entry_abc001",
+        "id": "69aff842806d99a2a3527a5e",
         "email": "another@example.com",
         "groupId": "AB12C3",
-        "reason": "unsubscribed",
-        "createdAt": "2026-02-15T14:30:00.000Z"
+        "reason": "BOUNCE",
+        "createdAt": "2026-03-10T10:53:54.327Z",
+        "updatedAt": "2026-03-10T10:53:54.327Z"
       }
     ],
-    "total": 142,
-    "page": 1,
-    "limit": 20
+    "pagination": {
+      "page": 1,
+      "limit": 20,
+      "total": 142,
+      "pages": 8
+    }
   }
 }
 ```
