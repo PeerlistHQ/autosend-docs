@@ -396,10 +396,6 @@
                   "isGlobal": {
                     "type": "boolean",
                     "example": false
-                  },
-                  "includeContact": {
-                    "type": "boolean",
-                    "example": false
                   }
                 }
               }
@@ -551,7 +547,7 @@
       "put": {
         "summary": "Bulk Unsuppress Emails",
         "operationId": "bulkUnsuppressEmails",
-        "description": "Removes one or more email addresses from a suppression group. Provide either `emails` or `ids` (or both).",
+        "description": "Removes one or more email addresses from a suppression group.",
         "requestBody": {
           "required": true,
           "content": {
