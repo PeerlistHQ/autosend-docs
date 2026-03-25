@@ -184,7 +184,6 @@
               "api-reference/suppression-groups/create",
               "api-reference/suppression-groups/update",
               "api-reference/suppression-groups/delete",
-              "api-reference/suppression-groups/get-all-entries",
               "api-reference/suppression-groups/search-entries",
               "api-reference/suppression-groups/get-email-groups",
               "api-reference/suppression-groups/bulk-suppress",
