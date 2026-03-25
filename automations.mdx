@@ -1,101 +1,145 @@
 ---
 title: 'Email Automations'
-description: 'Learn how to create contact-triggered email automations in AutoSend so you send the right emails to the right people at the right time.'
+description: 'Create contact-triggered email automations with three trigger types — list membership, property matching, and property changes.'
 sidebarTitle: 'Automations'
 ---
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
 
-Email automation lets you send sequences of emails triggered by user actions without manual intervention. When someone signs up, or matches a segment, they automatically enter a sequence. You define the timing, content, and exit conditions once, then the system handles the rest.
+Email automation lets you send sequences of emails triggered by contact actions without manual intervention. You define the trigger, timing, content, and exit conditions once — then the system handles the rest.
 
-<Frame>
-	<img src='/images/automation-changelog.jpeg' alt='Email Automations in AutoSend' />
-</Frame>
+AutoSend supports three trigger types:
 
-## Common use cases for Email Automations
+- **New contact is added to** a list or segment
+- **Contact property matches with** a specific condition
+- **Contact property changes from → to** a new value
+
+<iframe
+	width='100%'
+	height='400'
+	src='https://www.youtube.com/embed/dYH9TYzgbKU'
+	title='How to Build Email Automations in AutoSend'
+	frameborder='0'
+	allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+	allowFullScreen
+/>
+
+## Common Use Cases
 
 - **Onboarding sequences** for new users or customers on different plans
 - **Lead nurturing campaigns** for prospects at different stages
 - **Re-engagement campaigns** for inactive contacts
 - **Educational drip campaigns** that deliver value over time
 - **Event-based sequences** triggered by signup, download, or purchase
-- **Anniversary or milestone emails** celebrating customer relationships
 - **Product adoption sequences** guiding users through features
 - **Renewal or upgrade campaigns** for subscription-based products
 
-## How to Create an Email Automation in AutoSend
+## Prerequisites
 
-### Prerequisites
+Before creating an automation, make sure you have the following ready based on your trigger type:
 
-AutoSend uses a contact-based trigger system. This means automations are triggered when a contact joins a specific list or segment. Here's how to set one up:
+- **For list/segment triggers:** <a href={APP_PATHS.contactsLists}>Create a contact list</a> or <a href={APP_PATHS.contactsSegments}>segment</a> that represents your trigger condition.
+- **For property-based triggers:** Ensure your contacts have the relevant <a href={APP_PATHS.contactsCustomFields}>custom fields</a> set up. The automation will evaluate these properties to determine when to trigger.
 
-- ##### **Define Your Trigger**
-
-      Identify what action should trigger your automation. For example, a user purchasing a Pro plan, signing up for a webinar, or abandoning their cart.
-
-- ##### **Create the Corresponding Contact List or Segment**
-  Since AutoSend triggers automations based on contact list membership, you'll need to <a href={APP_PATHS.contactsLists}>create a list</a> or <a href={APP_PATHS.contactsSegments}>segment</a> that represents your trigger condition.
-  **Example:** For a Pro plan onboarding sequence, create a segment called "Pro Plan Members" that includes all contacts with the custom field `plan: pro`. When a user purchases a Pro plan and is added to this segment, the automation will trigger automatically.
+## How to Create an Email Automation
 
 <Steps>
- 
-  <Step title="Create Your Automation">
-Under **Marketing Emails** in the sidebar, select <a href={AUTOSEND_PATHS.automations} target='_blank' title='Automations' rel='noopener noreferrer'>**Automations**</a> and click **New Automation**.
+
+  <Step title="Create Your Automation" titleSize="h3">
+    Under **Marketing Emails** in the sidebar, select <a href={AUTOSEND_PATHS.automations} target='_blank' title='Automations' rel='noopener noreferrer'>**Automations**</a> and click **New Automation**.
 
     <Frame>
-
-  <img src='/images/email-automations/step-3.png' alt="navigate to team"  />
-</Frame>
+      <img src='/images/email-automations/step-3.png' alt="Create a new automation in AutoSend" />
+    </Frame>
 
     An untitled automation will be created. Give it a descriptive name that clearly identifies its purpose, such as "Pro Plan Onboarding" or "Welcome Series."
 
   </Step>
-  <Step title="Set Entry Condition">
-   
-    In the **Entry** card, select the <a href={APP_PATHS.contactsLists}> **contact list** </a> or <a href={APP_PATHS.contactsSegments}>**segment**</a> that will trigger this automation. When a contact joins this list or segment, they will enter the automation flow and begin receiving emails.
-     <Frame>
-  <img src='/images/email-automations/step-4.png' alt="navigate to team"  />
-</Frame>
+
+  <Step title="Set Your Trigger" titleSize="h3">
+    Click on the **Trigger** card to configure what starts your automation. AutoSend offers three trigger types:
+
+    ### New contact is added to
+
+    Select a <a href={APP_PATHS.contactsLists}>contact list</a> or <a href={APP_PATHS.contactsSegments}>segment</a>. When a contact joins this list or segment, they automatically enter the automation.
+
+    **Example:** Create a segment called "Pro Plan Members" with the custom field `plan: pro`. When a user purchases a Pro plan and enters this segment, the automation triggers.
+
+    <Frame>
+      <img src='/images/email-automations/trigger-contact-added.png' alt="Trigger: New contact is added to a list or segment" />
+    </Frame>
+
+    <Note>Only new contacts added after activation will enter this automation. Existing contacts won't receive these emails.</Note>
+
+    ### Contact property matches with
+
+    Select a list to scope the contacts, then define a property condition. The automation triggers when a contact in that list matches your condition(s).
+
+    1. Choose a **contact property** from the dropdown (e.g., `verified`)
+    2. Select an **operator** (e.g., `equals`)
+    3. Enter the **value** to match (e.g., `true`)
+    4. Click **Add** to include additional conditions if needed
+
+    **Example:** Set `verified` equals `true` on the "All Contacts" list. Any contact whose `verified` property becomes `true` will enter the automation.
+
+    <Frame>
+      <img src='/images/email-automations/trigger-property-matches.png' alt="Trigger: Contact property matches with a condition" />
+    </Frame>
+
+    <Note>Only new contacts added after activation and matching the condition(s) will enter this automation. Existing contacts won't receive these emails.</Note>
+
+    ### Contact property changes from → to
+
+    Select a list to scope the contacts, then define one or more property transitions. The automation triggers when a contact's property changes from one specific value to another.
+
+    1. Choose a **contact property** from the dropdown (e.g., `published`)
+    2. Set the **from value** (e.g., `unpublished`) and **to value** (e.g., `published`)
+    3. Click **Add** to include additional property change conditions
+    4. Use **AND** / **OR** logic to combine multiple conditions
+
+    **Example:** Trigger when `published` changes from `unpublished` to `published` in the "All Contacts" list — perfect for sending a congratulatory email when a user publishes their first project.
+
+    <Frame>
+      <img src='/images/email-automations/trigger-property-changes.png' alt="Trigger: Contact property changes from one value to another" />
+    </Frame>
+
   </Step>
-  <Step title="Set Exit Condition">
-    In the **Exit** card, choose when contacts should stop receiving emails from this automation:
-  <Frame>
-  <img src='/images/email-automations/step-5.png' alt="navigate to team"  />
-</Frame>
-    - **When the contact has received all the automation emails** - The contact completes the entire sequence and exits automatically
-    - **Contact is no longer a part of the list/segment** - The contact exits immediately if they're removed from the trigger list or segment
-  <Note>
-    Choose the option that best fits your automation's purpose. For example, onboarding sequences typically use the first option, while promotional campaigns might use the second to stop sending if someone cancels their subscription.
-  </Note>
-  </Step>
-  <Step title="Add Emails to Your Automation">
-  
+
+  <Step title="Add Emails to Your Automation" titleSize="h3">
     1. Click **Add Email** to create your first email in the sequence
     2. Set the **Wait For** timing to determine when this email should be sent:
        - By default, the timing is set to 0 seconds (immediately)
        - Adjust the timing based on your email strategy (e.g., 30 mins, 6 hours, 3 days)
-    3. Design your email content, subject line, and preview text and select the sender of this email.
+    3. Design your email content, subject line, and preview text and select the sender
     4. Repeat to add more emails to your sequence
 
     <Frame>
-      <img src='/images/email-automations/step-6.png' alt="Add Emails to Your Automation"  />
+      <img src='/images/email-automations/add-email.png' alt="Add emails to your automation sequence" />
     </Frame>
 
     <Info>
-      **Note:** You can add up to 10 emails in a single automation. Plan your sequence thoughtfully to deliver value without overwhelming your contacts.
+      You can add up to 10 emails in a single automation. Plan your sequence thoughtfully to deliver value without overwhelming your contacts.
     </Info>
 
   </Step>
-  <Step title="Select an Unsubscribe Group">
-    Choose an appropriate <a href={APP_PATHS.unsubscribeGroups}>unsubscribe group</a> for this automation. Since automations are treated as marketing emails, they are required to include an unsubscribe link. This ensures compliance with email regulations and gives contacts control over the emails they receive.
+
+  <Step title="Automation Settings" titleSize="h3">
+    Configure the following settings for your automation:
+
+    - **Automation name**: Give your automation a descriptive name (e.g., "Onboarding Automation").
+    - **Unsubscribe group**: Select an appropriate <a href={APP_PATHS.unsubscribeGroups}>unsubscribe group</a>. Automations are treated as marketing emails and are required to include an unsubscribe link for compliance with email regulations.
+    - **Tracking**: Toggle tracking for:
+      - **Open rate**: An invisible image is appended to HTML emails to track if they have been opened.
+      - **Clicks**: AutoSend tracks clicks by rewriting links in your email. When clicked, they pass through an AutoSend server before redirecting to the original URL.
 
     <Frame>
-      <img src='/images/email-automations/step-7.png' alt="Select an Unsubscribe Group"  />
+      <img src='/images/email-automations/automation-settings.png' alt="Automation settings: name, unsubscribe group, and tracking options" />
     </Frame>
 
   </Step>
-  <Step title="Activate Your Automation">
+
+  <Step title="Activate Your Automation" titleSize="h3">
     Once you've configured all settings and added your emails:
 
     1. Review your automation flow to ensure everything is correct
@@ -103,59 +147,70 @@ Under **Marketing Emails** in the sidebar, select <a href={AUTOSEND_PATHS.automa
     3. Click **Activate** to make your automation live
 
     <Frame>
-      <img src='/images/email-automations/step-8.png' alt="Activate Your Automation"  />
+      <img src='/images/email-automations/activate-automation.png' alt="Activate your automation" />
     </Frame>
-    Your automation is now active and will begin triggering for contacts who join the specified list or segment.
+
+    Your automation is now active and will begin triggering for contacts who meet the trigger conditions.
 
   </Step>
+
+<Step title='Exit Condition' titleSize='h3'>
+	The automation ends automatically once all emails have been sent or the contact no longer meets
+	the entry criteria. There's nothing to configure here — this is handled by default.
+</Step>
+
 </Steps>
 
-## Best Practices for Building Email Automations
+## Best Practices
 
-**Start with Clear Goals:** Define what you want each automation to achieve, whether it's onboarding, nurturing, conversion, or retention.
+**Start with clear goals.** Define what you want each automation to achieve — onboarding, nurturing, conversion, or retention.
 
-**Map the Contact Journey:** Plan the logical flow of emails from the contact's perspective. What information do they need first? What actions do you want them to take?
+**Map the contact journey.** Plan the logical flow of emails from the contact's perspective. What information do they need first? What actions do you want them to take?
 
-**Time Your Emails Strategically:** Balance staying top-of-mind with avoiding inbox fatigue. Consider your audience's behavior patterns and industry norms.
+**Choose the right trigger type.** Use list/segment triggers for broad audience entry, property matching for condition-based targeting, and property changes for reacting to specific transitions.
 
-**Test Before Activating:** Send test emails to yourself, verify all links work, and ensure personalization tokens display correctly.
+**Time your emails strategically.** Balance staying top-of-mind with avoiding inbox fatigue. Consider your audience's behavior patterns and industry norms.
 
-**Monitor and Optimize:** Regularly review open rates, click rates, and conversion metrics. A/B test subject lines, content, and timing to improve performance.
+**Test before activating.** Send test emails to yourself, verify all links work, and ensure personalization tokens display correctly.
 
-**Exit Conditions:** Any contact which do not meets the trigger criteria will be automatically removed from the automation and will not receive further emails. Also, if the contact unsubscribe from the email, they will be automatically removed from the automation and will not receive further emails.
+**Understand exit conditions.** Any contact that no longer meets the trigger criteria will be automatically removed from the automation. Contacts who unsubscribe will also be removed and will not receive further emails.
 
-**Avoid Automation Overlap:** Be mindful of contacts who might qualify for multiple automations. Ensure your segments are structured to prevent overwhelming contacts with too many simultaneous emails.
+**Avoid automation overlap.** Be mindful of contacts who might qualify for multiple automations. Structure your triggers to prevent overwhelming contacts with too many simultaneous emails.
 
 ## Troubleshooting
 
 <AccordionGroup>
-	<Accordion title="Contacts aren't entering my automation">
-		<ul>
-			<li>Verify the automation is in Active state, not Draft or Paused.</li>
-			<li>Check that contacts are actually joining your trigger list or segment.</li>
-			<li>Ensure your list or segment criteria are correctly configured.</li>
-			<li>
-				Contacts uploaded via CSV won't trigger automations. Only the one updated/added via API or
-				from dashboard will trigger automations.
-			</li>
-		</ul>
-	</Accordion>
-	<Accordion title='Emails are sending at unexpected times'>
-		<ul>
-			<li>Review your Wait For settings between each email.</li>
-			<li>
-				Remember that timing starts from when the contact enters, not from a specific time of day.
-			</li>
-		</ul>
-	</Accordion>
-	<Accordion title='Contacts stopped receiving emails'>
-		<ul>
-			<li>
-				Check if they were removed from the trigger list/segment that you selected for the exit
-				option "Contact is no longer a part of the list/segment".
-			</li>
-			<li>Verify the automation hasn't been paused.</li>
-			<li>Confirm they haven't unsubscribed from these emails.</li>
-		</ul>
-	</Accordion>
+  <Accordion title="Contacts aren't entering my automation">
+    <ul>
+      <li>Verify the automation is in **Active** state, not Draft or Paused.</li>
+      <li>Check that contacts are actually joining your trigger list or segment.</li>
+      <li>Ensure your list or segment criteria are correctly configured.</li>
+      <li>For property-based triggers, confirm the contact property exists and has the expected values.</li>
+      <li>Contacts uploaded via CSV won't trigger automations. Only contacts updated/added via API or from the dashboard will be enrolled in automations.</li>
+    </ul>
+  </Accordion>
+
+  <Accordion title="Property-based trigger isn't firing">
+    <ul>
+      <li>Verify the contact property name matches exactly (property names are case-sensitive).</li>
+      <li>For "matches with" triggers, check that the property value matches the condition you set.</li>
+      <li>For "changes from → to" triggers, ensure the contact's property actually transitions between the specified values — setting a value for the first time does not count as a change.</li>
+      <li>Check that the contact belongs to the list you selected for the trigger.</li>
+    </ul>
+  </Accordion>
+
+  <Accordion title="Emails are sending at unexpected times">
+    <ul>
+      <li>Review your **Wait For** settings between each email.</li>
+      <li>Remember that timing starts from when the contact enters the automation, not from a specific time of day.</li>
+    </ul>
+  </Accordion>
+
+  <Accordion title="Contacts stopped receiving emails">
+    <ul>
+      <li>Check if they were removed from the trigger list/segment, or if their contact property no longer matches the trigger condition, or if the property changed away from the expected value.</li>
+      <li>Verify the automation hasn't been paused.</li>
+      <li>Confirm they haven't unsubscribed from these emails.</li>
+    </ul>
+  </Accordion>
 </AccordionGroup>
