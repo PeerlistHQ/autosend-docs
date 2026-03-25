@@ -1,0 +1,370 @@
+---
+title: 'Create Contact List'
+description: 'Create a new contact list to organize and segment your recipients using the AutoSend API.'
+sidebarTitle: 'Create Contact List'
+openapi: 'POST /contact-lists'
+---
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/contact-lists \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "name": "Newsletter Subscribers",
+  "description": "Users who signed up for the weekly newsletter",
+  "type": "list"
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/contact-lists"
+
+headers = {
+    "Authorization": "Bearer <token>",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "name": "Newsletter Subscribers",
+    "description": "Users who signed up for the weekly newsletter",
+    "type": "list"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/contact-lists', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer <token>',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: 'Newsletter Subscribers',
+    description: 'Users who signed up for the weekly newsletter',
+    type: 'list'
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/contact-lists';
+
+$data = [
+    'name' => 'Newsletter Subscribers',
+    'description' => 'Users who signed up for the weekly newsletter',
+    'type' => 'list'
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer <token>',
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/contact-lists"
+
+    payload := map[string]interface{}{
+        "name":        "Newsletter Subscribers",
+        "description": "Users who signed up for the weekly newsletter",
+        "type":        "list",
+    }
+
+    jsonData, _ := json.Marshal(payload)
+
+    req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer <token>")
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    fmt.Println("Response Status:", resp.Status)
+}
+```
+
+```java Java
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class CreateContactList {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/contact-lists");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Authorization", "Bearer <token>");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+
+            String jsonInputString = "{\n" +
+                "  \"name\": \"Newsletter Subscribers\",\n" +
+                "  \"description\": \"Users who signed up for the weekly newsletter\",\n" +
+                "  \"type\": \"list\"\n" +
+                "}";
+
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/contact-lists')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(uri.path)
+request['Authorization'] = 'Bearer <token>'
+request['Content-Type'] = 'application/json'
+
+request.body = {
+  name: 'Newsletter Subscribers',
+  description: 'Users who signed up for the weekly newsletter',
+  type: 'list'
+}.to_json
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "id": "60d5ec49f1b2c72d9c8b4567",
+    "name": "Newsletter Subscribers",
+    "description": "Users who signed up for the weekly newsletter",
+    "type": "list",
+    "contactCount": 0,
+    "createdAt": "2026-03-17T10:30:00.000Z",
+    "updatedAt": "2026-03-17T10:30:00.000Z"
+  }
+}
+```
+
+</ResponseExample>
+
+---
+### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Body
+Contact list or segment data
+
+<ParamField path="name" type="string" required>
+  Name of the contact list (max 200 characters). Must be unique within the project.
+
+  Maximum length: `200`
+
+  Example: `"Newsletter Subscribers"`
+</ParamField>
+
+<ParamField path="description" type="string">
+  Description of the contact list (max 500 characters).
+
+  Maximum length: `500`
+
+  Example: `"Users who signed up for the weekly newsletter"`
+</ParamField>
+
+<ParamField path="type" type="string">
+  Type of contact list.
+
+  Allowed values: `list`, `segment`
+
+  Default: `"list"`
+
+  Example: `"list"`
+</ParamField>
+
+<ParamField path="filterCriteria" type="object">
+  Filter criteria for segments. Required when `type` is `segment`.
+
+  <Expandable title="child attributes">
+  <ParamField path="filterCriteria.logicalOperator" type="string" required>
+    Logical operator for combining groups.
+
+    Allowed values: `AND`, `OR`
+
+    Example: `"AND"`
+  </ParamField>
+
+  <ParamField path="filterCriteria.groups" type="object[]" required>
+    Array of filter conditions.
+
+    <Expandable title="child attributes">
+    <ParamField path="field" type="string" required>
+      Contact field to filter on.
+
+      Example: `"email"`
+    </ParamField>
+
+    <ParamField path="fieldType" type="string" required>
+      Data type of the field.
+
+      Allowed values: `string`, `number`, `boolean`, `date`
+
+      Example: `"string"`
+    </ParamField>
+
+    <ParamField path="operator" type="string" required>
+      Filter operator. Available operators depend on the field type.
+
+      String operators: `equals`, `not_equals`, `contains`, `not_contains`, `starts_with`, `ends_with`, `is_empty`, `is_not_empty`
+
+      Number operators: `equals`, `not_equals`, `greater_than`, `less_than`, `between`
+
+      Boolean operators: `equals`, `not_equals`
+
+      Date operators: `equals`, `not_equals`, `before`, `after`, `between`, `is_empty`, `is_not_empty`
+
+      Example: `"contains"`
+    </ParamField>
+
+    <ParamField path="value" type="any">
+      Value to compare against. Not required for unary operators like `is_empty` and `is_not_empty`.
+
+      Example: `"@gmail.com"`
+    </ParamField>
+    </Expandable>
+  </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="parentId" type="string">
+  ID of the parent contact list (for creating sub-segments).
+
+  Example: `"60d5ec49f1b2c72d9c8b4567"`
+</ParamField>
+
+### Response
+
+<span className='text-sm'>Contact list created successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The created contact list object
+
+  <Expandable title="child attributes">
+  <ResponseField name="data.id" type="string">
+    Unique contact list identifier
+
+    Example: `"60d5ec49f1b2c72d9c8b4567"`
+  </ResponseField>
+
+  <ResponseField name="data.name" type="string">
+    Name of the contact list
+
+    Example: `"Newsletter Subscribers"`
+  </ResponseField>
+
+  <ResponseField name="data.description" type="string">
+    Description of the contact list
+
+    Example: `"Users who signed up for the weekly newsletter"`
+  </ResponseField>
+
+  <ResponseField name="data.type" type="string">
+    Type: `list` or `segment`
+
+    Example: `"list"`
+  </ResponseField>
+
+  <ResponseField name="data.filterCriteria" type="object">
+    Filter criteria (for segments only)
+  </ResponseField>
+
+  <ResponseField name="data.contactCount" type="integer">
+    Number of contacts in the list
+
+    Example: `0`
+  </ResponseField>
+
+  <ResponseField name="data.parentId" type="string">
+    Parent list ID (if sub-segment)
+  </ResponseField>
+
+  <ResponseField name="data.createdAt" type="string">
+    ISO 8601 timestamp of creation
+
+    Example: `"2026-03-17T10:30:00.000Z"`
+  </ResponseField>
+
+  <ResponseField name="data.updatedAt" type="string">
+    ISO 8601 timestamp of last update
+
+    Example: `"2026-03-17T10:30:00.000Z"`
+  </ResponseField>
+  </Expandable>
+</ResponseField>

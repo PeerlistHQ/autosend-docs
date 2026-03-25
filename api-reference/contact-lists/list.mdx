@@ -1,30 +1,31 @@
 ---
-title: 'List Templates'
-description: 'List all email templates in your account with optional pagination using the AutoSend API.'
-sidebarTitle: 'List Templates'
-openapi: 'GET /templates'
+title: 'List Contact Lists'
+description: 'List all contact lists in your account with optional pagination using the AutoSend API.'
+sidebarTitle: 'List Contact Lists'
+openapi: 'GET /contact-lists'
 ---
 
 <RequestExample>
 
+
+
 ```bash cURL
 curl --request GET \
-  --url 'https://api.autosend.com/v1/templates?templateType=transactional&limit=10' \
+  --url 'https://api.autosend.com/v1/contact-lists?type=list' \
   --header 'Authorization: Bearer <token>'
 ```
 
 ```python Python
 import requests
 
-url = "https://api.autosend.com/v1/templates"
+url = "https://api.autosend.com/v1/contact-lists"
 
 headers = {
     "Authorization": "Bearer <token>"
 }
 
 params = {
-    "templateType": "transactional",
-    "limit": 10
+    "type": "list"
 }
 
 response = requests.get(url, headers=headers, params=params)
@@ -32,7 +33,7 @@ print(response.json())
 ```
 
 ```javascript JavaScript
-fetch('https://api.autosend.com/v1/templates?templateType=transactional&limit=10', {
+fetch('https://api.autosend.com/v1/contact-lists?type=list', {
   method: 'GET',
   headers: {
     'Authorization': 'Bearer <token>'
@@ -46,7 +47,7 @@ fetch('https://api.autosend.com/v1/templates?templateType=transactional&limit=10
 ```php PHP
 <?php
 
-$url = 'https://api.autosend.com/v1/templates?templateType=transactional&limit=10';
+$url = 'https://api.autosend.com/v1/contact-lists?type=list';
 
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -71,7 +72,7 @@ import (
 )
 
 func main() {
-    url := "https://api.autosend.com/v1/templates?templateType=transactional&limit=10"
+    url := "https://api.autosend.com/v1/contact-lists?type=list"
 
     req, _ := http.NewRequest("GET", url, nil)
     req.Header.Set("Authorization", "Bearer <token>")
@@ -95,10 +96,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class ListTemplates {
+public class ListContactLists {
     public static void main(String[] args) {
         try {
-            URL url = new URL("https://api.autosend.com/v1/templates?templateType=transactional&limit=10");
+            URL url = new URL("https://api.autosend.com/v1/contact-lists?type=list");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
             con.setRequestMethod("GET");
@@ -125,7 +126,7 @@ public class ListTemplates {
 require 'net/http'
 require 'uri'
 
-uri = URI('https://api.autosend.com/v1/templates?templateType=transactional&limit=10')
+uri = URI('https://api.autosend.com/v1/contact-lists?type=list')
 
 http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true
@@ -137,6 +138,8 @@ response = http.request(request)
 puts response.body
 ```
 
+
+
 </RequestExample>
 
 <ResponseExample>
@@ -145,27 +148,41 @@ puts response.body
 {
   "success": true,
   "data": {
-    "templates": [
+    "contacts": [
       {
-        "templateId": "A-abc123def456ghi789jk",
-        "templateName": "Welcome Email",
-        "description": "Welcome email for new users",
-        "subject": "Welcome to Our Platform!",
-        "previewText": "We're glad to have you on board",
-        "templateType": "transactional",
-        "builderType": "code",
+        "id": "GLOBAL_CONTACT_LIST",
+        "name": "All Contacts",
+        "description": "All contacts in the project",
+        "type": "list",
+        "contactCount": 1250
+      },
+      {
+        "id": "60d5ec49f1b2c72d9c8b4567",
+        "name": "Newsletter Subscribers",
+        "description": "Users who signed up for the weekly newsletter",
+        "type": "list",
+        "contactCount": 340,
         "createdAt": "2026-01-15T10:30:00.000Z",
         "updatedAt": "2026-02-20T14:45:00.000Z"
       },
       {
-        "templateId": "A-lmn012opq345rst678uv",
-        "templateName": "Password Reset",
-        "description": "Password reset notification",
-        "subject": "Reset Your Password",
-        "previewText": "Click the link to reset your password",
-        "templateType": "transactional",
-        "builderType": "code",
-        "createdAt": "2026-01-20T08:15:00.000Z",
+        "id": "60d5ec49f1b2c72d9c8b9876",
+        "name": "Active Users",
+        "description": "Segment of users who opened an email in the last 30 days",
+        "type": "segment",
+        "contactCount": 890,
+        "filterCriteria": {
+          "logicalOperator": "AND",
+          "groups": [
+            {
+              "field": "lastActivity",
+              "fieldType": "date",
+              "operator": "after",
+              "value": "2026-02-17T00:00:00.000Z"
+            }
+          ]
+        },
+        "createdAt": "2026-02-01T08:15:00.000Z",
         "updatedAt": "2026-03-01T11:20:00.000Z"
       }
     ]
@@ -175,6 +192,7 @@ puts response.body
 
 </ResponseExample>
 
+---
 ### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
@@ -182,25 +200,17 @@ puts response.body
 
 ### Query Parameters
 
-<ParamField path="templateType" type="string">
-  Filter templates by type.
+<ParamField path="type" type="string">
+  Filter contact lists by type.
 
-  Allowed values: `transactional`, `marketing`
+  Allowed values: `list`, `segment`
 
-  Example: `"transactional"`
-</ParamField>
-
-<ParamField path="limit" type="integer">
-  Maximum number of templates to return.
-
-  Range: `1` - `100`
-
-  Example: `10`
+  Example: `"list"`
 </ParamField>
 
 ### Response
 
-<span className='text-sm'>Templates retrieved successfully</span>
+<span className='text-sm'>Contact lists retrieved successfully</span>
 
 <ResponseField name="success" type="boolean">
   Indicates if the request was successful
@@ -210,62 +220,46 @@ puts response.body
 
 <ResponseField name="data" type="object">
   <Expandable title="child attributes">
-  <ResponseField name="data.templates" type="object[]">
-    Array of template objects
+  <ResponseField name="data.contacts" type="object[]">
+    Array of contact list objects. The virtual "All Contacts" list is always prepended as the first item with ID `GLOBAL_CONTACT_LIST`.
 
     <Expandable title="child attributes">
-    <ResponseField name="templateId" type="string">
-      Unique template identifier
+    <ResponseField name="id" type="string">
+      Unique contact list identifier. The global list uses the special ID `GLOBAL_CONTACT_LIST`.
 
-      Example: `"A-abc123def456ghi789jk"`
+      Example: `"60d5ec49f1b2c72d9c8b4567"`
     </ResponseField>
 
-    <ResponseField name="templateName" type="string">
-      Name of the template
+    <ResponseField name="name" type="string">
+      Name of the contact list
 
-      Example: `"Welcome Email"`
+      Example: `"Newsletter Subscribers"`
     </ResponseField>
 
     <ResponseField name="description" type="string">
-      Template description
+      Description of the contact list
 
-      Example: `"Welcome email for new users"`
+      Example: `"Users who signed up for the weekly newsletter"`
     </ResponseField>
 
-    <ResponseField name="subject" type="string">
-      Email subject line
+    <ResponseField name="type" type="string">
+      Type: `list` or `segment`
 
-      Example: `"Welcome to Our Platform!"`
+      Example: `"list"`
     </ResponseField>
 
-    <ResponseField name="previewText" type="string">
-      Email preview text (preheader)
+    <ResponseField name="contactCount" type="integer">
+      Number of contacts in the list
 
-      Example: `"We're glad to have you on board"`
+      Example: `340`
     </ResponseField>
 
-    <ResponseField name="emailTemplate" type="string">
-      HTML content of the template
+    <ResponseField name="filterCriteria" type="object">
+      Filter criteria (for segments only)
     </ResponseField>
 
-    <ResponseField name="plainTextTemplate" type="string">
-      Plain text version of the template
-    </ResponseField>
-
-    <ResponseField name="templateType" type="string">
-      Type of template: `transactional` or `marketing`
-
-      Example: `"transactional"`
-    </ResponseField>
-
-    <ResponseField name="builderType" type="string">
-      Builder used to create the template: `code` or `visual`
-
-      Example: `"code"`
-    </ResponseField>
-
-    <ResponseField name="dynamicVariables" type="object">
-      Dynamic variables used in the template
+    <ResponseField name="parentId" type="string">
+      Parent list ID (if sub-segment)
     </ResponseField>
 
     <ResponseField name="createdAt" type="string">

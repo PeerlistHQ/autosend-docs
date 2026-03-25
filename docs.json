@@ -161,7 +161,6 @@
               "api-reference/campaigns/get",
               "api-reference/campaigns/create",
               "api-reference/campaigns/update",
-              "api-reference/campaigns/duplicate",
               "api-reference/campaigns/pause",
               "api-reference/campaigns/resume",
               "api-reference/campaigns/abort",
@@ -176,6 +175,18 @@
               "api-reference/domains/add",
               "api-reference/domains/verify",
               "api-reference/domains/delete"
+            ]
+          },
+          {
+            "group": "Contact Lists",
+            "pages": [
+              "api-reference/contact-lists/list",
+              "api-reference/contact-lists/get",
+              "api-reference/contact-lists/create",
+              "api-reference/contact-lists/delete",
+              "api-reference/contact-lists/get-contacts",
+              "api-reference/contact-lists/bulk-add",
+              "api-reference/contact-lists/remove-contacts"
             ]
           },
           {

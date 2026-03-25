@@ -1,0 +1,58 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AutoSend API",
+    "description": "AutoSend REST API for managing contact lists and segments",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.autosend.com/v1"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/contact-lists": {
+      "post": {
+        "summary": "Create Contact List",
+        "description": "Creates a new contact list or segment for organizing contacts."
+      },
+      "get": {
+        "summary": "List Contact Lists",
+        "description": "Retrieves all contact lists and segments for the authenticated project."
+      }
+    },
+    "/contact-lists/{contactListId}": {
+      "get": {
+        "summary": "Get Contact List",
+        "description": "Retrieves a single contact list or segment by its ID."
+      },
+      "delete": {
+        "summary": "Delete Contact List",
+        "description": "Soft deletes a contact list by its ID. Cannot delete lists that are used in active workflows."
+      }
+    },
+    "/contact-lists/contacts/bulk-add": {
+      "post": {
+        "summary": "Bulk Add Contacts to List",
+        "description": "Add multiple contacts to a contact list by email addresses or contact IDs."
+      }
+    },
+    "/contact-lists/{contactListId}/contacts/remove": {
+      "post": {
+        "summary": "Remove Contacts from List",
+        "description": "Remove contacts from a contact list by email addresses or contact IDs."
+      }
+    },
+    "/contact-lists/contacts/search": {
+      "post": {
+        "summary": "Get Contacts in List",
+        "description": "Retrieve paginated contacts within a contact list, with optional email filtering."
+      }
+    }
+  }
+}

@@ -131,7 +131,7 @@ puts JSON.parse(response.body)
 
 > **MCP Access Blocked** — This endpoint is not accessible via MCP (Model Context Protocol) integrations. It must be called directly using your API token from your own infrastructure.
 
-#### Authorizations
+### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
 </ParamField>
@@ -142,7 +142,7 @@ puts JSON.parse(response.body)
   The id of the campaign to abort.
 </ParamField>
 
-#### Response
+### Response
 <span className='text-sm'>Returns the updated campaign object with status set to `aborted`. Aborting a campaign immediately stops all pending sends. Emails already sent are not recalled.</span>
 
 <ResponseField name="success" type="boolean">

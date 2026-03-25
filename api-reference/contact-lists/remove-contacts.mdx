@@ -1,6 +1,8 @@
 ---
-title: 'Search Contacts by Emails'
-openapi: 'POST /contacts/search/emails'
+title: 'Remove Contacts from List'
+description: 'Remove one or more contacts from a specific contact list using the AutoSend API.'
+sidebarTitle: 'Remove Contacts'
+openapi: 'POST /contact-lists/{contactListId}/contacts/remove'
 ---
 
 <RequestExample>
@@ -9,13 +11,13 @@ openapi: 'POST /contacts/search/emails'
 
 ```bash cURL
 curl --request POST \
-  --url https://api.autosend.com/v1/contacts/search/emails \
+  --url https://api.autosend.com/v1/contact-lists/60d5ec49f1b2c72d9c8b4567/contacts/remove \
   --header 'Authorization: Bearer <token>' \
   --header 'Content-Type: application/json' \
   --data '{
   "emails": [
-    "john.doe@example.com",
-    "jane.smith@example.com"
+    "jane@example.com",
+    "john@example.com"
   ]
 }'
 ```
@@ -23,7 +25,7 @@ curl --request POST \
 ```python Python
 import requests
 
-url = "https://api.autosend.com/v1/contacts/search/emails"
+url = "https://api.autosend.com/v1/contact-lists/60d5ec49f1b2c72d9c8b4567/contacts/remove"
 
 headers = {
     "Authorization": "Bearer <token>",
@@ -32,8 +34,8 @@ headers = {
 
 payload = {
     "emails": [
-        "john.doe@example.com",
-        "jane.smith@example.com"
+        "jane@example.com",
+        "john@example.com"
     ]
 }
 
@@ -42,7 +44,7 @@ print(response.json())
 ```
 
 ```javascript JavaScript
-fetch('https://api.autosend.com/v1/contacts/search/emails', {
+fetch('https://api.autosend.com/v1/contact-lists/60d5ec49f1b2c72d9c8b4567/contacts/remove', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer <token>',
@@ -50,8 +52,8 @@ fetch('https://api.autosend.com/v1/contacts/search/emails', {
   },
   body: JSON.stringify({
     emails: [
-      'john.doe@example.com',
-      'jane.smith@example.com'
+      'jane@example.com',
+      'john@example.com'
     ]
   })
 })
@@ -63,12 +65,13 @@ fetch('https://api.autosend.com/v1/contacts/search/emails', {
 ```php PHP
 <?php
 
-$url = 'https://api.autosend.com/v1/contacts/search/emails';
+$contactListId = '60d5ec49f1b2c72d9c8b4567';
+$url = "https://api.autosend.com/v1/contact-lists/{$contactListId}/contacts/remove";
 
 $data = [
     'emails' => [
-        'john.doe@example.com',
-        'jane.smith@example.com'
+        'jane@example.com',
+        'john@example.com'
     ]
 ];
 
@@ -99,21 +102,21 @@ import (
 )
 
 func main() {
-    url := "https://api.autosend.com/v1/contacts/search/emails"
-    
+    url := "https://api.autosend.com/v1/contact-lists/60d5ec49f1b2c72d9c8b4567/contacts/remove"
+
     payload := map[string]interface{}{
         "emails": []string{
-            "john.doe@example.com",
-            "jane.smith@example.com",
+            "jane@example.com",
+            "john@example.com",
         },
     }
-    
+
     jsonData, _ := json.Marshal(payload)
-    
+
     req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
     req.Header.Set("Authorization", "Bearer <token>")
     req.Header.Set("Content-Type", "application/json")
-    
+
     client := &http.Client{}
     resp, err := client.Do(req)
     if err != nil {
@@ -121,7 +124,7 @@ func main() {
         return
     }
     defer resp.Body.Close()
-    
+
     fmt.Println("Response Status:", resp.Status)
 }
 ```
@@ -132,32 +135,32 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-public class SearchContactsByEmails {
+public class RemoveContacts {
     public static void main(String[] args) {
         try {
-            URL url = new URL("https://api.autosend.com/v1/contacts/search/emails");
+            URL url = new URL("https://api.autosend.com/v1/contact-lists/60d5ec49f1b2c72d9c8b4567/contacts/remove");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            
+
             con.setRequestMethod("POST");
             con.setRequestProperty("Authorization", "Bearer <token>");
             con.setRequestProperty("Content-Type", "application/json");
             con.setDoOutput(true);
-            
+
             String jsonInputString = "{\n" +
                 "  \"emails\": [\n" +
-                "    \"john.doe@example.com\",\n" +
-                "    \"jane.smith@example.com\"\n" +
+                "    \"jane@example.com\",\n" +
+                "    \"john@example.com\"\n" +
                 "  ]\n" +
                 "}";
-            
+
             try (OutputStream os = con.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
                 os.write(input, 0, input.length);
             }
-            
+
             int status = con.getResponseCode();
             System.out.println("Response Status: " + status);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -170,7 +173,7 @@ require 'net/http'
 require 'json'
 require 'uri'
 
-uri = URI('https://api.autosend.com/v1/contacts/search/emails')
+uri = URI('https://api.autosend.com/v1/contact-lists/60d5ec49f1b2c72d9c8b4567/contacts/remove')
 
 http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true
@@ -181,8 +184,8 @@ request['Content-Type'] = 'application/json'
 
 request.body = {
   emails: [
-    'john.doe@example.com',
-    'jane.smith@example.com'
+    'jane@example.com',
+    'john@example.com'
   ]
 }.to_json
 
@@ -200,130 +203,80 @@ puts response.body
 {
   "success": true,
   "data": {
-    "contacts": [
-      {
-        "id": "507f1f77bcf86cd799439011",
-        "email": "john.doe@example.com",
-        "firstName": "John",
-        "lastName": "Doe",
-        "userId": "user_12345",
-        "customFields": {
-          "company": "Acme Corp",
-          "role": "Developer",
-          "plan": "premium"
-        },
-        "updatedAt": "2024-01-15T10:30:00.000Z",
-        "createdAt": "2024-01-15T10:30:00.000Z",
-        "projectId": "229f1f77bcf86cd9273048038"
-      }
-    ]
+    "removed": 2,
+    "notInList": 0,
+    "errors": []
   }
 }
 ```
 
 </ResponseExample>
 
---- 
+---
 ### Authorizations
-<ParamField path="Authorizations" type="string | header"  required>
+<ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
 </ParamField>
 
-### Body
-Array of email addresses to search
+### Path Parameters
 
-<ParamField path="emails" type="string[]"  required>
-  Array of email addresses (minimum 1, automatically normalized)
-  
-  Example: `["john.doe@example.com", "jane.smith@example.com"]`
+<ParamField path="contactListId" type="string" required>
+  The unique identifier of the contact list to remove contacts from.
+
+  <Note>
+    You cannot remove contacts from the global `GLOBAL_CONTACT_LIST`. Use the Delete Contact API instead.
+  </Note>
+
+  Example: `"60d5ec49f1b2c72d9c8b4567"`
+</ParamField>
+
+### Body
+Remove contacts from a list by email addresses or contact IDs. Provide either `emails` or `contactIds`, not both.
+
+<ParamField path="emails" type="string[]">
+  Array of email addresses to remove from the list.
+
+  Example:
+  ```json
+  ["jane@example.com", "john@example.com"]
+  ```
+</ParamField>
+
+<ParamField path="contactIds" type="string[]">
+  Array of contact IDs to remove from the list.
+
+  Example:
+  ```json
+  ["60d5ec49f1b2c72d9c8b1111", "60d5ec49f1b2c72d9c8b2222"]
+  ```
 </ParamField>
 
 ### Response
 
-<span className='text-sm'>Contacts retrieved successfully</span>
+<span className='text-sm'>Contacts removed from list</span>
 
 <ResponseField name="success" type="boolean">
   Indicates if the request was successful
-  
+
   Example: `true`
 </ResponseField>
 
 <ResponseField name="data" type="object">
   <Expandable title="child attributes">
-  <ResponseField name="data.contacts" type="array">
-    Array of contact objects
-    
-     <Expandable title="child attributes">
+  <ResponseField name="data.removed" type="integer">
+    Number of contacts successfully removed from the list
 
-<ResponseField name="id" type="string">
-    Contact ID
-    
-    Example: `"507f1f77bcf86cd799439011"`
-  </ResponseField>
-  
-  <ResponseField name="email" type="string">
-    Contact email address
-    
-    Example: `"john.doe@example.com"`
-  </ResponseField>
-  
-  <ResponseField name="firstName" type="string">
-    Contact's first name
-    
-    Example: `"John"`
-  </ResponseField>
-  
-  <ResponseField name="lastName" type="string">
-    Contact's last name
-    
-    Example: `"Doe"`
-  </ResponseField>
-  
-  <ResponseField name="userId" type="string">
-    Your application's user identifier
-    
-    Example: `"user_12345"`
-  </ResponseField>
-  
-  <ResponseField name="customFields" type="object">
-    Custom contact attributes
-
-     <Expandable title="child attributes">
-
-  <ResponseField name="customFields.{key}" type="string" />
-  </Expandable>
-    
-    Example: 
-    ```jsx
-    {
-      "company": "Acme Corp",
-      "role": "Developer",
-      "plan": "premium"
-    }
-    ```
-  </ResponseField>
-  
-  <ResponseField name="createdAt" type="string">
-    Contact creation timestamp
-    
-    Example: `"2024-01-15T10:30:00.000Z"`
-  </ResponseField>
-  
-  <ResponseField name="updatedAt" type="string">
-    Contact last update timestamp
-    
-    Example: `"2024-01-15T10:30:00.000Z"`
-  </ResponseField>
-  
-  <ResponseField name="projectId" type="string">
-    Project ID that the contact belongs to
-    
-    Example: `"229f1f77bcf86cd9273048038"`
+    Example: `2`
   </ResponseField>
 
-  </Expandable>
+  <ResponseField name="data.notInList" type="integer">
+    Number of contacts that were not in the list
 
+    Example: `0`
+  </ResponseField>
+
+  <ResponseField name="data.errors" type="object[]">
+    Array of errors for contacts that failed to be removed
   </ResponseField>
   </Expandable>
 </ResponseField>
-

@@ -1,0 +1,369 @@
+---
+title: 'Bulk Add Contacts to List'
+description: 'Add multiple contacts to a contact list in a single request using the AutoSend API.'
+sidebarTitle: 'Bulk Add Contacts'
+openapi: 'POST /contact-lists/contacts/bulk-add'
+---
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/contact-lists/contacts/bulk-add \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "contactListId": "60d5ec49f1b2c72d9c8b4567",
+  "emails": [
+    "jane@example.com",
+    "john@example.com",
+    "alice@example.com"
+  ]
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/contact-lists/contacts/bulk-add"
+
+headers = {
+    "Authorization": "Bearer <token>",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "contactListId": "60d5ec49f1b2c72d9c8b4567",
+    "emails": [
+        "jane@example.com",
+        "john@example.com",
+        "alice@example.com"
+    ]
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/contact-lists/contacts/bulk-add', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer <token>',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    contactListId: '60d5ec49f1b2c72d9c8b4567',
+    emails: [
+      'jane@example.com',
+      'john@example.com',
+      'alice@example.com'
+    ]
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/contact-lists/contacts/bulk-add';
+
+$data = [
+    'contactListId' => '60d5ec49f1b2c72d9c8b4567',
+    'emails' => [
+        'jane@example.com',
+        'john@example.com',
+        'alice@example.com'
+    ]
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer <token>',
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/contact-lists/contacts/bulk-add"
+
+    payload := map[string]interface{}{
+        "contactListId": "60d5ec49f1b2c72d9c8b4567",
+        "emails": []string{
+            "jane@example.com",
+            "john@example.com",
+            "alice@example.com",
+        },
+    }
+
+    jsonData, _ := json.Marshal(payload)
+
+    req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer <token>")
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    fmt.Println("Response Status:", resp.Status)
+}
+```
+
+```java Java
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class BulkAddContacts {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/contact-lists/contacts/bulk-add");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Authorization", "Bearer <token>");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+
+            String jsonInputString = "{\n" +
+                "  \"contactListId\": \"60d5ec49f1b2c72d9c8b4567\",\n" +
+                "  \"emails\": [\n" +
+                "    \"jane@example.com\",\n" +
+                "    \"john@example.com\",\n" +
+                "    \"alice@example.com\"\n" +
+                "  ]\n" +
+                "}";
+
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/contact-lists/contacts/bulk-add')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(uri.path)
+request['Authorization'] = 'Bearer <token>'
+request['Content-Type'] = 'application/json'
+
+request.body = {
+  contactListId: '60d5ec49f1b2c72d9c8b4567',
+  emails: [
+    'jane@example.com',
+    'john@example.com',
+    'alice@example.com'
+  ]
+}.to_json
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "added": 2,
+    "created": 1,
+    "alreadyInList": 0,
+    "errors": [],
+    "validation": {
+      "valid": [
+        { "email": "jane@example.com", "status": "valid" },
+        { "email": "john@example.com", "status": "valid" },
+        { "email": "alice@example.com", "status": "valid" }
+      ],
+      "invalid": [],
+      "suppressed": []
+    },
+    "totalContactsInList": 343
+  }
+}
+```
+
+</ResponseExample>
+
+---
+### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Body
+Add contacts to a list by email addresses or contact IDs. Provide either `emails` or `contactIds`, not both.
+
+<ParamField path="contactListId" type="string" required>
+  The ID of the contact list to add contacts to.
+
+  Example: `"60d5ec49f1b2c72d9c8b4567"`
+</ParamField>
+
+<ParamField path="emails" type="string[]">
+  Array of email addresses to add to the list. New contacts will be created for emails that don't already exist.
+
+  <Note>
+    Maximum 500 emails per request. Provide either `emails` or `contactIds`, not both.
+  </Note>
+
+  Example:
+  ```json
+  ["jane@example.com", "john@example.com", "alice@example.com"]
+  ```
+</ParamField>
+
+<ParamField path="contactIds" type="string[]">
+  Array of existing contact IDs to add to the list.
+
+  <Note>
+    Maximum 500 contact IDs per request. Provide either `emails` or `contactIds`, not both.
+  </Note>
+
+  Example:
+  ```json
+  ["60d5ec49f1b2c72d9c8b1111", "60d5ec49f1b2c72d9c8b2222"]
+  ```
+</ParamField>
+
+### Response
+
+<span className='text-sm'>Contacts added to list</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="child attributes">
+  <ResponseField name="data.added" type="integer">
+    Number of existing contacts added to the list
+
+    Example: `2`
+  </ResponseField>
+
+  <ResponseField name="data.created" type="integer">
+    Number of new contacts created and added to the list
+
+    Example: `1`
+  </ResponseField>
+
+  <ResponseField name="data.alreadyInList" type="integer">
+    Number of contacts that were already in the list
+
+    Example: `0`
+  </ResponseField>
+
+  <ResponseField name="data.errors" type="object[]">
+    Array of errors for contacts that failed to be added
+
+    <Expandable title="child attributes">
+    <ResponseField name="email" type="string">
+      The email address that failed
+    </ResponseField>
+
+    <ResponseField name="error" type="string">
+      Error description
+    </ResponseField>
+    </Expandable>
+  </ResponseField>
+
+  <ResponseField name="data.validation" type="object">
+    Email validation results
+
+    <Expandable title="child attributes">
+    <ResponseField name="validation.valid" type="object[]">
+      Successfully validated emails
+
+      <Expandable title="child attributes">
+      <ResponseField name="email" type="string">
+        Email address
+      </ResponseField>
+      <ResponseField name="status" type="string">
+        Validation status
+      </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="validation.invalid" type="object[]">
+      Emails that failed validation
+
+      <Expandable title="child attributes">
+      <ResponseField name="email" type="string">
+        Email address
+      </ResponseField>
+      <ResponseField name="status" type="string">
+        Validation status
+      </ResponseField>
+      <ResponseField name="reason" type="string">
+        Reason for invalidation
+      </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="validation.suppressed" type="object[]">
+      Emails that were suppressed
+    </ResponseField>
+    </Expandable>
+  </ResponseField>
+
+  <ResponseField name="data.totalContactsInList" type="integer">
+    Total number of contacts now in the list
+
+    Example: `343`
+  </ResponseField>
+  </Expandable>
+</ResponseField>

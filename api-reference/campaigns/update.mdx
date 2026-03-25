@@ -193,7 +193,7 @@ puts JSON.parse(response.body)
 
 </ResponseExample>
 
-#### Authorizations
+### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
 </ParamField>
@@ -297,7 +297,7 @@ All body fields are optional. Only the fields provided will be updated.
   Timezone string for scheduled or gradual sending.
 </ParamField>
 
-#### Response
+### Response
 <span className='text-sm'>Returns the updated campaign object.</span>
 
 <ResponseField name="success" type="boolean">

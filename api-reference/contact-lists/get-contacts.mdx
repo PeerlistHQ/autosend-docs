@@ -1,0 +1,364 @@
+---
+title: 'Get Contacts in List'
+description: 'Search and retrieve contacts within a specific contact list using the AutoSend API.'
+sidebarTitle: 'Get Contacts in List'
+openapi: 'POST /contact-lists/contacts/search'
+---
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/contact-lists/contacts/search \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "contactListId": "60d5ec49f1b2c72d9c8b4567",
+  "page": 1,
+  "limit": 20,
+  "email": "jane"
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/contact-lists/contacts/search"
+
+headers = {
+    "Authorization": "Bearer <token>",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "contactListId": "60d5ec49f1b2c72d9c8b4567",
+    "page": 1,
+    "limit": 20,
+    "email": "jane"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/contact-lists/contacts/search', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer <token>',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    contactListId: '60d5ec49f1b2c72d9c8b4567',
+    page: 1,
+    limit: 20,
+    email: 'jane'
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/contact-lists/contacts/search';
+
+$data = [
+    'contactListId' => '60d5ec49f1b2c72d9c8b4567',
+    'page' => 1,
+    'limit' => 20,
+    'email' => 'jane'
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer <token>',
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/contact-lists/contacts/search"
+
+    payload := map[string]interface{}{
+        "contactListId": "60d5ec49f1b2c72d9c8b4567",
+        "page":          1,
+        "limit":         20,
+        "email":         "jane",
+    }
+
+    jsonData, _ := json.Marshal(payload)
+
+    req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer <token>")
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class GetContactsInList {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/contact-lists/contacts/search");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Authorization", "Bearer <token>");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+
+            String jsonInputString = "{\n" +
+                "  \"contactListId\": \"60d5ec49f1b2c72d9c8b4567\",\n" +
+                "  \"page\": 1,\n" +
+                "  \"limit\": 20,\n" +
+                "  \"email\": \"jane\"\n" +
+                "}";
+
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+            con.disconnect();
+
+            System.out.println(content.toString());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/contact-lists/contacts/search')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(uri.path)
+request['Authorization'] = 'Bearer <token>'
+request['Content-Type'] = 'application/json'
+
+request.body = {
+  contactListId: '60d5ec49f1b2c72d9c8b4567',
+  page: 1,
+  limit: 20,
+  email: 'jane'
+}.to_json
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "contacts": [
+      {
+        "id": "60d5ec49f1b2c72d9c8b1111",
+        "email": "jane@example.com",
+        "firstName": "Jane",
+        "lastName": "Smith",
+        "createdAt": "2026-01-15T10:30:00.000Z",
+        "updatedAt": "2026-02-20T14:45:00.000Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 20,
+      "total": 1,
+      "pages": 1
+    }
+  }
+}
+```
+
+</ResponseExample>
+
+---
+### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Body
+Search parameters for retrieving contacts within a list
+
+<ParamField path="contactListId" type="string" required>
+  The ID of the contact list to search in.
+
+  Example: `"60d5ec49f1b2c72d9c8b4567"`
+</ParamField>
+
+<ParamField path="page" type="integer">
+  Page number for pagination (starts at 1).
+
+  Minimum: `1`
+
+  Default: `1`
+
+  Example: `1`
+</ParamField>
+
+<ParamField path="limit" type="integer">
+  Number of results per page.
+
+  Range: `1` - `100`
+
+  Default: `20`
+
+  Example: `20`
+</ParamField>
+
+<ParamField path="email" type="string">
+  Filter contacts by email address (partial match).
+
+  Example: `"jane"`
+</ParamField>
+
+### Response
+
+<span className='text-sm'>Contacts retrieved successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="child attributes">
+  <ResponseField name="data.contacts" type="object[]">
+    Array of contact objects
+
+    <Expandable title="child attributes">
+    <ResponseField name="id" type="string">
+      Unique contact identifier
+
+      Example: `"60d5ec49f1b2c72d9c8b1111"`
+    </ResponseField>
+
+    <ResponseField name="email" type="string">
+      Contact email address
+
+      Example: `"jane@example.com"`
+    </ResponseField>
+
+    <ResponseField name="firstName" type="string">
+      Contact first name
+
+      Example: `"Jane"`
+    </ResponseField>
+
+    <ResponseField name="lastName" type="string">
+      Contact last name
+
+      Example: `"Smith"`
+    </ResponseField>
+
+    <ResponseField name="createdAt" type="string">
+      ISO 8601 timestamp of creation
+
+      Example: `"2026-01-15T10:30:00.000Z"`
+    </ResponseField>
+
+    <ResponseField name="updatedAt" type="string">
+      ISO 8601 timestamp of last update
+
+      Example: `"2026-02-20T14:45:00.000Z"`
+    </ResponseField>
+    </Expandable>
+  </ResponseField>
+
+  <ResponseField name="data.pagination" type="object">
+    Pagination metadata
+
+    <Expandable title="child attributes">
+    <ResponseField name="pagination.page" type="integer">
+      Current page number
+
+      Example: `1`
+    </ResponseField>
+
+    <ResponseField name="pagination.limit" type="integer">
+      Results per page
+
+      Example: `20`
+    </ResponseField>
+
+    <ResponseField name="pagination.total" type="integer">
+      Total number of matching contacts
+
+      Example: `1`
+    </ResponseField>
+
+    <ResponseField name="pagination.pages" type="integer">
+      Total number of pages
+
+      Example: `1`
+    </ResponseField>
+    </Expandable>
+  </ResponseField>
+  </Expandable>
+</ResponseField>

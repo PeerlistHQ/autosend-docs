@@ -1,22 +1,24 @@
 ---
-title: 'Get Sender'
-description: 'Retrieve the details of a specific sender identity by ID using the AutoSend API.'
-sidebarTitle: 'Get Sender'
-openapi: 'GET /senders/{senderId}'
+title: 'Get Contact List'
+description: 'Retrieve the details of a specific contact list by its ID using the AutoSend API.'
+sidebarTitle: 'Get Contact List'
+openapi: 'GET /contact-lists/{contactListId}'
 ---
 
 <RequestExample>
 
+
+
 ```bash cURL
 curl --request GET \
-  --url https://api.autosend.com/v1/senders/60d5ec49f1b2c72d9c8b4567 \
+  --url https://api.autosend.com/v1/contact-lists/60d5ec49f1b2c72d9c8b4567 \
   --header 'Authorization: Bearer <token>'
 ```
 
 ```python Python
 import requests
 
-url = "https://api.autosend.com/v1/senders/60d5ec49f1b2c72d9c8b4567"
+url = "https://api.autosend.com/v1/contact-lists/60d5ec49f1b2c72d9c8b4567"
 
 headers = {
     "Authorization": "Bearer <token>"
@@ -27,7 +29,7 @@ print(response.json())
 ```
 
 ```javascript JavaScript
-fetch('https://api.autosend.com/v1/senders/60d5ec49f1b2c72d9c8b4567', {
+fetch('https://api.autosend.com/v1/contact-lists/60d5ec49f1b2c72d9c8b4567', {
   method: 'GET',
   headers: {
     'Authorization': 'Bearer <token>'
@@ -41,8 +43,8 @@ fetch('https://api.autosend.com/v1/senders/60d5ec49f1b2c72d9c8b4567', {
 ```php PHP
 <?php
 
-$senderId = '60d5ec49f1b2c72d9c8b4567';
-$url = "https://api.autosend.com/v1/senders/{$senderId}";
+$contactListId = '60d5ec49f1b2c72d9c8b4567';
+$url = "https://api.autosend.com/v1/contact-lists/{$contactListId}";
 
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -67,7 +69,7 @@ import (
 )
 
 func main() {
-    url := "https://api.autosend.com/v1/senders/60d5ec49f1b2c72d9c8b4567"
+    url := "https://api.autosend.com/v1/contact-lists/60d5ec49f1b2c72d9c8b4567"
 
     req, _ := http.NewRequest("GET", url, nil)
     req.Header.Set("Authorization", "Bearer <token>")
@@ -91,10 +93,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class GetSender {
+public class GetContactList {
     public static void main(String[] args) {
         try {
-            URL url = new URL("https://api.autosend.com/v1/senders/60d5ec49f1b2c72d9c8b4567");
+            URL url = new URL("https://api.autosend.com/v1/contact-lists/60d5ec49f1b2c72d9c8b4567");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
             con.setRequestMethod("GET");
@@ -121,7 +123,7 @@ public class GetSender {
 require 'net/http'
 require 'uri'
 
-uri = URI('https://api.autosend.com/v1/senders/60d5ec49f1b2c72d9c8b4567')
+uri = URI('https://api.autosend.com/v1/contact-lists/60d5ec49f1b2c72d9c8b4567')
 
 http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true
@@ -133,6 +135,8 @@ response = http.request(request)
 puts response.body
 ```
 
+
+
 </RequestExample>
 
 <ResponseExample>
@@ -142,15 +146,19 @@ puts response.body
   "success": true,
   "data": {
     "id": "60d5ec49f1b2c72d9c8b4567",
-    "email": "hello@example.com",
-    "name": "Example Team",
-    "replyTo": "support@example.com"
+    "name": "Newsletter Subscribers",
+    "description": "Users who signed up for the weekly newsletter",
+    "type": "list",
+    "contactCount": 340,
+    "createdAt": "2026-01-15T10:30:00.000Z",
+    "updatedAt": "2026-02-20T14:45:00.000Z"
   }
 }
 ```
 
 </ResponseExample>
 
+---
 ### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
@@ -158,15 +166,15 @@ puts response.body
 
 ### Path Parameters
 
-<ParamField path="senderId" type="string" required>
-  The unique identifier of the sender (id).
+<ParamField path="contactListId" type="string" required>
+  The unique identifier of the contact list. Use `GLOBAL_CONTACT_LIST` to get the virtual "All Contacts" list.
 
   Example: `"60d5ec49f1b2c72d9c8b4567"`
 </ParamField>
 
 ### Response
 
-<span className='text-sm'>Sender retrieved successfully</span>
+<span className='text-sm'>Contact list retrieved successfully</span>
 
 <ResponseField name="success" type="boolean">
   Indicates if the request was successful
@@ -175,31 +183,57 @@ puts response.body
 </ResponseField>
 
 <ResponseField name="data" type="object">
-  The sender object
+  The contact list object
 
   <Expandable title="child attributes">
   <ResponseField name="data.id" type="string">
-    Unique sender identifier
+    Unique contact list identifier
 
     Example: `"60d5ec49f1b2c72d9c8b4567"`
   </ResponseField>
 
-  <ResponseField name="data.email" type="string">
-    Sender email address
-
-    Example: `"hello@example.com"`
-  </ResponseField>
-
   <ResponseField name="data.name" type="string">
-    Display name for the sender
+    Name of the contact list
 
-    Example: `"Example Team"`
+    Example: `"Newsletter Subscribers"`
   </ResponseField>
 
-  <ResponseField name="data.replyTo" type="string">
-    Reply-to email address
+  <ResponseField name="data.description" type="string">
+    Description of the contact list
 
-    Example: `"support@example.com"`
+    Example: `"Users who signed up for the weekly newsletter"`
+  </ResponseField>
+
+  <ResponseField name="data.type" type="string">
+    Type: `list` or `segment`
+
+    Example: `"list"`
+  </ResponseField>
+
+  <ResponseField name="data.contactCount" type="integer">
+    Number of contacts in the list
+
+    Example: `340`
+  </ResponseField>
+
+  <ResponseField name="data.filterCriteria" type="object">
+    Filter criteria (for segments only)
+  </ResponseField>
+
+  <ResponseField name="data.parentId" type="string">
+    Parent list ID (if sub-segment)
+  </ResponseField>
+
+  <ResponseField name="data.createdAt" type="string">
+    ISO 8601 timestamp of creation
+
+    Example: `"2026-01-15T10:30:00.000Z"`
+  </ResponseField>
+
+  <ResponseField name="data.updatedAt" type="string">
+    ISO 8601 timestamp of last update
+
+    Example: `"2026-02-20T14:45:00.000Z"`
   </ResponseField>
   </Expandable>
 </ResponseField>
