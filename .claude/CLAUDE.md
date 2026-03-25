@@ -46,6 +46,7 @@ sidebarTitle: "Sidebar Label"  # Optional, use when sidebar needs shorter text
 - Use **second-person** ("you", "your") to address the reader directly
 - Be concise and action-oriented
 - Prioritize clarity over cleverness
+- Never use em dashes (—). Use regular dashes (-), commas, or periods instead.
 
 ### Content Structure
 

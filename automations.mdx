@@ -1,13 +1,13 @@
 ---
 title: 'Email Automations'
-description: 'Create contact-triggered email automations with three trigger types — list membership, property matching, and property changes.'
+description: 'Create contact-triggered email automations with three trigger types: added to list or segment, contact property matching, and contact property changes.'
 sidebarTitle: 'Introduction'
 ---
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
 
-Email automation lets you send sequences of emails triggered by contact actions without manual intervention. You define the trigger, timing, content, and exit conditions once — then the system handles the rest.
+Email automation lets you send sequences of emails triggered by contact actions without manual intervention. You define the trigger, timing, content, and exit conditions once, then the system handles the rest.
 
 AutoSend supports three trigger types:
 
@@ -15,15 +15,15 @@ AutoSend supports three trigger types:
 - **Contact property matches with** a specific condition
 - **Contact property changes from → to** a new value
 
-<iframe
-	width='100%'
-	height='400'
-	src='https://www.youtube.com/embed/dYH9TYzgbKU'
-	title='How to Build Email Automations in AutoSend'
-	frameborder='0'
-	allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-	allowFullScreen
-/>
+<Frame>
+	<iframe
+		className='w-full aspect-video rounded-xl'
+		src='https://www.youtube.com/embed/dYH9TYzgbKU'
+		title='How to Build Email Automations in AutoSend'
+		allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+		allowFullScreen
+	/>
+</Frame>
 
 ## Common Use Cases
 
@@ -48,10 +48,6 @@ Before creating an automation, make sure you have the following ready based on y
 
   <Step title="Create Your Automation" titleSize="h3">
     Under **Marketing Emails** in the sidebar, select <a href={AUTOSEND_PATHS.automations} target='_blank' title='Automations' rel='noopener noreferrer'>**Automations**</a> and click **New Automation**.
-
-    <Frame>
-      <img src='/images/email-automations/step-3.png' alt="Create a new automation in AutoSend" />
-    </Frame>
 
     An untitled automation will be created. Give it a descriptive name that clearly identifies its purpose, such as "Pro Plan Onboarding" or "Welcome Series."
 
@@ -98,7 +94,7 @@ Before creating an automation, make sure you have the following ready based on y
     3. Click **Add** to include additional property change conditions
     4. Use **AND** / **OR** logic to combine multiple conditions
 
-    **Example:** Trigger when `published` changes from `unpublished` to `published` in the "All Contacts" list — perfect for sending a congratulatory email when a user publishes their first project.
+    **Example:** Trigger when `published` changes from `unpublished` to `published` in the "All Contacts" list. Perfect for sending a congratulatory email when a user publishes their first project.
 
     <Frame>
       <img src='/images/email-automations/trigger-property-changes.png' alt="Trigger: Contact property changes from one value to another" />
@@ -156,14 +152,14 @@ Before creating an automation, make sure you have the following ready based on y
 
 <Step title='Exit Condition' titleSize='h3'>
 	The automation ends automatically once all emails have been sent or the contact no longer meets
-	the entry criteria. There's nothing to configure here — this is handled by default.
+	the entry criteria. There's nothing to configure here. This is handled by default.
 </Step>
 
 </Steps>
 
 ## Best Practices
 
-**Start with clear goals.** Define what you want each automation to achieve — onboarding, nurturing, conversion, or retention.
+**Start with clear goals.** Define what you want each automation to achieve, whether it's onboarding, nurturing, conversion, or retention.
 
 **Map the contact journey.** Plan the logical flow of emails from the contact's perspective. What information do they need first? What actions do you want them to take?
 
@@ -190,21 +186,29 @@ Before creating an automation, make sure you have the following ready based on y
     </ul>
   </Accordion>
 
-  <Accordion title="Property-based trigger isn't firing">
-    <ul>
-      <li>Verify the contact property name matches exactly (property names are case-sensitive).</li>
-      <li>For "matches with" triggers, check that the property value matches the condition you set.</li>
-      <li>For "changes from → to" triggers, ensure the contact's property actually transitions between the specified values — setting a value for the first time does not count as a change.</li>
-      <li>Check that the contact belongs to the list you selected for the trigger.</li>
-    </ul>
-  </Accordion>
+<Accordion title="Property-based trigger isn't firing">
+	<ul>
+		<li>Verify the contact property name matches exactly (property names are case-sensitive).</li>
+		<li>
+			For "matches with" triggers, check that the property value matches the condition you set.
+		</li>
+		<li>
+			For "changes from → to" triggers, ensure the contact's property actually transitions between
+			the specified values. Setting a value for the first time does not count as a change.
+		</li>
+		<li>Check that the contact belongs to the list you selected for the trigger.</li>
+	</ul>
+</Accordion>
 
-  <Accordion title="Emails are sending at unexpected times">
-    <ul>
-      <li>Review your **Wait For** settings between each email.</li>
-      <li>Remember that timing starts from when the contact enters the automation, not from a specific time of day.</li>
-    </ul>
-  </Accordion>
+<Accordion title='Emails are sending at unexpected times'>
+	<ul>
+		<li>Review your **Wait For** settings between each email.</li>
+		<li>
+			Remember that timing starts from when the contact enters the automation, not from a specific
+			time of day.
+		</li>
+	</ul>
+</Accordion>
 
   <Accordion title="Contacts stopped receiving emails">
     <ul>
