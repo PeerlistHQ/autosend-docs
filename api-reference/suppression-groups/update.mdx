@@ -14,7 +14,7 @@ curl --request PUT \
   --data '{
     "name": "Marketing Unsubscribes — Updated",
     "description": "Users who opted out of all marketing emails",
-    "active": true
+    "isActive": true
   }'
 ```
 
@@ -30,7 +30,7 @@ response = requests.put(
     json={
         "name": "Marketing Unsubscribes — Updated",
         "description": "Users who opted out of all marketing emails",
-        "active": True,
+        "isActive": true,
     },
 )
 print(response.json())
@@ -117,7 +117,7 @@ public class Main {
             {
               "name": "Marketing Unsubscribes — Updated",
               "description": "Users who opted out of all marketing emails",
-              "active": true
+              "isActive": true
             }
             """;
 
@@ -165,7 +165,7 @@ puts response.body
     "id": "AB12C3",
     "name": "Marketing Unsubscribes — Updated",
     "description": "Users who opted out of all marketing emails",
-    "active": true,
+    "isActive": true,
     "isGlobal": false
   }
 }

@@ -14,7 +14,7 @@ curl --request POST \
   --data '{
     "name": "Marketing Unsubscribes",
     "description": "Users who opted out of marketing",
-    "active": true
+    "isActive": true
   }'
 ```
 
@@ -30,7 +30,7 @@ response = requests.post(
     json={
         "name": "Marketing Unsubscribes",
         "description": "Users who opted out of marketing",
-        "active": True,
+        "isActive": true,
     },
 )
 print(response.json())
@@ -117,7 +117,7 @@ public class Main {
             {
               "name": "Marketing Unsubscribes",
               "description": "Users who opted out of marketing",
-              "active": true
+              "isActive": true
             }
             """;
 
@@ -165,7 +165,7 @@ puts response.body
     "id": "AB12C3",
     "name": "Marketing Unsubscribes",
     "description": "Users who opted out of marketing",
-    "active": true,
+    "isActive": true,
     "isGlobal": false
   }
 }
