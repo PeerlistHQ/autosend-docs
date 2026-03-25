@@ -19,13 +19,13 @@
     "/contacts": {
       "post": {
         "summary": "Create Contact",
-        "description": "Creates a new contact in your AutoSend project. If a contact with the same email already exists, this endpoint will return an error. Use the Upsert Contact endpoint if you want to update existing contacts."
+        "description": "Creates a new contact in your AutoSend project."
       }
     },
     "/contacts/email": {
       "post": {
         "summary": "Upsert Contact",
-        "description": "Creates a new contact or updates an existing contact if the email already exists. This is the recommended endpoint for most contact synchronization scenarios."
+        "description": "Creates a new contact or updates an existing contact if the email already exists."
       }
     },
     "/contacts/{id}": {

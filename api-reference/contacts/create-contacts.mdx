@@ -257,7 +257,11 @@ puts response.body
 
 </ResponseExample>
 
---- 
+
+<Note>
+  Use this API when you know the contact is new. Use <a href={APP_PATHS.upsertContactApiRef} target='_blank' title='Upsert Contact'>Upsert Contact</a> when the contact may already exist. It will create or update without throwing an error.
+</Note>
+
 #### Authorizations
 <ParamField path="Authorizations" type="string | header"  required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
@@ -290,7 +294,7 @@ Contact information to create
   Example: `"user_12345"`
 </ParamField>
 <ParamField path="listIds" type="array">
-  IDs of the contact lists to add this contact to. You can find list IDs in your <a href={AUTOSEND_PATHS.contactsPage} target='_blank' title='Automations'>AutoSend Dashboard</a>. 
+  IDs of the contact lists to add this contact to. You can find list IDs in your <a href={AUTOSEND_PATHS.contactsPage} target='_blank' title='AutoSend Dashboard'>AutoSend Dashboard</a>. 
   
   Do not pass segment IDs here. Segments are computed automatically based on contact field values. Adding a contact to a list will also trigger any live automations associated with that list.
   
@@ -298,7 +302,7 @@ Contact information to create
 </ParamField>
 <ParamField path="customFields" type="object" >
 
-  Key-value pairs for custom contact attributes. There are four supported value types: `string`, `number`, `boolean`, and `date`. Learn more about <a href={APP_PATHS.customFieldAPIRef} target='_blank' title='Automations'>custom fields</a>.
+  Key-value pairs for custom contact attributes. There are four supported value types: `string`, `number`, `boolean`, and `date`. Learn more about <a href={APP_PATHS.contactsCustomFields} target='_blank' title='Custom Field'>custom fields</a>.
   
    <Expandable title="child attributes">
 
