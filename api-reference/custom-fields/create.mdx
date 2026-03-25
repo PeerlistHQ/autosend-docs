@@ -12,10 +12,8 @@ curl --request POST \
   --header 'Authorization: Bearer <token>' \
   --header 'Content-Type: application/json' \
   --data '{
-    "fieldName": "planTier",
-    "fieldType": "string",
-    "description": "The user'\''s subscription tier",
-    "defaultValue": "free"
+    "fieldName": "company",
+    "fieldType": "string"
   }'
 ```
 
@@ -30,10 +28,8 @@ headers = {
 }
 
 payload = {
-    "fieldName": "planTier",
-    "fieldType": "string",
-    "description": "The user's subscription tier",
-    "defaultValue": "free"
+    "fieldName": "company",
+    "fieldType": "string"
 }
 
 response = requests.post(url, json=payload, headers=headers)
@@ -48,10 +44,8 @@ const response = await fetch("https://api.autosend.com/v1/custom-fields", {
     "Content-Type": "application/json",
   },
   body: JSON.stringify({
-    fieldName: "planTier",
+    fieldName: "company",
     fieldType: "string",
-    description: "The user's subscription tier",
-    defaultValue: "free",
   }),
 });
 
@@ -68,10 +62,8 @@ curl_setopt_array($curl, [
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_POST => true,
   CURLOPT_POSTFIELDS => json_encode([
-    "fieldName" => "planTier",
+    "fieldName" => "company",
     "fieldType" => "string",
-    "description" => "The user's subscription tier",
-    "defaultValue" => "free",
   ]),
   CURLOPT_HTTPHEADER => [
     "Authorization: Bearer <token>",
@@ -98,10 +90,8 @@ import (
 
 func main() {
   payload, _ := json.Marshal(map[string]string{
-    "fieldName":    "planTier",
-    "fieldType":    "string",
-    "description":  "The user's subscription tier",
-    "defaultValue": "free",
+    "fieldName": "company",
+    "fieldType": "string",
   })
 
   req, _ := http.NewRequest("POST", "https://api.autosend.com/v1/custom-fields", bytes.NewBuffer(payload))
@@ -129,10 +119,8 @@ public class Main {
 
     String body = """
       {
-        "fieldName": "planTier",
-        "fieldType": "string",
-        "description": "The user's subscription tier",
-        "defaultValue": "free"
+        "fieldName": "company",
+        "fieldType": "string"
       }
       """;
 
@@ -162,10 +150,8 @@ request = Net::HTTP::Post.new(uri)
 request["Authorization"] = "Bearer <token>"
 request["Content-Type"] = "application/json"
 request.body = JSON.dump({
-  fieldName: "planTier",
-  fieldType: "string",
-  description: "The user's subscription tier",
-  defaultValue: "free"
+  fieldName: "company",
+  fieldType: "string"
 })
 
 response = http.request(request)
@@ -181,14 +167,11 @@ puts response.body
   "success": true,
   "message": "Custom field created successfully",
   "data": {
-    "id": "60d5ec49f1b2c72d9c8b9999",
-    "fieldName": "planTier",
+    "id": "6960953e729f65f154369408",
+    "fieldName": "company",
     "fieldType": "string",
-    "description": "The user's subscription tier",
-    "defaultValue": "free",
-    "isReserved": false,
-    "createdAt": "2026-01-10T08:00:00.000Z",
-    "updatedAt": "2026-01-10T08:00:00.000Z"
+    "createdAt": "2026-01-09T05:42:22.171Z",
+    "updatedAt": "2026-01-09T05:42:22.171Z"
   }
 }
 ```
@@ -204,7 +187,7 @@ puts response.body
 ```json 400 Invalid Field Type
 {
   "success": false,
-  "message": "Invalid field type. Must be one of: string, number, date",
+  "message": "Invalid field type. Must be one of: string, number, boolean, date",
   "code": "INVALID_FIELD_TYPE"
 }
 ```
@@ -231,13 +214,9 @@ puts response.body
 </ParamField>
 
 <ParamField body="fieldType" type="string" required>
-  The data type of the custom field. Must be one of: `string`, `number`, `date`.
+  The data type of the custom field. Must be one of: `string`, `number`, `boolean`, `date`.
 </ParamField>
 
 <ParamField body="description" type="string">
   A human-readable description of what the field represents.
-</ParamField>
-
-<ParamField body="defaultValue" type="any">
-  A fallback value used when a contact does not have an explicit value set for this field.
 </ParamField>
