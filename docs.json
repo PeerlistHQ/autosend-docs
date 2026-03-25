@@ -71,9 +71,11 @@
                   "marketing-emails/contacts/custom-fields"
                 ]
               },
-              "/automations",
               "marketing-emails/domain-warmup"
-            ]
+            ]},
+					{
+						"group": "Email Automations",
+						"pages": ["/automations"]
           },
           {
             "group": "Others",
