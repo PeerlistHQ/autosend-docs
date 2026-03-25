@@ -1,12 +1,11 @@
 ---
 title: 'Search Templates'
+description: 'Search for email templates by name or other criteria using the AutoSend API.'
 sidebarTitle: 'Search Templates'
 openapi: 'GET /templates/search'
 ---
 
 <RequestExample>
-
-
 
 ```bash cURL
 curl --request GET \
@@ -154,8 +153,6 @@ response = http.request(request)
 puts response.body
 ```
 
-
-
 </RequestExample>
 
 <ResponseExample>
@@ -189,7 +186,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

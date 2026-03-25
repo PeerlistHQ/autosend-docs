@@ -1,5 +1,6 @@
 ---
 title: 'Create Suppression Group'
+description: 'Create a new suppression group for managing email opt-outs by category using the AutoSend API.'
 sidebarTitle: 'Create Suppression Group'
 openapi: 'POST /suppression-groups'
 ---
@@ -173,7 +174,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

@@ -1,12 +1,11 @@
 ---
 title: 'Delete Template'
+description: 'Delete an email template by ID using the AutoSend API.'
 sidebarTitle: 'Delete Template'
 openapi: 'DELETE /templates/{templateId}'
 ---
 
 <RequestExample>
-
-
 
 ```bash cURL
 curl --request DELETE \
@@ -125,8 +124,6 @@ response = http.request(request)
 puts response.body
 ```
 
-
-
 </RequestExample>
 
 <ResponseExample>
@@ -140,7 +137,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

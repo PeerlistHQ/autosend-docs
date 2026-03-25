@@ -1,5 +1,6 @@
 ---
 title: 'Get Custom Field by Name'
+description: "Retrieve a specific custom field's details by its name using the AutoSend API."
 sidebarTitle: 'Get Custom Field by Name'
 openapi: 'GET /custom-fields/fieldName/{customFieldName}'
 ---
@@ -145,7 +146,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

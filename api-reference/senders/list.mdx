@@ -1,12 +1,11 @@
 ---
 title: 'List Senders'
+description: 'List all sender identities configured in your account using the AutoSend API.'
 sidebarTitle: 'List Senders'
 openapi: 'GET /senders'
 ---
 
 <RequestExample>
-
-
 
 ```bash cURL
 curl --request GET \
@@ -133,8 +132,6 @@ response = http.request(request)
 puts response.body
 ```
 
-
-
 </RequestExample>
 
 <ResponseExample>
@@ -163,7 +160,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

@@ -1,12 +1,11 @@
 ---
 title: 'Update Template'
+description: "Update an existing email template's content, subject, or settings using the AutoSend API."
 sidebarTitle: 'Update Template'
 openapi: 'PUT /templates/{templateId}'
 ---
 
 <RequestExample>
-
-
 
 ```bash cURL
 curl --request PUT \
@@ -192,8 +191,6 @@ response = http.request(request)
 puts response.body
 ```
 
-
-
 </RequestExample>
 
 <ResponseExample>
@@ -218,7 +215,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

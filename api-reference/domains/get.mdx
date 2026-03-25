@@ -1,5 +1,6 @@
 ---
 title: 'Get Domain'
+description: 'Retrieve the details and verification status of a specific domain using the AutoSend API.'
 sidebarTitle: 'Get Domain'
 openapi: 'GET /domains/{domainId}'
 ---
@@ -168,7 +169,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorization" type="string | header" required>
   Bearer authentication header of the form `Bearer <token>`, where `<token>` is your API key.

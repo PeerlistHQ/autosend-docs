@@ -1,5 +1,6 @@
 ---
 title: 'Abort Campaign'
+description: 'Abort a running campaign to immediately stop all pending email sends using the AutoSend API.'
 sidebarTitle: 'Abort Campaign'
 openapi: 'POST /campaigns/{campaignId}/abort'
 ---
@@ -127,7 +128,6 @@ puts JSON.parse(response.body)
 
 </ResponseExample>
 
----
 
 > **MCP Access Blocked** — This endpoint is not accessible via MCP (Model Context Protocol) integrations. It must be called directly using your API token from your own infrastructure.
 

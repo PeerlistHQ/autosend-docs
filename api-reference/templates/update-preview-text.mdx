@@ -1,12 +1,11 @@
 ---
 title: 'Update Preview Text'
+description: 'Update the preview text of an email template using the AutoSend API.'
 sidebarTitle: 'Update Preview Text'
 openapi: 'PATCH /templates/{templateId}/preview-text'
 ---
 
 <RequestExample>
-
-
 
 ```bash cURL
 curl --request PATCH \
@@ -169,8 +168,6 @@ response = http.request(request)
 puts response.body
 ```
 
-
-
 </RequestExample>
 
 <ResponseExample>
@@ -194,7 +191,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

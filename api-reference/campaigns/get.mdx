@@ -1,5 +1,6 @@
 ---
 title: 'Get Campaign'
+description: 'Retrieve the details of a specific campaign by its ID using the AutoSend API.'
 sidebarTitle: 'Get Campaign'
 openapi: 'GET /campaigns/{campaignId}'
 ---
@@ -137,7 +138,6 @@ puts JSON.parse(response.body)
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

@@ -1,5 +1,6 @@
 ---
 title: 'Delete Campaign'
+description: 'Permanently delete a campaign by ID using the AutoSend API.'
 sidebarTitle: 'Delete Campaign'
 openapi: 'DELETE /campaigns/{campaignId}'
 ---
@@ -119,7 +120,6 @@ puts JSON.parse(response.body)
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

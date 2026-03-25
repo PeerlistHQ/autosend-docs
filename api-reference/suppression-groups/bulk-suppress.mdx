@@ -1,5 +1,6 @@
 ---
 title: 'Bulk Suppress Emails'
+description: 'Add multiple email addresses to a suppression group in bulk using the AutoSend API.'
 sidebarTitle: 'Bulk Suppress Emails'
 openapi: 'POST /suppression-groups/emails/suppress'
 ---
@@ -176,7 +177,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

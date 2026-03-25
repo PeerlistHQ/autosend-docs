@@ -1,5 +1,6 @@
 ---
 title: 'List Campaigns'
+description: 'List all campaigns in your account with optional filtering and pagination using the AutoSend API.'
 sidebarTitle: 'List Campaigns'
 openapi: 'GET /campaigns'
 ---
@@ -155,7 +156,6 @@ puts JSON.parse(response.body)
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

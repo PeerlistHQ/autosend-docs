@@ -1,5 +1,6 @@
 ---
 title: 'Add Domain'
+description: 'Add a new sending domain to your account for email authentication using the AutoSend API.'
 sidebarTitle: 'Add Domain'
 openapi: 'POST /domains'
 ---
@@ -202,7 +203,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorization" type="string | header" required>
   Bearer authentication header of the form `Bearer <token>`, where `<token>` is your API key.

@@ -1,5 +1,6 @@
 ---
 title: 'Delete Custom Field by Name'
+description: 'Delete a custom field by name to remove it from all contacts using the AutoSend API.'
 sidebarTitle: 'Delete Custom Field by Name'
 openapi: 'DELETE /custom-fields/fieldName/{customFieldName}'
 ---
@@ -139,7 +140,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

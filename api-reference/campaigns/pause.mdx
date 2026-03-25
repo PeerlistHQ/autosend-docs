@@ -1,5 +1,6 @@
 ---
 title: 'Pause Campaign'
+description: 'Pause a running campaign to temporarily stop email sends using the AutoSend API.'
 sidebarTitle: 'Pause Campaign'
 openapi: 'POST /campaigns/{campaignId}/pause'
 ---
@@ -127,7 +128,6 @@ puts JSON.parse(response.body)
 
 </ResponseExample>
 
----
 
 > **MCP Access Blocked** — This endpoint is not accessible via MCP (Model Context Protocol) integrations. It must be called directly using your API token from your own infrastructure.
 

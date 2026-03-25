@@ -1,5 +1,6 @@
 ---
 title: 'Create Campaign'
+description: 'Create a new email marketing campaign with sender, template, recipient lists, and scheduling options via the AutoSend API.'
 sidebarTitle: 'Create Campaign'
 openapi: 'POST /campaigns'
 ---
@@ -247,7 +248,6 @@ puts JSON.parse(response.body)
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
