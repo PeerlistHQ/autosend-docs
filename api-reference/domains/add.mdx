@@ -152,7 +152,6 @@ puts response.body
   "data": {
     "id": "60d5ec49f1b2c72d9c8b2222",
     "domain": "example.com",
-    "awsRegion": "us-east-1",
     "verificationStatus": "PENDING_CONFIGURATION",
     "ownershipVerified": false,
     "dkimEnabled": false,
@@ -179,7 +178,7 @@ puts response.body
 </ParamField>
 
 <ParamField body="regionKey" type="string">
-  The AWS region key where SES will be configured for this domain (e.g. `us-east-1`, `eu-west-1`). If omitted, the project's primary region is used.
+  The AutoSend region key where your email service will be configured for this domain (e.g. `us-east-1`, `ap-south-1`, `us-east-2`). If omitted, the project's primary region is used.
 </ParamField>
 
 #### Response
@@ -197,9 +196,6 @@ puts response.body
     </ResponseField>
     <ResponseField name="domain" type="string">
       The domain name that was added.
-    </ResponseField>
-    <ResponseField name="awsRegion" type="string">
-      The AWS region where SES is configured for this domain.
     </ResponseField>
     <ResponseField name="verificationStatus" type="string">
       Always `PENDING_CONFIGURATION` on creation.

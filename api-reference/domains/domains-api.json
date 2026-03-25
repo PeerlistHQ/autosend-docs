@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Autosend Domains API",
-    "description": "Manage SES domains associated with your Autosend project. Domains are used to send email via Amazon SES. After adding a domain you must configure DNS records and trigger verification before it can be used for sending.",
+    "description": "Manage your domains associated with your Autosend project. Domains are used to send email via AutoSend. After adding a domain you must configure DNS records and trigger verification before it can be used for sending.",
     "version": "1.0.0"
   },
   "servers": [
@@ -20,12 +20,12 @@
     "/domains": {
       "get": {
         "summary": "List Domains",
-        "description": "Returns all SES domains added to the project, including their current verification status and DNS record states.",
+        "description": "Returns all your domains added to the project, including their current verification status and DNS record states.",
         "operationId": "listDomains",
         "tags": ["Domains"],
         "responses": {
           "200": {
-            "description": "A list of SES domains for the project.",
+            "description": "A list of your domains for the project.",
             "content": {
               "application/json": {
                 "schema": {
@@ -49,7 +49,6 @@
                     {
                       "id": "60d5ec49f1b2c72d9c8b1111",
                       "domain": "example.com",
-                      "awsRegion": "us-east-1",
                       "verificationStatus": "VERIFIED",
                       "ownershipVerified": true,
                       "dkimEnabled": true,
@@ -70,7 +69,7 @@
       },
       "post": {
         "summary": "Add Domain",
-        "description": "Adds a new SES domain to the project. The domain must be a bare domain or subdomain (no protocol, no path). After adding the domain, configure the returned DNS records in your DNS provider and call the verify endpoint to trigger verification.",
+        "description": "Adds a new domain to the project. The domain must be a bare domain or subdomain (no protocol, no path). After adding the domain, configure the returned DNS records in your DNS provider and call the verify endpoint to trigger verification.",
         "operationId": "addDomain",
         "tags": ["Domains"],
         "requestBody": {
@@ -88,7 +87,7 @@
                   },
                   "regionKey": {
                     "type": "string",
-                    "description": "AWS region key where SES will be configured for this domain (e.g. us-east-1). Defaults to the project's primary region if omitted.",
+                    "description": "AutoSend region key where your domain will be configured (e.g. us-east-1). Defaults to the project's primary region if omitted.",
                     "example": "us-east-1"
                   }
                 }
@@ -118,7 +117,6 @@
                   "data": {
                     "id": "60d5ec49f1b2c72d9c8b2222",
                     "domain": "example.com",
-                    "awsRegion": "us-east-1",
                     "verificationStatus": "PENDING_CONFIGURATION",
                     "ownershipVerified": false,
                     "dkimEnabled": false,
@@ -157,7 +155,7 @@
     "/domains/{domainId}": {
       "get": {
         "summary": "Get Domain",
-        "description": "Returns a single SES domain by its ID, including its current verification status and DNS record states.",
+        "description": "Returns a single domain by its ID, including its current verification status and DNS record states.",
         "operationId": "getDomain",
         "tags": ["Domains"],
         "parameters": [
@@ -187,7 +185,6 @@
                   "data": {
                     "id": "60d5ec49f1b2c72d9c8b1111",
                     "domain": "example.com",
-                    "awsRegion": "us-east-1",
                     "verificationStatus": "VERIFIED",
                     "ownershipVerified": true,
                     "dkimEnabled": true,
@@ -210,7 +207,7 @@
       },
       "delete": {
         "summary": "Delete Domain",
-        "description": "Removes an SES domain from the project. This action cannot be undone. Any senders or campaigns using this domain may be affected.",
+        "description": "Removes a domain from the project. This action cannot be undone. Any senders or campaigns using this domain may be affected.",
         "operationId": "deleteDomain",
         "tags": ["Domains"],
         "parameters": [
@@ -255,7 +252,7 @@
     "/domains/{domainId}/verify": {
       "post": {
         "summary": "Verify Domain",
-        "description": "Triggers a background check of the domain's DNS records and SES verification state. The endpoint returns the current domain state immediately (fire-and-forget). The actual AWS/DNS verification runs in the background. Poll `GET /domains/{domainId}` every 15 seconds to detect status changes. This endpoint is rate limited.",
+        "description": "Triggers a background check of the domain's DNS records and verification state. ",
         "operationId": "verifyDomain",
         "tags": ["Domains"],
         "parameters": [
@@ -290,7 +287,6 @@
                   "data": {
                     "id": "60d5ec49f1b2c72d9c8b1111",
                     "domain": "example.com",
-                    "awsRegion": "us-east-1",
                     "verificationStatus": "PENDING",
                     "ownershipVerified": true,
                     "dkimEnabled": false,
@@ -351,15 +347,10 @@
             "description": "The domain name.",
             "example": "example.com"
           },
-          "awsRegion": {
-            "type": "string",
-            "description": "The AWS region where SES is configured for this domain.",
-            "example": "us-east-1"
-          },
           "verificationStatus": {
             "type": "string",
             "enum": ["PENDING_CONFIGURATION", "PENDING", "VERIFIED"],
-            "description": "Overall SES verification status. `PENDING_CONFIGURATION` — DNS records not yet detected. `PENDING` — DNS records detected, SES verification in progress. `VERIFIED` — domain is fully verified and ready to send.",
+            "description": "Overall domain verification status. `PENDING_CONFIGURATION` — DNS records not yet detected. `PENDING` — DNS records detected, domain verification in progress. `VERIFIED` — domain is fully verified and ready to send.",
             "example": "VERIFIED"
           },
           "ownershipVerified": {
@@ -471,7 +462,7 @@
   "tags": [
     {
       "name": "Domains",
-      "description": "Manage SES domains for your Autosend project."
+      "description": "Manage AutoSend domains for your Autosend project."
     }
   ]
 }

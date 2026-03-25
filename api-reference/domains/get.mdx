@@ -117,7 +117,6 @@ puts response.body
   "data": {
     "id": "60d5ec49f1b2c72d9c8b1111",
     "domain": "example.com",
-    "awsRegion": "us-east-1",
     "verificationStatus": "VERIFIED",
     "ownershipVerified": true,
     "dkimEnabled": true,
@@ -158,11 +157,8 @@ puts response.body
     <ResponseField name="domain" type="string">
       The domain name (e.g. `example.com`).
     </ResponseField>
-    <ResponseField name="awsRegion" type="string">
-      The AWS region where SES is configured for this domain.
-    </ResponseField>
     <ResponseField name="verificationStatus" type="string">
-      Overall SES verification status. One of `PENDING_CONFIGURATION`, `PENDING`, or `VERIFIED`.
+      Overall domain verification status. One of `PENDING_CONFIGURATION`, `PENDING`, or `VERIFIED`.
     </ResponseField>
     <ResponseField name="ownershipVerified" type="boolean">
       Whether the TXT ownership record has been verified. Once `true`, never reverts to `false`.

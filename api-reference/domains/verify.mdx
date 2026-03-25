@@ -120,7 +120,6 @@ puts response.body
   "data": {
     "id": "60d5ec49f1b2c72d9c8b1111",
     "domain": "example.com",
-    "awsRegion": "us-east-1",
     "verificationStatus": "PENDING",
     "ownershipVerified": true,
     "dkimEnabled": false,
@@ -147,10 +146,6 @@ puts response.body
 
 #### Response
 
-<Note>
-  This endpoint uses a **fire-and-forget** pattern. It returns the current domain state immediately — the actual DNS and AWS SES verification checks run in the background. To detect status changes, poll `GET /domains/{domainId}` approximately every 15 seconds until `verificationStatus` reaches `VERIFIED`.
-</Note>
-
 <ResponseField name="success" type="boolean">
   Indicates whether the request was accepted.
 </ResponseField>
@@ -168,9 +163,6 @@ puts response.body
     </ResponseField>
     <ResponseField name="domain" type="string">
       The domain name.
-    </ResponseField>
-    <ResponseField name="awsRegion" type="string">
-      The AWS region where SES is configured for this domain.
     </ResponseField>
     <ResponseField name="verificationStatus" type="string">
       Current overall verification status. One of `PENDING_CONFIGURATION`, `PENDING`, or `VERIFIED`. This value reflects the state before the background job completes — poll `GET /domains/{domainId}` for updates.
