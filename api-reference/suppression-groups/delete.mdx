@@ -1,5 +1,6 @@
 ---
 title: 'Delete Suppression Group'
+description: 'Delete a suppression group by ID using the AutoSend API.'
 sidebarTitle: 'Delete Suppression Group'
 openapi: 'DELETE /suppression-groups/{groupId}'
 ---
@@ -116,7 +117,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

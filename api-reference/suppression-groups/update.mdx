@@ -1,5 +1,6 @@
 ---
 title: 'Update Suppression Group'
+description: "Update a suppression group's name or description using the AutoSend API."
 sidebarTitle: 'Update Suppression Group'
 openapi: 'PUT /suppression-groups/{groupId}'
 ---
@@ -173,7 +174,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

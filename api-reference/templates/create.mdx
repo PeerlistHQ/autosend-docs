@@ -1,12 +1,11 @@
 ---
 title: 'Create Template'
+description: 'Create a new email template with HTML content and design settings using the AutoSend API.'
 sidebarTitle: 'Create Template'
 openapi: 'POST /templates'
 ---
 
 <RequestExample>
-
-
 
 ```bash cURL
 curl --request POST \
@@ -212,8 +211,6 @@ response = http.request(request)
 puts response.body
 ```
 
-
-
 </RequestExample>
 
 <ResponseExample>
@@ -238,7 +235,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

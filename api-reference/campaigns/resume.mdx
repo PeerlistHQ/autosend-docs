@@ -1,5 +1,6 @@
 ---
 title: 'Resume Campaign'
+description: 'Resume a paused campaign to continue sending emails using the AutoSend API.'
 sidebarTitle: 'Resume Campaign'
 openapi: 'POST /campaigns/{campaignId}/resume'
 ---
@@ -127,7 +128,6 @@ puts JSON.parse(response.body)
 
 </ResponseExample>
 
----
 
 > **MCP Access Blocked** — This endpoint is not accessible via MCP (Model Context Protocol) integrations. It must be called directly using your API token from your own infrastructure.
 

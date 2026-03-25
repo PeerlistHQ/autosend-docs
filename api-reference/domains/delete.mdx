@@ -1,5 +1,6 @@
 ---
 title: 'Delete Domain'
+description: 'Remove a sending domain from your account using the AutoSend API.'
 sidebarTitle: 'Delete Domain'
 openapi: 'DELETE /domains/{domainId}'
 ---
@@ -121,7 +122,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorization" type="string | header" required>
   Bearer authentication header of the form `Bearer <token>`, where `<token>` is your API key.

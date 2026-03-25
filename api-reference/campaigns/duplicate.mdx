@@ -1,5 +1,6 @@
 ---
 title: 'Duplicate Campaign'
+description: 'Duplicate an existing campaign to create a copy with the same settings using the AutoSend API.'
 sidebarTitle: 'Duplicate Campaign'
 openapi: 'POST /campaigns/{campaignId}/duplicate'
 ---
@@ -127,7 +128,6 @@ puts JSON.parse(response.body)
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

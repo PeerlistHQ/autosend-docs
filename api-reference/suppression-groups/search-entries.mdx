@@ -1,5 +1,6 @@
 ---
 title: 'Search Suppression Entries'
+description: 'Search for specific email addresses within a suppression group using the AutoSend API.'
 sidebarTitle: 'Search Suppression Entries'
 openapi: 'POST /suppression-groups/entries'
 ---
@@ -213,7 +214,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

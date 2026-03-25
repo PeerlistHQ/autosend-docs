@@ -1,12 +1,11 @@
 ---
 title: 'Create Sender'
+description: 'Create a new sender identity with email address and display name using the AutoSend API.'
 sidebarTitle: 'Create Sender'
 openapi: 'POST /senders'
 ---
 
 <RequestExample>
-
-
 
 ```bash cURL
 curl --request POST \
@@ -184,8 +183,6 @@ response = http.request(request)
 puts response.body
 ```
 
-
-
 </RequestExample>
 
 <ResponseExample>
@@ -208,7 +205,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

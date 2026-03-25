@@ -1,12 +1,11 @@
 ---
 title: 'Get Sender'
+description: 'Retrieve the details of a specific sender identity by ID using the AutoSend API.'
 sidebarTitle: 'Get Sender'
 openapi: 'GET /senders/{senderId}'
 ---
 
 <RequestExample>
-
-
 
 ```bash cURL
 curl --request GET \
@@ -134,8 +133,6 @@ response = http.request(request)
 puts response.body
 ```
 
-
-
 </RequestExample>
 
 <ResponseExample>
@@ -154,7 +151,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.

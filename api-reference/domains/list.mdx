@@ -1,5 +1,6 @@
 ---
 title: 'List Domains'
+description: 'List all sending domains configured in your account using the AutoSend API.'
 sidebarTitle: 'List Domains'
 openapi: 'GET /domains'
 ---
@@ -217,7 +218,6 @@ puts response.body
 
 </ResponseExample>
 
----
 #### Authorizations
 <ParamField path="Authorization" type="string | header" required>
   Bearer authentication header of the form `Bearer <token>`, where `<token>` is your API key.
