@@ -1,0 +1,10 @@
+#sidebar-title {
+	font-weight: 600;
+	text-transform: uppercase;
+	font-size: 13px;
+	font-family: 'Geist Mono', monospace;
+}
+a.link.nav-tabs-item img {
+	width: 18px;
+	height: 18px;
+}
