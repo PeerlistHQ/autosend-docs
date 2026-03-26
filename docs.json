@@ -1,6 +1,6 @@
 {
 	"$schema": "https://mintlify.com/docs.json",
-	"theme": "mint",
+	"theme": "luma",
 	"name": "AutoSend Documentation",
 	"description": "AutoSend is an email platform for developers and marketers to send transactional and marketing emails.",
 	"colors": {
