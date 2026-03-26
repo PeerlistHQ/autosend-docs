@@ -286,10 +286,6 @@
       {
         "label": "Support",
         "href": "mailto:support@autosend.com"
-      },
-      {
-        "label": "Login",
-        "href": "https://autosend.com/login"
       }
     ],
     "primary": {
@@ -319,7 +315,24 @@
   "footer": {
     "socials": {
       "x": "https://x.com/AutoSendEmail",
-      "github": "https://github.com/peerlisthq"
+      "youtube": "https://www.youtube.com/@AutoSendEmail"
+    }
+  },
+  "thumbnails": {
+    "fonts": {
+      "family": "Geist"
+    },
+    "appearance": "dark",
+    "background": "/images/og-bg.jpg"
+  },
+  "fonts": {
+    "family": "Geist",
+    "weight": 400
+  },
+  "background": {
+    "color": {
+      "light": "#F5F5F4",
+      "dark": "#292524"
     }
   }
 }
