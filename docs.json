@@ -13,7 +13,7 @@
 		"tabs": [
 			{
 				"tab": "Documentation",
-				"icon": "/icons/book-open.svg",
+
 				"groups": [
 					{
 						"group": "Getting Started",
@@ -67,7 +67,7 @@
 							"marketing-emails/sender",
 							{
 								"group": "Contacts",
-							"icon": "/icons/contacts.svg",
+								"icon": "/icons/contacts.svg",
 								"pages": [
 									"marketing-emails/contacts/introduction",
 									"marketing-emails/contacts/import-csv",
@@ -90,7 +90,7 @@
 							"others/unsubscribe-groups",
 							{
 								"group": "Webhooks",
-							"icon": "/icons/webhook.svg",
+								"icon": "/icons/webhook.svg",
 								"pages": [
 									"others/webhooks/introduction",
 									"others/webhooks/event-type",
@@ -105,7 +105,6 @@
 			},
 			{
 				"tab": "API Reference",
-				"icon": "/icons/api.svg",
 				"groups": [
 					{
 						"group": "API Reference",
@@ -203,7 +202,6 @@
 			},
 			{
 				"tab": "Agents",
-				"icon": "/icons/ai-chat.svg",
 				"groups": [
 					{
 						"group": "Getting Started",
@@ -242,7 +240,6 @@
 			},
 			{
 				"tab": "Guides",
-				"icon": "map",
 				"hidden": true,
 				"groups": [
 					{
@@ -269,7 +266,6 @@
 			},
 			{
 				"tab": "Changelog",
-				"icon": "/icons/notebook.svg",
 				"hidden": false,
 				"groups": [
 					{
@@ -331,7 +327,7 @@
 	"background": {
 		"color": {
 			"light": "#FAFAF9",
-			"dark": "#1C1917"
+			"dark": "#0C0A09"
 		}
 	}
 }
