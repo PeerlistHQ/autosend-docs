@@ -5,7 +5,9 @@
 #navbar .navbar-link {
 	font-weight: 600 !important;
 }
-
+navbar-link {
+	font-weight: 600 !important;
+}
 #navigation-items {
 	background-color: #f5f5f4;
 	border-right: 1px solid #e7e5e4;
@@ -73,18 +75,15 @@ a.link.nav-tabs-item img {
 	color: #1c1917;
 	background-color: #e7e5e4;
 }
-/* .sidebar-group button.group:hover,
-.sidebar-group a.group:hover,
-.sidebar-group li[data-active='true'] button.group,
-.sidebar-group li[data-active='true'] a.group {
-	background-color: #fff;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: 600 !important;
+	letter-spacing: normal !important;
 }
-.dark .sidebar-group button.group:hover,
-.dark .sidebar-group a.group:hover,
-.dark .sidebar-group li[data-active='true'] button.group,
-.dark .sidebar-group li[data-active='true'] a.group {
-	background-color: #0c0a09;
-} */
 
 .sidebar-group button.group svg {
 	width: 20px !important;
@@ -95,14 +94,8 @@ a.link.nav-tabs-item img {
 	background-color: #e7e5e4;
 	/* padding: 4px 8px; */
 	line-height: 1.5;
+	font-weight: 500 !important;
 }
-
-/* .prose :where(a):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-	border-bottom: 1.5px solid #a6a09b;
-}
-.prose :where(a:hover):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-	border-bottom: 1.5px solid #57534d;
-} */
 
 /* Overlay scrollbar */
 * {
@@ -118,8 +111,9 @@ a.link.nav-tabs-item img {
 *::-webkit-scrollbar {
 	width: 2px;
 	height: 2px;
-	background: transparent;
+	overflow-y: scroll;
 }
+
 ::-webkit-scrollbar-track-piece {
 	background: transparent !important;
 }
