@@ -3,27 +3,42 @@
 }
 
 #navbar .navbar-link {
-	font-weight: 700 !important;
+	font-weight: 600 !important;
 }
 
 #navigation-items {
 	background-color: #f5f5f4;
+	border-right: 1px solid #e7e5e4;
+	scrollbar-gutter: stable !important;
+	padding-right: 8px;
 }
 .dark #navigation-items {
-	background-color: #000000;
+	background-color: #1c1917;
+	border-right: 1px solid #404040;
+}
+.method-pill {
+	font-weight: 600 !important;
+	font-family: 'Geist Mono', monospace;
+}
+.eyebrow {
+	font-size: 13px;
+	font-weight: 600 !important;
+	text-transform: uppercase;
+	font-family: 'Geist Mono', monospace;
 }
 .method-nav-pill span {
 	text-transform: uppercase;
 	font-weight: bold;
 	font-family: 'Geist Mono', monospace;
 	border-radius: 4px;
+	font-size: 10px;
 }
 #sidebar-title {
 	font-weight: 600;
 	text-transform: uppercase;
 	font-size: 13px;
 	font-family: 'Geist Mono', monospace;
-	color: #000;
+	color: #1c1917;
 }
 .dark #sidebar-title {
 	color: #fff;
@@ -39,6 +54,55 @@ a.link.nav-tabs-item img {
 .dark a.link.nav-tabs-item img[src$='.svg'] {
 	filter: invert(1);
 }
+.sidebar-group li,
+.sidebar-group li {
+	border-radius: 8px;
+	transition: background-color 0.2s ease;
+}
+.sidebar-group button.group,
+.sidebar-group a.group {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	border-radius: 8px;
+}
+[data-component-part='step-number'] > div {
+	font-size: 12px;
+	font-weight: 600 !important;
+	font-family: 'Geist Mono', monospace;
+	color: #1c1917;
+	background-color: #e7e5e4;
+}
+/* .sidebar-group button.group:hover,
+.sidebar-group a.group:hover,
+.sidebar-group li[data-active='true'] button.group,
+.sidebar-group li[data-active='true'] a.group {
+	background-color: #fff;
+}
+.dark .sidebar-group button.group:hover,
+.dark .sidebar-group a.group:hover,
+.dark .sidebar-group li[data-active='true'] button.group,
+.dark .sidebar-group li[data-active='true'] a.group {
+	background-color: #0c0a09;
+} */
+
+.sidebar-group button.group svg {
+	width: 20px !important;
+	height: 20px !important;
+}
+:not(pre) > code {
+	font-family: 'Geist Mono', monospace;
+	background-color: #e7e5e4;
+	/* padding: 4px 8px; */
+	line-height: 1.5;
+}
+
+/* .prose :where(a):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	border-bottom: 1.5px solid #a6a09b;
+}
+.prose :where(a:hover):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	border-bottom: 1.5px solid #57534d;
+} */
 
 /* Overlay scrollbar */
 * {
@@ -52,13 +116,15 @@ a.link.nav-tabs-item img {
 
 /* Webkit (Chrome, Safari, Edge) */
 *::-webkit-scrollbar {
-	width: 4px;
-	height: 4px;
+	width: 2px;
+	height: 2px;
 	background: transparent;
 }
-
+::-webkit-scrollbar-track-piece {
+	background: transparent !important;
+}
 *::-webkit-scrollbar-track {
-	background: transparent;
+	background: transparent !important;
 }
 
 *::-webkit-scrollbar-thumb {

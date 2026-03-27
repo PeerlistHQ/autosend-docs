@@ -224,6 +224,7 @@
 							"ai/skills",
 							{
 								"group": "MCP Server",
+								"icon": "/icons/mcp-server.svg",
 								"pages": [
 									"ai/mcp-server",
 									"ai/mcp-clients/claude",
