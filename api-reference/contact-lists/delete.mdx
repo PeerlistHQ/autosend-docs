@@ -1,6 +1,8 @@
 ---
-title: 'Delete Contact by User ID'
-openapi: 'DELETE /contacts/email/userId/{userId}'
+title: 'Delete Contact List'
+description: 'Permanently delete a contact list by ID using the AutoSend API.'
+sidebarTitle: 'Delete Contact List'
+openapi: 'DELETE /contact-lists/{contactListId}'
 ---
 
 <RequestExample>
@@ -9,14 +11,14 @@ openapi: 'DELETE /contacts/email/userId/{userId}'
 
 ```bash cURL
 curl --request DELETE \
-  --url https://api.autosend.com/v1/contacts/email/userId/{id} \
+  --url https://api.autosend.com/v1/contact-lists/60d5ec49f1b2c72d9c8b4567 \
   --header 'Authorization: Bearer <token>'
 ```
 
 ```python Python
 import requests
 
-url = "https://api.autosend.com/v1/contacts/email/userId/{id}"
+url = "https://api.autosend.com/v1/contact-lists/60d5ec49f1b2c72d9c8b4567"
 
 headers = {
     "Authorization": "Bearer <token>"
@@ -27,7 +29,7 @@ print(response.json())
 ```
 
 ```javascript JavaScript
-fetch('https://api.autosend.com/v1/contacts/email/userId/{id}', {
+fetch('https://api.autosend.com/v1/contact-lists/60d5ec49f1b2c72d9c8b4567', {
   method: 'DELETE',
   headers: {
     'Authorization': 'Bearer <token>'
@@ -41,7 +43,8 @@ fetch('https://api.autosend.com/v1/contacts/email/userId/{id}', {
 ```php PHP
 <?php
 
-$url = 'https://api.autosend.com/v1/contacts/email/userId/{id}';
+$contactListId = '60d5ec49f1b2c72d9c8b4567';
+$url = "https://api.autosend.com/v1/contact-lists/{$contactListId}";
 
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -66,11 +69,11 @@ import (
 )
 
 func main() {
-    url := "https://api.autosend.com/v1/contacts/email/userId/{id}"
-    
+    url := "https://api.autosend.com/v1/contact-lists/60d5ec49f1b2c72d9c8b4567"
+
     req, _ := http.NewRequest("DELETE", url, nil)
     req.Header.Set("Authorization", "Bearer <token>")
-    
+
     client := &http.Client{}
     resp, err := client.Do(req)
     if err != nil {
@@ -78,7 +81,7 @@ func main() {
         return
     }
     defer resp.Body.Close()
-    
+
     fmt.Println("Response Status:", resp.Status)
 }
 ```
@@ -87,18 +90,19 @@ func main() {
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class DeleteContactByUserId {
+public class DeleteContactList {
     public static void main(String[] args) {
         try {
-            URL url = new URL("https://api.autosend.com/v1/contacts/email/userId/{id}");
+            URL url = new URL("https://api.autosend.com/v1/contact-lists/60d5ec49f1b2c72d9c8b4567");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            
+
             con.setRequestMethod("DELETE");
             con.setRequestProperty("Authorization", "Bearer <token>");
-            
+
             int status = con.getResponseCode();
             System.out.println("Response Status: " + status);
-            
+
+            con.disconnect();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -110,12 +114,12 @@ public class DeleteContactByUserId {
 require 'net/http'
 require 'uri'
 
-uri = URI('https://api.autosend.com/v1/contacts/email/userId/{id}')
+uri = URI('https://api.autosend.com/v1/contact-lists/60d5ec49f1b2c72d9c8b4567')
 
 http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true
 
-request = Net::HTTP::Delete.new(uri.path)
+request = Net::HTTP::Delete.new(uri)
 request['Authorization'] = 'Bearer <token>'
 
 response = http.request(request)
@@ -130,31 +134,43 @@ puts response.body
 
 ```json Response
 {
-  "success": true
+  "success": true,
+  "message": "Contact list successfully deleted."
 }
 ```
 
 </ResponseExample>
 
---- 
+---
 ### Authorizations
-<ParamField path="Authorizations" type="string | header"  required>
+<ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
 </ParamField>
 
 ### Path Parameters
 
-<ParamField path="userId" type="string"  required>
-  Your application's user identifier
-  
-  Example: `"user_12345"`
+<ParamField path="contactListId" type="string" required>
+  The unique identifier of the contact list to delete.
+
+  Example: `"60d5ec49f1b2c72d9c8b4567"`
 </ParamField>
+
+<Note>
+  You cannot delete a contact list that is currently used in active workflows. Remove the list from all workflows before deleting.
+</Note>
 
 ### Response
 
-<span className='text-sm'>Contact deleted successfully</span>
+<span className='text-sm'>Contact list deleted successfully</span>
 
 <ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
   Example: `true`
 </ResponseField>
 
+<ResponseField name="message" type="string">
+  Confirmation message
+
+  Example: `"Contact list successfully deleted."`
+</ResponseField>

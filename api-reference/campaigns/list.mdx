@@ -156,7 +156,7 @@ puts JSON.parse(response.body)
 
 </ResponseExample>
 
-#### Authorizations
+### Authorizations
 <ParamField path="Authorizations" type="string | header" required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
 </ParamField>
@@ -191,7 +191,7 @@ puts JSON.parse(response.body)
   Whether to include recipient and send counts in each campaign object. Pass `"true"` or `"false"`.
 </ParamField>
 
-#### Response
+### Response
 <span className='text-sm'>Returns a paginated list of campaign objects.</span>
 
 <ResponseField name="success" type="boolean">

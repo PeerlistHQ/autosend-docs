@@ -203,7 +203,7 @@ puts response.body
 
 </ResponseExample>
 
-#### Authorizations
+### Authorizations
 <ParamField path="Authorization" type="string | header" required>
   Bearer authentication header of the form `Bearer <token>`, where `<token>` is your API key.
 </ParamField>
@@ -218,7 +218,7 @@ puts response.body
   The AutoSend region key where your email service will be configured for this domain (e.g. `us-east-1`, `ap-south-1`, `us-east-2`). If omitted, the project's primary region is used.
 </ParamField>
 
-#### Response
+### Response
 
 <ResponseField name="success" type="boolean">
   Indicates whether the request was successful.
