@@ -57,7 +57,7 @@ sidebarTitle: "Sidebar Label"  # Optional, use when sidebar needs shorter text
 
 ### Components to Use
 
-```mdx
+```text
 <!-- Step-by-step tutorials -->
 <Steps>
   <Step title="Step Title" titleSize="h3">
