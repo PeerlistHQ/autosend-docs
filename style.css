@@ -75,15 +75,6 @@ a.link.nav-tabs-item img {
 	color: #1c1917;
 	background-color: #e7e5e4;
 }
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	font-weight: 600 !important;
-	letter-spacing: normal !important;
-}
 
 .sidebar-group button.group svg {
 	width: 20px !important;
