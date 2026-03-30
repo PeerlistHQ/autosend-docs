@@ -52,6 +52,11 @@ a.link.nav-tabs-item img {
 #sidebar-content {
 	width: 320px;
 }
+@media (min-width: 1024px) {
+	#content-area {
+		margin-left: max(0px, calc(50vw - 348px - 20rem)) !important;
+	}
+}
 .dark #sidebar-content img[src$='.svg'],
 .dark a.link.nav-tabs-item img[src$='.svg'] {
 	filter: invert(1);
