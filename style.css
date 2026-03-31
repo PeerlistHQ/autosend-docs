@@ -8,10 +8,16 @@
 navbar-link {
 	font-weight: 600 !important;
 }
+#navbar > div {
+	border-bottom: 1px solid #e7e5e4;
+}
+.code-group {
+	background-color: #f5f5f4;
+	border: 1px solid #e7e5e4;
+}
 #navigation-items {
 	background-color: #f5f5f4;
 	border-right: 1px solid #e7e5e4;
-	scrollbar-gutter: stable !important;
 	padding-right: 8px;
 }
 .dark #navigation-items {
@@ -72,6 +78,10 @@ a.link.nav-tabs-item img {
 	border-radius: 8px;
 	transition: background-color 0.2s ease;
 }
+li[data-active='true'] .sidebar-group button.group,
+li[data-active='true'] .sidebar-group a.group {
+	font-weight: 600 !important;
+}
 .sidebar-group button.group,
 .sidebar-group a.group {
 	width: 100%;
@@ -99,7 +109,7 @@ a.link.nav-tabs-item img {
 	font-weight: 500 !important;
 }
 
-/* Overlay scrollbar */
+/* Overlay scrollbar - matching Claude platform docs */
 * {
 	scrollbar-width: thin;
 	scrollbar-color: var(--gray-300) transparent;
@@ -111,16 +121,17 @@ a.link.nav-tabs-item img {
 
 /* Webkit (Chrome, Safari, Edge) */
 *::-webkit-scrollbar {
-	width: 2px;
-	height: 2px;
-	overflow-y: scroll;
+	width: 0.25rem;
+	height: 0.25rem;
+	background-color: transparent !important;
 }
 
-::-webkit-scrollbar-track-piece {
-	background: transparent !important;
-}
 *::-webkit-scrollbar-track {
-	background: transparent !important;
+	background-color: transparent !important;
+}
+
+*::-webkit-scrollbar-track-piece {
+	background-color: transparent !important;
 }
 
 *::-webkit-scrollbar-thumb {
@@ -137,5 +148,5 @@ a.link.nav-tabs-item img {
 }
 
 *::-webkit-scrollbar-corner {
-	background: transparent;
+	background-color: transparent !important;
 }
