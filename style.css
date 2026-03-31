@@ -57,6 +57,8 @@ a.link.nav-tabs-item img {
 	#body-content {
 		padding-left: 20rem !important;
 	}
+}
+@media (min-width: 1601px) {
 	#content-area {
 		margin-left: max(0px, calc(50vw - 348px - 20rem)) !important;
 	}
