@@ -120,7 +120,7 @@ puts JSON.parse(response.body)
   "data": {
     "campaigns": [
       {
-        "campaignId": "60d5ec49f1b2c72d9c8b4567",
+        "id": "60d5ec49f1b2c72d9c8b4567",
         "name": "Spring Sale Newsletter",
         "subject": "Don't miss our Spring Sale!",
         "previewText": "Up to 50% off this weekend only",
@@ -132,7 +132,7 @@ puts JSON.parse(response.body)
         "updatedAt": "2026-03-15T14:30:00.000Z"
       },
       {
-        "campaignId": "60d5ec49f1b2c72d9c8b4568",
+        "id": "60d5ec49f1b2c72d9c8b4568",
         "name": "Welcome Series - Week 1",
         "subject": "Welcome to Autosend!",
         "previewText": "Get started in minutes",
@@ -140,6 +140,20 @@ puts JSON.parse(response.body)
         "sendMode": "scheduled",
         "trackingClick": true,
         "trackingOpen": true,
+        "metrics": {
+          "sent": 200,
+          "delivered": 200,
+          "opened": 160,
+          "suppressed": 0,
+          "clicked": 0,
+          "bounced": 0,
+          "unsubscribed": 0,
+          "spamReported": 0,
+          "processedCount": 200,
+          "totalContacts": 200,
+          "failedCount": 0
+        },
+        "sentAt": "2026-04-06T05:54:51.190Z",
         "createdAt": "2026-02-15T08:00:00.000Z",
         "updatedAt": "2026-02-20T09:45:00.000Z"
       }

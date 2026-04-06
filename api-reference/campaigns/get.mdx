@@ -111,28 +111,73 @@ puts JSON.parse(response.body)
 {
   "success": true,
   "data": {
-    "campaignId": "60d5ec49f1b2c72d9c8b4567",
+    "id": "69d348dd0351e0c32be90342",
+    "projectId": "68c7e05a0bd5787257e6ee3b",
+    "organizationId": "68c7e05a0bd5787257e6ee38",
+    "createdBy": 68c7e05a0bd5787257e7ec99,
     "name": "Spring Sale Newsletter",
     "subject": "Don't miss our Spring Sale!",
     "previewText": "Up to 50% off this weekend only",
-    "status": "draft",
-    "sendMode": "immediate",
+    "replyTo": "support@example.com",
+    "toLists": [
+      {
+        "id": "696e1158fbfc515799175f02",
+        "name": "seg list",
+        "type": "list",
+        "contactCount": 3
+      }
+    ],
+    "excludeLists": [],
+    "unsubscribeGroupId": null,
+    "sendNow": true,
+    "scheduledAt": "2026-04-06T05:56:02.850Z",
+    "templateId": "A-280fa451a7ca5cc17513",
+    "status": "sent",
     "from": {
-      "email": "hello@example.com",
+      "email": "hello@yourdomain.com",
       "name": "Example Team"
     },
-    "replyTo": "support@example.com",
-    "templateId": "60d5ec49f1b2c72d9c8b1234",
-    "toLists": ["60d5ec49f1b2c72d9c8b0001"],
-    "excludeLists": [],
-    "unsubscribeGroupId": "60d5ec49f1b2c72d9c8b0099",
+    "metrics": {
+      "sent": 200,
+      "delivered": 200,
+      "opened": 160,
+      "suppressed": 0,
+      "clicked": 0,
+      "bounced": 0,
+      "unsubscribed": 0,
+      "spamReported": 0,
+      "processedCount": 200,
+      "totalContacts": 200,
+      "failedCount": 0
+    },
+    "sentAt": "2026-04-06T05:54:51.190Z",
+    "abortedAt": null,
+    "failureReason": null,
+    "createdAt": "2026-04-06T05:47:09.523Z",
+    "updatedAt": "2026-04-06T07:26:09.190Z",
+    "sendToGlobalList": false,
+    "template": {
+      "templateId": "A-280fa451a7ca5cc17513",
+      "projectId": "68c7e05a0bd5787257e6ee3b",
+      "templateName": "Spring Sale Newsletter",
+      "subject": "Don't miss our Spring Sale!",
+      "previewText": "Up to 50% off this weekend only",
+      "emailTemplate": "<!DOCTYPE html><html><head></head><body><h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p></body></html>",
+      "templateType": "marketing",
+      "builderType": "code",
+      "createdAt": "2026-04-06T05:47:09.516Z",
+      "updatedAt": "2026-04-06T05:47:09.516Z",
+    },
     "trackingClick": true,
     "trackingOpen": true,
-    "scheduledAt": null,
-    "timezone": "America/New_York",
-    "createdAt": "2026-03-01T10:00:00.000Z",
-    "updatedAt": "2026-03-15T14:30:00.000Z"
-  }
+    "sendMode": "immediate",
+    "resumedAt": null,
+    "pausedReason": null,
+    "pausedAt": null,
+    "thresholdPreset": "balanced",
+    "source": "api",
+  },
+  "message": "Campaign retrieved successfully"
 }
 ```
 
@@ -160,8 +205,17 @@ puts JSON.parse(response.body)
   The campaign object.
 
   <Expandable title="data">
-    <ResponseField name="campaignId" type="string">
+    <ResponseField name="id" type="string">
       Unique identifier of the campaign.
+    </ResponseField>
+    <ResponseField name="projectId" type="string">
+      ID of the project this campaign belongs to.
+    </ResponseField>
+    <ResponseField name="organizationId" type="string">
+      ID of the organization this campaign belongs to.
+    </ResponseField>
+    <ResponseField name="createdBy" type="string | null">
+      ID of the user who created the campaign.
     </ResponseField>
     <ResponseField name="name" type="string">
       Display name of the campaign.
@@ -172,11 +226,47 @@ puts JSON.parse(response.body)
     <ResponseField name="previewText" type="string">
       Preview text shown in email clients.
     </ResponseField>
+    <ResponseField name="fromSenderId" type="string | null">
+      ID of the sender used for this campaign.
+    </ResponseField>
+    <ResponseField name="replyTo" type="string">
+      Reply-to email address.
+    </ResponseField>
+    <ResponseField name="toLists" type="array">
+      Lists or segments the campaign targets.
+
+      <Expandable title="toLists item">
+        <ResponseField name="id" type="string">
+          ID of the list or segment.
+        </ResponseField>
+        <ResponseField name="name" type="string">
+          Name of the list or segment.
+        </ResponseField>
+        <ResponseField name="type" type="string">
+          Type of the target. One of: `list`, `segment`.
+        </ResponseField>
+        <ResponseField name="contactCount" type="number">
+          Number of contacts in the list or segment.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="excludeLists" type="array">
+      Lists or segments excluded from this campaign.
+    </ResponseField>
+    <ResponseField name="unsubscribeGroupId" type="string | null">
+      ID of the unsubscribe group associated with this campaign.
+    </ResponseField>
+    <ResponseField name="sendNow" type="boolean">
+      Whether the campaign was sent immediately.
+    </ResponseField>
+    <ResponseField name="scheduledAt" type="string | null">
+      ISO 8601 date-time when the campaign is scheduled to send. Null if not scheduled.
+    </ResponseField>
+    <ResponseField name="templateId" type="string">
+      ID of the email template used by this campaign.
+    </ResponseField>
     <ResponseField name="status" type="string">
       Current status of the campaign. One of: `draft`, `scheduled`, `sending`, `sending_gradual`, `paused`, `sent`, `failed`, `aborted`.
-    </ResponseField>
-    <ResponseField name="sendMode" type="string">
-      How the campaign is delivered: `immediate`, `scheduled`, or `gradual`.
     </ResponseField>
     <ResponseField name="from" type="object">
       Sender identity.
@@ -190,32 +280,62 @@ puts JSON.parse(response.body)
         </ResponseField>
       </Expandable>
     </ResponseField>
-    <ResponseField name="replyTo" type="string">
-      Reply-to email address.
+    <ResponseField name="metrics" type="object">
+      Campaign delivery and engagement metrics.
+
+      <Expandable title="metrics">
+        <ResponseField name="sent" type="number">
+          Number of emails sent.
+        </ResponseField>
+        <ResponseField name="delivered" type="number">
+          Number of emails delivered.
+        </ResponseField>
+        <ResponseField name="opened" type="number">
+          Number of emails opened.
+        </ResponseField>
+        <ResponseField name="suppressed" type="number">
+          Number of emails suppressed.
+        </ResponseField>
+        <ResponseField name="clicked" type="number">
+          Number of emails clicked.
+        </ResponseField>
+        <ResponseField name="bounced" type="number">
+          Number of emails bounced.
+        </ResponseField>
+        <ResponseField name="unsubscribed" type="number">
+          Number of unsubscribes.
+        </ResponseField>
+        <ResponseField name="spamReported" type="number">
+          Number of spam reports.
+        </ResponseField>
+        <ResponseField name="processedCount" type="number">
+          Total number of emails processed.
+        </ResponseField>
+        <ResponseField name="totalContacts" type="number">
+          Total number of contacts targeted.
+        </ResponseField>
+        <ResponseField name="failedCount" type="number">
+          Number of emails that failed to send.
+        </ResponseField>
+        <ResponseField name="averageRatePerSecond" type="number">
+          Average sending rate per second.
+        </ResponseField>
+        <ResponseField name="totalDurationSeconds" type="number">
+          Total time taken to send the campaign in seconds.
+        </ResponseField>
+      </Expandable>
     </ResponseField>
-    <ResponseField name="templateId" type="string">
-      ID of the email template used by this campaign.
+    <ResponseField name="sentAt" type="string | null">
+      ISO 8601 timestamp when the campaign was sent.
     </ResponseField>
-    <ResponseField name="toLists" type="array">
-      List/segment IDs the campaign targets.
+    <ResponseField name="abortedAt" type="string | null">
+      ISO 8601 timestamp when the campaign was aborted. Null if not aborted.
     </ResponseField>
-    <ResponseField name="excludeLists" type="array">
-      List/segment IDs excluded from this campaign.
+    <ResponseField name="agendaJobId" type="string | null">
+      Internal job ID for the campaign send process.
     </ResponseField>
-    <ResponseField name="unsubscribeGroupId" type="string">
-      ID of the unsubscribe group associated with this campaign.
-    </ResponseField>
-    <ResponseField name="trackingClick" type="boolean">
-      Whether click tracking is enabled.
-    </ResponseField>
-    <ResponseField name="trackingOpen" type="boolean">
-      Whether open tracking is enabled.
-    </ResponseField>
-    <ResponseField name="scheduledAt" type="string">
-      ISO 8601 date-time when the campaign is scheduled to send. Null if not scheduled.
-    </ResponseField>
-    <ResponseField name="timezone" type="string">
-      Timezone used for scheduled sending.
+    <ResponseField name="failureReason" type="string | null">
+      Reason for campaign failure. Null if the campaign did not fail.
     </ResponseField>
     <ResponseField name="createdAt" type="string">
       ISO 8601 timestamp when the campaign was created.
@@ -223,5 +343,90 @@ puts JSON.parse(response.body)
     <ResponseField name="updatedAt" type="string">
       ISO 8601 timestamp when the campaign was last updated.
     </ResponseField>
+    <ResponseField name="sendToGlobalList" type="boolean">
+      Whether the campaign was sent to the global contact list.
+    </ResponseField>
+    <ResponseField name="template" type="object">
+      The email template associated with this campaign.
+
+      <Expandable title="template">
+        <ResponseField name="templateId" type="string">
+          Unique identifier of the template.
+        </ResponseField>
+        <ResponseField name="projectId" type="string">
+          ID of the project the template belongs to.
+        </ResponseField>
+        <ResponseField name="templateName" type="string">
+          Display name of the template.
+        </ResponseField>
+        <ResponseField name="subject" type="string">
+          Email subject line from the template.
+        </ResponseField>
+        <ResponseField name="previewText" type="string">
+          Preview text from the template.
+        </ResponseField>
+        <ResponseField name="emailTemplate" type="string">
+          HTML content of the email template.
+        </ResponseField>
+        <ResponseField name="templateType" type="string">
+          Type of the template. One of: `marketing`, `transactional`.
+        </ResponseField>
+        <ResponseField name="builderType" type="string">
+          How the template was built. One of: `code`, `editor`.
+        </ResponseField>
+        <ResponseField name="editorJson" type="object | null">
+          Editor JSON data if built with the visual editor.
+        </ResponseField>
+        <ResponseField name="parentBodyProperties" type="object | null">
+          Parent body properties for the template.
+        </ResponseField>
+        <ResponseField name="createdAt" type="string">
+          ISO 8601 timestamp when the template was created.
+        </ResponseField>
+        <ResponseField name="updatedAt" type="string">
+          ISO 8601 timestamp when the template was last updated.
+        </ResponseField>
+        <ResponseField name="isFlagged" type="boolean">
+          Whether the template has been flagged.
+        </ResponseField>
+        <ResponseField name="source" type="string">
+          Source of the template. One of: `api`, `dashboard`.
+        </ResponseField>
+        <ResponseField name="id" type="string">
+          Internal ID of the template.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="trackingClick" type="boolean">
+      Whether click tracking is enabled.
+    </ResponseField>
+    <ResponseField name="trackingOpen" type="boolean">
+      Whether open tracking is enabled.
+    </ResponseField>
+    <ResponseField name="sendMode" type="string">
+      How the campaign is delivered: `immediate`, `scheduled`, or `gradual`.
+    </ResponseField>
+    <ResponseField name="resumedAt" type="string | null">
+      ISO 8601 timestamp when the campaign was resumed. Null if never paused.
+    </ResponseField>
+    <ResponseField name="pausedReason" type="string | null">
+      Reason the campaign was paused. Null if not paused.
+    </ResponseField>
+    <ResponseField name="pausedAt" type="string | null">
+      ISO 8601 timestamp when the campaign was paused. Null if not paused.
+    </ResponseField>
+    <ResponseField name="thresholdPreset" type="string">
+      Sending threshold preset. One of: `balanced`, `aggressive`, `conservative`.
+    </ResponseField>
+    <ResponseField name="source" type="string">
+      Source of the campaign. One of: `api`, `dashboard`.
+    </ResponseField>
+    <ResponseField name="gradualSend" type="object | null">
+      Gradual send configuration. Null if not using gradual send mode.
+    </ResponseField>
   </Expandable>
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  A human-readable message describing the result.
 </ResponseField>

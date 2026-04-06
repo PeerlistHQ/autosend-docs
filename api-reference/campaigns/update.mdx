@@ -177,7 +177,7 @@ puts JSON.parse(response.body)
 {
   "success": true,
   "data": {
-    "campaignId": "60d5ec49f1b2c72d9c8b4567",
+    "id": "60d5ec49f1b2c72d9c8b4567",
     "name": "Spring Sale Newsletter - Final",
     "subject": "Last chance: Spring Sale ends tonight!",
     "previewText": "Up to 50% off — ends at midnight",
@@ -242,7 +242,11 @@ All body fields are optional. Only the fields provided will be updated.
 </ParamField>
 
 <ParamField body="templateId" type="string">
-  ID of the email template to use.
+  ID of the email template to use. The template can be created via the [Template API](/api-reference/templates/create). Either `templateId` or `htmlTemplate` is required.
+</ParamField>
+
+<ParamField body="htmlTemplate" type="string">
+  Raw HTML content to use as the campaign email body. Either `htmlTemplate` or `templateId` is required. If both are provided, `htmlTemplate` takes precedence and the template referenced by `templateId` will be updated with the provided HTML content.
 </ParamField>
 
 <ParamField body="toLists" type="array">
