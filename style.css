@@ -11,6 +11,9 @@ navbar-link {
 #navbar > div {
 	border-bottom: 1px solid #e7e5e4;
 }
+.dark #navbar > div {
+	border-bottom: 1px solid #404040;
+}
 .code-group {
 	background-color: #f5f5f4;
 	border: 1px solid #e7e5e4;
