@@ -1,12 +1,12 @@
 ---
-title: "API Reference"
-description: "Send transactional emails programmatically using the AutoSend REST API. This guide covers details of all APIs, request/response formats, and best practices."
-sidebarTitle: "Introduction"
+title: 'API Reference'
+description: 'Send transactional emails programmatically using the AutoSend REST API. This guide covers details of all APIs, request/response formats, and best practices.'
+sidebarTitle: 'Introduction'
 icon: '/icons/introduction.svg'
 ---
 
-import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx'
-import { APP_PATHS } from '/snippets/appPaths.mdx'
+import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
 
 ## Base URL
 
@@ -18,7 +18,7 @@ https://api.autosend.com
 
 ## Authentication
 
-All API requests require authentication using an API key. Include your <a href={APP_PATHS.apiKey}>API Key</a> in the `Authorization` header:
+All API requests require authentication using an API key. Include your <a href={APP_PATHS.apiKeys}>API Key</a> in the `Authorization` header:
 
 ```bash
 Authorization: Bearer AS_xxxxxx
