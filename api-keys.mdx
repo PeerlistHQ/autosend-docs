@@ -20,16 +20,23 @@ AutoSend uses **API Key authentication** with Bearer tokens. Every API request m
 
 <Steps>
   <Step title="Navigate to API Keys" titleSize='h3'>
-    Go to **Account > API Keys** from the sidebar.
+    Go to <a href={AUTOSEND_PATHS.apiKey}>**Account > API Keys**</a> from the sidebar. Click the **"Generate Key"** button.
+    <Frame>
+    	<img src="/images/api-keys/create-api-key-step-1.png" alt="API Keys dashboard showing list of API keys" />
+    </Frame>
   </Step>
   <Step title="Generate a New API Key" titleSize='h3'>
-    Click the **"Generate API Key"** button. A modal will open where you:
+    A modal will open where you:
+    <Frame>
+    	<img src="/images/api-keys/create-api-key-step-2.png" alt="API Keys dashboard showing list of API keys" />
+    </Frame>
 
     1. Enter a descriptive name (e.g. `Production`, `Staging`, `Multi-tenant Service`)
     2. Select the key type: **Account API Key** or **Project API Key**
     3. If you selected **Project API Key**: choose which project this key belongs to
 
     Click **"Generate"**.
+
   </Step>
   <Step title="Save Your API Key Secret" titleSize='h3'>
     After generation, your **API Key Secret** is shown once:
@@ -43,6 +50,7 @@ AutoSend uses **API Key authentication** with Bearer tokens. Every API request m
       - Never commit API keys to version control
       - Never share your API key publicly or in client-side code
     </Note>
+
   </Step>
 </Steps>
 
@@ -159,7 +167,8 @@ x-project-id: your_project_id
 ```
 
 <Note>
-  The `x-project-id` header is **not required** when creating a new project, since no project exists yet to target.
+	The `x-project-id` header is **not required** when creating a new project, since no project exists
+	yet to target.
 </Note>
 
 <Tip>
@@ -273,11 +282,10 @@ Note: You cannot view the secret after creation. Only the key ID is visible.
 
 To delete an API key:
 
-1. Go to **Account > API Keys**
+1. Go to <a href={AUTOSEND_PATHS.apiKey}>**Account > API Keys**</a>
 2. Find the key you want to delete
-3. Click the three-dot menu icon
-4. Select **"Delete"**
-5. Confirm the deletion
+3. Click the trash icon
+4. Confirm the deletion
 
 <Warning>
 	When you delete an API key, it stops working immediately. Any applications or services using that

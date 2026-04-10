@@ -72,6 +72,11 @@ a.link.nav-tabs-item img {
 		margin-left: max(0px, calc(50vw - 348px - 20rem)) !important;
 	}
 }
+@media (min-width: 1024px) {
+	.peer.is-not-custom ~ .peer-\[\.is-not-custom\]\:lg\:pl-56 {
+		padding-left: 20rem;
+	}
+}
 .dark #sidebar-content img[src$='.svg'],
 .dark a.link.nav-tabs-item img[src$='.svg'],
 .dark #content-area img[src^='/icons/'] {
