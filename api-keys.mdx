@@ -1,7 +1,7 @@
 ---
 sidebarTitle: 'API Keys'
 title: 'API Keys'
-description: 'All API requests to AutoSend must be authenticated using an API key. This guide covers how to create API keys and authenticate your requests.'
+description: 'All API requests to AutoSend must be authenticated using an API key. This guide covers the two types of API keys, how to create them, and how to use them.'
 icon: '/icons/api-key.svg'
 ---
 
@@ -9,83 +9,71 @@ import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
 
 ## Overview
 
-AutoSend uses **API Key authentication** with Bearer tokens. Every API request must include your API key in the `Authorization` header. API keys are tied to a specific project and provide access to all resources within that project.
+AutoSend uses **API Key authentication** with Bearer tokens. Every API request must include your API key in the `Authorization` header. AutoSend has two types of API keys, each with different scope and purpose.
+
+## Key Types
+
+- **Project API Key** (`AS_...`): Scoped to a single project. Use this for sending emails, managing contacts, templates, campaigns, and all day-to-day operations. This is the right choice for most integrations.
+- **Account API Key** (`ASA_...`): Cross-project scope. Use this when you need to programmatically create, update, or delete projects - for example, when building a multi-tenant platform. All requests made with an Account API Key require an `x-project-id` header to specify the target project, except when creating a new project.
 
 ## Creating an API Key
 
-Follow these steps to generate a new API key from your AutoSend dashboard:
-
 <Steps>
-  <Step title="Navigate to API Keys Settings" titleSize='h3'>
-    Go to **Settings \> API Keys** from the sidebar
-
-    <Frame>
-      ![](/images/api-keys.png)
-    </Frame>
-
+  <Step title="Navigate to API Keys" titleSize='h3'>
+    Go to **Account > API Keys** from the sidebar.
   </Step>
-  <Step title="Generate New API Key" titleSize='h3'>
-    1. Click the **"Generate API Key"** button in the top-right corner
-    2. Enter a descriptive name for your API key:
-       - Use names that describe the purpose or environment (e.g., "Production", "Staging", "Development", "Marketing Automation")
-       - This helps you identify and manage multiple keys
-    3. Click **"Generate"**
+  <Step title="Generate a New API Key" titleSize='h3'>
+    Click the **"Generate API Key"** button. A modal will open where you:
 
-    <Frame>
-      ![](/images/create-api-key.png)
-    </Frame>
+    1. Enter a descriptive name (e.g. `Production`, `Staging`, `Multi-tenant Service`)
+    2. Select the key type: **Account API Key** or **Project API Key**
+    3. If you selected **Project API Key**: choose which project this key belongs to
 
+    Click **"Generate"**.
   </Step>
-  <Step title=" Save Your API Key Secret" titleSize='h3'>
-    After generation, you'll see your **API Key Secret** displayed once:
+  <Step title="Save Your API Key Secret" titleSize='h3'>
+    After generation, your **API Key Secret** is shown once:
 
-    <Frame>
-      ![](/images/api-key-created.png)
-    </Frame>
     <Note>
       For security reasons, the API key secret is only shown once during creation. You will NOT be able to view it again.
 
       - Copy the key immediately to your clipboard
       - Store it securely (password manager, environment variables, secrets management system)
       - Download the .txt file as a backup
-      - Never commit API keys to version control (Git, SVN, etc.)
+      - Never commit API keys to version control
       - Never share your API key publicly or in client-side code
     </Note>
-    Your API key will look like this:
-
-    ```
-    as_demo_your_api_key_here
-    ```
-
   </Step>
 </Steps>
 
-## API Key Format
+## API Key Formats
 
-AutoSend API keys follow this format:
+AutoSend API keys follow these formats depending on the type:
 
 ```
-as_[secret_string]
+ASA_[secret_string]   ← Account API Key
+AS_[secret_string]    ← Project API Key
 ```
 
-- **`as`** - Prefix identifying AutoSend keys
-- **`secret_string`** - Cryptographically secure alphanumeric characters
+- **`ASA`**: Prefix for Account-scoped keys
+- **`AS`**: Prefix for Project-scoped keys
+- **`secret_string`**: Cryptographically secure alphanumeric characters
 
 ## Making Authenticated Requests
 
-Include your API key in the `Authorization` header of every request using the Bearer authentication scheme:
+Include your API key in the `Authorization` header of every request.
 
-### HTTP Header Format
+### Project API Key
 
 ```
-Authorization: Bearer YOUR_API_KEY
+Authorization: Bearer AS_your_project_api_key
 ```
 
 <CodeGroup>
 
 ```bash cURL expandable
 curl -X POST https://api.autosend.com/v1/mails/send \
-  -H "Authorization: Bearer as_demo_your_api_key_here" \
+  -H "Authorization: Bearer AS_your_project_api_key" \
   -H "Content-Type: application/json" \
   -d '{
     "to": {
@@ -159,118 +147,125 @@ def send_email():
 send_email()
 ```
 
-```php PHP expandable
-<?php
+</CodeGroup>
 
-$apiKey = getenv('AUTOSEND_API_KEY');
+### Account API Key
 
-$ch = curl_init('https://api.autosend.com/v1/mails/send');
+Account API Keys require an additional `x-project-id` header on all requests, so AutoSend knows which project to operate on.
 
-$payload = json_encode([
-    'to' => [
-        'email' => 'customer@example.com'
-    ],
-    'from' => [
-        'email' => 'hello@mail.yourdomain.com'
-    ],
-    'subject' => 'Test Email',
-    'html' => '<p>Hello World!</p>'
-]);
-
-curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    'Authorization: Bearer ' . $apiKey,
-    'Content-Type: application/json'
-]);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-$response = curl_exec($ch);
-curl_close($ch);
-
-echo $response;
-?>
+```
+Authorization: Bearer ASA_your_account_api_key
+x-project-id: your_project_id
 ```
 
-```go Go expandable
-package main
+<Note>
+  The `x-project-id` header is **not required** when creating a new project, since no project exists yet to target.
+</Note>
 
-import (
-    "bytes"
-    "encoding/json"
-    "fmt"
-    "net/http"
-    "os"
-)
+<Tip>
+  To find your Project ID, go to [Project Settings > General](https://autosend.com/settings/project) and copy it from the **Project Info** section.
+</Tip>
 
-func main() {
-    apiKey := os.Getenv("AUTOSEND_API_KEY")
+<CodeGroup>
 
-    payload := map[string]interface{}{
-        "to": map[string]string{
-            "email": "customer@example.com",
+```bash cURL expandable
+curl -X POST https://api.autosend.com/v1/mails/send \
+  -H "Authorization: Bearer ASA_your_account_api_key" \
+  -H "x-project-id: your_project_id" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "to": {
+      "email": "customer@example.com"
+    },
+    "from": {
+      "email": "hello@mail.yourdomain.com"
+    },
+    "subject": "Test Email",
+    "html": "<p>Hello World!</p>"
+  }'
+```
+
+```javascript NodeJS expandable
+const fetch = require('node-fetch');
+
+const API_KEY = process.env.AUTOSEND_ACCOUNT_API_KEY;
+const PROJECT_ID = process.env.AUTOSEND_PROJECT_ID;
+
+async function sendEmail() {
+	const response = await fetch('https://api.autosend.com/v1/mails/send', {
+		method: 'POST',
+		headers: {
+			Authorization: `Bearer ${API_KEY}`,
+			'x-project-id': PROJECT_ID,
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			to: {
+				email: 'customer@example.com',
+			},
+			from: {
+				email: 'hello@mail.yourdomain.com',
+			},
+			subject: 'Test Email',
+			html: '<p>Hello World!</p>',
+		}),
+	});
+
+	const data = await response.json();
+	console.log(data);
+}
+
+sendEmail();
+```
+
+```python Python expandable
+import requests
+import os
+
+API_KEY = os.environ.get('AUTOSEND_ACCOUNT_API_KEY')
+PROJECT_ID = os.environ.get('AUTOSEND_PROJECT_ID')
+
+def send_email():
+    url = 'https://api.autosend.com/v1/mails/send'
+    headers = {
+        'Authorization': f'Bearer {API_KEY}',
+        'x-project-id': PROJECT_ID,
+        'Content-Type': 'application/json'
+    }
+    payload = {
+        'to': {
+            'email': 'customer@example.com'
         },
-        "from": map[string]string{
-            "email": "hello@mail.yourdomain.com",
+        'from': {
+            'email': 'hello@mail.yourdomain.com'
         },
-        "subject": "Test Email",
-        "html": "<p>Hello World!</p>",
+        'subject': 'Test Email',
+        'html': '<p>Hello World!</p>'
     }
 
-    jsonData, _ := json.Marshal(payload)
+    response = requests.post(url, json=payload, headers=headers)
+    print(response.json())
 
-    req, _ := http.NewRequest("POST", "https://api.autosend.com/v1/mails/send", bytes.NewBuffer(jsonData))
-    req.Header.Set("Authorization", "Bearer "+apiKey)
-    req.Header.Set("Content-Type", "application/json")
-
-    client := &http.Client{}
-    resp, _ := client.Do(req)
-    defer resp.Body.Close()
-
-    var result map[string]interface{}
-    json.NewDecoder(resp.Body).Decode(&result)
-    fmt.Println(result)
-}
-```
-
-```ruby Ruby expandable
-require 'net/http'
-require 'json'
-
-api_key = ENV['AUTOSEND_API_KEY']
-
-uri = URI('https://api.autosend.com/v1/mails/send')
-http = Net::HTTP.new(uri.host, uri.port)
-http.use_ssl = true
-
-request = Net::HTTP::Post.new(uri.path)
-request['Authorization'] = "Bearer #{api_key}"
-request['Content-Type'] = 'application/json'
-request.body = {
-  to: {
-    email: 'customer@example.com'
-  },
-  from: {
-    email: 'hello@mail.yourdomain.com'
-  },
-  subject: 'Test Email',
-  html: '<p>Hello World!</p>'
-}.to_json
-
-response = http.request(request)
-puts response.body
+send_email()
 ```
 
 </CodeGroup>
+
+## Choosing the Right API Key
+
+- Use a **Project API Key** for everyday operations: sending emails, managing contacts, templates, campaigns, and webhooks within a specific project. This is the right key for most integrations.
+- Use an **Account API Key** only when managing projects themselves - for example, when building a multi-tenant platform that automatically provisions new projects for each of your customers.
 
 ## Managing API Keys
 
 ### Viewing API Keys
 
-In your dashboard under **Settings \> API Keys**, you can see:
+In your dashboard under **Account > API Keys**, you can see:
 
-- **API Key Name** - The label you assigned
-- **API Key ID** - A unique identifier for the key
-- **Generated On** - Creation date
+- **API Key Name**: the label you assigned
+- **Type**: Account or Project
+- **Project**: the associated project (Project API Keys only)
+- **Generated On**: creation date
 
 Note: You cannot view the secret after creation. Only the key ID is visible.
 
@@ -278,8 +273,8 @@ Note: You cannot view the secret after creation. Only the key ID is visible.
 
 To delete an API key:
 
-1. Go to **Settings \> API Keys**
-2. Find the API key you want to delete
+1. Go to **Account > API Keys**
+2. Find the key you want to delete
 3. Click the three-dot menu icon
 4. Select **"Delete"**
 5. Confirm the deletion
@@ -296,19 +291,23 @@ To delete an API key:
 
    ```bash
    # .env file
-   AUTOSEND_API_KEY=as_live_your_api_key_here
+   AUTOSEND_API_KEY=AS_your_project_api_key
+   AUTOSEND_ACCOUNT_API_KEY=ASA_your_account_api_key
+   AUTOSEND_PROJECT_ID=your_project_id
    ```
 
    Never hardcode API keys in your source code.
 
 2. **Separate Keys for Different Environments**
-   - Create separate keys for development, staging, and production
-   - Use descriptive names: "Production API Key", "Staging API Key"
+   - Create separate Project API Keys for development, staging, and production
+   - Use descriptive names: `Production`, `Staging`, `Development`
    - This allows you to rotate keys without affecting other environments
+
 3. **Rotate Keys Regularly**
    - Generate new keys periodically (every 90 days recommended)
    - Update your applications with the new key
    - Delete the old key after confirming the new one works
+
 4. **Limit Key Exposure**
    - Never commit keys to version control
    - Don't include keys in client-side JavaScript
@@ -364,12 +363,14 @@ To delete an API key:
 **Common Causes:**
 
 - API key doesn't have access to the requested resource
-- API key belongs to a different project
+- Using a Project API Key to access a different project's resources
+- Missing `x-project-id` header when using an Account API Key
 
 **Solutions:**
 
 - Verify you're using the correct API key for the project
-- Check that the resource (domain, template, etc.) exists in the project
+- If using an Account API Key, ensure the `x-project-id` header is present and correct
+- Check that the resource (domain, template, etc.) exists in the target project
 
 </Accordion>
 </AccordionGroup>
@@ -381,7 +382,6 @@ API keys provide full access to your AutoSend account and should be treated like
 - Never share API keys in public forums, support tickets, or chat
 - Don't include keys in screenshots or screen recordings
 - Revoke keys immediately if exposed
-- Use read-only keys when possible (future feature)
 
 <Note>
 **HTTPS Only**
