@@ -7,6 +7,34 @@ rss: true
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 
+<Update label="April 10, 2026">
+
+## Introducing Projects
+
+You can now create multiple Projects under a single AutoSend account. Each project is a fully isolated workspace with its own API keys, contacts, senders, templates, campaigns, automations, and webhooks. Your subscription and monthly email quota are shared across all projects.
+
+<Frame>![Projects in AutoSend](/images/changelog/autosend-projects.png)</Frame>
+
+**Why Projects?**
+
+- Keep Production, Staging, and Development environments completely separate
+- Run multiple independent products under one subscription and billing
+- Build multi-tenant platforms (CRMs, Shopify apps, marketing tools) where each customer gets their own isolated project
+- Manage multiple clients as an agency without any data mixing
+
+Need more than 10 projects for a multi-tenant system? Reach out to support@autosend.com for a custom limit.
+
+**Two types of API Keys:**
+
+Along with Projects, we're introducing a second API key type:
+
+- **Project API Key** (`AS_...`): Scoped to a single project. Use this for sending emails, managing contacts, templates, and campaigns. The right key for most integrations.
+- **Account API Key** (`ASA_...`): Cross-project scope. Use this to programmatically create, update, or delete projects. All requests with an Account API Key require an `x-project-id` header to specify the target project, except when creating a new project.
+
+Read the <a href={APP_PATHS.apiKeys}>API Keys documentation</a> to learn more about key types and authentication.
+
+</Update>
+
 <Update label="March 28, 2026">
 
 ## NEW: 41 API Endpoints Added to API Reference
