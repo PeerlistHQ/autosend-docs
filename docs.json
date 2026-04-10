@@ -17,7 +17,7 @@
 				"groups": [
 					{
 						"group": "Getting Started",
-						"pages": ["index", "domain", "api-keys"]
+						"pages": ["index", "projects", "domain", "api-keys"]
 					},
 					{
 						"group": "Quickstart",

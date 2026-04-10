@@ -58,21 +58,21 @@ sidebarTitle: "Sidebar Label"  # Optional, use when sidebar needs shorter text
 ### Components to Use
 
 ```text
-<!-- Step-by-step tutorials -->
+{/* Step-by-step tutorials */}
 <Steps>
   <Step title="Step Title" titleSize="h3">
     Content here...
   </Step>
 </Steps>
 
-<!-- Grid layouts -->
+{/* Grid layouts */}
 <Columns cols={2}>
   <Card title="Title" icon="envelope" iconType="duotone" href="/path">
     Description
   </Card>
 </Columns>
 
-<!-- Multi-language code examples -->
+{/* Multi-language code examples */}
 <CodeGroup>
   ```bash cURL
   curl -X POST ...
@@ -82,12 +82,12 @@ sidebarTitle: "Sidebar Label"  # Optional, use when sidebar needs shorter text
   ```
 </CodeGroup>
 
-<!-- Alerts -->
+{/* Alerts */}
 <Note>Informational highlight</Note>
 <Info>Additional context</Info>
 <Warning>Important warning</Warning>
 
-<!-- Images -->
+{/* Images */}
 <Frame>
   <img src="/images/path.png" alt="Descriptive alt text" />
 </Frame>

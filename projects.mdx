@@ -1,0 +1,136 @@
+---
+title: 'Projects'
+description: 'Organize your work into separate Projects - each with its own API keys, contacts, senders, and settings, all under one account and subscription.'
+sidebarTitle: 'Projects'
+icon: '/icons/projects.svg'
+---
+
+import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+
+A **Project** is an isolated workspace within your AutoSend account. Each project has its own sending domains, contacts, senders, templates, campaigns, API keys, and settings. All your projects share the same subscription and billing, while usage and limits are pooled across them.
+
+## Why Use Projects?
+
+- **Separate Environments**: Keep Production, Staging, and Development completely isolated. Use separate API keys and senders per environment without risk of cross-contamination.
+- **Multiple Products**: Indie hackers and founders building several products can keep each one separate, with different contact lists and senders, all under a single subscription.
+- **Multi-Tenant Platforms**: Build CRMs, marketing tools, or Shopify apps where each of your customers sends from their own custom domain. Each customer gets their own isolated project.
+- **Agencies with Multiple Clients**: Manage email for multiple clients under one AutoSend account. Contacts, senders, and campaigns stay separate per client with no risk of data mixing.
+
+## Creating a Project
+
+<Steps>
+	<Step title='Open the Project Switcher' titleSize='h3'>
+		Click the project name in the top-left corner of your AutoSend dashboard to open the project
+		switcher dropdown, then click **"New Project"**.
+
+    	<Frame>
+    		<img src="/images/projects/create-project-step-1.png" alt="Project switcher dropdown with New Project option" />
+    	</Frame>
+    </Step>
+    <Step title='Name Your Project' titleSize='h3'>
+    	Enter a descriptive name for the project - for example, `Production`, `Staging`, or your
+    	client's brand name. Add a sending domain, select Region and click **"Create Project"**.
+
+    	<Frame>
+    		<img src="/images/projects/create-project-step-2.png" alt="Create project form with name input" />
+    	</Frame>
+    </Step>
+    <Step title='Set Up Your Sending Domain' titleSize='h3'>
+    	Your new project is ready. Head to <a href={AUTOSEND_PATHS.domains}>Settings > Domains</a> to get the DNS records and verify a sending domain for this project before you can start sending emails.
+    </Step>
+
+</Steps>
+
+## Switching Between Projects
+
+Use the project switcher in the top-left of the dashboard to move between projects at any time. All data shown in the dashboard - contacts, campaigns, analytics, API keys - belongs to the currently selected project.
+
+## What's Isolated Per Project
+
+Each project has its own separate:
+
+- **API Keys**: credentials scoped to that project only
+- **Contacts and Lists**: subscriber data does not cross project boundaries
+- **Senders and Domains**: verified sending addresses and domains
+- **Templates**: transactional and marketing email templates
+- **Campaigns**: marketing campaigns and their analytics
+- **Automations**: email sequences and workflow configurations
+- **Webhooks**: event notification endpoints
+- **Suppressions**: unsubscribe and bounce lists
+
+## What's Shared Across Projects
+
+The following are shared at the account level across all projects:
+
+- **Subscription and billing**: one plan covers all your projects
+- **Monthly email send quota**: the total sends are pooled across projects
+- **Team members**: all team members on your account can access all projects
+
+## Plan Limits
+
+Each plan includes a set number of projects:
+
+| Plan    | Projects |
+| ------- | -------- |
+| Hobby   | 1        |
+| Starter | Up to 3  |
+| Growth  | Up to 5  |
+| Scale   | Up to 10 |
+
+<Info>
+	Building a multi-tenant system and need more than 10 projects? Reach out to{' '}
+	<a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a> and we'll set up a custom limit for your
+	use case.
+</Info>
+
+---
+
+## FAQs
+
+<AccordionGroup>
+  <Accordion title="Can I move contacts from one project to another?">
+    Not directly - contacts are isolated per project by design. To migrate contacts, export them from the source project as a CSV and import them into the destination project.
+  </Accordion>
+
+<Accordion title='Do all my projects share the same email sending quota?'>
+	Yes. Your plan's monthly email quota is pooled across all projects. For example, on the Starter
+	plan, the total sends are shared between your 3 projects - there's no per-project quota split.
+</Accordion>
+
+<Accordion title='Can I use different sending domains in different projects?'>
+	Yes. Each project has its own verified senders and domains. You can verify `mail.client-a.com` in
+	one project and `mail.client-b.com` in another, completely independently.
+</Accordion>
+
+<Accordion title='What happens if I downgrade and have more projects than my new plan allows?'>
+	Your existing projects remain active and usable - nothing is deleted. However, you won't be able
+	to create new projects until the number of projects is within your new plan's limit.
+</Accordion>
+
+<Accordion title='Can my team members access all projects?'>
+	Yes. Team members are added at the account level and have access to all projects under the
+	account.
+</Accordion>
+
+  <Accordion title="What's the difference between a Project API key and an Account API key?">
+    AutoSend has two types of API keys:
+
+    - **Project API key**: Scoped to a single project. Use this for sending emails, managing contacts, campaigns, and all day-to-day operations within that project. An API key from Project A cannot access Project B.
+    - **Account API key**: Has extended scope across your entire account. Use this when you need to programmatically create, update, or delete projects. Requests made with an Account API key must include the target `projectId` in the payload to specify which project to operate on.
+
+    For most integrations, a Project API key is the right choice. Use an Account API key only when managing projects themselves - for example, when building a multi-tenant platform that provisions new projects automatically.
+
+  </Accordion>
+
+<Accordion title='Can I delete a project?'>
+	Yes. You can delete a project from the project settings. Deleting a project permanently removes
+	all associated data - contacts, templates, campaigns, API keys, and email history. This action
+	cannot be undone.
+</Accordion>
+
+  <Accordion title="I'm building a multi-tenant product. Is there a limit to how many projects I can have?">
+    The Scale plan supports up to 10 projects. If you're building a product where each of your customers needs their own isolated project, contact <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a> - we support custom project limits for multi-tenant use cases.
+  </Accordion>
+</AccordionGroup>
