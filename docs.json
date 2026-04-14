@@ -27,6 +27,7 @@
 								"icon": "/icons/api.svg",
 								"pages": [
 									"quickstart/email-using-api",
+									"guides/QStash",
 									"guides/better-auth",
 									"guides/supabase-edge-functions"
 								]
