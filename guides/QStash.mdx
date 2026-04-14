@@ -7,7 +7,7 @@ icon: '/icons/brand-qstash.png'
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 
-<Frame>![AutoSend x Better Auth](/images/guides/qstash.jpg)</Frame>
+<Frame>![AutoSend x QStash](/images/guides/qstash.jpg)</Frame>
 
 ## Overview
 
@@ -246,6 +246,13 @@ const res = await client.publishJSON({
 
 A retry is triggered when AutoSend returns a non-2xx HTTP response. QStash uses exponential backoff between retries.
 
+**How responses are handled:**
+
+- **2xx response** - Email successfully queued by AutoSend. No retry needed.
+- **Non-2xx response** - QStash retries automatically based on your retry configuration.
+
+Common errors that trigger retries include invalid API keys, unverified sender domains, missing required fields (`to`, `from`), and missing content (`html`, `text`, or `templateId`).
+
 ## Advanced Features
 
 ### Using Queues
@@ -311,12 +318,25 @@ Your callback endpoint will receive a POST request containing the AutoSend API r
 // app/api/email-callback/route.js
 export async function POST(req) {
   const body = await req.json();
-  // body contains the AutoSend response, e.g.:
-  // { success: true, data: { emailId: "em_xxx", message: "Email sent", totalRecipients: 1 } }
-  console.log("Email delivered:", body);
+
+  // body is a QStash envelope, not the raw AutoSend response
+  let autosendResponse;
+  try {
+    autosendResponse = JSON.parse(atob(body.body));
+  } catch {
+    console.error("Failed to parse AutoSend response:", body.body);
+    return Response.json({ ok: false }, { status: 400 });
+  }
+
+  // autosendResponse = { success: true, data: { emailId: "em_xxx", ... } }
+  console.log("Email delivered:", autosendResponse);
   return Response.json({ ok: true });
 }
 ```
+
+<Warning>
+  Always [verify the QStash signature](https://upstash.com/docs/qstash/features/security) on your callback endpoint to confirm the request came from QStash. The `@upstash/qstash` SDK provides a `Receiver` class for this.
+</Warning>
 
 ### Using Deduplication
 
@@ -416,7 +436,6 @@ If a message with the same `deduplicationId` was already published in the last 2
 
       const emails = [
         {
-          delay: "0s", // immediately
           subject: "Welcome!",
           html: `<p>Hi ${user.name}, welcome to our platform!</p>`,
           deduplicationId: `onboard-day0-${user.id}`,
@@ -472,6 +491,35 @@ If a message with the same `deduplicationId` was already published in the last 2
 | `Upstash-Forward-Content-Type` | Forwards `Content-Type` to AutoSend. The SDK sets this automatically when using `publishJSON`. |
 
 Any header prefixed with `Upstash-Forward-` is stripped of the prefix and forwarded to the destination URL. This is how QStash passes your AutoSend API key without exposing it as a QStash-level credential.
+
+## When to Use This Integration
+
+Use QStash with AutoSend when you need:
+
+- **Scheduled email delivery** - send emails at a specific time without a cron job
+- **Retry handling without custom logic** - QStash retries failed requests automatically
+- **Async processing for heavy workloads** - offload email sending from your main request
+- **Decoupled architecture** - separate email delivery from your application logic
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Keep requests fast">
+    `publishJSON` returns a `messageId` as soon as QStash accepts your message. AutoSend is called asynchronously after that. Avoid doing heavy processing before publishing to QStash.
+  </Accordion>
+  <Accordion title="Use deduplication for idempotency">
+    QStash may retry requests on transient failures. To avoid sending duplicate emails, always include a unique `deduplicationId` tied to the email intent (e.g., `welcome-${userId}`). See the [deduplication section](#using-deduplication) for details.
+  </Accordion>
+  <Accordion title="Secure your API key">
+    Always send your AutoSend API key via the `Upstash-Forward-Authorization` header. Never expose it in client-side code or include it in request bodies.
+  </Accordion>
+  <Accordion title="Avoid large payloads">
+    Keep request payloads lightweight. Store large files externally and reference them when possible. Attachments must stay within AutoSend's size limits.
+  </Accordion>
+  <Accordion title="Use templates for scale">
+    Prefer `templateId` with `dynamicData` instead of large inline HTML payloads. Templates are more performant, easier to maintain, and can be updated without code changes. Learn more about <a href={APP_PATHS.emailTemplates}>email templates</a>.
+  </Accordion>
+</AccordionGroup>
 
 ## What QStash Does Not Handle
 
