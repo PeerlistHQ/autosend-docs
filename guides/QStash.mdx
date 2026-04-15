@@ -1,0 +1,579 @@
+---
+title: 'Send Emails with QStash'
+sidebarTitle: 'QStash'
+description: 'Use Upstash QStash to queue, schedule, retry, and reliably deliver emails through AutoSend.'
+icon: '/icons/brand-qstash.png'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+<Frame>![AutoSend x QStash](/images/guides/qstash.jpg)</Frame>
+
+## Overview
+
+[QStash](https://upstash.com/docs/qstash/overall/getstarted) is a serverless message queue by Upstash. It lets you publish HTTP requests that get delivered reliably with automatic retries, delays, scheduling, and dead-letter queues.
+
+Because QStash can publish to any HTTP endpoint, it works with AutoSend out of the box. You do not need a dedicated integration. QStash forwards your request (including the `Authorization` header) directly to the AutoSend API.
+
+**This is useful when you want to:**
+
+- Send emails reliably without blocking your main request
+- Retry failed email sends automatically
+- Schedule emails for a future time (e.g., 24 hours after signup)
+- Queue high-volume sends without overwhelming your app
+
+## Prerequisites
+
+Before you start, make sure you have:
+
+- An **AutoSend account** with an API key - get one at [autosend.com](https://autosend.com)
+- An **Upstash account** with a QStash token - get one at [upstash.com](https://upstash.com)
+- Node.js 18+ (or any environment that supports `fetch`)
+
+## How It Works
+
+QStash acts as a proxy between your app and the AutoSend API. Instead of calling `https://api.autosend.com/v1/mails/send` directly, you publish the request to QStash. QStash then delivers it to AutoSend, handling retries and scheduling for you.
+
+
+Your App  →  QStash  →  AutoSend API  →  Email delivered
+
+
+Your `Authorization: Bearer <AUTOSEND_API_KEY>` header is forwarded to AutoSend using QStash's header-forwarding mechanism (`Upstash-Forward-*`).
+
+## Installation
+
+Install the QStash JavaScript SDK:
+
+```bash
+npm install @upstash/qstash
+```
+
+## Quickstart
+
+<Steps>
+  <Step title="Set Environment Variables" titleSize="h3">
+    Add these to your `.env` file:
+
+    ```bash .env
+    QSTASH_TOKEN=your_qstash_token_here
+    AUTOSEND_API_KEY=your_autosend_api_key_here
+    ```
+
+    <Info>
+      Get your AutoSend API key from the <a href={APP_PATHS.apiKeys}>API Keys</a> page in your dashboard, and your QStash token from the [Upstash console](https://console.upstash.com/qstash).
+    </Info>
+
+  </Step>
+  <Step title="Send a Single Email" titleSize="h3">
+    Use `client.publishJSON` with the AutoSend <a href={APP_PATHS.sendEmail}>mail send endpoint</a> as the URL. Pass your AutoSend API key in the `Upstash-Forward-Authorization` header. QStash strips the `Upstash-Forward-` prefix before forwarding the request, so AutoSend receives a standard `Authorization: Bearer ...` header.
+
+    ```javascript
+    import { Client } from "@upstash/qstash";
+
+    const client = new Client({
+      token: process.env.QSTASH_TOKEN,
+    });
+
+    const res = await client.publishJSON({
+      url: "https://api.autosend.com/v1/mails/send",
+      headers: {
+        "Upstash-Forward-Authorization": `Bearer ${process.env.AUTOSEND_API_KEY}`,
+      },
+      body: {
+        from: {
+          email: "hello@yourdomain.com",
+          name: "Your Company",
+        },
+        to: {
+          email: "user@example.com",
+          name: "User Name",
+        },
+        subject: "Welcome to our platform",
+        html: "<h1>Welcome!</h1><p>Thanks for signing up.</p>",
+      },
+    });
+
+    console.log(res.messageId); // QStash message ID
+    ```
+
+    `publishJSON` automatically sets `Content-Type: application/json` and serializes the body.
+
+    **Response from QStash:**
+
+    ```json
+    {
+      "messageId": "msg_xxxxxxxxxxxxxxxx"
+    }
+    ```
+
+    <Note>
+      This is the QStash message ID, not the AutoSend email ID. The email is queued and will be delivered asynchronously.
+    </Note>
+
+  </Step>
+  <Step title="Send a Bulk Email" titleSize="h3">
+    For bulk sends, use the <a href={APP_PATHS.bulkSendEmail}>bulk send endpoint</a> and provide a `recipients` array instead of a single `to` field.
+
+    ```javascript
+    import { Client } from "@upstash/qstash";
+
+    const client = new Client({
+      token: process.env.QSTASH_TOKEN,
+    });
+
+    const res = await client.publishJSON({
+      url: "https://api.autosend.com/v1/mails/bulk",
+      headers: {
+        "Upstash-Forward-Authorization": `Bearer ${process.env.AUTOSEND_API_KEY}`,
+      },
+      body: {
+        from: {
+          email: "hello@yourdomain.com",
+          name: "Your Company",
+        },
+        subject: "Your monthly newsletter",
+        html: "<h1>This month in product</h1><p>Here's what shipped...</p>",
+        recipients: [
+          { email: "alice@example.com", name: "Alice" },
+          { email: "bob@example.com", name: "Bob" },
+          { email: "carol@example.com", name: "Carol" },
+        ],
+      },
+    });
+
+    console.log(res.messageId);
+    ```
+
+  </Step>
+  <Step title="Send Using a Template" titleSize="h3">
+    If you have a template configured in AutoSend, pass `templateId` and `dynamicData` instead of `html`. Learn more about <a href={APP_PATHS.emailTemplates}>email templates</a> and <a href={APP_PATHS.templateVariables}>template variables</a>.
+
+    ```javascript
+    const res = await client.publishJSON({
+      url: "https://api.autosend.com/v1/mails/send",
+      headers: {
+        "Upstash-Forward-Authorization": `Bearer ${process.env.AUTOSEND_API_KEY}`,
+      },
+      body: {
+        from: {
+          email: "hello@yourdomain.com",
+          name: "Your Company",
+        },
+        to: {
+          email: "user@example.com",
+          name: "User Name",
+        },
+        templateId: "your-template-id",
+        dynamicData: {
+          firstName: "John",
+          orderNumber: "ORD-12345",
+          trackingUrl: "https://track.example.com/ORD-12345",
+        },
+      },
+    });
+    ```
+
+  </Step>
+</Steps>
+
+## Scheduling and Retries
+
+### Schedule a Delayed Email
+
+Use the `delay` option to send an email at a future time. This is useful for follow-up sequences, onboarding drips, or reminders.
+
+```javascript
+// Send 24 hours from now
+const res = await client.publishJSON({
+  url: "https://api.autosend.com/v1/mails/send",
+  headers: {
+    "Upstash-Forward-Authorization": `Bearer ${process.env.AUTOSEND_API_KEY}`,
+  },
+  delay: "24h", // supports: "10s", "5m", "2h", "1d"
+  body: {
+    from: {
+      email: "hello@yourdomain.com",
+      name: "Your Company",
+    },
+    to: {
+      email: "user@example.com",
+    },
+    subject: "Just checking in",
+    html: "<p>It's been 24 hours since you signed up. Need any help?</p>",
+  },
+});
+```
+
+You can also schedule for an exact Unix timestamp using `notBefore`:
+
+```javascript
+const sendAt = Math.floor(Date.now() / 1000) + 3 * 24 * 60 * 60; // 3 days from now
+
+const res = await client.publishJSON({
+  url: "https://api.autosend.com/v1/mails/send",
+  headers: {
+    "Upstash-Forward-Authorization": `Bearer ${process.env.AUTOSEND_API_KEY}`,
+  },
+  notBefore: sendAt,
+  body: {
+    from: { email: "hello@yourdomain.com", name: "Your Company" },
+    to: { email: "user@example.com" },
+    subject: "Your trial ends soon",
+    html: "<p>Your 7-day trial ends in 3 days.</p>",
+  },
+});
+```
+
+### Configure Retries
+
+By default, QStash retries failed requests 3 times. You can configure this:
+
+```javascript
+const res = await client.publishJSON({
+  url: "https://api.autosend.com/v1/mails/send",
+  headers: {
+    "Upstash-Forward-Authorization": `Bearer ${process.env.AUTOSEND_API_KEY}`,
+  },
+  retries: 5, // retry up to 5 times on failure
+  body: {
+    from: { email: "hello@yourdomain.com", name: "Your Company" },
+    to: { email: "user@example.com" },
+    subject: "Important notification",
+    html: "<p>This message is important.</p>",
+  },
+});
+```
+
+A retry is triggered when AutoSend returns a non-2xx HTTP response. QStash uses exponential backoff between retries.
+
+**How responses are handled:**
+
+- **2xx response** - Email successfully queued by AutoSend. No retry needed.
+- **Non-2xx response** - QStash retries automatically based on your retry configuration.
+
+Common errors that trigger retries include invalid API keys, unverified sender domains, missing required fields (`to`, `from`), and missing content (`html`, `text`, or `templateId`).
+
+## Advanced Features
+
+### Using Queues
+
+If you want concurrency control, for example limiting how many emails are sent per second, use a QStash queue with `enqueueJSON`.
+
+```javascript
+import { Client } from "@upstash/qstash";
+
+const client = new Client({
+  token: process.env.QSTASH_TOKEN,
+});
+
+const queue = client.queue({ queueName: "email-queue" });
+
+const res = await queue.enqueueJSON({
+  url: "https://api.autosend.com/v1/mails/bulk",
+  headers: {
+    "Upstash-Forward-Authorization": `Bearer ${process.env.AUTOSEND_API_KEY}`,
+  },
+  body: {
+    from: { email: "hello@yourdomain.com", name: "Your Company" },
+    subject: "Campaign blast",
+    html: "<p>Big announcement!</p>",
+    recipients: [
+      { email: "alice@example.com", name: "Alice" },
+      { email: "bob@example.com", name: "Bob" },
+    ],
+  },
+});
+
+console.log(res.messageId);
+```
+
+Messages in a queue are processed in order. You can configure `parallelism` on the queue in your Upstash console.
+
+### Using a Callback URL
+
+If you want to know when QStash has successfully delivered the email request to AutoSend, you can pass a `callback` URL. QStash will POST the response from AutoSend to this URL after delivery.
+
+```javascript
+const res = await client.publishJSON({
+  url: "https://api.autosend.com/v1/mails/send",
+  headers: {
+    "Upstash-Forward-Authorization": `Bearer ${process.env.AUTOSEND_API_KEY}`,
+  },
+  callback: "https://yourapp.com/api/email-callback",
+  failureCallback: "https://yourapp.com/api/email-failure",
+  body: {
+    from: { email: "hello@yourdomain.com", name: "Your Company" },
+    to: { email: "user@example.com" },
+    subject: "Hello",
+    html: "<p>Hello!</p>",
+  },
+});
+```
+
+Your callback endpoint will receive a POST request containing the AutoSend API response body.
+
+**Example callback handler (Next.js App Router):**
+
+```javascript
+// app/api/email-callback/route.js
+export async function POST(req) {
+  const body = await req.json();
+
+  // body is a QStash envelope, not the raw AutoSend response
+  let autosendResponse;
+  try {
+    autosendResponse = JSON.parse(atob(body.body));
+  } catch {
+    console.error("Failed to parse AutoSend response:", body.body);
+    return Response.json({ ok: false }, { status: 400 });
+  }
+
+  // autosendResponse = { success: true, data: { emailId: "em_xxx", ... } }
+  console.log("Email delivered:", autosendResponse);
+  return Response.json({ ok: true });
+}
+```
+
+<Warning>
+  Always [verify the QStash signature](https://upstash.com/docs/qstash/features/security) on your callback endpoint to confirm the request came from QStash. The `@upstash/qstash` SDK provides a `Receiver` class for this.
+</Warning>
+
+### Using Deduplication
+
+If your app might accidentally publish the same email twice (e.g., due to a retry on your side), use a `deduplicationId` to prevent duplicates.
+
+```javascript
+const res = await client.publishJSON({
+  url: "https://api.autosend.com/v1/mails/send",
+  headers: {
+    "Upstash-Forward-Authorization": `Bearer ${process.env.AUTOSEND_API_KEY}`,
+  },
+  deduplicationId: `welcome-email-user-${userId}`, // unique per email intent
+  body: {
+    from: { email: "hello@yourdomain.com", name: "Your Company" },
+    to: { email: userEmail },
+    subject: "Welcome!",
+    html: "<p>Welcome to our platform!</p>",
+  },
+});
+```
+
+If a message with the same `deduplicationId` was already published in the last 24 hours, QStash will reject the duplicate silently.
+
+## Complete Examples
+
+<AccordionGroup>
+  <Accordion title="Post-Signup Email Flow (Next.js)">
+    A full example of a Next.js API route that queues a welcome email when a user signs up.
+
+    ```javascript expandable
+    // app/api/signup/route.js
+    import { Client } from "@upstash/qstash";
+
+    const qstash = new Client({
+      token: process.env.QSTASH_TOKEN,
+    });
+
+    export async function POST(req) {
+      const { email, name } = await req.json();
+
+      // 1. Save user to your database
+      // await db.users.create({ email, name });
+
+      // 2. Queue welcome email via QStash -> AutoSend
+      try {
+        const res = await qstash.publishJSON({
+          url: "https://api.autosend.com/v1/mails/send",
+          headers: {
+            "Upstash-Forward-Authorization": `Bearer ${process.env.AUTOSEND_API_KEY}`,
+          },
+          deduplicationId: `welcome-${email}`,
+          retries: 3,
+          body: {
+            from: {
+              email: "hello@yourdomain.com",
+              name: "Your Company",
+            },
+            to: {
+              email,
+              name,
+            },
+            subject: `Welcome, ${name}!`,
+            html: `
+              <h1>Welcome aboard, ${name}!</h1>
+              <p>We're excited to have you.</p>
+              <p>If you have any questions, just reply to this email.</p>
+            `,
+          },
+        });
+
+        console.log("Email queued:", res.messageId);
+      } catch (err) {
+        // QStash publish failed - log and continue, don't block signup
+        console.error("Failed to queue welcome email:", err);
+      }
+
+      return Response.json({ success: true });
+    }
+    ```
+
+  </Accordion>
+  <Accordion title="Onboarding Drip Sequence">
+    Queue multiple emails at different delays when a user signs up.
+
+    ```javascript expandable
+    import { Client } from "@upstash/qstash";
+
+    const qstash = new Client({
+      token: process.env.QSTASH_TOKEN,
+    });
+
+    async function queueOnboardingSequence(user) {
+      const emailBase = {
+        from: { email: "hello@yourdomain.com", name: "Your Company" },
+        to: { email: user.email, name: user.name },
+      };
+
+      const emails = [
+        {
+          subject: "Welcome!",
+          html: `<p>Hi ${user.name}, welcome to our platform!</p>`,
+          deduplicationId: `onboard-day0-${user.id}`,
+        },
+        {
+          delay: "1d", // day 1
+          subject: "Getting started tips",
+          html: `<p>Hi ${user.name}, here are 3 things to try today...</p>`,
+          deduplicationId: `onboard-day1-${user.id}`,
+        },
+        {
+          delay: "3d", // day 3
+          subject: "How's it going?",
+          html: `<p>Hi ${user.name}, just checking in. Need any help?</p>`,
+          deduplicationId: `onboard-day3-${user.id}`,
+        },
+        {
+          delay: "7d", // day 7
+          subject: "Your first week",
+          html: `<p>You've been with us for a week, ${user.name}. Here's what's new...</p>`,
+          deduplicationId: `onboard-day7-${user.id}`,
+        },
+      ];
+
+      await Promise.all(
+        emails.map(({ delay, subject, html, deduplicationId }) =>
+          qstash.publishJSON({
+            url: "https://api.autosend.com/v1/mails/send",
+            headers: {
+              "Upstash-Forward-Authorization": `Bearer ${process.env.AUTOSEND_API_KEY}`,
+            },
+            delay,
+            deduplicationId,
+            body: {
+              ...emailBase,
+              subject,
+              html,
+            },
+          })
+        )
+      );
+    }
+    ```
+
+  </Accordion>
+</AccordionGroup>
+
+## Header Reference
+
+| Header | Description |
+|--------|-------------|
+| `Upstash-Forward-Authorization` | Forwards `Authorization: Bearer <token>` to AutoSend. Required for authentication. |
+| `Upstash-Forward-Content-Type` | Forwards `Content-Type` to AutoSend. The SDK sets this automatically when using `publishJSON`. |
+
+Any header prefixed with `Upstash-Forward-` is stripped of the prefix and forwarded to the destination URL. This is how QStash passes your AutoSend API key without exposing it as a QStash-level credential.
+
+## When to Use This Integration
+
+Use QStash with AutoSend when you need:
+
+- **Scheduled email delivery** - send emails at a specific time without a cron job
+- **Retry handling without custom logic** - QStash retries failed requests automatically
+- **Async processing for heavy workloads** - offload email sending from your main request
+- **Decoupled architecture** - separate email delivery from your application logic
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Keep requests fast">
+    `publishJSON` returns a `messageId` as soon as QStash accepts your message. AutoSend is called asynchronously after that. Avoid doing heavy processing before publishing to QStash.
+  </Accordion>
+  <Accordion title="Use deduplication for idempotency">
+    QStash may retry requests on transient failures. To avoid sending duplicate emails, always include a unique `deduplicationId` tied to the email intent (e.g., `welcome-${userId}`). See the [deduplication section](#using-deduplication) for details.
+  </Accordion>
+  <Accordion title="Secure your API key">
+    Always send your AutoSend API key via the `Upstash-Forward-Authorization` header. Never expose it in client-side code or include it in request bodies.
+  </Accordion>
+  <Accordion title="Avoid large payloads">
+    Keep request payloads lightweight. Store large files externally and reference them when possible. Attachments must stay within AutoSend's size limits.
+  </Accordion>
+  <Accordion title="Use templates for scale">
+    Prefer `templateId` with `dynamicData` instead of large inline HTML payloads. Templates are more performant, easier to maintain, and can be updated without code changes. Learn more about <a href={APP_PATHS.emailTemplates}>email templates</a>.
+  </Accordion>
+</AccordionGroup>
+
+## What QStash Does Not Handle
+
+QStash handles reliable delivery to the AutoSend API. The following are handled by AutoSend, not QStash:
+
+- Whether the email was actually delivered to the recipient's inbox
+- Bounce and complaint handling
+- Unsubscribe tracking
+- Open and click tracking
+
+For those, refer to the <a href={APP_PATHS.webhookIntroduction}>webhooks documentation</a>.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Email not delivered">
+    Check the QStash dashboard in your Upstash console. You can see message status, retry attempts, and the response body from AutoSend. If the message is in the Dead Letter Queue (DLQ), the AutoSend API returned a persistent error.
+
+    **Solution:** Review the message details in the [Upstash console](https://console.upstash.com/qstash) and check your <a href={APP_PATHS.emailActivity}>Email Activity</a> dashboard for delivery status.
+
+  </Accordion>
+  <Accordion title="401 Unauthorized from AutoSend">
+    Make sure you are passing `Upstash-Forward-Authorization` (not `Authorization`) in the headers. The `Authorization` header goes to QStash for QStash authentication. `Upstash-Forward-Authorization` is forwarded to AutoSend.
+
+    **Solution:** Verify your header name and API key value. Check your key in the <a href={APP_PATHS.apiKeys}>API Keys</a> dashboard.
+
+  </Accordion>
+  <Accordion title="Messages delivering to wrong endpoint">
+    Double-check your `url` is `https://api.autosend.com/v1/mails/send` for single sends or `https://api.autosend.com/v1/mails/bulk` for bulk sends.
+
+    **Solution:** Refer to the <a href={APP_PATHS.apiReference}>API Reference</a> for the correct endpoint URLs.
+
+  </Accordion>
+  <Accordion title="Duplicate emails">
+    Use a `deduplicationId` that is unique per email intent (e.g., `welcome-${userId}`). See the [deduplication section](#using-deduplication) above.
+
+    **Solution:** Add a unique `deduplicationId` to every `publishJSON` call where duplicate sends are possible.
+
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<Columns cols={2}>
+  <Card title='Email Templates' icon='/icons/email-templates.svg' href={APP_PATHS.emailTemplates}>
+    Create reusable, personalized email templates for transactional emails.
+  </Card>
+  <Card title='Webhooks' icon='/icons/webhook.svg' href={APP_PATHS.webhookIntroduction}>
+    Use webhooks to notify your application about email and contact events in real-time.
+  </Card>
+  <Card title='Sending Domain' icon='/icons/domain.svg' href={APP_PATHS.domainConfiguration}>
+    Verify and authenticate your domain on AutoSend for sending emails.
+  </Card>
+  <Card title='Email Activity' icon='/icons/email-activity.svg' href={APP_PATHS.emailActivity}>
+    Track delivery, performance, and troubleshoot issues for your transactional emails.
+  </Card>
+</Columns>
