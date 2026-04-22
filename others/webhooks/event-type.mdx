@@ -991,7 +991,7 @@ You can programmatically fetch the list of available events:
 
 <CodeGroup>
   ```bash cURL
-  curl -X GET https://api.autosend.io/v1/webhooks/events/available \
+  curl -X GET https://api.autosend.com/v1/webhooks/events/available \
     -H "Authorization: Bearer YOUR_API_KEY" \
     -H "x-project-id: YOUR_PROJECT_ID"
   ```
@@ -1004,7 +1004,7 @@ const PROJECT_ID = process.env.AUTOSEND_PROJECT_ID;
 
 async function getAvailableEvents() {
   const response = await fetch(
-    'https://api.autosend.io/v1/webhooks/events/available',
+    'https://api.autosend.com/v1/webhooks/events/available',
     {
       method: 'GET',
       headers: {
@@ -1030,7 +1030,7 @@ API_KEY = os.environ.get('AUTOSEND_API_KEY')
 PROJECT_ID = os.environ.get('AUTOSEND_PROJECT_ID')
 
 def get_available_events():
-    url = 'https://api.autosend.io/v1/webhooks/events/available'
+    url = 'https://api.autosend.com/v1/webhooks/events/available'
     headers = {
         'Authorization': f'Bearer {API_KEY}',
         'x-project-id': PROJECT_ID
@@ -1050,7 +1050,7 @@ get_available_events()
 $apiKey = getenv('AUTOSEND_API_KEY');
 $projectId = getenv('AUTOSEND_PROJECT_ID');
 
-$ch = curl_init('https://api.autosend.io/v1/webhooks/events/available');
+$ch = curl_init('https://api.autosend.com/v1/webhooks/events/available');
 
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'Authorization: Bearer ' . $apiKey,
@@ -1080,7 +1080,7 @@ func main() {
     apiKey := os.Getenv("AUTOSEND_API_KEY")
     projectId := os.Getenv("AUTOSEND_PROJECT_ID")
 
-    req, _ := http.NewRequest("GET", "https://api.autosend.io/v1/webhooks/events/available", nil)
+    req, _ := http.NewRequest("GET", "https://api.autosend.com/v1/webhooks/events/available", nil)
     req.Header.Set("Authorization", "Bearer "+apiKey)
     req.Header.Set("x-project-id", projectId)
 
@@ -1101,7 +1101,7 @@ require 'uri'
 api_key = ENV['AUTOSEND_API_KEY']
 project_id = ENV['AUTOSEND_PROJECT_ID']
 
-uri = URI('https://api.autosend.io/v1/webhooks/events/available')
+uri = URI('https://api.autosend.com/v1/webhooks/events/available')
 http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true
 
