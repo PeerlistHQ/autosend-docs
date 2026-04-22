@@ -186,7 +186,9 @@ puts response.body
   ```json
   {
     "success": false,
-    "error": "This endpoint requires an organization admin API key (ASA_ prefix)"
+    "error":{
+      "message":"This endpoint requires an organization admin API key (ASA_ prefix)"
+    }
   }
   ```
 </ResponseField>
@@ -197,9 +199,8 @@ puts response.body
   ```json
   {
     "success": false,
-    "errors": [
+    "error": [
       {
-        "field": "projectId",
         "message": "Invalid project ID"
       }
     ]
@@ -213,7 +214,9 @@ puts response.body
   ```json
   {
     "success": false,
-    "error": "Project not found"
+    "error": {
+      "message": "Project not found"
+    }
   }
   ```
 </ResponseField>

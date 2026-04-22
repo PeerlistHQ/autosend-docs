@@ -278,10 +278,12 @@ puts response.body
 <ResponseField name="403 - Not an admin key" type="object">
   Returned when using a standard project API key instead of an organization admin API key.
 
-  ```json
+   ```json
   {
     "success": false,
-    "error": "This endpoint requires an organization admin API key (ASA_ prefix)"
+    "error":{
+      "message":"This endpoint requires an organization admin API key (ASA_ prefix)"
+    }
   }
   ```
 </ResponseField>
