@@ -159,24 +159,9 @@ puts response.body
             "verificationStatus": "VERIFIED"
           }
         ],
-        "authenticatedSenders": [
-          {
-            "id": "60d5ec49f1b2c72d9c8b9012",
-            "email": "hello@example.com",
-            "name": "Example Team",
-            "replyTo": "support@example.com"
-          }
-        ],
         "industry": "saas",
         "logo": null,
         "address": null,
-        "credentials": [
-          {
-            "id": "60d5ec49f1b2c72d9c8b3456",
-            "name": "Production Key",
-            "prefix": "AS_"
-          }
-        ],
         "trackingOpen": true,
         "trackingClick": true
       },
@@ -185,11 +170,9 @@ puts response.body
         "name": "Staging App",
         "domain": null,
         "domains": [],
-        "authenticatedSenders": [],
         "industry": null,
         "logo": null,
         "address": null,
-        "credentials": [],
         "trackingOpen": false,
         "trackingClick": false
       }
@@ -260,27 +243,6 @@ puts response.body
       </Expandable>
     </ResponseField>
 
-    <ResponseField name="authenticatedSenders" type="object[]">
-      List of authenticated email senders
-
-      <Expandable title="child attributes">
-      <ResponseField name="id" type="string">
-        Sender identifier
-      </ResponseField>
-
-      <ResponseField name="email" type="string">
-        Sender email address
-      </ResponseField>
-
-      <ResponseField name="name" type="string">
-        Sender display name
-      </ResponseField>
-
-      <ResponseField name="replyTo" type="string">
-        Reply-to email address
-      </ResponseField>
-      </Expandable>
-    </ResponseField>
 
     <ResponseField name="industry" type="string | null">
       Industry category
@@ -294,27 +256,6 @@ puts response.body
       Physical address for CAN-SPAM compliance
     </ResponseField>
 
-    <ResponseField name="credentials" type="object[]">
-      API key credentials (secrets are never returned)
-
-      <Expandable title="child attributes">
-      <ResponseField name="id" type="string">
-        Credential identifier
-      </ResponseField>
-
-      <ResponseField name="name" type="string">
-        Key name
-
-        Example: `"Production Key"`
-      </ResponseField>
-
-      <ResponseField name="prefix" type="string">
-        Key prefix
-
-        Example: `"AS_"`
-      </ResponseField>
-      </Expandable>
-    </ResponseField>
 
     <ResponseField name="trackingOpen" type="boolean">
       Whether open tracking is enabled

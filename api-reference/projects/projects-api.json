@@ -29,7 +29,7 @@
     "/account/projects/{projectId}": {
       "delete": {
         "summary": "Delete Project",
-        "description": "Soft-deletes a project by its ID. The project must belong to the organization. Requires an organization admin API key (ASA_ prefix). No OTP verification is required for admin API key callers."
+        "description": "Deletes a project by its ID. The project must belong to the organization. Requires an organization admin API key (ASA_ prefix). No OTP verification is required for admin API key callers."
       }
     }
   }

@@ -190,11 +190,9 @@ puts response.body
     "name": "My New Project",
     "domain": null,
     "domains": [],
-    "authenticatedSenders": [],
     "industry": null,
     "logo": null,
     "address": null,
-    "credentials": [],
     "trackingOpen": false,
     "trackingClick": false
   }
@@ -253,10 +251,6 @@ puts response.body
     List of verified email domains (empty for new projects)
   </ResponseField>
 
-  <ResponseField name="data.authenticatedSenders" type="object[]">
-    List of authenticated senders (empty for new projects)
-  </ResponseField>
-
   <ResponseField name="data.industry" type="string | null">
     Industry category
   </ResponseField>
@@ -267,10 +261,6 @@ puts response.body
 
   <ResponseField name="data.address" type="object | null">
     Physical address for CAN-SPAM compliance
-  </ResponseField>
-
-  <ResponseField name="data.credentials" type="object[]">
-    API key credentials associated with the project
   </ResponseField>
 
   <ResponseField name="data.trackingOpen" type="boolean">
