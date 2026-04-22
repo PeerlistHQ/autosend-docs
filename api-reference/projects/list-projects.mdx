@@ -1,0 +1,346 @@
+---
+title: 'List Projects'
+sidebarTitle: 'List Projects'
+openapi: 'GET /account/projects'
+---
+
+<Note>
+  This endpoint requires an **organization admin API key** (`ASA_` prefix). Standard project API keys cannot access this endpoint.
+</Note>
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request GET \
+  --url https://api.autosend.com/v1/account/projects \
+  --header 'Authorization: Bearer ASA_your-admin-api-key'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/account/projects"
+
+headers = {
+    "Authorization": "Bearer ASA_your-admin-api-key"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/account/projects', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer ASA_your-admin-api-key'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/account/projects';
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer ASA_your-admin-api-key'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/account/projects"
+
+    req, _ := http.NewRequest("GET", url, nil)
+    req.Header.Set("Authorization", "Bearer ASA_your-admin-api-key")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class ListProjects {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/account/projects");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Authorization", "Bearer ASA_your-admin-api-key");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+            con.disconnect();
+
+            System.out.println(content.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/account/projects')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Get.new(uri)
+request['Authorization'] = 'Bearer ASA_your-admin-api-key'
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "projects": [
+      {
+        "id": "60d5ec49f1b2c72d9c8b1234",
+        "name": "Production App",
+        "domain": "example.com",
+        "domains": [
+          {
+            "id": "60d5ec49f1b2c72d9c8b5678",
+            "domain": "example.com",
+            "verificationStatus": "VERIFIED"
+          }
+        ],
+        "authenticatedSenders": [
+          {
+            "id": "60d5ec49f1b2c72d9c8b9012",
+            "email": "hello@example.com",
+            "name": "Example Team",
+            "replyTo": "support@example.com"
+          }
+        ],
+        "industry": "saas",
+        "logo": null,
+        "address": null,
+        "credentials": [
+          {
+            "id": "60d5ec49f1b2c72d9c8b3456",
+            "name": "Production Key",
+            "prefix": "AS_"
+          }
+        ],
+        "trackingOpen": true,
+        "trackingClick": true
+      },
+      {
+        "id": "60d5ec49f1b2c72d9c8b7890",
+        "name": "Staging App",
+        "domain": null,
+        "domains": [],
+        "authenticatedSenders": [],
+        "industry": null,
+        "logo": null,
+        "address": null,
+        "credentials": [],
+        "trackingOpen": false,
+        "trackingClick": false
+      }
+    ]
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Organization admin API key header of the form Bearer `ASA_<key>`. Standard project API keys (`AS_` prefix) will receive a `403` error.
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Projects retrieved successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="child attributes">
+  <ResponseField name="data.projects" type="object[]">
+    Array of project objects belonging to the organization
+
+    <Expandable title="child attributes">
+    <ResponseField name="id" type="string">
+      Unique project identifier
+
+      Example: `"60d5ec49f1b2c72d9c8b1234"`
+    </ResponseField>
+
+    <ResponseField name="name" type="string">
+      Project name
+
+      Example: `"Production App"`
+    </ResponseField>
+
+    <ResponseField name="domain" type="string | null">
+      Primary domain associated with the project
+
+      Example: `"example.com"`
+    </ResponseField>
+
+    <ResponseField name="domains" type="object[]">
+      List of email domains configured for the project
+
+      <Expandable title="child attributes">
+      <ResponseField name="id" type="string">
+        Domain identifier
+      </ResponseField>
+
+      <ResponseField name="domain" type="string">
+        Domain name
+
+        Example: `"example.com"`
+      </ResponseField>
+
+      <ResponseField name="verificationStatus" type="string">
+        Domain verification status: `PENDING_CONFIGURATION`, `PENDING`, or `VERIFIED`
+      </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="authenticatedSenders" type="object[]">
+      List of authenticated email senders
+
+      <Expandable title="child attributes">
+      <ResponseField name="id" type="string">
+        Sender identifier
+      </ResponseField>
+
+      <ResponseField name="email" type="string">
+        Sender email address
+      </ResponseField>
+
+      <ResponseField name="name" type="string">
+        Sender display name
+      </ResponseField>
+
+      <ResponseField name="replyTo" type="string">
+        Reply-to email address
+      </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="industry" type="string | null">
+      Industry category
+    </ResponseField>
+
+    <ResponseField name="logo" type="string | null">
+      Project logo URL (CloudFront)
+    </ResponseField>
+
+    <ResponseField name="address" type="object | null">
+      Physical address for CAN-SPAM compliance
+    </ResponseField>
+
+    <ResponseField name="credentials" type="object[]">
+      API key credentials (secrets are never returned)
+
+      <Expandable title="child attributes">
+      <ResponseField name="id" type="string">
+        Credential identifier
+      </ResponseField>
+
+      <ResponseField name="name" type="string">
+        Key name
+
+        Example: `"Production Key"`
+      </ResponseField>
+
+      <ResponseField name="prefix" type="string">
+        Key prefix
+
+        Example: `"AS_"`
+      </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="trackingOpen" type="boolean">
+      Whether open tracking is enabled
+
+      Example: `true`
+    </ResponseField>
+
+    <ResponseField name="trackingClick" type="boolean">
+      Whether click tracking is enabled
+
+      Example: `true`
+    </ResponseField>
+    </Expandable>
+  </ResponseField>
+  </Expandable>
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="403 - Not an admin key" type="object">
+  Returned when using a standard project API key instead of an organization admin API key.
+
+  ```json
+  {
+    "success": false,
+    "error": "This endpoint requires an organization admin API key (ASA_ prefix)"
+  }
+  ```
+</ResponseField>

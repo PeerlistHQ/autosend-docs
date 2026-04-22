@@ -209,6 +209,14 @@
 							"api-reference/suppression-groups/bulk-suppress",
 							"api-reference/suppression-groups/bulk-unsuppress"
 						]
+					},
+					{
+						"group": "Projects",
+						"pages": [
+							"api-reference/projects/list-projects",
+							"api-reference/projects/create-project",
+							"api-reference/projects/delete-project"
+						]
 					}
 				]
 			},

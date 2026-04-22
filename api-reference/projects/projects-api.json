@@ -1,0 +1,36 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AutoSend API",
+    "description": "AutoSend REST API for managing organization projects. These endpoints require an organization admin API key (ASA_ prefix) and are not accessible via standard project API keys.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.autosend.com/v1"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/account/projects": {
+      "get": {
+        "summary": "List Projects",
+        "description": "Retrieves all projects for the authenticated organization. Requires an organization admin API key (ASA_ prefix)."
+      },
+      "post": {
+        "summary": "Create Project",
+        "description": "Creates a new project under the organization. The number of projects is limited by the organization's plan. Requires an organization admin API key (ASA_ prefix)."
+      }
+    },
+    "/account/projects/{projectId}": {
+      "delete": {
+        "summary": "Delete Project",
+        "description": "Soft-deletes a project by its ID. The project must belong to the organization. Requires an organization admin API key (ASA_ prefix). No OTP verification is required for admin API key callers."
+      }
+    }
+  }
+}
