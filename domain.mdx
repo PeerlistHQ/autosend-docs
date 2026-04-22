@@ -6,8 +6,8 @@ icon: '/icons/domain.svg'
 ---
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
-import { SUPPORT_EMAIL } from '/snippets/custom-variables.mdx';
 import {
+	SUPPORT_EMAIL,
 	DNS_CHECKER_LINK,
 	WHATS_MY_DNS_LINK,
 	AUTOSEND_DOCS_DOMAIN,
@@ -107,13 +107,17 @@ Your domain will progress through these statuses:
 	<img src='/images/domain/domain-verified.png' alt='Domain verified' />
 </Frame>
 <Check>
-	{' '}
 	When your domain shows a green “Verified” badge, you’re all set! You can now use this domain to
 	send emails through AutoSend’s API.
 </Check>
 
 </Step>
 </Steps>
+<Note>
+
+**New domains are limited to 300 emails/day.** Since your domain is new, sending too many emails too quickly can hurt your deliverability and trigger spam filters. This limit also protects against unauthorized use. As your domain builds a sending reputation, the limit will be lifted automatically - or you can reach out to <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a> to request an early removal.
+
+</Note>
 
 ## Next Step: Warm Up Your Domain
 

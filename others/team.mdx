@@ -1,84 +1,183 @@
 ---
-title: "Team"
-description: "Collaborate with your team by inviting members to your AutoSend workspace. This guide covers how to invite, manage, and remove team members."
-sidebarTitle: "Team"
+title: 'Team'
+description: 'Collaborate with your team by inviting members to your AutoSend workspace. This guide covers how to invite, manage, and remove team members.'
+sidebarTitle: 'Team'
 icon: '/icons/team.svg'
 ---
 
 ## Overview
 
-AutoSend's team feature allows you to **invite team members** to collaborate on your workspace. Team members will have full access to all projects, domains, and resources within your workspace. You can manage invitations, track their status, and resend or cancel pending invitations as needed.
+AutoSend's team feature lets you invite colleagues to collaborate within your workspace. With the new roles system, you have granular control over what each person can access. There are two roles available: **Admin** and **Member**.
 
-## Inviting Team Members
+- **Admins** have full access to the entire workspace — all projects, domains, members, billing, and usage.
+- **Members** have scoped access. They can only access specific projects that an Admin has granted them, and can add or remove other members within those projects.
 
-Follow these steps to invite a new team member to your AutoSend workspace:
+## Roles & Permissions
+
+| Capability                              | Admin | Member                 |
+| --------------------------------------- | ----- | ---------------------- |
+| Access all projects                     | Yes   | Assigned projects only |
+| Manage projects                         | Yes   | No                     |
+| Manage billing & usage                  | Yes   | No                     |
+| Invite & remove workspace members       | Yes   | No                     |
+| Add/remove members in assigned projects | Yes   | Yes                    |
+
+## Team Management
+
+There are two places to manage your team in AutoSend, and access depends on your role:
+
+#### Account Settings \> Team (Admins only)
+
+This is the workspace-level view where Admins can invite new Admins or Members, assign project access, and manage all team members across the workspace.
+
+#### Project Settings \> Team
+
+This is the project-level view where both Admins and Members can add or remove members within that specific project.
+
+## How to Invite Someone (as an Admin)
+
+Admins can invite new people from either [**Account Settings \> Team** ](https://autosend.com/account/team)or from within a specific [**Project Settings \> Team**](https://autosend.com/settings/team).
 
 <Steps>
-    <Step title="Navigate to Team Settings" >
+  <Step title="Navigate to Team Settings">
+    Go to **Settings \> Team** from the sidebar
 
-Go to **Settings > Team** from the sidebar
+    <Frame>
+      ![navigate to team](/images/team/inviting-someone-1.png)
+    </Frame>
 
-<Frame>
-  <img src='/images/navigate-to-team-page.png' alt="navigate to team"  />
-</Frame>
-</Step>
+  </Step>
+  <Step title="Click the Invite button in the top-right corner">
+    Enter the following information about the team member you want to invite:
 
-<Step title="Click the Invite button in the top-right corner" >
-  Enter the following information about the team member you want to invite:
+    <Frame>
+      ![Invite Team Member Modal](/images/team/inviting-someone-2.png)
+    </Frame>
 
-<Frame>
-  <img src='/images/team.png' alt="Invite Team Member Modal"  />
-</Frame>
+    **Required Fields:**
 
-**Required Fields:**
+    - **First Name** - The team member's first name
+    - **Last Name** - The team member's last name
+    - **Email** - A valid email address where the invitation will be sent
 
-- **First Name** - The team member's first name
-- **Last Name** - The team member's last name
-- **Email** - A valid email address where the invitation will be sent
+    <Info>
+      The email address should not be associated with any other account or workspace on AutoSend. Disposable email addresses may be blocked.
+    </Info>
 
-<Info>
-The email address should not be associated with any other account or workspace on AutoSend. Disposable email addresses may be blocked.
-</Info>
+  </Step>
+  <Step title="Invite as " stepNumber={3}>
+    Select **Admin** for full workspace access, or **Member** for project-scoped access.
 
-Click **"Invite"** to send the invitation.
+    If you selected **Member**, select which projects this person should have access to.
 
-</Step>
-<Step title="Invitation Sent" >
+    <Frame>
+      ![Adding Member As Admin 2](/images/team/inviting-someone-3.png)
+    </Frame>
 
-After successfully sending the invitation:
+  </Step>
+  <Step title="Invitation Sent">
+    After successfully sending the invitation:
 
-- The invitee will receive an email with an invitation link.
-- The invitation will appear in your team list with a **"Pending"** status.
-- You can resend or cancel the invitation.
-</Step>
+    - The invitee will receive an email with an invitation link.
+    - The invitation will appear in your team list with a **"Pending"** status.
+    - You can resend or cancel the invitation.
+
+    <Frame>
+      ![Adding Member As Admin 3](/images/team/inviting-someone-4.png)
+    </Frame>
+
+  </Step>
 </Steps>
 
 <Note>
-All team members have equivalent permissions. There is no role-based access control or permission differentiation between team members at this moment.
+  **Admins** can update a member's project access at any time from **Account Settings \> Team**.
 </Note>
 
+## How to Invite Someone (as a Member)
+
+Members can add other people directly to their project from [**Project Settings \> Team**](https://autosend.com/settings/team).
+
+<Steps>
+  <Step title="Navigate to the project you want to add someone to.">
+    Select the appropriate project from the dropdown
+
+    <Frame>
+      ![Adding Member As Member 1](/images/team/inviting-someone-as-member-1.png)
+    </Frame>
+
+  </Step>
+  <Step title="Click the Invite button in the top-right corner">
+    Enter the following information about the team member you want to invite:
+
+    <Frame>
+      ![Adding Member As Member 2](/images/team/inviting-someone-as-member-2.png)
+    </Frame>
+
+  </Step>
+  <Step title="Invitation Sent" stepNumber={3}>
+    After successfully sending the invitation:
+
+    - The invitee will receive an email with an invitation link.
+    - The invitation will appear in your team list with a **"Pending"** status.
+    - You can resend or cancel the invitation.
+
+    <Frame>
+      ![Invitation Sent](/images/team/inviting-someone-as-member-3.png)
+    </Frame>
+
+    **Required Fields:**
+
+    - **First Name** - The team member's first name
+    - **Last Name** - The team member's last name
+    - **Email** - A valid email address where the invitation will be sent
+
+    <Info>
+      When a Member sends an invite, the new person is automatically added as a Member scoped to that project. There is no option to choose a role or assign additional projects. That can only be done by an Admin.
+    </Info>
+
+  </Step>
+</Steps>
 
 ## FAQs
+
 <AccordionGroup>
+  <Accordion title="Can I change a member's role after they've joined?">
+    Yes, Admins can update a team member's role from [**Account Settings \> Team**](https://autosend.com/account/team) at any time.
+  </Accordion>
+
+  <Accordion title="Can I update which projects a Member has access to?">
+    Yes, Admins can edit a Member's project access from [**Account Settings \> Team**](https://autosend.com/account/team).
+  </Accordion>
+
+<Accordion title='Can a Member invite someone as an Admin?'>
+	No. When a Member invites someone, they are automatically added as a Member scoped to that
+	project. Only Admins can assign the Admin role.
+</Accordion>
+
 <Accordion title='How many team members can I invite?'>
-There is no limit on the number of team members you can invite.
+	There is no limit on the number of team members you can invite.
 </Accordion>
-<Accordion title='Can I assign different roles to team members?'>
-No, you cannot assign different roles to team members yet. All team members have the same access to all projects and resources within the workspace. Role-based access control is on our roadmap for future releases.
-</Accordion>    
+
 <Accordion title='Do invitations expire?'>
-Yes, invitations expire after 7 days. If an invitation expires, simply send a new one to the same email address.
+	Yes, invitations expire after 7 days. If an invitation expires, simply send a new one to the same
+	email address.
 </Accordion>
-<Accordion title='How do I remove a team member?'>
-Team member removal functionality is coming soon. Currently, you can only cancel pending invitations. Contact support if you need to remove an active team member urgently.
+
+  <Accordion title="How do I remove a team member?">
+    Admins can remove any team member from [**Account Settings \> Team**](https://autosend.com/account/team). Members can remove other members from  [**Project Settings \> Team**](https://autosend.com/settings/team) for their assigned projects.
+  </Accordion>
+
+<Accordion title='Can someone be part of multiple workspaces?'>
+	No, a user can accept invitation only from single workspace. They have to use a different email if
+	they want to join another workspace.
 </Accordion>
-<Accordion title='Can an invitee be part of multiple workspaces?'>
-No, a user can accept invitation only from single workspace. They have to use a different email if they want to join another workspace.
-</Accordion>
+
 <Accordion title='What happens if I delete a pending invitation?'>
-The invitation link becomes invalid immediately, and the invitee will not be able to join your workspace using that link. You can send a new invitation if needed.
+	The invitation link becomes invalid immediately, and the invitee will not be able to join your
+	workspace using that link. You can send a new invitation if needed.
 </Accordion>
-<Accordion title='Can I edit an invitation after sending?'>
-No, you cannot edit an invitation after it's sent. If you made a mistake, cancel the invitation and send a new one with the correct information.
-</Accordion>
+
+  <Accordion title="Can I edit an invitation after sending?">
+    No, you cannot edit an invitation after it's sent. If you made a mistake, cancel the invitation and send a new one with the correct information.
+  </Accordion>
 </AccordionGroup>
