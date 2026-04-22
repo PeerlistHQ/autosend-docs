@@ -1,0 +1,306 @@
+---
+title: 'Create Project'
+sidebarTitle: 'Create Project'
+openapi: 'POST /account/projects'
+---
+
+<Note>
+  This endpoint requires an **organization admin API key** (`ASA_` prefix). Standard project API keys cannot access this endpoint.
+</Note>
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/account/projects \
+  --header 'Authorization: Bearer ASA_your-admin-api-key' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "name": "My New Project"
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/account/projects"
+
+headers = {
+    "Authorization": "Bearer ASA_your-admin-api-key",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "name": "My New Project"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/account/projects', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer ASA_your-admin-api-key',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: 'My New Project'
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/account/projects';
+
+$data = [
+    'name' => 'My New Project'
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer ASA_your-admin-api-key',
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/account/projects"
+
+    payload := map[string]interface{}{
+        "name": "My New Project",
+    }
+
+    jsonData, _ := json.Marshal(payload)
+
+    req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer ASA_your-admin-api-key")
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class CreateProject {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/account/projects");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Authorization", "Bearer ASA_your-admin-api-key");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+
+            String jsonInputString = "{\n" +
+                "  \"name\": \"My New Project\"\n" +
+                "}";
+
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/account/projects')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(uri.path)
+request['Authorization'] = 'Bearer ASA_your-admin-api-key'
+request['Content-Type'] = 'application/json'
+
+request.body = {
+  name: 'My New Project'
+}.to_json
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 201 Response
+{
+  "success": true,
+  "data": {
+    "id": "60d5ec49f1b2c72d9c8b1234",
+    "name": "My New Project",
+    "domain": null,
+    "domains": [],
+    "industry": null,
+    "logo": null,
+    "address": null,
+    "trackingOpen": false,
+    "trackingClick": false
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Organization admin API key header of the form Bearer `ASA_<key>`. Standard project API keys (`AS_` prefix) will receive a `403` error.
+</ParamField>
+
+### Body
+
+<ParamField path="name" type="string" required>
+  Name of the project (max 100 characters).
+
+  Maximum length: `100`
+
+  Example: `"My New Project"`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Project created successfully (201)</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The created project object
+
+  <Expandable title="child attributes">
+  <ResponseField name="data.id" type="string">
+    Unique project identifier
+
+    Example: `"60d5ec49f1b2c72d9c8b1234"`
+  </ResponseField>
+
+  <ResponseField name="data.name" type="string">
+    Project name
+
+    Example: `"My New Project"`
+  </ResponseField>
+
+  <ResponseField name="data.domain" type="string | null">
+    Primary domain (null for new projects)
+  </ResponseField>
+
+  <ResponseField name="data.domains" type="object[]">
+    List of verified email domains (empty for new projects)
+  </ResponseField>
+
+  <ResponseField name="data.industry" type="string | null">
+    Industry category
+  </ResponseField>
+
+  <ResponseField name="data.logo" type="string | null">
+    Project logo URL
+  </ResponseField>
+
+  <ResponseField name="data.address" type="object | null">
+    Physical address for CAN-SPAM compliance
+  </ResponseField>
+
+  <ResponseField name="data.trackingOpen" type="boolean">
+    Whether open tracking is enabled
+
+    Example: `false`
+  </ResponseField>
+
+  <ResponseField name="data.trackingClick" type="boolean">
+    Whether click tracking is enabled
+
+    Example: `false`
+  </ResponseField>
+  </Expandable>
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="403 - Not an admin key" type="object">
+  Returned when using a standard project API key instead of an organization admin API key.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "This endpoint requires an organization admin API key (ASA_ prefix)",
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="403 - Plan limit reached" type="object">
+  Returned when the organization has reached its plan's project limit.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Plan upgrade required"
+    }
+  }
+  ```
+</ResponseField>

@@ -1,0 +1,222 @@
+---
+title: 'Delete Project'
+sidebarTitle: 'Delete Project'
+openapi: 'DELETE /account/projects/{projectId}'
+---
+
+<Note>
+  This endpoint requires an **organization admin API key** (`ASA_` prefix). Standard project API keys cannot access this endpoint.
+</Note>
+
+<Warning>
+  This action deletes the project and all associated resources (domains, senders, templates, campaigns, contacts). This cannot be undone.
+</Warning>
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request DELETE \
+  --url https://api.autosend.com/v1/account/projects/60d5ec49f1b2c72d9c8b1234 \
+  --header 'Authorization: Bearer ASA_your-admin-api-key'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/account/projects/60d5ec49f1b2c72d9c8b1234"
+
+headers = {
+    "Authorization": "Bearer ASA_your-admin-api-key"
+}
+
+response = requests.delete(url, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/account/projects/60d5ec49f1b2c72d9c8b1234', {
+  method: 'DELETE',
+  headers: {
+    'Authorization': 'Bearer ASA_your-admin-api-key'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$projectId = '60d5ec49f1b2c72d9c8b1234';
+$url = "https://api.autosend.com/v1/account/projects/{$projectId}";
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer ASA_your-admin-api-key'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/account/projects/60d5ec49f1b2c72d9c8b1234"
+
+    req, _ := http.NewRequest("DELETE", url, nil)
+    req.Header.Set("Authorization", "Bearer ASA_your-admin-api-key")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    fmt.Println("Response Status:", resp.Status)
+}
+```
+
+```java Java
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class DeleteProject {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/account/projects/60d5ec49f1b2c72d9c8b1234");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("DELETE");
+            con.setRequestProperty("Authorization", "Bearer ASA_your-admin-api-key");
+
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+
+            con.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/account/projects/60d5ec49f1b2c72d9c8b1234')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Delete.new(uri)
+request['Authorization'] = 'Bearer ASA_your-admin-api-key'
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "message": "Project deleted successfully"
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Organization admin API key header of the form Bearer `ASA_<key>`. Standard project API keys (`AS_` prefix) will receive a `403` error.
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="projectId" type="string" required>
+  The unique identifier of the project to delete (MongoDB ObjectId). The project must belong to the authenticated organization.
+
+  Example: `"60d5ec49f1b2c72d9c8b1234"`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Project deleted successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Confirmation message
+
+  Example: `"Project deleted successfully"`
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="403 - Not an admin key" type="object">
+  Returned when using a standard project API key instead of an organization admin API key.
+
+  ```json
+  {
+    "success": false,
+    "error":{
+      "message":"This endpoint requires an organization admin API key (ASA_ prefix)"
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="400 - Invalid project ID" type="object">
+  Returned when the `projectId` parameter is not a valid MongoDB ObjectId.
+
+  ```json
+  {
+    "success": false,
+    "error": [
+      {
+        "message": "Invalid project ID"
+      }
+    ]
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="404 - Project not found" type="object">
+  Returned when the project does not exist or does not belong to the organization.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Project not found"
+    }
+  }
+  ```
+</ResponseField>
