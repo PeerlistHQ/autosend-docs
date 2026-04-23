@@ -18,7 +18,9 @@ curl --request POST \
   --header 'Authorization: Bearer ASA_your-admin-api-key' \
   --header 'Content-Type: application/json' \
   --data '{
-  "name": "My New Project"
+  "name": "My New Project",
+  "domain": "example.com",
+  "regionKey": "us-east-1"
 }'
 ```
 
@@ -33,7 +35,9 @@ headers = {
 }
 
 payload = {
-    "name": "My New Project"
+    "name": "My New Project",
+    "domain": "example.com",
+    "regionKey": "us-east-1"
 }
 
 response = requests.post(url, json=payload, headers=headers)
@@ -48,7 +52,9 @@ fetch('https://api.autosend.com/v1/account/projects', {
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({
-    name: 'My New Project'
+    name: 'My New Project',
+    domain: 'example.com',
+    regionKey: 'us-east-1'
   })
 })
   .then(response => response.json())
@@ -62,7 +68,9 @@ fetch('https://api.autosend.com/v1/account/projects', {
 $url = 'https://api.autosend.com/v1/account/projects';
 
 $data = [
-    'name' => 'My New Project'
+    'name' => 'My New Project',
+    'domain' => 'example.com',
+    'regionKey' => 'us-east-1'
 ];
 
 $ch = curl_init($url);
@@ -96,7 +104,9 @@ func main() {
     url := "https://api.autosend.com/v1/account/projects"
 
     payload := map[string]interface{}{
-        "name": "My New Project",
+        "name":   "My New Project",
+        "domain": "example.com",
+        "regionKey": "us-east-1",
     }
 
     jsonData, _ := json.Marshal(payload)
@@ -136,7 +146,9 @@ public class CreateProject {
             con.setDoOutput(true);
 
             String jsonInputString = "{\n" +
-                "  \"name\": \"My New Project\"\n" +
+                "  \"name\": \"My New Project\",\n" +
+                "  \"domain\": \"example.com\",\n" +
+                "  \"regionKey\": \"us-east-1\"\n" +
                 "}";
 
             try (OutputStream os = con.getOutputStream()) {
@@ -169,7 +181,9 @@ request['Authorization'] = 'Bearer ASA_your-admin-api-key'
 request['Content-Type'] = 'application/json'
 
 request.body = {
-  name: 'My New Project'
+  name: 'My New Project',
+  domain: 'example.com',
+  regionKey: 'us-east-1'
 }.to_json
 
 response = http.request(request)
@@ -188,8 +202,9 @@ puts response.body
   "data": {
     "id": "60d5ec49f1b2c72d9c8b1234",
     "name": "My New Project",
-    "domain": null,
+    "domain": "example.com",
     "domains": [],
+    "regionKey": "us-east-1",
     "industry": null,
     "logo": null,
     "address": null,
@@ -215,6 +230,20 @@ puts response.body
   Maximum length: `100`
 
   Example: `"My New Project"`
+</ParamField>
+
+<ParamField path="domain" type="string">
+  Domain name through which you plan to send emails, without the `https://` prefix. Accepts a root domain (e.g., `example.com`) or a subdomain (e.g., `mail.example.com`).
+
+  Example: `"example.com"`
+</ParamField>
+
+<ParamField path="regionKey" type="string">
+  Account region where the project data will be stored.
+
+  Allowed values: `us-east-1`, `us-east-2`, `ap-south-1`
+
+  Example: `"us-east-1"`
 </ParamField>
 
 #### Response
@@ -244,11 +273,15 @@ puts response.body
   </ResponseField>
 
   <ResponseField name="data.domain" type="string | null">
-    Primary domain (null for new projects)
+    Primary domain set for the project, or `null` if none was provided
   </ResponseField>
 
   <ResponseField name="data.domains" type="object[]">
     List of verified email domains (empty for new projects)
+  </ResponseField>
+
+  <ResponseField name="data.regionKey" type="string | null">
+    Account region for the project. One of `us-east-1`, `us-east-2`, or `ap-south-1`
   </ResponseField>
 
   <ResponseField name="data.industry" type="string | null">
