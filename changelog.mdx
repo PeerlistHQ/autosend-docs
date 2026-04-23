@@ -7,6 +7,35 @@ rss: true
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 
+<Update label="April 23, 2026">
+
+## RBAC and Projects API
+
+Two big additions to multi-project support: role-based access control for your team and a full Projects API.
+
+<Frame>![RBAC and Projects API](/images/changelog/rbac-changelog.jpg)</Frame>
+
+#### Role-Based Access Control
+
+Team permissions now have two distinct roles: **Admin** and **Member**.
+
+- **Admins** have full access to the entire workspace, including all projects, domains, billing, and member management.
+- **Members** have scoped access. Admins assign them to specific projects, and they can only see and operate within those projects. Members can also add or remove other members within their assigned projects.
+
+Read the <a href={APP_PATHS.team}>Team documentation</a> for the full invite flow and FAQ.
+
+#### Projects API
+
+You can now manage projects programmatically using the Account Admin API key (`ASA_` prefix). Three endpoints are available:
+
+- **List Projects** - Retrieve all projects in your organization.
+- **Create Project** - Create a new project with a name. The project is ready to use immediately.
+- **Delete Project** - Permanently delete a project and all its associated resources. This cannot be undone.
+
+Check out the <a href={APP_PATHS.projects}>Projects API reference</a> to get started.
+
+</Update>
+
 <Update label="April 10, 2026">
 
 ## Introducing Projects
@@ -70,6 +99,7 @@ Email automations just got a lot more powerful. You can now trigger automations 
 - **Contact property changes from → to**: Trigger when a contact's property transitions from one value to another (e.g., `published` changes from `unpublished` to `published`). Perfect for reacting to real-time changes. Supports multiple conditions with AND/OR logic.
 
 #### Brand new visual workflow builder
+
 Build your automation sequences in a completely redesigned visual workflow builder with a cleaner interface and smoother experience. Do try the email drag-n-drop to rearrange emails in your sequence. That's our favorite part.
 
 Read the updated <a href={APP_PATHS.automations}>Email Automations documentation</a> to learn more.
@@ -121,9 +151,11 @@ We shipped quality-of-life improvements this week. Faster workflows, cleaner ana
 <Frame>![Quick create menu](/images/quick-create-menu.png)</Frame>
 
 #### Quick Create Menu
+
 Create campaigns and automations directly from the dashboard. Click the "+" button in the top right corner without navigating away from your current page.
 
 #### Faster Campaign and Analytics Loading
+
 Dashboards load faster with caching for workflow analytics and streamlined campaign queries. Separated worker services for email sending, validation, and webhooks handle higher loads independently. Lazy loading for past and failed campaigns reduces initial page load times.
 
 ### Fixes:
@@ -143,18 +175,23 @@ The dashboard has been redesigned from the ground up and a fresh new landing pag
 <Frame>![AutoSend dashboard](/images/dashboard-changelog.png)</Frame>
 
 #### Dashboard Redesign
+
 Your dashboard now surfaces key metrics (sends, opens, clicks, bounces), active campaigns, and product updates right when you log in. No more digging through reports.
 
 #### Fresh Landing Page
+
 Completely redesigned with a modern look, interactive sections, smoother animations, and a clearer story about how AutoSend helps you send better emails.
 
 #### Faster CSV Imports
+
 Importing large contact lists is significantly faster. Upload your CSV and get back to work.
 
 #### User ID Support in CSV Imports
+
 Import user IDs alongside contact data to maintain consistent identifiers across systems.
 
 #### List-Unsubscribe Header
+
 The standard `List-Unsubscribe` header is now included in all emails, enabling one-click unsubscribe buttons in Gmail and Apple Mail. No configuration needed.
 
 ### Fixes:
@@ -172,24 +209,31 @@ The standard `List-Unsubscribe` header is now included in all emails, enabling o
 Native CC and BCC support is now available across AutoSend.
 
 #### Send to Multiple Recipients
+
 Add CC and BCC recipients to any email via API or SMTP relay without sending separate emails.
 
 #### Full Email Activity Tracking
+
 Every CC and BCC recipient is tracked individually. See opens, clicks, bounces, and complaints for each recipient separately.
 
 #### Smart Suppression Handling
+
 When a TO recipient is suppressed, CC and BCC recipients are automatically suppressed too. Bypass options are available when needed.
 
 #### Proper Bounce and Complaint Attribution
+
 Bounces and complaints from CC/BCC recipients are correctly attributed to the right email address.
 
 #### Cleaner Campaign Dashboard
+
 Active campaigns now automatically appear at the top and past campaigns are hidden to reduce visual clutter.
 
 #### Filter Contacts by List ID
+
 Added `contactListId` parameter to the contacts API for filtering contacts by specific lists.
 
 #### Bypass Suppressions
+
 Send an email to a suppressed recipient on a per-email basis for critical communications like password resets.
 
 ### Fixes:
@@ -207,18 +251,23 @@ Send an email to a suppressed recipient on a per-email basis for critical commun
 This release focuses on polishing the edges. Clearer errors, better analytics visibility, and a few fixes.
 
 #### Email Automation Landing Page
+
 A dedicated landing page for email automation explaining drip campaigns, onboarding sequences, and triggered emails.
 
 #### Dynamic Validation Errors
+
 Validation errors now tell you exactly what's wrong and where, with specific feedback for contacts, emails, SMTP settings, and suppression groups.
 
 #### Unsubscribe Preferences
+
 The unsubscribe preferences page now shows visible and hidden states for suppression groups, giving you control over what subscribers see.
 
 #### Open Rate Analytics
+
 Campaign and automation analytics now include dedicated open rate sections alongside clicks and deliveries.
 
 #### SMTP API Key Flexibility
+
 All API key types now work with SMTP authentication. Any valid API key works as your SMTP password.
 
 ### Fixes:
@@ -238,12 +287,15 @@ You can now send emails through AutoSend using SMTP as well as the REST API.
 <Frame>![SMTP settings](/images/smtp/autosend-smtp-settings.png)</Frame>
 
 #### Simple Setup
+
 Go to Settings → SMTP to get your credentials. Host, port, and username are pre-configured. Generate an API key to use as your password.
 
 #### Standard SMTP
+
 Connect using `smtp.autosend.com` on port 587 with TLS. Works with any SMTP client, library, or platform that supports standard SMTP.
 
 #### Same Deliverability
+
 All the benefits of AutoSend's sending infrastructure: same reputation, same analytics, same reliability. Perfect for legacy systems or platforms with built-in SMTP support.
 
 ### Improvements:
@@ -267,18 +319,23 @@ Spam Checker analyzes your email content in real-time, flags potential issues, a
 <Frame>![Spam Checker](/images/spam-checker-changlog.png)</Frame>
 
 #### Real-time spam analysis
+
 As you write, Spam Checker scans your content for known spam triggers.
 
 #### Severity scoring
+
 Issues are categorized as safe, warning, or critical based on how likely they are to trigger spam filters.
 
 #### Specific issue detection
+
 Catches excessive caps, suspicious URLs, spam trigger words, urgency language, missing unsubscribe links, and more.
 
 #### One-click fixes
+
 Most issues come with suggested replacements. Click "Accept" and the fix is applied instantly.
 
 #### Works everywhere
+
 Available in the email builder for campaigns, automations, transactional templates, and compose.
 
 ### Fixes:
@@ -297,9 +354,11 @@ Available in the email builder for campaigns, automations, transactional templat
 Major improvements to how you track campaign performance and how quickly emails reach inboxes.
 
 #### Improved Analytics
+
 Email status tooltips now explain what each status means and what action to take. Date/time formatting is consistent across all views for easier comparison.
 
 #### Faster Campaign Delivery
+
 Upgraded sending infrastructure improves speed and reliability. Campaigns reach inboxes faster with fewer delivery errors, especially for large contact lists.
 
 ### Fixes:
@@ -317,27 +376,35 @@ Upgraded sending infrastructure improves speed and reliability. Campaigns reach 
 Major improvements to the email builder, better webhook tracking, new analytics capabilities, and platform stability fixes.
 
 #### Global Text Color
+
 Set a default text color for your entire email once and all text inherits that color.
 
 #### Plain Text Support
+
 The email builder now properly handles plain text versions of your emails for better deliverability.
 
 #### Better State Management
+
 Selecting buttons, dividers, images, and text blocks is smoother with clearer visual feedback.
 
 #### Better Test Email Experience
+
 Enter test values for email variables directly in the test email modal. Cleaner interface with better feedback.
 
 #### Email Activity Analytics
+
 Key metrics (total sent, delivered, opened, clicked, bounced, failed) are now visible at a glance on the email activities page.
 
 #### Template Table View and Search
+
 Email templates now have a proper table view. Search by name or subject line to find templates faster.
 
 #### Webhook batchId and test field
+
 Webhook events now include `batchId` (for grouping bulk email events) and a `test` boolean field for debugging.
 
 #### Optimized webhook payloads
+
 Reduced payload size by stripping unnecessary data. Faster processing, less bandwidth, and cleaner logs.
 
 ### Fixes:
@@ -363,18 +430,23 @@ Email automation is now live in AutoSend. Create triggered sequences with visual
 <Frame>![Email Automations in AutoSend](/images/automation-changelog.jpeg)</Frame>
 
 #### Visual Builder
+
 Design automation flows in a drag-and-drop interface. See your entire sequence with entry points, wait steps, and email blocks connected in order.
 
 #### Flexible Timing
+
 Set delays between emails: immediately, hours, or days.
 
 #### Exit Conditions
+
 Control when contacts leave sequences. Exit contacts immediately when they're removed from the triggering list or segment.
 
 #### Unsubscribe Groups
+
 Assign each automation to a specific unsubscribe group so contacts can opt out of individual sequences without unsubscribing from everything.
 
 #### Tracking Built-in
+
 Enable or disable open and click tracking per email. Analytics show open rates, click rates, and engagement metrics per message.
 
 **Common use cases:** Welcome sequences, onboarding drips, re-engagement campaigns, trial conversion sequences, and waitlist nurturing.
@@ -390,12 +462,15 @@ AutoSend now supports teams. Invite your team for full platform access with no p
 <Frame>![Teams in AutoSend](/images/team.png)</Frame>
 
 #### Invite Your Team
+
 Head to [Settings → Team](https://autosend.com/settings/team) to invite as many people as you need.
 
 #### Same Access for Everyone
+
 No permission levels to configure. Everyone you invite can do everything you can.
 
 #### Simple Invite Flow
+
 Send an invite, they get a secure link via email, they click it, they're in. Invites are valid for 7 days. You can resend or cancel them anytime.
 
 </Update>
@@ -409,21 +484,27 @@ A free email template builder with markdown support. Create responsive emails wi
 <Frame>![Compose by AutoSend](/images/compose-og.webp)</Frame>
 
 #### Markdown support
+
 Write emails the same way you write docs or READMEs. If you've written markdown before, you already know how to use Compose.
 
 #### Visual blocks
+
 Drag in buttons, columns, spacers, and dividers when markdown isn't enough.
 
 #### Variables for personalization
+
 Drop in `{{first_name}}` or `{{company_name}}` and your email is ready for dynamic content.
 
 #### Responsive by default
+
 Your emails automatically adapt to desktop, tablet, and mobile.
 
 #### Clean HTML export
+
 Production-ready HTML with no inline styles soup. Tested across Gmail, Outlook, Yahoo, and Apple Mail.
 
 #### No signup required
+
 Open [autosend.com/compose](https://autosend.com/compose) and start building. Works with any email provider.
 
 </Update>
@@ -437,15 +518,19 @@ Filter and analyze your email activity by status, templates, domain, and API key
 <Frame>![Email Activity Filter Modal](/images/autosend-email-activity-changelog.jpeg)</Frame>
 
 #### Status Filters
+
 Filter by delivery lifecycle (Sent, Delivered, Bounced), engagement (Opened, Clicked), or issues (Complained, Suppressed, Failed).
 
 #### Email Source
+
 Filter by email template or campaign to see activity for specific email types.
 
 #### Sending Domain
+
 Filter emails sent from specific verified domains.
 
 #### API Key
+
 Filter emails sent using specific API keys for better tracking.
 
 Combine multiple filters to narrow down your search and get precise insights into email activity.
@@ -461,6 +546,7 @@ Two of the most requested features: webhooks management and email attachments.
 <Frame>![Create new webhook](/images/create-new-webhook.png)</Frame>
 
 #### Webhooks
+
 Listen to real-time email events directly in your app. Available on Pro 10k plans and above.
 
 Events you can track:
@@ -472,6 +558,7 @@ Events you can track:
 - Contact events: `contact.created`, `contact.updated`, `contact.deleted`
 
 #### Email Attachments
+
 Attach files via base64 upload, S3 file paths, or external URLs. Up to 20 attachments per email, 40MB per file.
 
 ### Fixes:
@@ -487,21 +574,27 @@ Attach files via base64 upload, S3 file paths, or external URLs. Up to 20 attach
 You can now create and send marketing campaigns, manage contacts, and build engaged audiences, all from one platform.
 
 #### Campaigns
+
 Create and send one-time or scheduled marketing emails to contacts, lists, or segments. Features include an HTML email designer, variable personalization, real-time preview, send now or schedule, test emails, targeting options, and exclusion lists.
 
 #### Contact Management
+
 All contacts view, contact details, reserved fields, custom fields, CSV import with field mapping, and contact activity tracking.
 
 #### Lists
+
 Static collections of contacts grouped together. Perfect for fixed criteria like "Newsletter Subscribers."
 
 #### Segments
+
 Dynamic groups that update automatically based on conditions. Auto-update as contacts meet or stop meeting your defined criteria.
 
 #### Sender Management
+
 Add sender names, email addresses, and reply-to addresses. Only authenticated domains are allowed for better deliverability.
 
 #### Unsubscribe Groups
+
 Let recipients choose which types of emails they want to receive. Supports CAN-SPAM, GDPR, and CASL compliance.
 
 </Update>
