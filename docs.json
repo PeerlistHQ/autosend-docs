@@ -176,6 +176,29 @@
 						]
 					},
 					{
+						"group": "Automations",
+						"pages": [
+							"api-reference/automations/list-workflow-automations",
+							"api-reference/automations/get-workflow-automation",
+							"api-reference/automations/create-workflow-automation",
+							"api-reference/automations/update-workflow-automation",
+							"api-reference/automations/pause-workflow-automation",
+							"api-reference/automations/resume-workflow-automation",
+							"api-reference/automations/delete-workflow-automation"
+						]
+					},
+					{
+						"group": "Events",
+						"pages": [
+							"api-reference/events/list-events",
+							"api-reference/events/get-event",
+							"api-reference/events/create-event",
+							"api-reference/events/update-event",
+							"api-reference/events/send-event",
+							"api-reference/events/delete-event"
+						]
+					},
+					{
 						"group": "Domains",
 						"pages": [
 							"api-reference/domains/list",

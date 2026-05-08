@@ -1,0 +1,50 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AutoSend API",
+    "description": "AutoSend REST API for managing event definitions and recording event logs for a project. These endpoints accept a standard project API key (AS_ prefix).",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.autosend.com/v1"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/events": {
+      "get": {
+        "summary": "List Events",
+        "description": "Retrieves all event definitions for the authenticated project."
+      },
+      "post": {
+        "summary": "Create Event",
+        "description": "Creates a new event definition under the project."
+      }
+    },
+    "/events/eventName/{eventName}": {
+      "get": {
+        "summary": "Get Event",
+        "description": "Retrieves a single event definition by its name."
+      },
+      "patch": {
+        "summary": "Update Event",
+        "description": "Updates the description or property schema of an existing event definition. The eventName itself cannot be changed."
+      },
+      "delete": {
+        "summary": "Delete Event",
+        "description": "Soft-deletes an event definition. Existing event logs for this name are retained but no new logs can be recorded against it."
+      }
+    },
+    "/events/send": {
+      "post": {
+        "summary": "Send Event",
+        "description": "Records an event log for a contact. The eventName must match an existing event definition; properties are validated and coerced against the declared schema."
+      }
+    }
+  }
+}

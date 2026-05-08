@@ -1,0 +1,56 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AutoSend API",
+    "description": "AutoSend REST API for managing workflow automations. Workflow automations send a sequence of emails to contacts based on entry criteria (contact created, added to a list, segment match, contact-property match, contact-property change, or a custom event). These endpoints accept a standard project API key (AS_ prefix).",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.autosend.com/v1"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/automations": {
+      "get": {
+        "summary": "List Automations",
+        "description": "Retrieves workflow automations for the project, with optional filtering by status and tags."
+      },
+      "post": {
+        "summary": "Create Automation",
+        "description": "Creates a new workflow automation. Pass `active: true` to activate the workflow as part of the create call."
+      }
+    },
+    "/automations/{id}": {
+      "get": {
+        "summary": "Get Automation",
+        "description": "Retrieves a single workflow automation by its ID."
+      },
+      "patch": {
+        "summary": "Update Automation",
+        "description": "Updates a workflow automation. Only draft and paused workflows can be edited. Pass `active: true` to activate after the update."
+      },
+      "delete": {
+        "summary": "Delete Automation",
+        "description": "Soft-deletes a workflow automation. Active executions are stopped."
+      }
+    },
+    "/automations/{id}/pause": {
+      "post": {
+        "summary": "Pause Automation",
+        "description": "Pauses an active workflow automation. New contacts will not enter the workflow while paused."
+      }
+    },
+    "/automations/{id}/resume": {
+      "post": {
+        "summary": "Resume Automation",
+        "description": "Resumes a paused workflow automation back to active state."
+      }
+    }
+  }
+}

@@ -1,0 +1,302 @@
+---
+title: 'Update Event'
+sidebarTitle: 'Update Event'
+openapi: 'PATCH /events/eventName/{eventName}'
+---
+
+<Note>
+  Updates the `description` and/or `properties` schema of an existing event definition. The `eventName` itself cannot be changed — to rename, create a new event and delete the old one.
+</Note>
+
+<Warning>
+  When `properties` is provided, the supplied array fully replaces the existing property schema. Properties not included in the request will be removed.
+</Warning>
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request PATCH \
+  --url https://api.autosend.com/v1/events/eventName/order_completed \
+  --header 'Authorization: Bearer AS_your-project-api-key' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "description": "Updated: fired on successful checkout",
+  "properties": [
+    { "propertyName": "order_total", "type": "number" },
+    { "propertyName": "currency", "type": "string", "suggestedValues": ["USD", "EUR"] },
+    { "propertyName": "coupon_code", "type": "string" }
+  ]
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/events/eventName/order_completed"
+
+headers = {
+    "Authorization": "Bearer AS_your-project-api-key",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "description": "Updated: fired on successful checkout",
+    "properties": [
+        {"propertyName": "order_total", "type": "number"},
+        {"propertyName": "currency", "type": "string", "suggestedValues": ["USD", "EUR"]},
+        {"propertyName": "coupon_code", "type": "string"}
+    ]
+}
+
+response = requests.patch(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/events/eventName/order_completed', {
+  method: 'PATCH',
+  headers: {
+    'Authorization': 'Bearer AS_your-project-api-key',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    description: 'Updated: fired on successful checkout',
+    properties: [
+      { propertyName: 'order_total', type: 'number' },
+      { propertyName: 'currency', type: 'string', suggestedValues: ['USD', 'EUR'] },
+      { propertyName: 'coupon_code', type: 'string' }
+    ]
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/events/eventName/order_completed';
+
+$data = [
+    'description' => 'Updated: fired on successful checkout',
+    'properties' => [
+        ['propertyName' => 'order_total', 'type' => 'number'],
+        ['propertyName' => 'currency', 'type' => 'string', 'suggestedValues' => ['USD', 'EUR']],
+        ['propertyName' => 'coupon_code', 'type' => 'string']
+    ]
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer AS_your-project-api-key',
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/events/eventName/order_completed"
+
+    payload := map[string]interface{}{
+        "description": "Updated: fired on successful checkout",
+        "properties": []map[string]interface{}{
+            {"propertyName": "order_total", "type": "number"},
+            {"propertyName": "currency", "type": "string", "suggestedValues": []string{"USD", "EUR"}},
+            {"propertyName": "coupon_code", "type": "string"},
+        },
+    }
+
+    jsonData, _ := json.Marshal(payload)
+
+    req, _ := http.NewRequest("PATCH", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer AS_your-project-api-key")
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class UpdateEvent {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/events/eventName/order_completed");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("PATCH");
+            con.setRequestProperty("Authorization", "Bearer AS_your-project-api-key");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+
+            String jsonInputString = "{\n" +
+                "  \"description\": \"Updated: fired on successful checkout\"\n" +
+                "}";
+
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/events/eventName/order_completed')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Patch.new(uri.path)
+request['Authorization'] = 'Bearer AS_your-project-api-key'
+request['Content-Type'] = 'application/json'
+
+request.body = {
+  description: 'Updated: fired on successful checkout',
+  properties: [
+    { propertyName: 'order_total', type: 'number' },
+    { propertyName: 'currency', type: 'string', suggestedValues: ['USD', 'EUR'] }
+  ]
+}.to_json
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "id": "60d5ec49f1b2c72d9c8b1234",
+    "eventName": "order_completed",
+    "description": "Updated: fired on successful checkout",
+    "properties": [
+      { "propertyName": "order_total", "type": "number", "suggestedValues": [] },
+      { "propertyName": "currency", "type": "string", "suggestedValues": ["USD", "EUR"] },
+      { "propertyName": "coupon_code", "type": "string", "suggestedValues": [] }
+    ],
+    "createdAt": "2026-05-08T10:00:00.000Z",
+    "updatedAt": "2026-05-08T11:30:00.000Z"
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Project API key header of the form Bearer `AS_<key>`.
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="eventName" type="string" required>
+  Name of the event to update.
+
+  Example: `"order_completed"`
+</ParamField>
+
+### Body
+
+At least one of `description` or `properties` must be provided.
+
+<ParamField path="description" type="string">
+  New human-readable description for the event.
+</ParamField>
+
+<ParamField path="properties" type="object[]">
+  Replacement property schema. Up to 50 properties per event. See [Create Event](./create-event) for the property object shape.
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Event updated successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The updated event definition (same shape as Get Event).
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="400 - No data to update" type="object">
+  Returned when neither `description` nor `properties` is provided.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "No data to update",
+      "code": "NO_DATA_TO_UPDATE"
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="404 - Event not found" type="object">
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Event not found",
+      "code": "EVENT_NOT_FOUND"
+    }
+  }
+  ```
+</ResponseField>

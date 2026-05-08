@@ -1,0 +1,382 @@
+---
+title: 'Send Event'
+sidebarTitle: 'Send Event'
+openapi: 'POST /events/send'
+---
+
+<Note>
+  Records an event log for a contact. The `eventName` must match an existing event definition; supplied `eventProperties` are validated and coerced against the declared property schema. Either `email` or `contactId` is required to identify the contact.
+</Note>
+
+<Info>
+  Triggering an event also evaluates any active workflow automations whose entry criteria match this event name. The workflow evaluation is fire-and-forget — it never blocks the API response.
+</Info>
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/events/send \
+  --header 'Authorization: Bearer AS_your-project-api-key' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "eventName": "order_completed",
+  "email": "jane@example.com",
+  "eventProperties": {
+    "order_total": 129.99,
+    "currency": "USD",
+    "is_first_purchase": true
+  }
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/events/send"
+
+headers = {
+    "Authorization": "Bearer AS_your-project-api-key",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "eventName": "order_completed",
+    "email": "jane@example.com",
+    "eventProperties": {
+        "order_total": 129.99,
+        "currency": "USD",
+        "is_first_purchase": True
+    }
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/events/send', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer AS_your-project-api-key',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    eventName: 'order_completed',
+    email: 'jane@example.com',
+    eventProperties: {
+      order_total: 129.99,
+      currency: 'USD',
+      is_first_purchase: true
+    }
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/events/send';
+
+$data = [
+    'eventName' => 'order_completed',
+    'email' => 'jane@example.com',
+    'eventProperties' => [
+        'order_total' => 129.99,
+        'currency' => 'USD',
+        'is_first_purchase' => true
+    ]
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer AS_your-project-api-key',
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/events/send"
+
+    payload := map[string]interface{}{
+        "eventName": "order_completed",
+        "email":     "jane@example.com",
+        "eventProperties": map[string]interface{}{
+            "order_total":       129.99,
+            "currency":          "USD",
+            "is_first_purchase": true,
+        },
+    }
+
+    jsonData, _ := json.Marshal(payload)
+
+    req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer AS_your-project-api-key")
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class SendEvent {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/events/send");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Authorization", "Bearer AS_your-project-api-key");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+
+            String jsonInputString = "{\n" +
+                "  \"eventName\": \"order_completed\",\n" +
+                "  \"email\": \"jane@example.com\",\n" +
+                "  \"eventProperties\": {\n" +
+                "    \"order_total\": 129.99,\n" +
+                "    \"currency\": \"USD\",\n" +
+                "    \"is_first_purchase\": true\n" +
+                "  }\n" +
+                "}";
+
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/events/send')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(uri.path)
+request['Authorization'] = 'Bearer AS_your-project-api-key'
+request['Content-Type'] = 'application/json'
+
+request.body = {
+  eventName: 'order_completed',
+  email: 'jane@example.com',
+  eventProperties: {
+    order_total: 129.99,
+    currency: 'USD',
+    is_first_purchase: true
+  }
+}.to_json
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 201 Response
+{
+  "success": true,
+  "data": {
+    "id": "60d5ec49f1b2c72d9c8b9999",
+    "eventName": "order_completed",
+    "contactId": "60d5ec49f1b2c72d9c8b8888",
+    "properties": {
+      "order_total": 129.99,
+      "currency": "USD",
+      "is_first_purchase": true
+    },
+    "createdAt": "2026-05-08T13:45:00.000Z"
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Project API key header of the form Bearer `AS_<key>`.
+</ParamField>
+
+### Body
+
+<ParamField path="eventName" type="string" required>
+  Name of an existing event definition for this project.
+
+  Example: `"order_completed"`
+</ParamField>
+
+<ParamField path="email" type="string">
+  Email of the contact this event belongs to. Either `email` or `contactId` must be provided.
+
+  Example: `"jane@example.com"`
+</ParamField>
+
+<ParamField path="contactId" type="string">
+  MongoDB ObjectId of the contact. Either `email` or `contactId` must be provided.
+
+  Example: `"60d5ec49f1b2c72d9c8b8888"`
+</ParamField>
+
+<ParamField path="eventProperties" type="object">
+  Key/value map of property values. Each key must match a `propertyName` declared on the event definition; values are coerced to the declared `type` (string, number, date, or boolean). Unknown properties are rejected.
+
+  Example: `{ "order_total": 129.99, "currency": "USD" }`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Event recorded (201)</span>
+
+<ResponseField name="success" type="boolean">
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The recorded event log
+
+  <Expandable title="child attributes">
+  <ResponseField name="data.id" type="string">
+    Unique event log identifier
+  </ResponseField>
+
+  <ResponseField name="data.eventName" type="string">
+    Event name
+  </ResponseField>
+
+  <ResponseField name="data.contactId" type="string">
+    Contact this event was recorded against
+  </ResponseField>
+
+  <ResponseField name="data.properties" type="object">
+    Coerced event property values
+  </ResponseField>
+
+  <ResponseField name="data.createdAt" type="string">
+    ISO 8601 timestamp the event was recorded at
+  </ResponseField>
+  </Expandable>
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="400 - Missing identifier" type="object">
+  Returned when neither `email` nor `contactId` is provided.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Either email or contactId is required",
+      "code": "EMAIL_OR_CONTACT_ID_REQUIRED"
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="404 - Contact not found" type="object">
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Contact not found for the provided email or contactId",
+      "code": "CONTACT_NOT_FOUND_FOR_EVENT"
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="404 - Event not found" type="object">
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Event not found",
+      "code": "EVENT_NOT_FOUND"
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="400 - Unknown property" type="object">
+  Returned when `eventProperties` contains a key not declared on the event definition.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Property \"foo\" is not declared on event \"order_completed\"",
+      "code": "UNKNOWN_PROPERTY"
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="400 - Invalid property value" type="object">
+  Returned when a property value cannot be coerced to its declared type.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Property \"order_total\" must be a number",
+      "code": "INVALID_PROPERTY_VALUE"
+    }
+  }
+  ```
+</ResponseField>
