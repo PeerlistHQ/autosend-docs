@@ -1,0 +1,391 @@
+---
+title: 'Create Event'
+sidebarTitle: 'Create Event'
+openapi: 'POST /events'
+---
+
+<Note>
+  Defines a new event for the project. Event names and property names accept ASCII letters, digits, and underscores only, and must be 64 characters or fewer.
+</Note>
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/events \
+  --header 'Authorization: Bearer AS_your-project-api-key' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "eventName": "order_completed",
+  "description": "Fired when a customer completes a checkout",
+  "properties": [
+    { "propertyName": "order_total", "type": "number", "description": "Total order value in USD" },
+    { "propertyName": "currency", "type": "string", "suggestedValues": ["USD", "EUR", "GBP"] },
+    { "propertyName": "is_first_purchase", "type": "boolean" }
+  ]
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/events"
+
+headers = {
+    "Authorization": "Bearer AS_your-project-api-key",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "eventName": "order_completed",
+    "description": "Fired when a customer completes a checkout",
+    "properties": [
+        {"propertyName": "order_total", "type": "number", "description": "Total order value in USD"},
+        {"propertyName": "currency", "type": "string", "suggestedValues": ["USD", "EUR", "GBP"]},
+        {"propertyName": "is_first_purchase", "type": "boolean"}
+    ]
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/events', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer AS_your-project-api-key',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    eventName: 'order_completed',
+    description: 'Fired when a customer completes a checkout',
+    properties: [
+      { propertyName: 'order_total', type: 'number', description: 'Total order value in USD' },
+      { propertyName: 'currency', type: 'string', suggestedValues: ['USD', 'EUR', 'GBP'] },
+      { propertyName: 'is_first_purchase', type: 'boolean' }
+    ]
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/events';
+
+$data = [
+    'eventName' => 'order_completed',
+    'description' => 'Fired when a customer completes a checkout',
+    'properties' => [
+        ['propertyName' => 'order_total', 'type' => 'number', 'description' => 'Total order value in USD'],
+        ['propertyName' => 'currency', 'type' => 'string', 'suggestedValues' => ['USD', 'EUR', 'GBP']],
+        ['propertyName' => 'is_first_purchase', 'type' => 'boolean']
+    ]
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer AS_your-project-api-key',
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/events"
+
+    payload := map[string]interface{}{
+        "eventName":   "order_completed",
+        "description": "Fired when a customer completes a checkout",
+        "properties": []map[string]interface{}{
+            {"propertyName": "order_total", "type": "number", "description": "Total order value in USD"},
+            {"propertyName": "currency", "type": "string", "suggestedValues": []string{"USD", "EUR", "GBP"}},
+            {"propertyName": "is_first_purchase", "type": "boolean"},
+        },
+    }
+
+    jsonData, _ := json.Marshal(payload)
+
+    req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer AS_your-project-api-key")
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class CreateEvent {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/events");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Authorization", "Bearer AS_your-project-api-key");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+
+            String jsonInputString = "{\n" +
+                "  \"eventName\": \"order_completed\",\n" +
+                "  \"description\": \"Fired when a customer completes a checkout\",\n" +
+                "  \"properties\": [\n" +
+                "    { \"propertyName\": \"order_total\", \"type\": \"number\" },\n" +
+                "    { \"propertyName\": \"currency\", \"type\": \"string\" }\n" +
+                "  ]\n" +
+                "}";
+
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/events')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(uri.path)
+request['Authorization'] = 'Bearer AS_your-project-api-key'
+request['Content-Type'] = 'application/json'
+
+request.body = {
+  eventName: 'order_completed',
+  description: 'Fired when a customer completes a checkout',
+  properties: [
+    { propertyName: 'order_total', type: 'number' },
+    { propertyName: 'currency', type: 'string', suggestedValues: ['USD', 'EUR', 'GBP'] },
+    { propertyName: 'is_first_purchase', type: 'boolean' }
+  ]
+}.to_json
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 201 Response
+{
+  "success": true,
+  "data": {
+    "id": "60d5ec49f1b2c72d9c8b1234",
+    "eventName": "order_completed",
+    "description": "Fired when a customer completes a checkout",
+    "properties": [
+      {
+        "propertyName": "order_total",
+        "type": "number",
+        "description": "Total order value in USD",
+        "suggestedValues": []
+      },
+      {
+        "propertyName": "currency",
+        "type": "string",
+        "suggestedValues": ["USD", "EUR", "GBP"]
+      },
+      {
+        "propertyName": "is_first_purchase",
+        "type": "boolean",
+        "suggestedValues": []
+      }
+    ],
+    "createdAt": "2026-05-08T10:00:00.000Z",
+    "updatedAt": "2026-05-08T10:00:00.000Z"
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Project API key header of the form Bearer `AS_<key>`.
+</ParamField>
+
+### Body
+
+<ParamField path="eventName" type="string" required>
+  Unique name of the event within the project. ASCII letters, digits, and underscores only.
+
+  Maximum length: `64`
+
+  Example: `"order_completed"`
+</ParamField>
+
+<ParamField path="description" type="string">
+  Optional human-readable description.
+
+  Example: `"Fired when a customer completes a checkout"`
+</ParamField>
+
+<ParamField path="properties" type="object[]">
+  Schema for the event's custom properties. Up to 50 properties per event.
+
+  <Expandable title="property attributes">
+  <ParamField path="propertyName" type="string" required>
+    Property identifier. ASCII letters, digits, and underscores only. Must be unique within the event.
+
+    Maximum length: `64`
+
+    Example: `"order_total"`
+  </ParamField>
+
+  <ParamField path="type" type="string" required>
+    Declared type for the property value. One of `string`, `number`, `date`, or `boolean`.
+
+    Example: `"number"`
+  </ParamField>
+
+  <ParamField path="description" type="string">
+    Optional human-readable description of the property.
+  </ParamField>
+
+  <ParamField path="suggestedValues" type="array | string">
+    Optional list of suggested values shown in the UI. Accepts an array, or a comma-separated string. Each value is coerced to the declared `type`.
+
+    Example: `["USD", "EUR", "GBP"]`
+  </ParamField>
+  </Expandable>
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Event created successfully (201)</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The created event definition
+
+  <Expandable title="child attributes">
+  <ResponseField name="data.id" type="string">
+    Unique event definition identifier
+  </ResponseField>
+
+  <ResponseField name="data.eventName" type="string">
+    Event name as supplied at creation
+  </ResponseField>
+
+  <ResponseField name="data.description" type="string | null">
+    Human-readable description, or `null`
+  </ResponseField>
+
+  <ResponseField name="data.properties" type="object[]">
+    Declared property schema for the event
+  </ResponseField>
+
+  <ResponseField name="data.createdAt" type="string">
+    ISO 8601 timestamp of creation
+  </ResponseField>
+
+  <ResponseField name="data.updatedAt" type="string">
+    ISO 8601 timestamp of last update
+  </ResponseField>
+  </Expandable>
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="400 - Invalid event name" type="object">
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Event name can only contain ASCII letters (a-z, A-Z), numbers (0-9), and underscores (_).",
+      "code": "INVALID_EVENT_NAME_CHARACTERS"
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="409 - Event already exists" type="object">
+  Returned when an event with the same `eventName` already exists in the project.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Event with this name already exists in the project",
+      "code": "EVENT_ALREADY_EXISTS"
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="400 - Max events reached" type="object">
+  Returned when the project has 100 active event definitions.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Maximum number of events (100) reached for this project.",
+      "code": "MAX_EVENTS_REACHED"
+    }
+  }
+  ```
+</ResponseField>

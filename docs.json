@@ -176,6 +176,29 @@
 						]
 					},
 					{
+						"group": "Automations",
+						"pages": [
+							"api-reference/automations/list-automations",
+							"api-reference/automations/get-automation",
+							"api-reference/automations/create-automation",
+							"api-reference/automations/update-automation",
+							"api-reference/automations/pause-automation",
+							"api-reference/automations/resume-automation",
+							"api-reference/automations/delete-automation"
+						]
+					},
+					{
+						"group": "Events",
+						"pages": [
+							"api-reference/events/list-events",
+							"api-reference/events/get-event",
+							"api-reference/events/create-event",
+							"api-reference/events/update-event",
+							"api-reference/events/send-event",
+							"api-reference/events/delete-event"
+						]
+					},
+					{
 						"group": "Domains",
 						"pages": [
 							"api-reference/domains/list",

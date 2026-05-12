@@ -1,0 +1,315 @@
+---
+title: 'Update Automation'
+sidebarTitle: 'Update Automation'
+openapi: 'PATCH /automations/{id}'
+---
+
+<Note>
+  Updates a workflow automation. Only `draft` and `paused` workflows can be edited — active workflows must be paused first. Pass `active: true` to re-activate as part of the update.
+</Note>
+
+<Warning>
+  When `steps` is provided, the supplied array fully replaces the existing step list. Steps not included will be removed and any in-flight executions on those steps will exit.
+</Warning>
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request PATCH \
+  --url https://api.autosend.com/v1/automations/60d5ec49f1b2c72d9c8b9abc \
+  --header 'Authorization: Bearer AS_your-project-api-key' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "name": "Welcome Series — v2",
+  "tags": ["onboarding", "v2"],
+  "trackingClick": true,
+  "active": true
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/automations/60d5ec49f1b2c72d9c8b9abc"
+
+headers = {
+    "Authorization": "Bearer AS_your-project-api-key",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "name": "Welcome Series — v2",
+    "tags": ["onboarding", "v2"],
+    "trackingClick": True,
+    "active": True
+}
+
+response = requests.patch(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/automations/60d5ec49f1b2c72d9c8b9abc', {
+  method: 'PATCH',
+  headers: {
+    'Authorization': 'Bearer AS_your-project-api-key',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: 'Welcome Series — v2',
+    tags: ['onboarding', 'v2'],
+    trackingClick: true,
+    active: true
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/automations/60d5ec49f1b2c72d9c8b9abc';
+
+$data = [
+    'name' => 'Welcome Series — v2',
+    'tags' => ['onboarding', 'v2'],
+    'trackingClick' => true,
+    'active' => true
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer AS_your-project-api-key',
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/automations/60d5ec49f1b2c72d9c8b9abc"
+
+    payload := map[string]interface{}{
+        "name":          "Welcome Series — v2",
+        "tags":          []string{"onboarding", "v2"},
+        "trackingClick": true,
+        "active":        true,
+    }
+
+    jsonData, _ := json.Marshal(payload)
+
+    req, _ := http.NewRequest("PATCH", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer AS_your-project-api-key")
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class UpdateWorkflow {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/automations/60d5ec49f1b2c72d9c8b9abc");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("PATCH");
+            con.setRequestProperty("Authorization", "Bearer AS_your-project-api-key");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+
+            String jsonInputString = "{\n" +
+                "  \"name\": \"Welcome Series — v2\",\n" +
+                "  \"active\": true\n" +
+                "}";
+
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/automations/60d5ec49f1b2c72d9c8b9abc')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Patch.new(uri.path)
+request['Authorization'] = 'Bearer AS_your-project-api-key'
+request['Content-Type'] = 'application/json'
+
+request.body = {
+  name: 'Welcome Series — v2',
+  tags: ['onboarding', 'v2'],
+  trackingClick: true,
+  active: true
+}.to_json
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "id": "60d5ec49f1b2c72d9c8b9abc",
+    "name": "Welcome Series — v2",
+    "status": "active",
+    "tags": ["onboarding", "v2"],
+    "trackingClick": true,
+    "activeAt": "2026-05-08T11:00:00.000Z",
+    "updatedAt": "2026-05-08T11:00:00.000Z"
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Project API key header of the form Bearer `AS_<key>`.
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  Workflow automation ID (MongoDB ObjectId).
+</ParamField>
+
+### Body
+
+All fields are optional. See [Create Automation](./create-workflow-automation) for the full shape of each field.
+
+<ParamField path="name" type="string">
+  New workflow name. Maximum length `255`.
+</ParamField>
+
+<ParamField path="description" type="string">
+  Maximum length `1000`.
+</ParamField>
+
+<ParamField path="entryCriteria" type="object">
+  Replacement entry criteria.
+</ParamField>
+
+<ParamField path="exitCriteria" type="object">
+  Replacement exit criteria.
+</ParamField>
+
+<ParamField path="steps" type="object[]">
+  Replacement step list. Fully replaces the existing steps.
+</ParamField>
+
+<ParamField path="tags" type="string[]">
+  Replacement tag list.
+</ParamField>
+
+<ParamField path="unsubscribeGroupId" type="string">
+  Suppression group applied to all email steps.
+</ParamField>
+
+<ParamField path="trackingOpen" type="boolean" />
+
+<ParamField path="trackingClick" type="boolean" />
+
+<ParamField path="active" type="boolean">
+  When `true`, the workflow is validated and activated after the update. When `false`, the workflow is left in (or moved to) `draft` state.
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Workflow automation updated successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The updated workflow automation.
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="400 - Cannot edit workflow" type="object">
+  Returned when the workflow is `active` or `archived` — pause it first.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Only draft or paused workflows can be edited",
+      "code": "CANNOT_EDIT_AUTOMATION"
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="404 - Workflow not found" type="object">
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Workflow automation not found",
+      "code": "WORKFLOW_NOT_FOUND"
+    }
+  }
+  ```
+</ResponseField>

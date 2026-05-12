@@ -1,0 +1,254 @@
+---
+title: 'List Events'
+sidebarTitle: 'List Events'
+openapi: 'GET /events'
+---
+
+<Note>
+  Returns every active event definition for the authenticated project, sorted newest-first.
+</Note>
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request GET \
+  --url https://api.autosend.com/v1/events \
+  --header 'Authorization: Bearer AS_your-project-api-key'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/events"
+
+headers = {
+    "Authorization": "Bearer AS_your-project-api-key"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/events', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer AS_your-project-api-key'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/events';
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer AS_your-project-api-key'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/events"
+
+    req, _ := http.NewRequest("GET", url, nil)
+    req.Header.Set("Authorization", "Bearer AS_your-project-api-key")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class ListEvents {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/events");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Authorization", "Bearer AS_your-project-api-key");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+            con.disconnect();
+
+            System.out.println(content.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/events')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Get.new(uri)
+request['Authorization'] = 'Bearer AS_your-project-api-key'
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "events": [
+      {
+        "id": "60d5ec49f1b2c72d9c8b1234",
+        "eventName": "order_completed",
+        "description": "Fired when a customer completes a checkout",
+        "properties": [
+          {
+            "propertyName": "order_total",
+            "type": "number",
+            "description": "Total order value in USD",
+            "suggestedValues": []
+          },
+          {
+            "propertyName": "currency",
+            "type": "string",
+            "suggestedValues": ["USD", "EUR", "GBP"]
+          }
+        ],
+        "createdAt": "2026-05-08T10:00:00.000Z",
+        "updatedAt": "2026-05-08T10:00:00.000Z"
+      },
+      {
+        "id": "60d5ec49f1b2c72d9c8b5678",
+        "eventName": "signup_completed",
+        "description": null,
+        "properties": [],
+        "createdAt": "2026-05-01T08:30:00.000Z",
+        "updatedAt": "2026-05-01T08:30:00.000Z"
+      }
+    ]
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Project API key header of the form Bearer `AS_<key>`.
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Events retrieved successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="child attributes">
+  <ResponseField name="data.events" type="object[]">
+    Array of event definitions belonging to the project
+
+    <Expandable title="child attributes">
+    <ResponseField name="id" type="string">
+      Unique event definition identifier
+    </ResponseField>
+
+    <ResponseField name="eventName" type="string">
+      Event name
+
+      Example: `"order_completed"`
+    </ResponseField>
+
+    <ResponseField name="description" type="string | null">
+      Human-readable description
+    </ResponseField>
+
+    <ResponseField name="properties" type="object[]">
+      Declared property schema for the event
+
+      <Expandable title="property attributes">
+      <ResponseField name="propertyName" type="string">
+        Property identifier
+      </ResponseField>
+
+      <ResponseField name="type" type="string">
+        Declared type. One of `string`, `number`, `date`, or `boolean`
+      </ResponseField>
+
+      <ResponseField name="description" type="string | null">
+        Optional human-readable description
+      </ResponseField>
+
+      <ResponseField name="suggestedValues" type="array">
+        Suggested values for the property (may be empty)
+      </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="createdAt" type="string">
+      ISO 8601 timestamp of creation
+    </ResponseField>
+
+    <ResponseField name="updatedAt" type="string">
+      ISO 8601 timestamp of last update
+    </ResponseField>
+    </Expandable>
+  </ResponseField>
+  </Expandable>
+</ResponseField>

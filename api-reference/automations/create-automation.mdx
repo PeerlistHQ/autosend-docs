@@ -1,0 +1,803 @@
+---
+title: 'Create Automation'
+sidebarTitle: 'Create Automation'
+openapi: 'POST /automations'
+---
+
+<Note>
+  Creates a new workflow automation. By default the workflow is created in `draft` status — pass `active: true` to validate and activate it as part of the create call.
+</Note>
+
+<Info>
+  A workflow runs `steps` in order. Without `branch` steps, `steps` must strictly alternate `wait → email`, starting with `wait` and ending with `email`. Workflows containing `branch` steps use a more flexible graph (each step references the next via `nextStepId`).
+</Info>
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/automations \
+  --header 'Authorization: Bearer AS_your-project-api-key' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "name": "Branch with guard - pro vs other",
+  "description": "Pro plan gets a 2-email sequence with a guard that routes to a merged email if plan changes mid-flight. Other plans get a single welcome email.",
+  "active": true,
+  "entryCriteria": {
+    "type": "contact_property_matches_with",
+    "filterCriteria": {
+      "logicalOperator": "AND",
+      "conditions": [
+        { "field": "customFields.plan", "operator": "is_not_empty", "fieldType": "string" }
+      ]
+    }
+  },
+  "unsubscribeGroupId": "60d5ec49f1b2c72d9c8b4444",
+  "trackingOpen": true,
+  "trackingClick": true,
+  "exitCriteria": { "type": "workflow_complete" },
+  "tags": ["onboarding", "branch-guard"],
+  "steps": [
+    {
+      "type": "wait",
+      "delay": { "value": 2, "unit": "mins" },
+      "checkExitCriteria": true,
+      "stepId": "step_wait_intro",
+      "nextStepId": "step_email_intro"
+    },
+    {
+      "type": "email",
+      "email": {
+        "senderEmail": "team@example.com",
+        "senderName": "Example Team",
+        "projectId": "60d5ec49f1b2c72d9c8b1111",
+        "templateName": "Welcome - intro email",
+        "subject": "Welcome to Example!",
+        "previewText": "Glad to have you with us.",
+        "htmlTemplate": "<!DOCTYPE html><html><body><h1>Welcome {{firstName}}!</h1><p>Thanks for joining.</p></body></html>"
+      },
+      "checkExitCriteria": true,
+      "stepId": "step_email_intro",
+      "nextStepId": "step_branch"
+    },
+    {
+      "stepId": "step_branch",
+      "type": "branch",
+      "branches": [
+        {
+          "branchId": "br_pro",
+          "label": "Pro plan",
+          "triggerType": "contact_property_matches_with",
+          "appliesTo": "all_branch_steps",
+          "filterCriteria": {
+            "logicalOperator": "AND",
+            "conditions": [
+              { "field": "customFields.plan", "operator": "equals", "value": "pro", "fieldType": "string" }
+            ]
+          },
+          "nextStepId": "step_wait_pro",
+          "mergeStepId": "step_wait_merged"
+        },
+        {
+          "branchId": "br_other",
+          "label": "Catch-all",
+          "triggerType": "contact_property_matches_with",
+          "appliesTo": "branch_entry",
+          "filterCriteria": {
+            "logicalOperator": "AND",
+            "conditions": [
+              { "field": "customFields.plan", "operator": "is_not_empty", "fieldType": "string" }
+            ]
+          },
+          "nextStepId": "step_wait_other"
+        }
+      ]
+    },
+    {
+      "type": "wait",
+      "delay": { "value": 2, "unit": "mins" },
+      "checkExitCriteria": true,
+      "stepId": "step_wait_pro",
+      "parentBranchStepId": "step_branch",
+      "parentBranchId": "br_pro",
+      "nextStepId": "step_email_pro"
+    },
+    {
+      "stepId": "step_email_pro",
+      "type": "email",
+      "email": {
+        "senderEmail": "team@example.com",
+        "senderName": "Example Team",
+        "projectId": "60d5ec49f1b2c72d9c8b1111",
+        "templateName": "Welcome - pro email",
+        "subject": "Welcome to Pro, {{firstName}}",
+        "previewText": "Your Pro perks are ready.",
+        "htmlTemplate": "<!DOCTYPE html><html><body><h1>Welcome to Pro, {{firstName}}!</h1><p>Your perks are ready.</p></body></html>"
+      },
+      "parentBranchStepId": "step_branch",
+      "parentBranchId": "br_pro",
+      "nextStepId": "step_wait_pro_followup"
+    },
+    {
+      "stepId": "step_wait_pro_followup",
+      "type": "wait",
+      "delay": { "value": 1, "unit": "minutes" },
+      "parentBranchStepId": "step_branch",
+      "parentBranchId": "br_pro",
+      "nextStepId": "step_email_pro_followup"
+    },
+    {
+      "stepId": "step_email_pro_followup",
+      "type": "email",
+      "email": {
+        "senderEmail": "team@example.com",
+        "senderName": "Example Team",
+        "projectId": "60d5ec49f1b2c72d9c8b1111",
+        "templateName": "Welcome - pro follow-up",
+        "subject": "A quick follow-up on your Pro plan",
+        "previewText": "Tips to get the most out of Pro.",
+        "htmlTemplate": "<!DOCTYPE html><html><body><h1>Hi {{firstName}}</h1><p>Here are a few Pro tips.</p></body></html>"
+      },
+      "parentBranchStepId": "step_branch",
+      "parentBranchId": "br_pro"
+    },
+    {
+      "stepId": "step_wait_other",
+      "type": "wait",
+      "delay": { "value": 2, "unit": "mins" },
+      "checkExitCriteria": true,
+      "parentBranchStepId": "step_branch",
+      "parentBranchId": "br_other",
+      "nextStepId": "step_email_other"
+    },
+    {
+      "stepId": "step_email_other",
+      "type": "email",
+      "email": {
+        "senderEmail": "team@example.com",
+        "senderName": "Example Team",
+        "projectId": "60d5ec49f1b2c72d9c8b1111",
+        "templateName": "Welcome - standard email",
+        "subject": "Welcome to Example!",
+        "previewText": "Glad to have you with us.",
+        "htmlTemplate": "<!DOCTYPE html><html><body><h1>Welcome {{firstName}}!</h1><p>Thanks for joining.</p></body></html>"
+      },
+      "parentBranchStepId": "step_branch",
+      "parentBranchId": "br_other"
+    },
+    {
+      "stepId": "step_wait_merged",
+      "type": "wait",
+      "delay": { "value": 2, "unit": "mins" },
+      "checkExitCriteria": true,
+      "nextStepId": "step_email_merged"
+    },
+    {
+      "stepId": "step_email_merged",
+      "type": "email",
+      "email": {
+        "senderEmail": "team@example.com",
+        "senderName": "Example Team",
+        "projectId": "60d5ec49f1b2c72d9c8b1111",
+        "templateName": "Welcome - merged email",
+        "subject": "Thanks for sticking with us, {{firstName}}",
+        "previewText": "A wrap-up note from the team.",
+        "htmlTemplate": "<!DOCTYPE html><html><body><h1>Thanks {{firstName}}!</h1><p>Here is your wrap-up.</p></body></html>"
+      }
+    }
+  ]
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/automations"
+
+headers = {
+    "Authorization": "Bearer AS_your-project-api-key",
+    "Content-Type": "application/json"
+}
+
+email_defaults = {
+    "senderEmail": "team@example.com",
+    "senderName": "Example Team",
+    "projectId": "60d5ec49f1b2c72d9c8b1111"
+}
+
+payload = {
+    "name": "Branch with guard - pro vs other",
+    "description": "Pro plan gets a 2-email sequence with a guard. Other plans get a single welcome email.",
+    "active": True,
+    "entryCriteria": {
+        "type": "contact_property_matches_with",
+        "filterCriteria": {
+            "logicalOperator": "AND",
+            "conditions": [
+                {"field": "customFields.plan", "operator": "is_not_empty", "fieldType": "string"}
+            ]
+        }
+    },
+    "unsubscribeGroupId": "60d5ec49f1b2c72d9c8b4444",
+    "trackingOpen": True,
+    "trackingClick": True,
+    "exitCriteria": {"type": "workflow_complete"},
+    "tags": ["onboarding", "branch-guard"],
+    "steps": [
+        {"type": "wait", "delay": {"value": 2, "unit": "mins"}, "checkExitCriteria": True,
+         "stepId": "step_wait_intro", "nextStepId": "step_email_intro"},
+        {"type": "email",
+         "email": {**email_defaults, "templateName": "Welcome - intro email",
+                   "subject": "Welcome to Example!", "previewText": "Glad to have you with us.",
+                   "htmlTemplate": "<!DOCTYPE html><html><body><h1>Welcome {{firstName}}!</h1></body></html>"},
+         "checkExitCriteria": True, "stepId": "step_email_intro", "nextStepId": "step_branch"},
+        {"stepId": "step_branch", "type": "branch", "branches": [
+            {"branchId": "br_pro", "label": "Pro plan",
+             "triggerType": "contact_property_matches_with", "appliesTo": "all_branch_steps",
+             "filterCriteria": {"logicalOperator": "AND", "conditions": [
+                 {"field": "customFields.plan", "operator": "equals", "value": "pro", "fieldType": "string"}]},
+             "nextStepId": "step_wait_pro", "mergeStepId": "step_wait_merged"},
+            {"branchId": "br_other", "label": "Catch-all",
+             "triggerType": "contact_property_matches_with", "appliesTo": "branch_entry",
+             "filterCriteria": {"logicalOperator": "AND", "conditions": [
+                 {"field": "customFields.plan", "operator": "is_not_empty", "fieldType": "string"}]},
+             "nextStepId": "step_wait_other"}
+        ]},
+        {"type": "wait", "delay": {"value": 2, "unit": "mins"}, "checkExitCriteria": True,
+         "stepId": "step_wait_pro", "parentBranchStepId": "step_branch", "parentBranchId": "br_pro",
+         "nextStepId": "step_email_pro"},
+        {"stepId": "step_email_pro", "type": "email",
+         "email": {**email_defaults, "templateName": "Welcome - pro email",
+                   "subject": "Welcome to Pro, {{firstName}}", "previewText": "Your Pro perks are ready.",
+                   "htmlTemplate": "<!DOCTYPE html><html><body><h1>Welcome to Pro!</h1></body></html>"},
+         "parentBranchStepId": "step_branch", "parentBranchId": "br_pro",
+         "nextStepId": "step_wait_pro_followup"},
+        {"stepId": "step_wait_pro_followup", "type": "wait",
+         "delay": {"value": 1, "unit": "minutes"},
+         "parentBranchStepId": "step_branch", "parentBranchId": "br_pro",
+         "nextStepId": "step_email_pro_followup"},
+        {"stepId": "step_email_pro_followup", "type": "email",
+         "email": {**email_defaults, "templateName": "Welcome - pro follow-up",
+                   "subject": "A quick follow-up on your Pro plan", "previewText": "Tips to get the most out of Pro.",
+                   "htmlTemplate": "<!DOCTYPE html><html><body><h1>Hi {{firstName}}</h1></body></html>"},
+         "parentBranchStepId": "step_branch", "parentBranchId": "br_pro"},
+        {"stepId": "step_wait_other", "type": "wait", "delay": {"value": 2, "unit": "mins"},
+         "checkExitCriteria": True, "parentBranchStepId": "step_branch",
+         "parentBranchId": "br_other", "nextStepId": "step_email_other"},
+        {"stepId": "step_email_other", "type": "email",
+         "email": {**email_defaults, "templateName": "Welcome - standard email",
+                   "subject": "Welcome to Example!", "previewText": "Glad to have you with us.",
+                   "htmlTemplate": "<!DOCTYPE html><html><body><h1>Welcome {{firstName}}!</h1></body></html>"},
+         "parentBranchStepId": "step_branch", "parentBranchId": "br_other"},
+        {"stepId": "step_wait_merged", "type": "wait", "delay": {"value": 2, "unit": "mins"},
+         "checkExitCriteria": True, "nextStepId": "step_email_merged"},
+        {"stepId": "step_email_merged", "type": "email",
+         "email": {**email_defaults, "templateName": "Welcome - merged email",
+                   "subject": "Thanks for sticking with us, {{firstName}}",
+                   "previewText": "A wrap-up note from the team.",
+                   "htmlTemplate": "<!DOCTYPE html><html><body><h1>Thanks {{firstName}}!</h1></body></html>"}}
+    ]
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+const emailDefaults = {
+  senderEmail: 'team@example.com',
+  senderName: 'Example Team',
+  projectId: '60d5ec49f1b2c72d9c8b1111'
+};
+
+const payload = {
+  name: 'Branch with guard - pro vs other',
+  description: 'Pro plan gets a 2-email sequence with a guard. Other plans get a single welcome email.',
+  active: true,
+  entryCriteria: {
+    type: 'contact_property_matches_with',
+    filterCriteria: {
+      logicalOperator: 'AND',
+      conditions: [
+        { field: 'customFields.plan', operator: 'is_not_empty', fieldType: 'string' }
+      ]
+    }
+  },
+  unsubscribeGroupId: '60d5ec49f1b2c72d9c8b4444',
+  trackingOpen: true,
+  trackingClick: true,
+  exitCriteria: { type: 'workflow_complete' },
+  tags: ['onboarding', 'branch-guard'],
+  steps: [
+    { type: 'wait', delay: { value: 2, unit: 'mins' }, checkExitCriteria: true,
+      stepId: 'step_wait_intro', nextStepId: 'step_email_intro' },
+    { type: 'email',
+      email: { ...emailDefaults, templateName: 'Welcome - intro email',
+        subject: 'Welcome to Example!', previewText: 'Glad to have you with us.',
+        htmlTemplate: '<!DOCTYPE html><html><body><h1>Welcome {{firstName}}!</h1></body></html>' },
+      checkExitCriteria: true, stepId: 'step_email_intro', nextStepId: 'step_branch' },
+    { stepId: 'step_branch', type: 'branch', branches: [
+        { branchId: 'br_pro', label: 'Pro plan',
+          triggerType: 'contact_property_matches_with', appliesTo: 'all_branch_steps',
+          filterCriteria: { logicalOperator: 'AND', conditions: [
+            { field: 'customFields.plan', operator: 'equals', value: 'pro', fieldType: 'string' }
+          ]},
+          nextStepId: 'step_wait_pro', mergeStepId: 'step_wait_merged' },
+        { branchId: 'br_other', label: 'Catch-all',
+          triggerType: 'contact_property_matches_with', appliesTo: 'branch_entry',
+          filterCriteria: { logicalOperator: 'AND', conditions: [
+            { field: 'customFields.plan', operator: 'is_not_empty', fieldType: 'string' }
+          ]},
+          nextStepId: 'step_wait_other' }
+    ]},
+    { type: 'wait', delay: { value: 2, unit: 'mins' }, checkExitCriteria: true,
+      stepId: 'step_wait_pro', parentBranchStepId: 'step_branch', parentBranchId: 'br_pro',
+      nextStepId: 'step_email_pro' },
+    { stepId: 'step_email_pro', type: 'email',
+      email: { ...emailDefaults, templateName: 'Welcome - pro email',
+        subject: 'Welcome to Pro, {{firstName}}', previewText: 'Your Pro perks are ready.',
+        htmlTemplate: '<!DOCTYPE html><html><body><h1>Welcome to Pro!</h1></body></html>' },
+      parentBranchStepId: 'step_branch', parentBranchId: 'br_pro',
+      nextStepId: 'step_wait_pro_followup' },
+    { stepId: 'step_wait_pro_followup', type: 'wait', delay: { value: 1, unit: 'minutes' },
+      parentBranchStepId: 'step_branch', parentBranchId: 'br_pro',
+      nextStepId: 'step_email_pro_followup' },
+    { stepId: 'step_email_pro_followup', type: 'email',
+      email: { ...emailDefaults, templateName: 'Welcome - pro follow-up',
+        subject: 'A quick follow-up on your Pro plan', previewText: 'Tips to get the most out of Pro.',
+        htmlTemplate: '<!DOCTYPE html><html><body><h1>Hi {{firstName}}</h1></body></html>' },
+      parentBranchStepId: 'step_branch', parentBranchId: 'br_pro' },
+    { stepId: 'step_wait_other', type: 'wait', delay: { value: 2, unit: 'mins' },
+      checkExitCriteria: true, parentBranchStepId: 'step_branch',
+      parentBranchId: 'br_other', nextStepId: 'step_email_other' },
+    { stepId: 'step_email_other', type: 'email',
+      email: { ...emailDefaults, templateName: 'Welcome - standard email',
+        subject: 'Welcome to Example!', previewText: 'Glad to have you with us.',
+        htmlTemplate: '<!DOCTYPE html><html><body><h1>Welcome {{firstName}}!</h1></body></html>' },
+      parentBranchStepId: 'step_branch', parentBranchId: 'br_other' },
+    { stepId: 'step_wait_merged', type: 'wait', delay: { value: 2, unit: 'mins' },
+      checkExitCriteria: true, nextStepId: 'step_email_merged' },
+    { stepId: 'step_email_merged', type: 'email',
+      email: { ...emailDefaults, templateName: 'Welcome - merged email',
+        subject: 'Thanks for sticking with us, {{firstName}}',
+        previewText: 'A wrap-up note from the team.',
+        htmlTemplate: '<!DOCTYPE html><html><body><h1>Thanks {{firstName}}!</h1></body></html>' }}
+  ]
+};
+
+fetch('https://api.autosend.com/v1/automations', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer AS_your-project-api-key',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(payload)
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+// Load the workflow payload (see the cURL or JavaScript example for the full structure).
+$data = json_decode(file_get_contents('automation.json'), true);
+
+$ch = curl_init('https://api.autosend.com/v1/automations');
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer AS_your-project-api-key',
+    'Content-Type: application/json'
+]);
+
+echo curl_exec($ch);
+curl_close($ch);
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "fmt"
+    "io"
+    "net/http"
+    "os"
+)
+
+func main() {
+    // Load the workflow payload (see the cURL or JavaScript example for the full structure).
+    body, _ := os.ReadFile("automation.json")
+
+    req, _ := http.NewRequest("POST", "https://api.autosend.com/v1/automations", bytes.NewBuffer(body))
+    req.Header.Set("Authorization", "Bearer AS_your-project-api-key")
+    req.Header.Set("Content-Type", "application/json")
+
+    resp, err := (&http.Client{}).Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    out, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(out))
+}
+```
+
+```java Java
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+public class CreateWorkflow {
+    public static void main(String[] args) throws Exception {
+        // Load the workflow payload (see the cURL or JavaScript example for the full structure).
+        byte[] body = Files.readAllBytes(Paths.get("automation.json"));
+
+        HttpURLConnection con = (HttpURLConnection) new URL("https://api.autosend.com/v1/automations").openConnection();
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Authorization", "Bearer AS_your-project-api-key");
+        con.setRequestProperty("Content-Type", "application/json");
+        con.setDoOutput(true);
+
+        try (OutputStream os = con.getOutputStream()) {
+            os.write(body);
+        }
+
+        System.out.println("Response Status: " + con.getResponseCode());
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/automations')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(uri.path)
+request['Authorization'] = 'Bearer AS_your-project-api-key'
+request['Content-Type'] = 'application/json'
+
+# Load the workflow payload (see the cURL or JavaScript example for the full structure).
+request.body = File.read('automation.json')
+
+puts http.request(request).body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 201 Response
+{
+  "success": true,
+  "data": {
+    "id": "60d5ec49f1b2c72d9c8b9abc",
+    "projectId": "60d5ec49f1b2c72d9c8b1111",
+    "organizationId": "60d5ec49f1b2c72d9c8b2222",
+    "name": "Branch with guard - pro vs other",
+    "description": "Pro plan gets a 2-email sequence with a guard. Other plans get a single welcome email.",
+    "status": "active",
+    "entryCriteria": {
+      "type": "contact_property_matches_with",
+      "filterCriteria": {
+        "logicalOperator": "AND",
+        "conditions": [
+          { "field": "customFields.plan", "operator": "is_not_empty", "fieldType": "string" }
+        ]
+      }
+    },
+    "exitCriteria": { "type": "workflow_complete" },
+    "steps": [
+      { "stepId": "step_wait_intro", "type": "wait", "delay": { "value": 2, "unit": "mins" }, "nextStepId": "step_email_intro" },
+      { "stepId": "step_email_intro", "type": "email", "nextStepId": "step_branch" },
+      { "stepId": "step_branch", "type": "branch", "branches": [
+          { "branchId": "br_pro", "nextStepId": "step_wait_pro", "mergeStepId": "step_wait_merged" },
+          { "branchId": "br_other", "nextStepId": "step_wait_other" }
+      ]},
+      { "stepId": "step_wait_pro", "type": "wait", "parentBranchId": "br_pro", "nextStepId": "step_email_pro" },
+      { "stepId": "step_email_pro", "type": "email", "parentBranchId": "br_pro", "nextStepId": "step_wait_pro_followup" },
+      { "stepId": "step_wait_pro_followup", "type": "wait", "parentBranchId": "br_pro", "nextStepId": "step_email_pro_followup" },
+      { "stepId": "step_email_pro_followup", "type": "email", "parentBranchId": "br_pro" },
+      { "stepId": "step_wait_other", "type": "wait", "parentBranchId": "br_other", "nextStepId": "step_email_other" },
+      { "stepId": "step_email_other", "type": "email", "parentBranchId": "br_other" },
+      { "stepId": "step_wait_merged", "type": "wait", "nextStepId": "step_email_merged" },
+      { "stepId": "step_email_merged", "type": "email" }
+    ],
+    "tags": ["onboarding", "branch-guard"],
+    "unsubscribeGroupId": "60d5ec49f1b2c72d9c8b4444",
+    "trackingOpen": true,
+    "trackingClick": true,
+    "activeAt": "2026-05-08T10:00:00.000Z",
+    "createdAt": "2026-05-08T10:00:00.000Z",
+    "updatedAt": "2026-05-08T10:00:00.000Z"
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Project API key header of the form Bearer `AS_<key>`.
+</ParamField>
+
+### Body
+
+<ParamField path="name" type="string" required>
+  Display name for the workflow automation.
+
+  Maximum length: `255`
+
+  Example: `"Welcome Series"`
+</ParamField>
+
+<ParamField path="description" type="string">
+  Optional description.
+
+  Maximum length: `1000`
+</ParamField>
+
+<ParamField path="entryCriteria" type="object">
+  Defines which contacts enter the workflow.
+
+  <Expandable title="entryCriteria attributes">
+  <ParamField path="type" type="string">
+    One of `contact_created`, `contact_added_to_list`, `contact_property_matches_with`, `contact_property_changes_from_to`, or `event_trigger`. Defaults to `contact_created`.
+  </ParamField>
+
+  <ParamField path="contactListId" type="string">
+    ID of the contact list or segment.
+  </ParamField>
+
+  <ParamField path="eventName" type="string">
+    Required when `type` is `event_trigger`. Name of the event that triggers the workflow.
+  </ParamField>
+
+  <ParamField path="filterCriteria" type="object">
+    Optional filter tree applied on top of the base `type`. Use `event.name` and `event.properties.*` paths in `event_trigger` workflows; otherwise reference contact properties.
+    ```json
+            {
+                "logicalOperator": "AND",
+                "groups": [
+                    {
+                        "field": "source",
+                        "operator": "contains",
+                        "value": "web",
+                        "id": "filter_1"
+                    }
+                ]
+            }
+    ```
+    source is a Custom Field
+  </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="exitCriteria" type="object">
+  Defines when contacts leave the workflow before completion.
+
+  <Expandable title="exitCriteria attributes">
+  <ParamField path="type" type="string">
+    One of `workflow_complete` (default), `entry_criteria_no_longer_met`.
+  </ParamField>
+
+  </Expandable>
+</ParamField>
+
+<ParamField path="steps" type="object[]">
+  Ordered steps that contacts walk through. Each step must include a `type`. Linear workflows alternate `wait` and `email`; workflows containing a `branch` step form a graph where each step references the next via `nextStepId`.
+
+  <Expandable title="step attributes">
+  <ParamField path="type" type="string" required>
+    One of `wait`, `email`, or `branch`.
+  </ParamField>
+
+  <ParamField path="delay" type="object">
+    Required for `wait` steps. `delay.value` is a non-negative integer; `delay.unit` is one of `minutes`, `mins`, `hours`, or `days`.
+  </ParamField>
+
+  <ParamField path="email" type="object">
+    Required for `email` steps. Provide either `templateId` (existing template) or `htmlTemplate` (inline HTML, `subject` is required when using `htmlTemplate`). Optional fields: `subject`, `previewText`, `senderEmail`, `senderName`, `senderReplyToEmail`, `senderReplyToName`.
+  </ParamField>
+
+  <ParamField path="branches" type="object[]">
+    Required for `branch` steps. Each branch defines a `triggerType` (`contact_property_matches_with` or `event_property`), a `filterCriteria` tree, an `appliesTo` scope (`branch_entry` or `all_branch_steps`), a `nextStepId` that points to the first step on that branch, and an optional `mergeStepId` where the branch rejoins the main flow.
+  </ParamField>
+
+  <ParamField path="nextStepId" type="string">
+    ID of the next step in graph-style workflows (those containing a `branch`). Steps inside a branch must also set `parentBranchStepId` and `parentBranchId`.
+  </ParamField>
+
+  <ParamField path="checkExitCriteria" type="boolean">
+    Whether to re-evaluate exit criteria before this step. Defaults to `true`.
+  </ParamField>
+  </Expandable>
+</ParamField>
+
+#### Branch step example
+
+A `branch` step splits the workflow into multiple paths based on `filterCriteria`. Each branch points at its first step via `nextStepId`, and steps inside the branch reference back via `parentBranchStepId` and `parentBranchId`. Branches can rejoin the main flow at a shared `mergeStepId`.
+
+```json Branch step
+{
+  "stepId": "step_branch",
+  "type": "branch",
+  "branches": [
+    {
+      "branchId": "br_pro",
+      "label": "Pro plan",
+      "triggerType": "contact_property_matches_with",
+      "appliesTo": "all_branch_steps",
+      "filterCriteria": {
+        "logicalOperator": "AND",
+        "conditions": [
+          {
+            "field": "customFields.plan",
+            "operator": "equals",
+            "value": "pro",
+            "fieldType": "string"
+          }
+        ]
+      },
+      "nextStepId": "step_wait_pro",
+      "mergeStepId": "step_wait_merged"
+    },
+    {
+      "branchId": "br_other",
+      "label": "Catch-all",
+      "triggerType": "contact_property_matches_with",
+      "appliesTo": "branch_entry",
+      "filterCriteria": {
+        "logicalOperator": "AND",
+        "conditions": [
+          {
+            "field": "customFields.plan",
+            "operator": "is_not_empty",
+            "fieldType": "string"
+          }
+        ]
+      },
+      "nextStepId": "step_wait_other"
+    }
+  ]
+},
+```
+
+```json Wait step inside a branch
+{
+  "stepId": "step_wait_vip",
+  "type": "wait",
+  "delay": { "value": 2, "unit": "mins" },
+  "checkExitCriteria": true,
+  "parentBranchStepId": "step_branch",
+  "parentBranchId": "br_vip",
+  "nextStepId": "step_email_vip"
+}
+```
+
+```json Email step inside a branch
+{
+  "stepId": "step_email_vip",
+  "type": "email",
+  "email": {
+    "senderEmail": "ankban@mail4.ankitbansal.co.in",
+    "senderName": "Example Team",
+    "projectId": "68b7f9dfb6924068b8ecda65",
+    "templateName": "VIP thank you",
+    "subject": "A personal thank-you, {{firstName}}",
+    "previewText": "VIP perks inside.",
+    "htmlTemplate": "<!DOCTYPE html><html><body><h1>Thanks {{firstName}}!</h1><p>Your VIP perks are on the way.</p></body></html>"
+  },
+  "parentBranchStepId": "step_branch",
+  "parentBranchId": "br_vip"
+}
+```
+
+<Info>
+  In an `email` step you can pass `templateId` to reference an existing template instead of inlining `htmlTemplate` and `subject`.
+</Info>
+
+<ParamField path="tags" type="string[]">
+  Optional tags for filtering and organisation.
+</ParamField>
+
+<ParamField path="unsubscribeGroupId" type="string">
+  Suppression group applied to all email steps in the workflow.
+</ParamField>
+
+<ParamField path="trackingOpen" type="boolean">
+  Whether to insert open-tracking pixels into emails sent by this workflow.
+</ParamField>
+
+<ParamField path="trackingClick" type="boolean">
+  Whether to rewrite links for click tracking in emails sent by this workflow.
+</ParamField>
+
+<ParamField path="active" type="boolean">
+  When `true`, the workflow is validated and activated as part of the create call. When `false` or omitted, the workflow is created in `draft` status and must be activated separately.
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Workflow automation created successfully (201)</span>
+
+<ResponseField name="success" type="boolean">
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The created workflow automation.
+
+  <Expandable title="child attributes">
+  <ResponseField name="data.id" type="string">
+    Unique workflow identifier
+  </ResponseField>
+
+  <ResponseField name="data.status" type="string">
+    Current status: `draft`, `active`, `paused`, or `archived`.
+  </ResponseField>
+
+  <ResponseField name="data.steps" type="object[]">
+    Resolved steps with auto-generated `stepId` values.
+  </ResponseField>
+
+  <ResponseField name="data.activeAt" type="string | null">
+    Timestamp at which the workflow was last activated, or `null` if never activated.
+  </ResponseField>
+
+  <ResponseField name="data.createdAt" type="string">
+    ISO 8601 timestamp of creation
+  </ResponseField>
+
+  <ResponseField name="data.updatedAt" type="string">
+    ISO 8601 timestamp of last update
+  </ResponseField>
+  </Expandable>
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="400 - Validation error" type="object">
+  Returned when the request body fails validation. Common codes include `NAME_REQUIRED`, `INVALID_STEP_SEQUENCE`, `EMAIL_TEMPLATE_REQUIRED`, `BRANCH_BRANCHES_REQUIRED`, `EVENT_NAME_REQUIRED`.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Steps must strictly alternate wait → email starting with wait and ending with email",
+      "code": "INVALID_STEP_SEQUENCE"
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="400 - Cannot activate" type="object">
+  Returned when `active: true` is sent but the workflow is missing required fields for activation.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Cannot activate workflow. Please check all required fields are filled",
+      "code": "CANNOT_ACTIVATE_AUTOMATION"
+    }
+  }
+  ```
+</ResponseField>

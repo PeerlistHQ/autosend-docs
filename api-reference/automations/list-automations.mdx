@@ -1,0 +1,257 @@
+---
+title: 'List Automations'
+sidebarTitle: 'List Automations'
+openapi: 'GET /automations'
+---
+
+<Note>
+  Returns a paginated list of workflow automations for the project, with optional filtering by `status` and comma-separated `tags`.
+</Note>
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request GET \
+  --url 'https://api.autosend.com/v1/automations?status=active&tags=onboarding&page=1&limit=20' \
+  --header 'Authorization: Bearer AS_your-project-api-key'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/automations"
+
+headers = {
+    "Authorization": "Bearer AS_your-project-api-key"
+}
+
+params = {"status": "active", "tags": "onboarding", "page": 1, "limit": 20}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```javascript JavaScript
+const params = new URLSearchParams({
+  status: 'active',
+  tags: 'onboarding',
+  page: '1',
+  limit: '20'
+});
+
+fetch(`https://api.autosend.com/v1/automations?${params}`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer AS_your-project-api-key'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/automations?status=active&tags=onboarding&page=1&limit=20';
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer AS_your-project-api-key'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/automations?status=active&tags=onboarding&page=1&limit=20"
+
+    req, _ := http.NewRequest("GET", url, nil)
+    req.Header.Set("Authorization", "Bearer AS_your-project-api-key")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class ListWorkflows {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/automations?status=active&page=1&limit=20");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Authorization", "Bearer AS_your-project-api-key");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+            con.disconnect();
+
+            System.out.println(content.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/automations')
+uri.query = URI.encode_www_form(status: 'active', tags: 'onboarding', page: 1, limit: 20)
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Get.new(uri)
+request['Authorization'] = 'Bearer AS_your-project-api-key'
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "workflowAutomations": [
+      {
+        "id": "60d5ec49f1b2c72d9c8b9abc",
+        "name": "Welcome Series",
+        "status": "active",
+        "entryCriteria": { "type": "contact_created" },
+        "exitCriteria": { "type": "workflow_complete" },
+        "steps": [],
+        "tags": ["onboarding"],
+        "trackingOpen": true,
+        "trackingClick": true,
+        "createdBy": {
+          "id": "60d5ec49f1b2c72d9c8b3333",
+          "firstName": "Jane",
+          "lastName": "Doe"
+        },
+        "analytics": {
+          "totalEntered": 1250,
+          "totalCompleted": 980,
+          "totalExited": 40,
+          "totalActive": 230,
+          "sent": 2100,
+          "delivered": 2050,
+          "opened": 1320,
+          "clicked": 410,
+          "bounced": 12
+        },
+        "activeAt": "2026-05-08T10:00:00.000Z",
+        "createdAt": "2026-05-01T08:00:00.000Z",
+        "updatedAt": "2026-05-08T10:00:00.000Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 20,
+      "total": 1,
+      "pages": 1
+    }
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Project API key header of the form Bearer `AS_<key>`.
+</ParamField>
+
+### Query Parameters
+
+<ParamField path="status" type="string">
+  Filter by workflow status. One of `draft`, `active`, `paused`, or `archived`.
+</ParamField>
+
+<ParamField path="tags" type="string">
+  Comma-separated list of tags to filter by.
+
+  Example: `"onboarding,trial"`
+</ParamField>
+
+<ParamField path="page" type="integer">
+  Page number (1-indexed). Default `1`.
+</ParamField>
+
+<ParamField path="limit" type="integer">
+  Page size. Default `50`, maximum `100`.
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Workflow automations retrieved successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="child attributes">
+  <ResponseField name="data.workflowAutomations" type="object[]">
+    Array of workflow automations. Each entry includes the resolved `createdBy` user and live `analytics` for active workflows.
+  </ResponseField>
+
+  <ResponseField name="data.pagination" type="object">
+    <Expandable title="pagination attributes">
+    <ResponseField name="page" type="integer" />
+    <ResponseField name="limit" type="integer" />
+    <ResponseField name="total" type="integer">
+      Total number of workflows matching the filter.
+    </ResponseField>
+    <ResponseField name="pages" type="integer">
+      Total number of pages.
+    </ResponseField>
+    </Expandable>
+  </ResponseField>
+  </Expandable>
+</ResponseField>
