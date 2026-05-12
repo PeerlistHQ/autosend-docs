@@ -485,6 +485,37 @@ Email data to send
   Example: `"unsub_group_123"`
 </ParamField>
 
+<ParamField path="trackingClick" type="boolean">
+  Enable or disable click tracking for links in the email. When enabled, links are rewritten so clicks can be tracked. If omitted, the project-level setting configured in your AutoSend dashboard is used.
+
+  Example: `false`
+</ParamField>
+
+<ParamField path="trackingOpen" type="boolean">
+  Enable or disable open tracking for the email. When enabled, a tracking pixel is added to record opens. If omitted, the project-level setting configured in your AutoSend dashboard is used.
+
+  Example: `false`
+</ParamField>
+
+<ParamField path="headers" type="object" >
+  Custom email headers to include with the message as key-value pairs.
+
+  <Note>
+    - Maximum 20 custom headers per email.
+    - Header names must match `^[A-Za-z0-9-]{1,76}$` (ASCII letters, digits, and hyphens, up to 76 characters).
+    - Header values can be up to 1000 characters.
+    - Reserved headers managed by AutoSend or the underlying mail transport cannot be overridden, including: `From`, `To`, `Cc`, `Bcc`, `Subject`, `Date`, `Message-ID`, `Return-Path`, `Sender`, `Reply-To`, `Received`, `DKIM-Signature`, `MIME-Version`, `Content-Type`, `Content-Transfer-Encoding`, `List-Unsubscribe`, `List-Unsubscribe-Post`, `X-SES-Configuration-Set`, and `X-SES-Message-Tags`.
+  </Note>
+
+  Example:
+  ```jsx
+  headers: {
+    "X-Entity-Ref-ID": "order-12345",
+    "X-Campaign-ID": "welcome-series"
+  }
+  ```
+</ParamField>
+
 <ParamField path="attachments" type="object[]" >
   Filename and content of attachments.
   
