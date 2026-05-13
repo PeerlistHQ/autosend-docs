@@ -5,6 +5,8 @@ sidebarTitle: 'Domain Warmup'
 icon: '/icons/domain-warmup.svg'
 ---
 
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
 <Frame>
 	<img
 		src='/images/domain-warmup.jpg'
@@ -39,7 +41,7 @@ You should warm up your domain if you are:
 <Steps>
 <Step title="Create your campaign" titleSize="h3">
 
-Set up your campaign as you normally would. Write your email, add subject, preview text (optional), and once everything looks good, click on Save & Next in the top-right of the page to go to the Campaign Details page.
+<a href={APP_PATHS.campaigns}>Set up your campaign</a> as you normally would. Write your email, add subject, preview text (optional), and once everything looks good, click on Save & Next in the top-right of the page to go to the Campaign Details page.
 
 </Step>
 <Step title='Open the "When to send?" section' titleSize="h3">
