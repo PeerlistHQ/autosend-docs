@@ -7,6 +7,32 @@ rss: true
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 
+<Update label="May 14, 2026">
+
+## Automation Branching
+
+If you've been creating separate automations just to send different emails to different segments, that's no longer necessary. Branching is now live in AutoSend. One automation, multiple paths.
+
+<Frame>![RBAC and Projects API](/images/changelog/automation-branching.jpeg)</Frame>
+
+#### Branch by contact property
+
+Split any automation into branches based on contact properties. Each branch gets its own filters, wait times, and email sequence.
+
+For example, a new contact gets added to your list. Instead of sending everyone the same onboarding sequence, you branch based on their plan:
+
+- Trial users get a sequence focused on activation and conversion
+- Pro users get tips on getting the most out of their plan
+- Business users get a white-glove onboarding with dedicated support info
+
+#### Automations API
+
+We also opened up API endpoints for Automations, so you can create and manage automations programmatically. List, create, get, update, pause, resume, and delete automations directly from your code.
+
+Read the <a href={APP_PATHS.automations}>Email Automations documentation</a> to learn more about branching, and check the <a href={APP_PATHS.createAutomationApi}>Automations API reference</a> to start managing automations programmatically.
+
+</Update>
+
 <Update label="April 23, 2026">
 
 ## RBAC and Projects API
