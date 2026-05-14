@@ -101,6 +101,10 @@
 							},
 							"others/team"
 						]
+					},
+					{
+						"group": "Migration",
+						"pages": ["migration/sendgrid"]
 					}
 				]
 			},

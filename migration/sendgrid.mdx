@@ -1,0 +1,542 @@
+---
+title: 'Migrate from SendGrid to AutoSend'
+sidebarTitle: 'SendGrid'
+description: 'Use the SendGrid Migration API to move dynamic templates, contacts, lists, custom fields, and unsubscribe groups from SendGrid into AutoSend.'
+icon: '/icons/brand-sendgrid.png'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+## Overview
+
+AutoSend provides a set of public API endpoints to migrate your SendGrid assets into your AutoSend project:
+
+- Dynamic templates
+- Contacts and contact lists
+- Custom fields
+- Unsubscribe groups and their suppressed emails
+
+All endpoints are authenticated with your **AutoSend project API key** sent as a Bearer token. The SendGrid API key required to read from your SendGrid account is passed in the request body for each call. It is never persisted in plaintext.
+
+## Prerequisites
+
+Before you start, make sure you have:
+
+1. An **AutoSend project API key** - create one on the <a href={APP_PATHS.apiKeys}>API Keys</a> page. Keys look like `AS_xxxxxxxx_xxxxxxxxxxxxxxxxxxxx`.
+2. A **SendGrid API key** - generate one in SendGrid under *Settings → API Keys*. The key should have at least these scopes:
+   - `template_engine.read` - fetch templates
+   - `marketing.read` - fetch contacts, lists, and custom field definitions
+   - `suppressions.read` - fetch unsubscribe groups and suppressed emails
+3. The base URL for all requests: `https://api.autosend.com/v1`
+
+### Authentication
+
+Every request uses two headers:
+
+| Header          | Value                            |
+| --------------- | -------------------------------- |
+| `Authorization` | `Bearer <YOUR_AUTOSEND_API_KEY>` |
+| `Content-Type`  | `application/json`               |
+
+## Recommended Flow
+
+<Steps>
+  <Step title="Preview the migration" titleSize="h3">
+    Call `POST /migrations/sendgrid/plan` to confirm the SendGrid key is valid and see what will be migrated.
+  </Step>
+  <Step title="Run the full migration" titleSize="h3">
+    Call `POST /migrations/sendgrid/migrate` with `migrateAll: true` or with specific IDs you want to import.
+  </Step>
+  <Step title="Or run targeted migrations" titleSize="h3">
+    Use `POST /migrations/sendgrid/sg-template` to migrate selected templates, or `POST /migrations/sendgrid/sg-unsubscribe-group` to migrate a single unsubscribe group.
+  </Step>
+</Steps>
+
+## Endpoints
+
+### Get migration plan
+
+Fetches a preview of everything that can be migrated from your SendGrid account: templates, unsubscribe groups, custom fields, contact lists, and the total contact count.
+
+**`POST /v1/migrations/sendgrid/plan`**
+
+#### Request body
+
+| Field            | Type   | Required | Description           |
+| ---------------- | ------ | -------- | --------------------- |
+| `sendgridApiKey` | string | yes      | Your SendGrid API key |
+
+<CodeGroup>
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/migrations/sendgrid/plan \
+  --header 'Authorization: Bearer AS_YOUR_AUTOSEND_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "sendgridApiKey": "SG.your_sendgrid_api_key"
+  }'
+```
+
+```javascript NodeJS
+const res = await fetch("https://api.autosend.com/v1/migrations/sendgrid/plan", {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${process.env.AUTOSEND_API_KEY}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    sendgridApiKey: process.env.SENDGRID_API_KEY,
+  }),
+});
+
+const data = await res.json();
+```
+
+```python Python
+import os
+import requests
+
+res = requests.post(
+    "https://api.autosend.com/v1/migrations/sendgrid/plan",
+    headers={
+        "Authorization": f"Bearer {os.environ['AUTOSEND_API_KEY']}",
+        "Content-Type": "application/json",
+    },
+    json={"sendgridApiKey": os.environ["SENDGRID_API_KEY"]},
+)
+
+data = res.json()
+```
+</CodeGroup>
+
+#### Response `200`
+
+```json expandable
+{
+  "success": true,
+  "message": "Migration plan fetched successfully",
+  "data": {
+    "contactsCount": 12453,
+    "templatesCount": 24,
+    "templates": [
+      {
+        "templateId": "d-abc123",
+        "templateName": "Welcome email",
+        "subject": "Welcome to Acme",
+        "htmlContent": "<html>...</html>",
+        "thumbnailUrl": "https://...",
+        "updatedAt": "2025-08-12T10:24:11Z"
+      }
+    ],
+    "unsubscribeGroups": [
+      {
+        "groupId": "12345",
+        "name": "Product updates",
+        "description": "Monthly product newsletter",
+        "isActive": true,
+        "unsubscribeCount": 42
+      }
+    ],
+    "customFields": [
+      {
+        "sendgridFieldId": "e1_T",
+        "sendgridFieldName": "company",
+        "autosendFieldName": "company",
+        "fieldType": "string"
+      }
+    ],
+    "reservedFields": [
+      {
+        "sendgridFieldId": "_rf0_T",
+        "sendgridFieldName": "first_name",
+        "fieldType": "string"
+      }
+    ],
+    "contactLists": [
+      { "id": "list-uuid-1", "name": "Newsletter subscribers", "contactCount": 8123 }
+    ],
+    "contactListsCount": 5
+  }
+}
+```
+
+### Run the full migration
+
+Kicks off a background migration job that imports the selected SendGrid assets into your AutoSend project. Returns a `bulkOperationId` immediately; the work continues in the background.
+
+**`POST /v1/migrations/sendgrid/migrate`**
+
+#### Request body
+
+| Field                     | Type     | Required | Default | Description                                                                                                         |
+| ------------------------- | -------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
+| `sendgridApiKey`          | string   | yes      | -       | Your SendGrid API key                                                                                               |
+| `migrateAll`              | boolean  | no       | `false` | If `true`, migrate everything returned by `/plan`. Per-type ID arrays below are populated from the plan when empty. |
+| `templateIds`             | string[] | no       | `[]`    | Specific SendGrid template IDs to migrate                                                                           |
+| `unsubscribeGroupIds`     | string[] | no       | `[]`    | Specific SendGrid unsubscribe group IDs                                                                             |
+| `contactListIds`          | string[] | no       | `[]`    | Specific SendGrid contact list IDs                                                                                  |
+| `customFieldMappings`     | object[] | no       | `[]`    | SendGrid to AutoSend custom field mappings (see schema below)                                                       |
+| `ignoreTemplates`         | boolean  | no       | `false` | Skip templates phase                                                                                                |
+| `ignoreUnsubscribeGroups` | boolean  | no       | `false` | Skip unsubscribe groups phase                                                                                       |
+| `ignoreContactLists`      | boolean  | no       | `false` | Skip contact lists phase                                                                                            |
+| `ignoreCustomFields`      | boolean  | no       | `false` | Skip custom fields phase                                                                                            |
+| `ignoreContacts`          | boolean  | no       | `false` | Skip contacts phase                                                                                                 |
+
+`customFieldMappings` item schema:
+
+```json
+{
+  "sendgridFieldId": "e1_T",
+  "sendgridFieldName": "company",
+  "autosendFieldName": "company",
+  "fieldType": "string"
+}
+```
+
+`fieldType` must be one of: `string`, `number`, `date`.
+
+#### Migration phases
+
+The job runs in this order:
+
+1. **Custom fields** - creates AutoSend custom field definitions from the mappings.
+2. **Templates** - fetches each SendGrid template's active version. Images hosted on `cdn.mcauto-images-production.sendgrid.net` are downloaded and re-uploaded to your AutoSend media library, and the HTML is rewritten to point at the new URLs.
+3. **Unsubscribe groups** - creates the matching suppression group in AutoSend and imports its suppressed email list.
+4. **Contact lists** - creates the AutoSend list metadata.
+5. **Contacts** - uses SendGrid's Export Contacts API to import all global contacts, then associates them with the lists created in step 4.
+
+#### Example A - migrate everything
+
+<CodeGroup>
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/migrations/sendgrid/migrate \
+  --header 'Authorization: Bearer AS_YOUR_AUTOSEND_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "sendgridApiKey": "SG.your_sendgrid_api_key",
+    "migrateAll": true
+  }'
+```
+
+```javascript NodeJS
+const res = await fetch("https://api.autosend.com/v1/migrations/sendgrid/migrate", {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${process.env.AUTOSEND_API_KEY}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    sendgridApiKey: process.env.SENDGRID_API_KEY,
+    migrateAll: true,
+  }),
+});
+
+const { data } = await res.json();
+console.log(data.bulkOperationId);
+```
+
+```python Python
+import os
+import requests
+
+res = requests.post(
+    "https://api.autosend.com/v1/migrations/sendgrid/migrate",
+    headers={
+        "Authorization": f"Bearer {os.environ['AUTOSEND_API_KEY']}",
+        "Content-Type": "application/json",
+    },
+    json={
+        "sendgridApiKey": os.environ["SENDGRID_API_KEY"],
+        "migrateAll": True,
+    },
+)
+
+print(res.json()["data"]["bulkOperationId"])
+```
+</CodeGroup>
+
+#### Example B - migrate selected assets only
+
+```bash
+curl --request POST \
+  --url https://api.autosend.com/v1/migrations/sendgrid/migrate \
+  --header 'Authorization: Bearer AS_YOUR_AUTOSEND_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "sendgridApiKey": "SG.your_sendgrid_api_key",
+    "templateIds": ["d-abc123", "d-def456"],
+    "contactListIds": ["list-uuid-1"],
+    "customFieldMappings": [
+      {
+        "sendgridFieldId": "e1_T",
+        "sendgridFieldName": "company",
+        "autosendFieldName": "company",
+        "fieldType": "string"
+      }
+    ],
+    "ignoreUnsubscribeGroups": true
+  }'
+```
+
+#### Example C - contacts only, skip everything else
+
+```bash
+curl --request POST \
+  --url https://api.autosend.com/v1/migrations/sendgrid/migrate \
+  --header 'Authorization: Bearer AS_YOUR_AUTOSEND_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "sendgridApiKey": "SG.your_sendgrid_api_key",
+    "migrateAll": true,
+    "ignoreTemplates": true,
+    "ignoreUnsubscribeGroups": true,
+    "ignoreCustomFields": true
+  }'
+```
+
+#### Response `202 Accepted`
+
+```json
+{
+  "success": true,
+  "message": "SendGrid migration initiated successfully",
+  "data": {
+    "bulkOperationId": "65fa1d2b8c9a4f1234567890",
+    "status": "PENDING",
+    "message": "SendGrid migration initiated successfully"
+  }
+}
+```
+
+<Info>
+  Hold on to the `bulkOperationId`. Your AutoSend dashboard shows progress against it.
+</Info>
+
+#### Common errors
+
+| HTTP | Code                                 | Meaning                                                                 |
+| ---- | ------------------------------------ | ----------------------------------------------------------------------- |
+| 400  | `SENDGRID_MIGRATION_IN_PROGRESS`     | A migration is already running for this project - wait for it to finish |
+| 400  | `SENDGRID_NO_ITEMS_TO_MIGRATE`       | Nothing selected and `migrateAll` was not set                           |
+| 500  | `SENDGRID_FAILED_TO_FETCH_PLAN`      | SendGrid API key is invalid or rejected                                 |
+| 500  | `SENDGRID_MIGRATION_CREATION_FAILED` | Could not schedule the migration job - retry shortly                    |
+
+### Migrate one or more templates
+
+Migrate specific SendGrid dynamic templates without touching anything else. Useful for one-off moves or for syncing a template after edits in SendGrid.
+
+<Warning>
+  Always test migrated templates that contain complex Handlebars expressions before sending production traffic to them.
+</Warning>
+
+**`POST /v1/migrations/sendgrid/sg-template`**
+
+#### Request body
+
+| Field                 | Type     | Required | Default | Description                                                                                |
+| --------------------- | -------- | -------- | ------- | ------------------------------------------------------------------------------------------ |
+| `sendgridApiKey`      | string   | yes      | -       | Your SendGrid API key                                                                      |
+| `sendgridTemplateIds` | string[] | yes      | -       | SendGrid dynamic template IDs (e.g. `d-abc123`)                                            |
+| `onExistUpdateHTML`   | boolean  | no       | `false` | If a template with the same ID already exists in AutoSend, overwrite its HTML and subject |
+
+<CodeGroup>
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/migrations/sendgrid/sg-template \
+  --header 'Authorization: Bearer AS_YOUR_AUTOSEND_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "sendgridApiKey": "SG.your_sendgrid_api_key",
+    "sendgridTemplateIds": ["d-abc123", "d-def456"],
+    "onExistUpdateHTML": true
+  }'
+```
+
+```javascript NodeJS
+const res = await fetch("https://api.autosend.com/v1/migrations/sendgrid/sg-template", {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${process.env.AUTOSEND_API_KEY}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    sendgridApiKey: process.env.SENDGRID_API_KEY,
+    sendgridTemplateIds: ["d-abc123", "d-def456"],
+    onExistUpdateHTML: true,
+  }),
+});
+```
+
+```python Python
+import os
+import requests
+
+res = requests.post(
+    "https://api.autosend.com/v1/migrations/sendgrid/sg-template",
+    headers={
+        "Authorization": f"Bearer {os.environ['AUTOSEND_API_KEY']}",
+        "Content-Type": "application/json",
+    },
+    json={
+        "sendgridApiKey": os.environ["SENDGRID_API_KEY"],
+        "sendgridTemplateIds": ["d-abc123", "d-def456"],
+        "onExistUpdateHTML": True,
+    },
+)
+```
+</CodeGroup>
+
+#### Response `200`
+
+```json
+{
+  "success": true,
+  "message": "Template migrated successfully",
+  "data": [
+    {
+      "templateId": "d-abc123",
+      "templateName": "Welcome email",
+      "subject": "Welcome to Acme",
+      "templateType": "TRANSACTIONAL",
+      "createdAt": "2026-05-14T08:12:11.234Z"
+    }
+  ]
+}
+```
+
+<Note>
+  Images referenced from `cdn.mcauto-images-production.sendgrid.net` are automatically downloaded and re-hosted on AutoSend so your templates continue to render after you turn SendGrid off.
+</Note>
+
+### Migrate one unsubscribe group
+
+Migrate a single SendGrid unsubscribe group (ASM group), and optionally its suppressed email addresses.
+
+**`POST /v1/migrations/sendgrid/sg-unsubscribe-group`**
+
+#### Request body
+
+| Field                        | Type             | Required | Default | Description                                                                                                                                |
+| ---------------------------- | ---------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `sendgridApiKey`             | string           | yes      | -       | Your SendGrid API key                                                                                                                      |
+| `sendgridUnsubscribeGroupId` | string \| number | yes      | -       | The SendGrid unsubscribe group ID                                                                                                          |
+| `addEmailsInSuppression`     | boolean          | no       | `true`  | Also import all currently suppressed email addresses for the group                                                                         |
+| `groupExist`                 | boolean          | no       | `false` | If `true`, skip creating a new AutoSend suppression group and only import the emails into the existing group with the matching `groupId` |
+
+<CodeGroup>
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/migrations/sendgrid/sg-unsubscribe-group \
+  --header 'Authorization: Bearer AS_YOUR_AUTOSEND_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "sendgridApiKey": "SG.your_sendgrid_api_key",
+    "sendgridUnsubscribeGroupId": 12345,
+    "addEmailsInSuppression": true
+  }'
+```
+
+```javascript NodeJS
+const res = await fetch(
+  "https://api.autosend.com/v1/migrations/sendgrid/sg-unsubscribe-group",
+  {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.AUTOSEND_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      sendgridApiKey: process.env.SENDGRID_API_KEY,
+      sendgridUnsubscribeGroupId: 12345,
+      addEmailsInSuppression: true,
+    }),
+  }
+);
+```
+
+```python Python
+import os
+import requests
+
+res = requests.post(
+    "https://api.autosend.com/v1/migrations/sendgrid/sg-unsubscribe-group",
+    headers={
+        "Authorization": f"Bearer {os.environ['AUTOSEND_API_KEY']}",
+        "Content-Type": "application/json",
+    },
+    json={
+        "sendgridApiKey": os.environ["SENDGRID_API_KEY"],
+        "sendgridUnsubscribeGroupId": 12345,
+        "addEmailsInSuppression": True,
+    },
+)
+```
+</CodeGroup>
+
+#### Response `200`
+
+When the group was newly created and emails were imported:
+
+```json
+{
+  "success": true,
+  "message": "Unsubscribe group migrated successfully",
+  "data": {
+    "groupId": "12345",
+    "addedCount": 42,
+    "entries": [
+      { "id": "65fa...", "email": "user@example.com", "groupId": "12345" }
+    ]
+  }
+}
+```
+
+If the group already existed and `addEmailsInSuppression` was `false`, the response is the suppression group DTO instead.
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Is my SendGrid API key stored anywhere?">
+    The key is held in memory for the lifetime of the migration job and encrypted at rest while the background job is queued.
+  </Accordion>
+  <Accordion title="Can I re-run a migration?">
+    Yes. Templates are upserted by their SendGrid `templateId` when `onExistUpdateHTML: true`. Contacts and suppressed emails are upserted by email address, so duplicates are safe. Custom fields are not deduplicated - re-running custom-field migration will fail the duplicate creations and report them in the metrics, but the run continues.
+  </Accordion>
+  <Accordion title="How long does it take?">
+    Templates and unsubscribe groups are usually done in seconds. Contacts use SendGrid's Export Contacts API, which takes around 1 minute per 100k contacts on SendGrid's side, plus the time to import on our side. The request returns immediately - the job keeps running after your HTTP connection closes.
+  </Accordion>
+  <Accordion title="What about images embedded in templates?">
+    SendGrid-hosted images (`cdn.mcauto-images-production.sendgrid.net`) are automatically downloaded and re-uploaded to AutoSend's media library, and the HTML is rewritten to point at the new URLs.
+  </Accordion>
+  <Accordion title="What if my SendGrid API key has limited scopes?">
+    `/plan` returns whatever the scopes allow. If a scope is missing (e.g. you didn't grant `suppressions.read`), that section comes back empty and the corresponding migration phase silently skips it. Grant the missing scope and re-run if needed.
+  </Accordion>
+</AccordionGroup>
+
+## Support
+
+If a migration fails or produces unexpected results, send us:
+
+1. The `bulkOperationId` returned by `/migrate`
+2. Your AutoSend project ID
+3. The approximate time of the request
+
+Email [support@autosend.com](mailto:support@autosend.com) with these details and we'll investigate.
+
+## Next Steps
+
+<Columns cols={2}>
+  <Card title='Email Templates' icon='/icons/email-templates.svg' href={APP_PATHS.emailTemplates}>
+    Manage the templates you just migrated from SendGrid.
+  </Card>
+  <Card title='Contacts' icon='/icons/contacts.svg' href={APP_PATHS.contactsIntroduction}>
+    Browse and segment the contacts imported from SendGrid.
+  </Card>
+  <Card title='Unsubscribe Groups' icon='/icons/unsubscribe-groups.svg' href={APP_PATHS.unsubscribeGroups}>
+    Review the suppression groups created during migration.
+  </Card>
+  <Card title='Sending Domain' icon='/icons/domain.svg' href={APP_PATHS.domainConfiguration}>
+    Verify your sending domain so migrated templates can start sending.
+  </Card>
+</Columns>
