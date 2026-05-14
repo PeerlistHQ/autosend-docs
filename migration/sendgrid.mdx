@@ -6,6 +6,7 @@ icon: '/icons/brand-sendgrid.png'
 ---
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
 
 ## Overview
 
@@ -16,13 +17,13 @@ AutoSend provides a set of public API endpoints to migrate your SendGrid assets 
 - Custom fields
 - Unsubscribe groups and their suppressed emails
 
-All endpoints are authenticated with your **AutoSend project API key** sent as a Bearer token. The SendGrid API key required to read from your SendGrid account is passed in the request body for each call. It is never persisted in plaintext.
+All endpoints are authenticated with your <a href={APP_PATHS.apiKeys}>**AutoSend project API key**</a> sent as a Bearer token. The SendGrid API key required to read from your SendGrid account is passed in the request body for each call. It is never persisted in plaintext.
 
 ## Prerequisites
 
 Before you start, make sure you have:
 
-1. An **AutoSend project API key** - create one on the <a href={APP_PATHS.apiKeys}>API Keys</a> page. Keys look like `AS_xxxxxxxx_xxxxxxxxxxxxxxxxxxxx`.
+1. An <a href={APP_PATHS.apiKeys}>**AutoSend project API key**</a> - create one on the <a href={AUTOSEND_PATHS.apiKey} target='_blank'>**API Keys**</a> page. Keys look like `AS_xxxxxxxx_xxxxxxxxxxxxxxxxxxxx`.
 2. A **SendGrid API key** - generate one in SendGrid under *Settings → API Keys*. The key should have at least these scopes:
    - `template_engine.read` - fetch templates
    - `marketing.read` - fetch contacts, lists, and custom field definitions
