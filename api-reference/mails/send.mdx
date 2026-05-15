@@ -3,11 +3,9 @@ title: 'Send Email'
 openapi: 'POST /mails/send'
 ---
 
-import { APP_PATHS } from '/snippets/appPaths.mdx'
+import { APP_PATHS } from '/snippets/appPaths.mdx';
 
 <RequestExample>
-
-
 
 ```bash cURL
 curl --request POST \
@@ -79,33 +77,33 @@ print(response.json())
 
 ```javascript JavaScript
 fetch('https://api.autosend.com/v1/mails/send', {
-  method: 'POST',
-  headers: {
-    'Authorization': 'Bearer <token>',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    to: {
-      email: 'to@example.com',
-      name: 'Jane Smith'
-    },
-    from: {
-      email: 'from@example.com',
-      name: 'Your Company'
-    },
-    subject: 'Welcome to Our Platform!',
-    html: '<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>',
-    dynamicData: {
-      name: 'Jane'
-    },
-    replyTo: {
-      email: 'to@example.com'
-    }
-  })
+	method: 'POST',
+	headers: {
+		Authorization: 'Bearer <token>',
+		'Content-Type': 'application/json',
+	},
+	body: JSON.stringify({
+		to: {
+			email: 'to@example.com',
+			name: 'Jane Smith',
+		},
+		from: {
+			email: 'from@example.com',
+			name: 'Your Company',
+		},
+		subject: 'Welcome to Our Platform!',
+		html: '<h1>Welcome, {{name}}!</h1><p>Thanks for signing up.</p>',
+		dynamicData: {
+			name: 'Jane',
+		},
+		replyTo: {
+			email: 'to@example.com',
+		},
+	}),
 })
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Error:', error));
+	.then((response) => response.json())
+	.then((data) => console.log(data))
+	.catch((error) => console.error('Error:', error));
 ```
 
 ```php PHP
@@ -160,7 +158,7 @@ import (
 
 func main() {
     url := "https://api.autosend.com/v1/mails/send"
-    
+
     payload := map[string]interface{}{
         "to": map[string]string{
             "email": "to@example.com",
@@ -179,13 +177,13 @@ func main() {
             "email": "to@example.com",
         },
     }
-    
+
     jsonData, _ := json.Marshal(payload)
-    
+
     req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
     req.Header.Set("Authorization", "Bearer <token>")
     req.Header.Set("Content-Type", "application/json")
-    
+
     client := &http.Client{}
     resp, err := client.Do(req)
     if err != nil {
@@ -193,7 +191,7 @@ func main() {
         return
     }
     defer resp.Body.Close()
-    
+
     fmt.Println("Response Status:", resp.Status)
 }
 ```
@@ -209,12 +207,12 @@ public class SendEmail {
         try {
             URL url = new URL("https://api.autosend.com/v1/mails/send");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            
+
             con.setRequestMethod("POST");
             con.setRequestProperty("Authorization", "Bearer <token>");
             con.setRequestProperty("Content-Type", "application/json");
             con.setDoOutput(true);
-            
+
             String jsonInputString = "{\n" +
                 "  \"to\": {\n" +
                 "    \"email\": \"to@example.com\",\n" +
@@ -233,15 +231,15 @@ public class SendEmail {
                 "    \"email\": \"to@example.com\"\n" +
                 "  }\n" +
                 "}";
-            
+
             try (OutputStream os = con.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
                 os.write(input, 0, input.length);
             }
-            
+
             int status = con.getResponseCode();
             System.out.println("Response Status: " + status);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -286,38 +284,38 @@ response = http.request(request)
 puts response.body
 ```
 
-
-
 </RequestExample>
 
 <ResponseExample>
 
 ```json Response
 {
- "success": true,
-  "data": {
-    "emailId": "698afb75ff4bc5466e3a797a",
-    "message": "Email queued successfully.",
-    "totalRecipients": 1
-  }
+	"success": true,
+	"data": {
+		"emailId": "698afb75ff4bc5466e3a797a",
+		"message": "Email queued successfully.",
+		"totalRecipients": 1
+	}
 }
 ```
 
 </ResponseExample>
 
---- 
+---
+
 ### Authorizations
+
 <ParamField path="Authorizations" type="string | header"  required>
   Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
 </ParamField>
 
 ### Body
+
 Email data to send
 
 <ParamField path="to" type="object"  required>
   Recipient email address and name
 
-  To send to multiple recipients, use the <a href={APP_PATHS.bulkSendEmail}>send bulk email</a> endpoint.
   <Expandable title="child attributes">
   <ParamField path="to.email" type="string<email>"  required>
   Email address
@@ -328,14 +326,20 @@ Email data to send
   <ParamField path="to.name" type="string" >
   Display name
 
-  Example: `"Jane Smith"`
+Example: `"Jane Smith"`
+
 </ParamField>
  
   </Expandable>
+  <Info>
+	To send to multiple recipients, use the <a href={APP_PATHS.bulkSendEmail}>send bulk email</a>{' '}
+	endpoint.
+</Info>
 </ParamField>
 
 <ParamField path="cc" type="object[]" >
   Cc Recipients array of email address and name object
+
   <Expandable title="child attributes">
   <ParamField path="email" type="string<email>"  required>
   Email address
@@ -346,7 +350,8 @@ Email data to send
   <ParamField path="name" type="string" >
   Cc User name
 
-  Example: `"Cc User Name"`
+Example: `"Cc User Name"`
+
 </ParamField>
  
   </Expandable>
@@ -354,6 +359,7 @@ Email data to send
 
 <ParamField path="bcc" type="object[]" >
   Bcc Recipients array of email address and name object
+
   <Expandable title="child attributes">
   <ParamField path="email" type="string<email>"  required>
   Email address
@@ -364,10 +370,14 @@ Email data to send
   <ParamField path="name" type="string" >
   Bcc User name
 
-  Example: `"Bcc User Name"`
+Example: `"Bcc User Name"`
+
 </ParamField>
  
   </Expandable>
+<Info>
+    The total combined recipients across `to`, `cc`, and `bcc` cannot exceed 50 per email.
+  </Info>
 </ParamField>
 
 <ParamField path="from" type="object"  required>
@@ -382,43 +392,27 @@ Email data to send
   <ParamField path="from.name" type="string" >
   Display name
 
-  Example: `"Your Company"`
+Example: `"Your Company"`
+
 </ParamField>
-
-
-
 
   </Expandable>
 </ParamField>
 
-<ParamField path="subject" type="string" required>
-  Email subject line (max 998 characters). Required if not using templateId.
-  
-  Maximum length: `998`
-  
-  Example: `"Welcome to Our Platform!"`
+<ParamField path='subject' type='string' required>
+	Email subject line (max 998 characters). Required if not using templateId. Maximum length: `998`
+	Example: `"Welcome to Our Platform!"`
 </ParamField>
 
-<ParamField path="html" type="string" >
-  HTML content of the email. Required if not using templateId.
-  
-  **Handlebars Template Variables:**
-  
-  Use Handlebars syntax for template variables in your HTML. Variables are wrapped in double curly braces: `{{variableName}}`. 
-  Example:
-  
-  ```html 
-  <h1>Hello {{firstName}}!</h1>
-  <p>Your order #{{orderNumber}} has been shipped.</p>
-  <p>Total: {{orderTotal}}</p>
-  ```
-  
-  Provide the values for these variables in the `dynamicData` field.
-  
-  Example: 
-  ```jsx  
-  html: "<p>Hello {{firstName}}! Sending this email via AutoSend.</p>"
-  ```
+<ParamField path='html' type='string'>
+	HTML content of the email. Required if not using templateId. **Handlebars Template Variables:**
+	Use Handlebars syntax for template variables in your HTML. Variables are wrapped in double curly
+	braces: `{{ variableName }}`. Example: ```html
+	<h1>Hello {{ firstName }}!</h1>
+	<p>Your order #{{ orderNumber }} has been shipped.</p>
+	<p>Total: {{ orderTotal }}</p>
+	``` Provide the values for these variables in the `dynamicData` field. Example: ```jsx html: "
+	<p>Hello {{ firstName }}! Sending this email via AutoSend.</p>" ```
 </ParamField>
 
 <ParamField path="dynamicData" type="object" >
@@ -435,16 +429,12 @@ Email data to send
   ```
 </ParamField>
 
-<ParamField path="text" type="string" >
-  Plain text version of the email
-  
-  Example: `"Welcome! Thanks for signing up."`
+<ParamField path='text' type='string'>
+	Plain text version of the email Example: `"Welcome! Thanks for signing up."`
 </ParamField>
 
-<ParamField path="templateId" type="string" >
-  ID of the email template to use. Required if not providing html/text.
-  
-  Example: `"A-abc123"`
+<ParamField path='templateId' type='string'>
+	ID of the email template to use. Required if not providing html/text. Example: `"A-abc123"`
 </ParamField>
 
 <ParamField path="replyTo" type="object" >
@@ -459,42 +449,45 @@ Email data to send
   <ParamField path="replyTo.name" type="string" >
   Display name
 
-  Example: `"John Doe"`
+Example: `"John Doe"`
+
 </ParamField>
  
   <ParamField path="replyTo.dynamicData" type="object" >
   Key-value pairs for template variable substitution (Handlebars syntax)
 
-  Example: 
-  ```jsx
-  {
-      "name": "Jane",
-      "firstName": "Jane",
-      "orderNumber": "ORD-12345",
-      "orderTotal": "$99.99"
-  }
- ```
+Example:
+
+```jsx
+{
+    "name": "Jane",
+    "firstName": "Jane",
+    "orderNumber": "ORD-12345",
+    "orderTotal": "$99.99"
+}
+```
+
 </ParamField>
 
   </Expandable>
 </ParamField>
 
-<ParamField path="unsubscribeGroupId" type="string" >
-  ID of the unsubscribe group
-  
-  Example: `"unsub_group_123"`
+<ParamField path='unsubscribeGroupId' type='string'>
+	ID of the unsubscribe group Example: `"unsub_group_123"`
 </ParamField>
 
 <ParamField path="trackingClick" type="boolean">
   Enable or disable click tracking for links in the email. When enabled, links are rewritten so clicks can be tracked. If omitted, the project-level setting configured in your AutoSend dashboard is used.
 
-  Example: `false`
+Example: `false`
+
 </ParamField>
 
 <ParamField path="trackingOpen" type="boolean">
   Enable or disable open tracking for the email. When enabled, a tracking pixel is added to record opens. If omitted, the project-level setting configured in your AutoSend dashboard is used.
 
-  Example: `false`
+Example: `false`
+
 </ParamField>
 
 <ParamField path="headers" type="object" >
@@ -507,13 +500,15 @@ Email data to send
     - Reserved headers managed by AutoSend or the underlying mail transport cannot be overridden, including: `From`, `To`, `Cc`, `Bcc`, `Subject`, `Date`, `Message-ID`, `Return-Path`, `Sender`, `Reply-To`, `Received`, `DKIM-Signature`, `MIME-Version`, `Content-Type`, `Content-Transfer-Encoding`, `List-Unsubscribe`, `List-Unsubscribe-Post`, `X-SES-Configuration-Set`, and `X-SES-Message-Tags`.
   </Note>
 
-  Example:
-  ```jsx
-  headers: {
-    "X-Entity-Ref-ID": "order-12345",
-    "X-Campaign-ID": "welcome-series"
-  }
-  ```
+Example:
+
+```jsx
+headers: {
+  "X-Entity-Ref-ID": "order-12345",
+  "X-Campaign-ID": "welcome-series"
+}
+```
+
 </ParamField>
 
 <ParamField path="attachments" type="object[]" >
@@ -539,11 +534,11 @@ Email data to send
   Content type of the attachment (e.g. application/pdf, image/png, image/jpeg)
 </ParamField>
 
-  <ParamField path="fileUrl" type="string" >
-  File URL where the attachment is hosted (required if content is not provided)
+<ParamField path='fileUrl' type='string'>
+	File URL where the attachment is hosted (required if content is not provided)
 </ParamField>
-  <ParamField path="description" type="string" >
-  Description of the attachment (optional)
+<ParamField path='description' type='string'>
+	Description of the attachment (optional)
 </ParamField>
 
   </Expandable>
@@ -585,30 +580,23 @@ Email data to send
 
 <span className='text-sm'>Email queued successfully</span>
 
-<ResponseField name="success" type="boolean">
-  Indicates if the request was successful
-  
-  Example: `true`
+<ResponseField name='success' type='boolean'>
+	Indicates if the request was successful Example: `true`
 </ResponseField>
 
-<ResponseField name="data" type="object">
-  <Expandable title="child attributes">
-  <ResponseField name="data.emailId" type="string">
-    The ID of the queued email
-    
-    Example: `"698afb75ff4bc5466e3a797a"`
-  </ResponseField>
-  
-  <ResponseField name="data.message" type="string">
-    Success message indicating the email was queued
-    
-    Example: `"Email queued successfully."`
-  </ResponseField>
-  
-  <ResponseField name="data.totalRecipients" type="number">
-    Total number of recipients for the email
-    
-    Example: `1`
-  </ResponseField>
-  </Expandable>
+<ResponseField name='data' type='object'>
+	<Expandable title='child attributes'>
+		<ResponseField name='data.emailId' type='string'>
+			The ID of the queued email Example: `"698afb75ff4bc5466e3a797a"`
+		</ResponseField>
+
+    	<ResponseField name='data.message' type='string'>
+    		Success message indicating the email was queued Example: `"Email queued successfully."`
+    	</ResponseField>
+
+    	<ResponseField name='data.totalRecipients' type='number'>
+    		Total number of recipients for the email Example: `1`
+    	</ResponseField>
+    </Expandable>
+
 </ResponseField>
