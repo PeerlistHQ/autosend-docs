@@ -1,0 +1,77 @@
+---
+title: 'Branching'
+description: 'Branching lets you send different emails to different contacts within the same automation, based on contact or event properties.'
+sidebarTitle: 'Branching'
+icon: '/icons/branching.svg'
+---
+
+
+## What is branching in AutoSend?
+
+By default, every contact in an automation receives the same emails in the same order. Branching lets you change that. You define separate paths inside a single automation, and each path has its own conditions, emails, and timing. When a contact reaches a branch, AutoSend checks their properties and sends them down every path they match.
+
+This means you can handle multiple cases without building separate automations for each one. A new user on a free plan and a new user on a paid plan can both enter the same automation, but from the branch onwards, each receives emails written specifically for them.
+
+## How to branch your automations
+
+<Steps>
+  <Step title="Add a branch">
+    Click the **\+** button below any email in your automation. This gives you two options: **Add Email** or **Create Branch**. Select **Create Branch**.
+
+    <Frame>
+      <img src='/images/branching/add-branch.png' alt="Add a branch to your automation" />
+    </Frame>
+  </Step>
+  <Step title="Set the branch filter conditions">
+    Click on a **Branch Filter** to open the condition panel. Select **Contact property**, then set the field, condition, and value.
+
+  <Frame>
+      <img src='/images/branching/select-contact-property.png' alt='Select contact property' />
+    </Frame>
+
+    For example, to route contacts by industry:
+
+    - Branch Filter 1: `industry` contains `Healthcare`
+    - Branch Filter 2: `industry` contains `Finance`
+
+  <Frame>
+      <img src='/images/branching/add-filters.png' alt='Select contact property' />
+    </Frame>
+
+    Click **\+ Add Filter** to add more conditions to the same branch. Use **AND** / **OR** to combine them:
+
+    - **AND** - contact must match all conditions
+    - **OR** - contact must match at least one condition
+
+    <Note>
+      Property values are case-sensitive. `Healthcare` and `healthcare` are treated as different values.
+    </Note>
+  </Step>
+  <Step title="Add emails to each branch">
+    Once your filters are set, click **Add Email** inside each branch to build out that path's sequence. Each branch has its own **Wait For** timing, so you can space emails out differently per audience.
+     <Frame>
+      <img src='/images/branching/add-emails-branch.png' alt='Select contact property' />
+    </Frame>
+  </Step>
+</Steps>
+
+### **Adding more branches**
+
+Click **\+ Branch** below the Branch node to add more paths. You can create upto 10 branches in an automation.
+  <Frame>
+      <img src='/images/branching/add-more-branches.png' alt='Select contact property' />
+    </Frame>
+
+  <Note>
+     Branches are prioritized from left to right. A contact enters the first branch they match and won’t be checked against any remaining branches after that. If you have multiple branches, make sure to order them with the important conditions first.
+    </Note>
+## Use cases
+
+- **Free vs. paid users** - Show different features or CTAs based on a contact's plan
+- **Role-based content** - Send engineers to API guides and marketers to campaign tips based on their `role`
+- **Industry-specific emails** - Share relevant case studies based on a contact's `industry`
+- **Regional content** - Deliver localized messaging based on `region`
+- **Onboarding by product** - Guide contacts through different setup flows depending on which product they signed up for
+- **Trial expiry** - Send a different automation to contacts whose trial is expiring soon vs. those who still have time left
+- **Company size** - Tailor emails for individual users vs. teams vs. enterprise accounts based on `company_size`
+- **Signup source** - Follow up differently depending on whether a contact came from a demo, a referral, or organic signup
