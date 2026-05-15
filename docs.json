@@ -82,7 +82,7 @@
 					},
 					{
 						"group": "Email Automations",
-						"pages": ["automations"]
+						"pages": ["automations","automations/create", "automations/branching"]
 					},
 					{
 						"group": "Others",
