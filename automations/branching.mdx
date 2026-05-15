@@ -6,7 +6,7 @@ icon: '/icons/branching.svg'
 ---
 
 
-## What is Branching?
+## What is branching in AutoSend?
 
 By default, every contact in an automation receives the same emails in the same order. Branching lets you change that. You define separate paths inside a single automation, and each path has its own conditions, emails, and timing. When a contact reaches a branch, AutoSend checks their properties and sends them down every path they match.
 
@@ -61,6 +61,10 @@ Click **\+ Branch** below the Branch node to add more paths. You can create upto
   <Frame>
       <img src='/images/branching/add-more-branches.png' alt='Select contact property' />
     </Frame>
+
+  <Note>
+     Branches are prioritized from left to right. A contact enters the first branch they match and won’t be checked against any remaining branches after that. If you have multiple branches, make sure to order them with the important conditions first.
+    </Note>
 ## Use cases
 
 - **Free vs. paid users** - Show different features or CTAs based on a contact's plan
