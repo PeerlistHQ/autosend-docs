@@ -1,10 +1,11 @@
 ---
 title: 'Branching'
-description: 'Branching lets you send different emails to different contacts within the same automation, based on contact or event properties.'
+description: 'Branching lets you send different emails to different contacts within the same automation, based on contact properties or event properties.'
 sidebarTitle: 'Branching'
 icon: '/icons/branching.svg'
 ---
 
+import { APP_PATHS } from '/snippets/appPaths.mdx';
 
 ## What is branching in AutoSend?
 
@@ -23,7 +24,14 @@ This means you can handle multiple cases without building separate automations f
     </Frame>
   </Step>
   <Step title="Set the branch filter conditions">
-    Click on a **Branch Filter** to open the condition panel. Select **Contact property**, then set the field, condition, and value.
+    Click on a **Branch Filter** to open the condition panel. Each lane supports two filter modes:
+
+    - **Contact property** - filter on a property stored on the contact record (default).
+    - **Event property** - filter on a property from the event that started the automation. Only available when the automation's entry trigger is **Event Received**.
+
+    ### Contact property
+
+    Select **Contact property**, then set the field, condition, and value.
 
   <Frame>
       <img src='/images/branching/select-contact-property.png' alt='Select contact property' />
@@ -46,6 +54,41 @@ This means you can handle multiple cases without building separate automations f
     <Note>
       Property values are case-sensitive. `Healthcare` and `healthcare` are treated as different values.
     </Note>
+
+    ### Event property
+
+    When your automation's trigger is **Event Received**, you can branch on the data carried in the event itself instead of the contact record. Select **Event property** in the filter mode.
+
+    <Frame>
+      <img src='/images/branching/select-event-property.png' alt='Select event property mode in the branch filter' />
+    </Frame>
+
+    The **Property** dropdown lists the properties declared on the entry event (e.g. `country`, `plan`, `amount`) rather than the contact's custom fields. Operators and value inputs work the same as for contact properties, and are matched per property type (string, number, date, or boolean).
+
+    For example, on an automation triggered by `order_completed`:
+
+    - Branch Filter 1: `order_total` greater than `100`
+    - Branch Filter 2: `order_total` less than or equal to `100`
+
+    The lane header copy changes to reflect the new mode: *"Only events matching these conditions will route into this branch."*
+
+    <Note>
+      **Event property** is only enabled when the automation's entry trigger is **Event Received**. On other trigger types it appears disabled with a tooltip explaining the requirement.
+    </Note>
+
+    <Info>
+      Switching a lane between **Contact property** and **Event property** clears that lane's existing filter, because the field universes don't overlap. Set the mode first, then build the filter.
+    </Info>
+
+    #### Suggested values for string properties
+
+    If you defined **suggested values** for a string property on the event (see <a href={APP_PATHS.events}>Events</a>), the value input becomes a combobox: pick an existing suggestion from the dropdown, or type a brand-new value and select **Use '…'** to apply it.
+
+    <Frame>
+      <img src='/images/branching/event-property-combobox.png' alt='Combobox showing suggested values for a string event property' />
+    </Frame>
+
+    New values typed through **Use '…'** are saved back to the event definition automatically, so the next person editing a filter on that property sees them as existing options without having to edit the event.
   </Step>
   <Step title="Add emails to each branch">
     Once your filters are set, click **Add Email** inside each branch to build out that path's sequence. Each branch has its own **Wait For** timing, so you can space emails out differently per audience.
@@ -75,3 +118,5 @@ Click **\+ Branch** below the Branch node to add more paths. You can create upto
 - **Trial expiry** - Send a different automation to contacts whose trial is expiring soon vs. those who still have time left
 - **Company size** - Tailor emails for individual users vs. teams vs. enterprise accounts based on `company_size`
 - **Signup source** - Follow up differently depending on whether a contact came from a demo, a referral, or organic signup
+- **Order value (event property)** - On an automation triggered by `order_completed`, route high-value orders to a VIP thank-you and lower-value orders to a standard receipt sequence
+- **Plan picked at signup (event property)** - On a `signup_completed` event carrying a `plan` property, send each plan into its own onboarding
