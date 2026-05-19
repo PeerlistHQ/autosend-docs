@@ -214,7 +214,9 @@ puts response.body
         },
         "updatedAt": "2024-01-15T10:30:00.000Z",
         "createdAt": "2024-01-15T10:30:00.000Z",
-        "projectId": "229f1f77bcf86cd9273048038"
+        "projectId": "229f1f77bcf86cd9273048038",
+        "listIds": ["69929ee99ba41f12c56b710e"],
+        "segmentIds": ["6a0c0fb56ae88a19f5a010a9"]
       }
     ]
   }
@@ -317,8 +319,20 @@ Array of email addresses to search
   
   <ResponseField name="projectId" type="string">
     Project ID that the contact belongs to
-    
+
     Example: `"229f1f77bcf86cd9273048038"`
+  </ResponseField>
+
+  <ResponseField name="listIds" type="array">
+    Contact List IDs
+
+    Example: `["69929ee99ba41f12c56b710e"]`
+  </ResponseField>
+
+  <ResponseField name="segmentIds" type="array">
+    Segment IDs the contact belongs to
+
+    Example: `["6a0c0fb56ae88a19f5a010a9"]`
   </ResponseField>
 
   </Expandable>
