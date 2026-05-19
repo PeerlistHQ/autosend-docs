@@ -142,6 +142,7 @@ puts response.body
       "plan": "premium"
     },
     "listIds":["692822107f092ea9019d3af8"],
+    "segmentIds":["6a0c0fb56ae88a19f5a010a9"],
     "updatedAt": "2024-01-15T10:30:00.000Z",
     "createdAt": "2024-01-15T10:30:00.000Z",
     "projectId": "229f1f77bcf86cd9273048038"
@@ -244,8 +245,13 @@ puts response.body
   </ResponseField>
     <ResponseField name="data.listIds" type="array">
     Contact List IDs
-    
-    Example: `["507f1f77bcf86cd799439011"]`
+
+    Example: `["692822107f092ea9019d3af8"]`
+  </ResponseField>
+  <ResponseField name="data.segmentIds" type="array">
+    Segment IDs the contact belongs to
+
+    Example: `["6a0c0fb56ae88a19f5a010a9"]`
   </ResponseField>
   </Expandable>
 </ResponseField>

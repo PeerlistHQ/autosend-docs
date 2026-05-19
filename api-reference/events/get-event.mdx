@@ -214,7 +214,22 @@ puts response.body
   </ResponseField>
 
   <ResponseField name="data.properties" type="object[]">
-    Declared property schema
+    Declared property schema.
+
+    <Expandable title="property attributes">
+      <ResponseField name="propertyName" type="string">
+        Property identifier.
+      </ResponseField>
+      <ResponseField name="type" type="string">
+        Declared type: `string`, `number`, `date`, or `boolean`.
+      </ResponseField>
+      <ResponseField name="description" type="string | null">
+        Optional human-readable description.
+      </ResponseField>
+      <ResponseField name="suggestedValues" type="array">
+        Suggested values for the property (may be empty).
+      </ResponseField>
+    </Expandable>
   </ResponseField>
 
   <ResponseField name="data.createdAt" type="string">
