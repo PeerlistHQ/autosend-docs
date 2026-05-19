@@ -1,0 +1,165 @@
+---
+title: 'Events'
+description: 'Define custom events with typed properties and use them to trigger automations or branch contacts on the data carried by the event.'
+sidebarTitle: 'Events'
+icon: '/icons/events.svg'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+
+Custom events are point-in-time signals you send to AutoSend from your application. Unlike contact properties, which describe a contact's current state, events describe something that just happened, and they can carry a typed payload (order total, plan name, country) that your automations can react to.
+
+Use events when you want to:
+
+- Trigger an automation the moment something happens (a signup, a purchase, a cart abandon).
+- Branch contacts inside an automation based on data from the event itself, not from the contact record.
+
+## What is an event?
+
+An event definition belongs to a project and consists of:
+
+- An **event name** (e.g. `order_completed`, `signup_completed`). Names are unique within a project and cannot be renamed once created.
+- An optional **description**.
+- A **property schema**: zero or more properties, each with a name and a type. Supported types are `string`, `number`, `date`, and `boolean`.
+
+Properties of type `string` can optionally declare **suggested values**, a short list of expected values (e.g. `USD`, `EUR`, `GBP`). Suggested values power the dropdown shown in branch filters and grow automatically as new values are used (see <a href={APP_PATHS.automations + '/branching'}>Branching</a>).
+
+## Create an event
+
+<Steps>
+  <Step title="Open the Events page" titleSize="h3">
+    From your project dashboard, open the **Events** page from the left navigation.
+
+    <Frame>
+      <img src='/images/email-automations/events/events-page.png' alt='Events page in the AutoSend dashboard' />
+    </Frame>
+
+    <Note>
+      The Events page is part of the marketing feature set. On transactional-only projects, you'll see an upgrade prompt instead.
+    </Note>
+  </Step>
+
+  <Step title="Add a new event" titleSize="h3">
+    Click **New Event**, then enter an **Event Name** (e.g. `order_completed`) and an optional description. Event names should be lowercase and use underscores for readability.
+
+    <Frame>
+      <img src='/images/email-automations/events/create-event.png' alt='Create a new event with name and description' />
+    </Frame>
+  </Step>
+
+  <Step title="Define the property schema" titleSize="h3">
+    For each property you plan to send with the event, add a row with:
+
+    - **Property Name** (e.g. `order_total`, `currency`, `plan`).
+    - **Type**: `string`, `number`, `date`, or `boolean`.
+    - **Description** (optional).
+    - **Suggested values** (string properties only): expected values for the property.
+
+    <Frame>
+      <img src='/images/email-automations/events/event-properties.png' alt='Define event properties with name, type, and suggested values' />
+    </Frame>
+
+    <Note>
+      Once an event is referenced by an automation, its property names and types are locked to prevent breaking saved branch filters. You can still extend the schema by adding new properties, and you can keep editing suggested values.
+    </Note>
+  </Step>
+
+  <Step title="Save the event" titleSize="h3">
+    Click **Save**. The event is now available to send from your application and to select as a trigger inside an automation.
+  </Step>
+</Steps>
+
+## Send an event
+
+Once defined, send an event from your backend using the <a href='/api-reference/events/send-event'>Send Event API</a>. Identify the contact with either `email` or `contactId` (one is required), and pass the property values in `eventProperties`.
+
+<CodeGroup>
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/events/send \
+  --header 'Authorization: Bearer AS_your-project-api-key' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "eventName": "order_completed",
+    "email": "jane@example.com",
+    "eventProperties": {
+      "order_total": 129.50,
+      "currency": "USD"
+    }
+  }'
+```
+
+```javascript JavaScript
+await fetch('https://api.autosend.com/v1/events/send', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer AS_your-project-api-key',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    eventName: 'order_completed',
+    email: 'jane@example.com',
+    eventProperties: {
+      order_total: 129.5,
+      currency: 'USD',
+    },
+  }),
+});
+```
+
+```python Python
+import requests
+
+requests.post(
+    "https://api.autosend.com/v1/events/send",
+    headers={
+        "Authorization": "Bearer AS_your-project-api-key",
+        "Content-Type": "application/json",
+    },
+    json={
+        "eventName": "order_completed",
+        "email": "jane@example.com",
+        "eventProperties": {
+            "order_total": 129.50,
+            "currency": "USD",
+        },
+    },
+)
+```
+</CodeGroup>
+
+<Info>
+  You can identify the contact by `email` **or** `contactId`. Use `contactId` when you already have the AutoSend contact ID stored in your application; it skips the email lookup and is the recommended choice for high-volume event sources.
+</Info>
+
+Example using `contactId`:
+
+```json
+{
+  "eventName": "order_completed",
+  "contactId": "60d5ec49f1b2c72d9c8b8888",
+  "eventProperties": {
+    "order_total": 129.50,
+    "currency": "USD"
+  }
+}
+```
+
+See the <a href='/api-reference/events/send-event'>Send Event API reference</a> for the full request schema, error codes, and language-specific examples.
+
+## Events vs. contact properties
+
+Both can drive automations, but they answer different questions:
+
+- **Contact properties** describe who a contact is right now (`plan`, `country`, `verified`). They persist on the contact record. Use them when the trigger or branch logic depends on the contact's current state.
+- **Events** describe what just happened, with a payload attached (`order_completed` with an `order_total`). They aren't stored on the contact. Use them when the trigger or branch logic depends on a specific occurrence and the data that came with it.
+
+A common pattern is to use an event to start an automation, then branch on a property of that event, so a single automation can fan out (for example, different cart-recovery emails based on `cart_value`).
+
+## Use events in automations
+
+Once you've defined and started sending an event, you can:
+
+- <a href={APP_PATHS.automations + '/create'}>Trigger an automation from an event</a>, so a sequence starts the moment the event is received.
+- <a href={APP_PATHS.automations + '/branching'}>Branch on event properties</a>, so contacts entering an event-triggered automation are routed by the data carried in the event.

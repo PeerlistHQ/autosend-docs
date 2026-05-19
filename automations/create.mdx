@@ -27,7 +27,7 @@ Before creating an automation, make sure you have the following ready based on y
   </Step>
 
   <Step title="Set Your Trigger" titleSize="h3">
-    Click on the **Trigger** card to configure what starts your automation. AutoSend offers three trigger types:
+    Click on the **Trigger** card to configure what starts your automation. AutoSend offers four trigger types:
 
     ### New contact is added to
 
@@ -72,6 +72,26 @@ Before creating an automation, make sure you have the following ready based on y
     <Frame>
       <img src='/images/email-automations/trigger-property-changes.png' alt="Trigger: Contact property changes from one value to another" />
     </Frame>
+
+    ### Event Received
+
+    Pick a custom event from the **Event** dropdown. The automation triggers whenever that event is recorded for a contact, using the data carried in the event payload.
+
+    Unlike the other trigger types, **Event Received** is not scoped to a list or segment. Any contact for whom the event fires enters the automation.
+
+    1. Select **Event Received** as the trigger type
+    2. Choose an event from the **Event** dropdown (lists every event defined in this project)
+    3. Save the trigger
+
+    **Example:** Trigger when `order_completed` is received. Then use a [branch](/automations/branching) on the event's `order_total` property to send different post-purchase sequences for small vs. large orders.
+
+    <Frame>
+      <img src='/images/email-automations/trigger-event-received.png' alt="Trigger: Event Received" />
+    </Frame>
+
+    <Note>
+      Only events received after the automation is activated will trigger it. Historical events are not replayed. Don't have an event yet? See <a href={APP_PATHS.events}>Events</a> to define one.
+    </Note>
 
   </Step>
 
@@ -158,7 +178,16 @@ Before creating an automation, make sure you have the following ready based on y
 	</ul>
 </Accordion>
 
-<Accordion title='Emails are sending at unexpected times'>
+<Accordion title="Event-triggered automation didn't fire">
+    <ul>
+      <li>Confirm the automation was in **Active** state before the event was sent. Events received while the automation is in Draft or Paused are not replayed when you activate it later.</li>
+      <li>Check that the `eventName` in your API call matches the event definition exactly (names are case-sensitive).</li>
+      <li>Verify the event identifies a contact that exists in your project. Events sent with an `email` or `contactId` that doesn't resolve to a contact are rejected.</li>
+      <li>Make sure the event still exists. If it was deleted, the automation's trigger no longer resolves and won't fire.</li>
+    </ul>
+  </Accordion>
+
+  <Accordion title='Emails are sending at unexpected times'>
 	<ul>
 		<li>Review your **Wait For** settings between each email.</li>
 		<li>
