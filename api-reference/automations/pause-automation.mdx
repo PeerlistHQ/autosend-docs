@@ -172,6 +172,21 @@ puts response.body
 
 <ResponseField name="data" type="object">
   The workflow automation, with `status` set to `paused`.
+
+  <Expandable title="child attributes">
+    <ResponseField name="data.id" type="string">
+      Unique workflow identifier.
+    </ResponseField>
+    <ResponseField name="data.name" type="string">
+      Display name of the workflow.
+    </ResponseField>
+    <ResponseField name="data.status" type="string">
+      Current status - will be `paused`.
+    </ResponseField>
+    <ResponseField name="data.updatedAt" type="string">
+      ISO 8601 timestamp of when the workflow was paused.
+    </ResponseField>
+  </Expandable>
 </ResponseField>
 
 #### Error Responses

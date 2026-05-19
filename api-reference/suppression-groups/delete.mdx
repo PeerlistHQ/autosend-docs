@@ -126,3 +126,17 @@ puts response.body
 <ParamField path="groupId" type="string" required>
   The unique identifier of the suppression group to delete.
 </ParamField>
+
+#### Response
+
+<span className='text-sm'>Suppression group deleted successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Confirmation message.
+
+  Example: `"Suppression group deleted successfully."`
+</ResponseField>

@@ -163,11 +163,15 @@ puts response.body
 {
   "success": true,
   "data": {
-    "id": "AB12C3",
+    "id": "6a0c49ef6ae88a19f5a01cb1",
+    "groupId": "GEHYB",
     "name": "Marketing Unsubscribes",
     "description": "Users who opted out of marketing",
+    "isGlobal": false,
     "isActive": true,
-    "isGlobal": false
+    "createdAt": "2026-05-19T11:30:55.935Z",
+    "updatedAt": "2026-05-19T11:30:55.935Z",
+    "suppressionCount": 0
   }
 }
 ```
@@ -191,3 +195,47 @@ puts response.body
 <ParamField body="isActive" type="boolean">
   Whether the suppression group is active. Defaults to `true` if not specified.
 </ParamField>
+
+#### Response
+
+<span className='text-sm'>Suppression group created successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The created suppression group.
+
+  <Expandable title="child attributes">
+    <ResponseField name="data.id" type="string">
+      Unique identifier for the suppression group.
+    </ResponseField>
+    <ResponseField name="data.groupId" type="string">
+      Short code identifier used when referencing the group in campaigns and templates.
+
+      Example: `"GEHYB"`
+    </ResponseField>
+    <ResponseField name="data.name" type="string">
+      Display name of the suppression group.
+    </ResponseField>
+    <ResponseField name="data.description" type="string">
+      Optional description of the suppression group.
+    </ResponseField>
+    <ResponseField name="data.isGlobal" type="boolean">
+      Whether this is a global suppression group.
+    </ResponseField>
+    <ResponseField name="data.isActive" type="boolean">
+      Whether the suppression group is active.
+    </ResponseField>
+    <ResponseField name="data.suppressionCount" type="integer">
+      Number of email addresses currently suppressed in this group.
+    </ResponseField>
+    <ResponseField name="data.createdAt" type="string">
+      ISO 8601 creation timestamp.
+    </ResponseField>
+    <ResponseField name="data.updatedAt" type="string">
+      ISO 8601 last-updated timestamp.
+    </ResponseField>
+  </Expandable>
+</ResponseField>

@@ -155,3 +155,51 @@ puts response.body
 <ParamField query="includeGlobal" type="boolean">
   When `true`, includes global suppression groups in the results alongside project-specific groups.
 </ParamField>
+
+#### Response
+
+<span className='text-sm'>Suppression groups retrieved successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="child attributes">
+    <ResponseField name="data.groups" type="object[]">
+      Array of suppression groups.
+
+      <Expandable title="group attributes">
+        <ResponseField name="id" type="string">
+          Unique identifier for the suppression group.
+        </ResponseField>
+        <ResponseField name="groupId" type="string">
+          Short code identifier used when referencing the group in campaigns and templates.
+
+          Example: `"20XWO"`
+        </ResponseField>
+        <ResponseField name="name" type="string">
+          Display name of the suppression group.
+        </ResponseField>
+        <ResponseField name="description" type="string">
+          Optional description of the suppression group.
+        </ResponseField>
+        <ResponseField name="isGlobal" type="boolean">
+          Whether this is a global suppression group shared across all projects.
+        </ResponseField>
+        <ResponseField name="isActive" type="boolean">
+          Whether the suppression group is active.
+        </ResponseField>
+        <ResponseField name="suppressionCount" type="integer">
+          Number of email addresses currently suppressed in this group.
+        </ResponseField>
+        <ResponseField name="createdAt" type="string">
+          ISO 8601 creation timestamp.
+        </ResponseField>
+        <ResponseField name="updatedAt" type="string">
+          ISO 8601 last-updated timestamp.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>

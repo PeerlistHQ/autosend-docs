@@ -200,6 +200,54 @@ puts response.body
 
 <ResponseField name="data" type="object">
   The workflow automation, with email-step `templateId` references enriched with template metadata where applicable.
+
+  <Expandable title="child attributes">
+    <ResponseField name="data.id" type="string">
+      Unique workflow identifier.
+    </ResponseField>
+    <ResponseField name="data.projectId" type="string">
+      Project the workflow belongs to.
+    </ResponseField>
+    <ResponseField name="data.name" type="string">
+      Display name of the workflow.
+    </ResponseField>
+    <ResponseField name="data.description" type="string">
+      Optional description.
+    </ResponseField>
+    <ResponseField name="data.status" type="string">
+      Current status: `draft`, `active`, `paused`, or `archived`.
+    </ResponseField>
+    <ResponseField name="data.entryCriteria" type="object">
+      Conditions that determine which contacts enter the workflow.
+    </ResponseField>
+    <ResponseField name="data.exitCriteria" type="object">
+      Conditions that cause contacts to exit the workflow early.
+    </ResponseField>
+    <ResponseField name="data.steps" type="object[]">
+      Full ordered step graph, with email steps enriched with template metadata.
+    </ResponseField>
+    <ResponseField name="data.tags" type="string[]">
+      Tags for filtering and organisation.
+    </ResponseField>
+    <ResponseField name="data.trackingOpen" type="boolean">
+      Whether open tracking is enabled.
+    </ResponseField>
+    <ResponseField name="data.trackingClick" type="boolean">
+      Whether click tracking is enabled.
+    </ResponseField>
+    <ResponseField name="data.analytics" type="object">
+      Live engagement metrics (`totalEntered`, `totalCompleted`, `totalExited`, `totalActive`).
+    </ResponseField>
+    <ResponseField name="data.activeAt" type="string">
+      ISO 8601 timestamp when the workflow was last activated.
+    </ResponseField>
+    <ResponseField name="data.createdAt" type="string">
+      ISO 8601 creation timestamp.
+    </ResponseField>
+    <ResponseField name="data.updatedAt" type="string">
+      ISO 8601 last-updated timestamp.
+    </ResponseField>
+  </Expandable>
 </ResponseField>
 
 #### Error Responses

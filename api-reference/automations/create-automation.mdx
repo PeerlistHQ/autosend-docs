@@ -746,29 +746,51 @@ A `branch` step splits the workflow into multiple paths based on `filterCriteria
   The created workflow automation.
 
   <Expandable title="child attributes">
-  <ResponseField name="data.id" type="string">
-    Unique workflow identifier
-  </ResponseField>
-
-  <ResponseField name="data.status" type="string">
-    Current status: `draft`, `active`, `paused`, or `archived`.
-  </ResponseField>
-
-  <ResponseField name="data.steps" type="object[]">
-    Resolved steps with auto-generated `stepId` values.
-  </ResponseField>
-
-  <ResponseField name="data.activeAt" type="string | null">
-    Timestamp at which the workflow was last activated, or `null` if never activated.
-  </ResponseField>
-
-  <ResponseField name="data.createdAt" type="string">
-    ISO 8601 timestamp of creation
-  </ResponseField>
-
-  <ResponseField name="data.updatedAt" type="string">
-    ISO 8601 timestamp of last update
-  </ResponseField>
+    <ResponseField name="data.id" type="string">
+      Unique workflow identifier.
+    </ResponseField>
+    <ResponseField name="data.projectId" type="string">
+      Project the workflow belongs to.
+    </ResponseField>
+    <ResponseField name="data.name" type="string">
+      Display name of the workflow.
+    </ResponseField>
+    <ResponseField name="data.description" type="string">
+      Optional description.
+    </ResponseField>
+    <ResponseField name="data.status" type="string">
+      Current status: `draft`, `active`, `paused`, or `archived`.
+    </ResponseField>
+    <ResponseField name="data.entryCriteria" type="object">
+      Conditions that determine which contacts enter the workflow.
+    </ResponseField>
+    <ResponseField name="data.exitCriteria" type="object">
+      Conditions that cause contacts to exit the workflow early.
+    </ResponseField>
+    <ResponseField name="data.steps" type="object[]">
+      Resolved steps with auto-generated `stepId` values.
+    </ResponseField>
+    <ResponseField name="data.tags" type="string[]">
+      Tags for filtering and organization.
+    </ResponseField>
+    <ResponseField name="data.unsubscribeGroupId" type="string">
+      Suppression group applied to all email steps in the workflow.
+    </ResponseField>
+    <ResponseField name="data.trackingOpen" type="boolean">
+      Whether open tracking is enabled.
+    </ResponseField>
+    <ResponseField name="data.trackingClick" type="boolean">
+      Whether click tracking is enabled.
+    </ResponseField>
+    <ResponseField name="data.activeAt" type="string | null">
+      ISO 8601 timestamp when the workflow was last activated, or `null` if never activated.
+    </ResponseField>
+    <ResponseField name="data.createdAt" type="string">
+      ISO 8601 creation timestamp.
+    </ResponseField>
+    <ResponseField name="data.updatedAt" type="string">
+      ISO 8601 last-updated timestamp.
+    </ResponseField>
   </Expandable>
 </ResponseField>
 

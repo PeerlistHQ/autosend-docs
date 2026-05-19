@@ -180,3 +180,21 @@ puts response.body
 <ParamField body="isGlobal" type="boolean">
   When `true`, removes entries from the global suppression list rather than a project-specific group.
 </ParamField>
+
+#### Response
+
+<span className='text-sm'>Emails removed from suppression successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="child attributes">
+    <ResponseField name="data.unsuppressed" type="integer">
+      Number of email addresses successfully removed from suppression.
+
+      Example: `1`
+    </ResponseField>
+  </Expandable>
+</ResponseField>

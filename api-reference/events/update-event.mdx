@@ -270,7 +270,43 @@ At least one of `description` or `properties` must be provided.
 </ResponseField>
 
 <ResponseField name="data" type="object">
-  The updated event definition (same shape as Get Event).
+  The updated event definition.
+
+  <Expandable title="child attributes">
+    <ResponseField name="data.id" type="string">
+      Unique event definition identifier.
+    </ResponseField>
+    <ResponseField name="data.eventName" type="string">
+      Event name.
+    </ResponseField>
+    <ResponseField name="data.description" type="string | null">
+      Human-readable description, or `null`.
+    </ResponseField>
+    <ResponseField name="data.properties" type="object[]">
+      Replacement property schema after the update.
+
+      <Expandable title="property attributes">
+        <ResponseField name="propertyName" type="string">
+          Property identifier.
+        </ResponseField>
+        <ResponseField name="type" type="string">
+          Declared type: `string`, `number`, `date`, or `boolean`.
+        </ResponseField>
+        <ResponseField name="description" type="string | null">
+          Optional human-readable description.
+        </ResponseField>
+        <ResponseField name="suggestedValues" type="array">
+          Suggested values for the property (may be empty).
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="data.createdAt" type="string">
+      ISO 8601 creation timestamp.
+    </ResponseField>
+    <ResponseField name="data.updatedAt" type="string">
+      ISO 8601 last-updated timestamp.
+    </ResponseField>
+  </Expandable>
 </ResponseField>
 
 #### Error Responses

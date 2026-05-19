@@ -198,3 +198,21 @@ puts response.body
 <ParamField body="isGlobal" type="boolean">
   When `true`, adds the entries to the global suppression list rather than a project-specific group.
 </ParamField>
+
+#### Response
+
+<span className='text-sm'>Emails suppressed successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="child attributes">
+    <ResponseField name="data.suppressed" type="integer">
+      Number of email addresses successfully suppressed.
+
+      Example: `2`
+    </ResponseField>
+  </Expandable>
+</ResponseField>

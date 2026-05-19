@@ -261,14 +261,18 @@ puts response.body
   Example: `"order_completed"`
 </ParamField>
 
+<Info>
+  You must provide either `email` or `contactId` to identify the contact. Providing both is allowed - `contactId` takes precedence.
+</Info>
+
 <ParamField path="email" type="string">
-  Email of the contact this event belongs to. Either `email` or `contactId` must be provided.
+  Email address of the contact this event belongs to.
 
   Example: `"jane@example.com"`
 </ParamField>
 
 <ParamField path="contactId" type="string">
-  MongoDB ObjectId of the contact. Either `email` or `contactId` must be provided.
+  ID of the contact this event belongs to.
 
   Example: `"60d5ec49f1b2c72d9c8b8888"`
 </ParamField>

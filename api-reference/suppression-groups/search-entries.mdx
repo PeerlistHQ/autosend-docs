@@ -255,3 +255,57 @@ puts response.body
 <ParamField body="isGlobal" type="boolean">
   When `true`, returns only entries belonging to global suppression groups.
 </ParamField>
+
+#### Response
+
+<span className='text-sm'>Suppression entries retrieved successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="child attributes">
+    <ResponseField name="data.entries" type="object[]">
+      Array of suppression entries.
+
+      <Expandable title="entry attributes">
+        <ResponseField name="id" type="string">
+          Unique identifier for the suppression entry.
+        </ResponseField>
+        <ResponseField name="email" type="string">
+          The suppressed email address.
+        </ResponseField>
+        <ResponseField name="groupId" type="string">
+          ID of the suppression group this entry belongs to.
+        </ResponseField>
+        <ResponseField name="reason" type="string">
+          Reason for suppression (e.g. `BOUNCE`, `UNSUBSCRIBE`, `SPAM`).
+        </ResponseField>
+        <ResponseField name="createdAt" type="string">
+          ISO 8601 creation timestamp.
+        </ResponseField>
+        <ResponseField name="updatedAt" type="string">
+          ISO 8601 last-updated timestamp.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="data.pagination" type="object">
+      <Expandable title="pagination attributes">
+        <ResponseField name="page" type="integer">
+          Current page number.
+        </ResponseField>
+        <ResponseField name="limit" type="integer">
+          Number of results per page.
+        </ResponseField>
+        <ResponseField name="total" type="integer">
+          Total number of entries matching the filter.
+        </ResponseField>
+        <ResponseField name="pages" type="integer">
+          Total number of pages.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>

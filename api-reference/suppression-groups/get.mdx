@@ -131,3 +131,33 @@ puts response.body
 <ParamField path="groupId" type="string" required>
   The unique identifier of the suppression group to retrieve.
 </ParamField>
+
+#### Response
+
+<span className='text-sm'>Suppression group retrieved successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The suppression group.
+
+  <Expandable title="child attributes">
+    <ResponseField name="data.id" type="string">
+      Unique identifier for the suppression group.
+    </ResponseField>
+    <ResponseField name="data.name" type="string">
+      Display name of the suppression group.
+    </ResponseField>
+    <ResponseField name="data.description" type="string">
+      Optional description of the suppression group.
+    </ResponseField>
+    <ResponseField name="data.isActive" type="boolean">
+      Whether the suppression group is active.
+    </ResponseField>
+    <ResponseField name="data.isGlobal" type="boolean">
+      Whether this is a global suppression group.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
