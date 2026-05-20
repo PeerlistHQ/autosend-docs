@@ -1,6 +1,6 @@
 ---
 title: 'Events'
-description: 'Define custom events with typed properties and use them to trigger automations or branch contacts on the data carried by the event.'
+description: 'Events are actions from your app, like signups or purchases, that you can use to trigger automations, create segments, and more.'
 sidebarTitle: 'Events'
 icon: '/icons/events.svg'
 ---
@@ -38,6 +38,7 @@ Properties of type `string` can optionally declare **suggested values**, a short
     <Note>
       The Events page is part of the marketing feature set. On transactional-only projects, you'll see an upgrade prompt instead.
     </Note>
+
   </Step>
 
   <Step title="Add a new event" titleSize="h3">
@@ -46,6 +47,7 @@ Properties of type `string` can optionally declare **suggested values**, a short
     <Frame>
       <img src='/images/email-automations/events/create-event.png' alt='Create a new event with name and description' />
     </Frame>
+
   </Step>
 
   <Step title="Define the property schema" titleSize="h3">
@@ -63,6 +65,7 @@ Properties of type `string` can optionally declare **suggested values**, a short
     <Note>
       Once an event is referenced by an automation, its property names and types are locked to prevent breaking saved branch filters. You can still extend the schema by adding new properties, and you can keep editing suggested values.
     </Note>
+
   </Step>
 
   <Step title="Save the event" titleSize="h3">
@@ -92,19 +95,19 @@ curl --request POST \
 
 ```javascript JavaScript
 await fetch('https://api.autosend.com/v1/events/send', {
-  method: 'POST',
-  headers: {
-    'Authorization': 'Bearer AS_your-project-api-key',
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    eventName: 'order_completed',
-    email: 'jane@example.com',
-    eventProperties: {
-      order_total: 129.5,
-      currency: 'USD',
-    },
-  }),
+	method: 'POST',
+	headers: {
+		Authorization: 'Bearer AS_your-project-api-key',
+		'Content-Type': 'application/json',
+	},
+	body: JSON.stringify({
+		eventName: 'order_completed',
+		email: 'jane@example.com',
+		eventProperties: {
+			order_total: 129.5,
+			currency: 'USD',
+		},
+	}),
 });
 ```
 
@@ -127,22 +130,25 @@ requests.post(
     },
 )
 ```
+
 </CodeGroup>
 
 <Info>
-  You can identify the contact by `email` **or** `contactId`. Use `contactId` when you already have the AutoSend contact ID stored in your application; it skips the email lookup and is the recommended choice for high-volume event sources.
+	You can identify the contact by `email` **or** `contactId`. Use `contactId` when you already have
+	the AutoSend contact ID stored in your application; it skips the email lookup and is the
+	recommended choice for high-volume event sources.
 </Info>
 
 Example using `contactId`:
 
 ```json
 {
-  "eventName": "order_completed",
-  "contactId": "60d5ec49f1b2c72d9c8b8888",
-  "eventProperties": {
-    "order_total": 129.50,
-    "currency": "USD"
-  }
+	"eventName": "order_completed",
+	"contactId": "60d5ec49f1b2c72d9c8b8888",
+	"eventProperties": {
+		"order_total": 129.5,
+		"currency": "USD"
+	}
 }
 ```
 
@@ -161,5 +167,7 @@ A common pattern is to use an event to start an automation, then branch on a pro
 
 Once you've defined and started sending an event, you can:
 
-- <a href={APP_PATHS.automations + '/create'}>Trigger an automation from an event</a>, so a sequence starts the moment the event is received.
-- <a href={APP_PATHS.automations + '/branching'}>Branch on event properties</a>, so contacts entering an event-triggered automation are routed by the data carried in the event.
+- <a href={APP_PATHS.automations + '/create'}>Trigger an automation from an event</a>, so a sequence
+  starts the moment the event is received.
+- <a href={APP_PATHS.automations + '/branching'}>Branch on event properties</a>, so contacts
+  entering an event-triggered automation are routed by the data carried in the event.
