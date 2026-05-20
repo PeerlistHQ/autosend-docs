@@ -20,15 +20,6 @@ Learn how to send transactional emails like magic links, verification codes, and
 	<Card title='Send with SMTP' icon='/icons/smtp.svg' href={APP_PATHS.smtpIntroduction}>
 		Learn how to send emails using AutoSend's SMTP relay service.
 	</Card>
-	<Card title='Email Templates' icon='/icons/email-templates.svg' href={APP_PATHS.emailTemplates}>
-		Learn how to create and use resuable transactional email templates in AutoSend.
-	</Card>
-	<Card
-		title='Email Activity'
-		icon='/icons/email-activity.svg'
-		href={APP_PATHS.emailActivity}>
-		Monitor the status, delivery details, and engagement for all the emails that you send.
-	</Card>
 </Columns>
 
 ## Marketing Emails
@@ -44,9 +35,6 @@ Learn how to send marketing emails like newsletters, product updates, and announ
 	</Card>
 	<Card title='Contacts' icon='/icons/contacts.svg' href={APP_PATHS.contacts}>
 		Learn about contact lists and dynamic segments in Autosend.
-	</Card>
-	<Card title='Sender' icon='/icons/senders.svg' href={APP_PATHS.sender}>
-		Learn how to add and manage senders for sending marketing campaigns.
 	</Card>
 	<Card title='Domain Warmup' icon='/icons/domain-warmup.svg' href={APP_PATHS.domainWarmup}>
 		Learn how to warm up your domain to build sender reputation and improve deliverability.
@@ -68,19 +56,19 @@ Use AutoSend with AI coding agents and no-code AI tools to send emails, manage c
 	</Card>
 </Columns>
 
+## Migration Guides
+
+Migrate your existing email infrastructure to AutoSend smoothly.
+
+<Columns cols={2}>
+	<Card title='SendGrid' icon='/icons/brand-sendgrid.png' href={APP_PATHS.migrationSendgrid} horizontal />
+</Columns>
+
 ## Need Help ?
 
 <Columns cols={2}>
-	<Card title='FAQs' icon='/icons/faq.svg' href={AUTOSEND_PATHS.faqs}>
-		Frequently asked questions about transactional emails, marketing emails, pricing, and everything
-		else.
-	</Card>
-	<Card
-		title='Contact Support'
-		icon='/icons/support.svg'
-		href={`mailto:${SUPPORT_EMAIL}`}>
-		Get direct help from our support team
-	</Card>
+	<Card title='FAQs' icon='/icons/faq.svg' href={AUTOSEND_PATHS.faqs} horizontal />
+	<Card title='Contact Support' icon='/icons/support.svg' href={`mailto:${SUPPORT_EMAIL}`} horizontal />
 </Columns>
 
 ---
