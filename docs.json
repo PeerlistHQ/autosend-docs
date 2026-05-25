@@ -29,6 +29,7 @@
 									"quickstart/email-using-api",
 									"guides/QStash",
 									"guides/better-auth",
+									"guides/auth0-custom-action",
 									"guides/supabase-edge-functions"
 								]
 							},
@@ -295,7 +296,7 @@
 						"pages": [
 							{
 								"group": "REST API",
-								"pages": ["guides/better-auth", "guides/supabase-edge-functions"]
+								"pages": ["guides/better-auth", "guides/auth0-custom-action", "guides/supabase-edge-functions"]
 							},
 							{
 								"group": "SMTP",

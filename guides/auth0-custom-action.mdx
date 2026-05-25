@@ -1,0 +1,170 @@
+---
+title: 'Send emails from Auth0 with a Custom Email Provider Action'
+description: 'Use the AutoSend API to deliver Auth0 authentication emails when SMTP is not an option.'
+sidebarTitle: 'Auth0 (Custom Action)'
+icon: '/icons/brand-auth0.png'
+---
+
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+<Frame>![AutoSend x Auth0](/images/smtp/autosendxauth0.jpg)</Frame>
+
+If <a href={APP_PATHS.smtpIntegrationGuides}>SMTP</a> isn't working for your Auth0 tenant, or you'd rather call the AutoSend API directly, you can configure Auth0's [Custom Email Provider Action](https://auth0.com/docs/customize/email/smtp-email-providers/custom/configure-action) to send authentication emails through the <a href={APP_PATHS.sendEmail}>AutoSend Send Mail API</a>.
+
+## Prerequisites
+
+<CardGroup cols={2}>
+	<Card title='Verified Domain' href={AUTOSEND_PATHS.domains}>
+		Make sure you have a verified domain added in AutoSend to send emails from.
+	</Card>
+	<Card title='API Key' href={AUTOSEND_PATHS.apiKey}>
+		Create a new API key for the Custom Action or use an existing one.
+	</Card>
+</CardGroup>
+
+## Configuration
+
+<Steps>
+  <Step title="Navigate to Email Provider Settings" titleSize="h3">
+    1. Log in to your [Auth0 Dashboard](https://manage.auth0.com/)
+    2. Go to **Branding** in the sidebar
+    3. Click on **Email Provider**
+
+  <Frame>![Navigate to Email Provider](/images/smtp/auth0-step-1.png)</Frame>
+  </Step>
+  <Step title="Enable Custom Email Provider" titleSize="h3">
+    Toggle **Use my own email provider** to enable the custom provider configuration.
+
+  <Frame>![Enable Custom Email Provider](/images/smtp/auth0-step-2.png)</Frame>
+  </Step>
+  <Step title="Select Custom Action Provider" titleSize="h3">
+    Select **Custom Provider** as your email provider type. Auth0 will create a Custom Email Provider Action that runs every time an authentication email needs to be sent.
+
+  <Frame>![Select Custom Provider](/images/guides/auth0-cp-step-3.png)</Frame>
+  </Step>
+  <Step title="Add the AutoSend Action Code" titleSize="h3">
+    Replace the default action code with the snippet below. It forwards every Auth0 notification to the AutoSend Send Mail API.
+
+    ```javascript Auth0 Custom Email Provider Action
+    exports.onExecuteCustomEmailProvider = async (event, api) => {
+      const { notification } = event;
+      try {
+        const response = await fetch('https://api.autosend.com/v1/mails/send', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${event.secrets.AUTOSEND_API_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            from: {
+              name: 'AutoSend',
+              email: notification.from || 'no-reply@yourdomain.com',
+            },
+            to: { email: notification.to || event.user.email || 'receiver@yourdomain.com' },
+            subject: notification.subject,
+            html: notification.html,
+            text: notification.text
+          })
+        });
+
+        if (!response.ok) {
+          const error = await response.text();
+          api.notification.drop(`Send failed: ${error}`);
+          return;
+        }
+      } catch (error) {
+        console.error(`Error sending email: ${error.message}`);
+        api.notification.drop(`An unexpected error occurred. Error: ${error.message}`);
+      }
+    };
+    ```
+
+    <Info>
+      Update the `from.email` to an address on your verified domain as a falls back to `notification.from` value which is sent by Auth0.
+    </Info>
+
+    You'll need an AutoSend API key for the next step. Create one from the <a href={AUTOSEND_PATHS.apiKey} target="_blank" rel="noopener noreferrer">API Keys</a> page in your dashboard, or follow the <a href={APP_PATHS.apiReferenceIntroduction}>API reference</a> for details on authentication.
+
+  </Step>
+  <Step title="Add the AutoSend API Key as a Secret" titleSize="h3">
+    In the Action editor, you can click the key icon to add secrets on the left panel and add a new secret named `AUTOSEND_API_KEY` with your AutoSend API key (`AS_xxx`) as the value. The action reads it via `event.secrets.AUTOSEND_API_KEY`.
+
+  <Frame>![Add AutoSend API key secret](/images/guides/auth0-cp-step-4.png)</Frame>
+
+    <Warning>
+      Never paste the API key directly into the action code. Secrets keep the key out of the action source and out of execution logs.
+    </Warning>
+
+  </Step>
+  <Step title="Deploy the Action" titleSize="h3">
+    Click **Deploy**/**Save** in the top right of the Action editor to publish your changes. Auth0 will start routing authentication emails through the action immediately.
+  </Step>
+  <Step title="Send a Test Email" titleSize="h3">
+    After saving, click the **Send Test Email** button next to the Save button to send a test email and verify your configuration is working.
+
+    The test email is delivered to the address in the **last field** of the `to` json object `'receiver@yourdomain.com'`. The other fields (`notification.from`, `notification.subject`, etc.) are populated by Auth0 with sample values; only the recipient address controls where the message lands.
+
+    You can also check the <a href={AUTOSEND_PATHS.emailActivity} target="_blank" rel="noopener noreferrer">Email Activity</a> dashboard to verify the email was sent through AutoSend.
+
+  <Frame>![Send a test email](/images/smtp/auth0-step-5.png)</Frame>
+  </Step>
+</Steps>
+
+## Viewing Logs
+
+Auth0 captures every Custom Action execution, which is the fastest way to debug send failures.
+
+Go to [Dashboard > Monitoring > Logs](https://manage.auth0.com/#/logs) to view log events for your tenant. See Auth0's [View Log Events](https://auth0.com/docs/deploy-monitor/logs/view-log-events#view-logs) guide for filtering options.
+
+For the Custom Email Provider Action specifically, you can also inspect per-invocation output (including `console.error` and any `api.notification.drop` reasons) from the action editor under **Actions** → **Library** → your action → **Logs** tab.
+
+## Email Templates
+
+Auth0 still owns the email content when you use a Custom Action - the action only delivers what Auth0 hands you in `notification.subject`, `notification.html`, and `notification.text`. To customize the content, edit the templates under **Branding** → **Email Templates**:
+
+- **Verification Email** - Sent when users need to verify their email address
+- **Welcome Email** - Sent after successful signup
+- **Change Password** - Sent for password reset requests
+- **Blocked Account** - Sent when an account is blocked
+- **Passwordless Email** - Sent for passwordless authentication (magic links/codes)
+
+<Note>
+Auth0 email templates use Liquid syntax for dynamic content. Variables like `{{ user.email }}` and `{{ url }}` are replaced with actual values before the rendered HTML reaches your action.
+</Note>
+
+## Troubleshooting
+
+<AccordionGroup>
+	<Accordion title='Send failed: domain not verified'>
+		AutoSend rejects sends from unverified domains. Update the `from.email` in the action to an address on a domain you've verified in <a href={AUTOSEND_PATHS.domains} target="_blank" rel="noopener noreferrer">Domain Settings</a>.
+	</Accordion>
+	<Accordion title='401 Unauthorized from AutoSend'>
+		The `AUTOSEND_API_KEY` secret is missing, misspelled, or revoked. Re-check the secret name in the action and confirm the key is active in your <a href={AUTOSEND_PATHS.apiKey} target="_blank" rel="noopener noreferrer">API Keys</a> dashboard.
+	</Accordion>
+	<Accordion title='Action runs but no email arrives'>
+		1. Check the action **Logs** tab for `Send failed` entries.
+		2. Look up the recipient in the <a href={AUTOSEND_PATHS.emailActivity} target="_blank" rel="noopener noreferrer">Email Activity</a> dashboard.
+		3. Confirm the address isn't in <a href={AUTOSEND_PATHS.globalSuppressions} target="_blank" rel="noopener noreferrer">Suppressions</a>.
+	</Accordion>
+	<Accordion title='Test email goes to the wrong address'>
+		Only the last field of Auth0's test form controls the recipient. The other fields are sample values used to populate `notification.*` and don't change where the message is sent.
+	</Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+	<Card title='Verify Your Domain' icon='/icons/domain.svg' href={APP_PATHS.domainConfiguration}>
+		Set up SPF, DKIM, and DMARC for better deliverability
+	</Card>
+	<Card title='Email Activity' icon='/icons/email-activity.svg' href={APP_PATHS.emailActivity}>
+		Monitor your email delivery and engagement
+	</Card>
+	<Card title='Webhooks' icon='/icons/webhook.svg' href={APP_PATHS.webhookIntroduction}>
+		Set up webhooks to track email events in real-time
+	</Card>
+	<Card title='Send Mail API' icon='/icons/smtp.svg' href={APP_PATHS.sendEmail}>
+		Reference for the AutoSend Send Mail endpoint used by the action
+	</Card>
+</CardGroup>
