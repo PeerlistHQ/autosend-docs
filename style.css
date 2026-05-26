@@ -44,14 +44,16 @@ navbar-link {
 	border-radius: 4px;
 	font-size: 10px;
 }
-#sidebar-title {
+#sidebar-title,
+.sidebar-title {
 	font-weight: 600;
 	text-transform: uppercase;
 	font-size: 13px;
 	font-family: 'Geist Mono', monospace;
 	color: #1c1917;
 }
-.dark #sidebar-title {
+.dark #sidebar-title,
+.dark .sidebar-title {
 	color: #fff;
 }
 a.link.nav-tabs-item img {
