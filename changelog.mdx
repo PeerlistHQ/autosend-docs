@@ -7,6 +7,34 @@ rss: true
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 
+<Update label="May 26, 2026">
+
+## Event-Triggered Automations and EU Region
+
+Two big additions: a new trigger type that fires on events from your app, and a new sending region for EU customers.
+
+<Frame>
+	![Event-triggered automations and EU region](/images/changelog/event-triggered-automation.png)
+</Frame>
+
+#### Events in Email Automations
+
+Until now, automations could only trigger based on contact properties or list membership. That works for things like "plan changed to pro" or "contact added to waitlist," but it can't react to something that just happened in your app.
+
+Events fix that. You can now define custom events (like `signup_completed`, `project_published`, `team_member_invited`) with typed properties, send them from your backend via API, and use them to trigger automations the moment they fire.
+
+The real power comes from combining events with branching. A single `signup_completed` event can branch contacts based on `plan` or `team_size`. Solo users get a self-serve onboarding sequence, teams get collaboration tips, and enterprise gets a white-glove welcome. One automation, multiple paths.
+
+Read the <a href={APP_PATHS.events}>Events in Automations documentation</a> to learn more, and check the <a href={APP_PATHS.sendEventApi}>Send Event API reference</a> to start firing events from your backend.
+
+#### EU Region
+
+You can now choose EU as your sending region. Select it when adding a new domain. For existing verified domains, you'll need to update your DNS records if you decide to switch the region.
+
+Read the <a href={APP_PATHS.domainConfiguration}>Domain documentation</a> to learn more.
+
+</Update>
+
 <Update label="May 14, 2026">
 
 ## Automation Branching
