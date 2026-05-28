@@ -7,6 +7,7 @@ icon: '/icons/brand-convex.png'
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 
+<Frame>![Official Convex component](/images/guides/autosendxconvex.jpg)</Frame>
 ## Overview
 
 The official [AutoSend Convex component](https://www.convex.dev/components/autosend/convex) is a drop-in integration for sending transactional email from your Convex backend. It wraps the AutoSend API with queueing, deterministic idempotency, automatic retries, webhook verification, and full delivery lifecycle tracking, so you only need to call `sendEmail` from a mutation and the component handles the rest.
@@ -14,7 +15,8 @@ The official [AutoSend Convex component](https://www.convex.dev/components/autos
 The package is open source on [GitHub](https://github.com/autosendhq/autosend-convex) and published on [npm](https://www.npmjs.com/package/@autosend/convex) as `@autosend/convex`.
 
 <Tip>
-	The component runs entirely inside your Convex deployment. Email jobs, retry state, and webhook events are stored in Convex tables, so you do not need any extra infrastructure to track delivery.
+	The component runs entirely inside your Convex deployment. Email jobs, retry state, and webhook
+	events are stored in Convex tables, so you do not need any extra infrastructure to track delivery.
 </Tip>
 
 ## Install with your AI assistant
@@ -39,7 +41,8 @@ Please:
 ```
 
 <Tip>
-	Prefer to wire it up yourself? Skip ahead to <a href="#install">Install</a> and follow the manual steps.
+	Prefer to wire it up yourself? Skip ahead to <a href='#install'>Install</a> and follow the manual
+	steps.
 </Tip>
 
 ## What you get
@@ -77,6 +80,7 @@ pnpm add @autosend/convex convex
 ```bash yarn
 yarn add @autosend/convex convex
 ```
+
 </CodeGroup>
 
 ## Setup
@@ -178,22 +182,22 @@ yarn add @autosend/convex convex
 Call `sendEmail` from any Convex mutation. The component enqueues the job and triggers the processor automatically, so you do not need to schedule anything yourself.
 
 ```ts convex/sendWelcome.ts
-import { mutation } from "./_generated/server";
-import { v } from "convex/values";
-import { autosend } from "./email";
+import { mutation } from './_generated/server';
+import { v } from 'convex/values';
+import { autosend } from './email';
 
 export const sendWelcome = mutation({
-  args: { email: v.string(), name: v.string() },
-  handler: async (ctx, { email, name }) => {
-    const { emailId } = await autosend.sendEmail(ctx, {
-      to: [email],
-      toName: name,
-      subject: "Welcome to Acme",
-      html: `<h1>Hi ${name}</h1><p>Thanks for signing up.</p>`,
-    });
+	args: { email: v.string(), name: v.string() },
+	handler: async (ctx, { email, name }) => {
+		const { emailId } = await autosend.sendEmail(ctx, {
+			to: [email],
+			toName: name,
+			subject: 'Welcome to Acme',
+			html: `<h1>Hi ${name}</h1><p>Thanks for signing up.</p>`,
+		});
 
-    return emailId;
-  },
+		return emailId;
+	},
 });
 ```
 
@@ -217,6 +221,7 @@ If you omit `from`, the component uses the `defaultFrom` you set in config. The 
     ```
 
     When you use `templateId`, `subject` and `html` are optional. See <a href={APP_PATHS.templateVariables}>template variables</a> for the syntax supported in your template.
+
   </Accordion>
   <Accordion title="CC, BCC, and reply-to">
     ```ts
@@ -255,6 +260,7 @@ If you omit `from`, the component uses the `defaultFrom` you set in config. The 
     ```
 
     Provide either `fileUrl` or `content`, never both.
+
   </Accordion>
   <Accordion title="Bulk send">
     Send the same payload to up to 100 recipients in one call.
@@ -268,6 +274,7 @@ If you omit `from`, the component uses the `defaultFrom` you set in config. The 
     ```
 
     Each recipient is queued as a separate email, so retries and webhook events are tracked per recipient.
+
   </Accordion>
   <Accordion title="Bulk send with per-recipient data">
     Pass `recipientData` keyed by email to interpolate `{{placeholders}}` into `subject`, `html`, and `text` per recipient.
@@ -285,6 +292,7 @@ If you omit `from`, the component uses the `defaultFrom` you set in config. The 
     ```
 
     Per-recipient values are also forwarded as `dynamicData` for that recipient, overriding any shared `dynamicData` you pass.
+
   </Accordion>
   <Accordion title="Idempotency">
     Pass `idempotencyKey` to guarantee a single send for a given logical operation. If your mutation runs twice (Convex retries on conflict), the second call returns the same `emailId` with `deduped: true`.
@@ -299,6 +307,7 @@ If you omit `from`, the component uses the `defaultFrom` you set in config. The 
     ```
 
     Without an explicit key, the component derives one from the payload, so identical payloads also deduplicate.
+
   </Accordion>
 </AccordionGroup>
 
@@ -307,17 +316,17 @@ If you omit `from`, the component uses the `defaultFrom` you set in config. The 
 The component stores every email and its webhook events in Convex, so you can query them from any Convex query.
 
 ```ts convex/emailStatus.ts
-import { query } from "./_generated/server";
-import { v } from "convex/values";
-import { autosend } from "./email";
+import { query } from './_generated/server';
+import { v } from 'convex/values';
+import { autosend } from './email';
 
 export const getEmailStatus = query({
-  args: { emailId: v.string() },
-  handler: async (ctx, { emailId }) => {
-    const email = await autosend.status(ctx, { emailId });
-    const events = await autosend.listEvents(ctx, { emailId, limit: 20 });
-    return { email, events };
-  },
+	args: { emailId: v.string() },
+	handler: async (ctx, { emailId }) => {
+		const email = await autosend.status(ctx, { emailId });
+		const events = await autosend.listEvents(ctx, { emailId, limit: 20 });
+		return { email, events };
+	},
 });
 ```
 
@@ -326,7 +335,7 @@ Other status helpers:
 ```ts
 // Batch status for multiple emails in one call
 const statuses = await autosend.statusBatch(ctx, {
-  emailIds: [id1, id2, id3],
+	emailIds: [id1, id2, id3],
 });
 
 // Cancel an email that has not been sent yet
@@ -337,14 +346,14 @@ const { canceled } = await autosend.cancelEmail(ctx, { emailId });
 
 ### Email lifecycle
 
-| Status      | Meaning                                                |
-| ----------- | ------------------------------------------------------ |
-| `queued`    | Accepted and waiting to be claimed by the processor    |
-| `sending`   | Currently being sent by the queue processor            |
-| `retrying`  | Previous attempt failed and a retry is scheduled       |
-| `sent`      | Accepted by AutoSend                                   |
-| `failed`    | Retries exhausted or non-retryable error               |
-| `canceled`  | Canceled via `cancelEmail` before send                 |
+| Status     | Meaning                                             |
+| ---------- | --------------------------------------------------- |
+| `queued`   | Accepted and waiting to be claimed by the processor |
+| `sending`  | Currently being sent by the queue processor         |
+| `retrying` | Previous attempt failed and a retry is scheduled    |
+| `sent`     | Accepted by AutoSend                                |
+| `failed`   | Retries exhausted or non-retryable error            |
+| `canceled` | Canceled via `cancelEmail` before send              |
 
 Default retry policy is 4 attempts total with delays of 5s, 10s, and 20s. Both are tunable via `maxAttempts` and `retryDelaysMs` in config.
 
@@ -352,20 +361,20 @@ Default retry policy is 4 attempts total with delays of 5s, 10s, and 20s. Both a
 
 `setConfig` accepts these fields. Anything you omit keeps its existing value (unless you pass `replace: true`).
 
-| Field             | Type       | Default                    | Description                                              |
-| ----------------- | ---------- | -------------------------- | -------------------------------------------------------- |
-| `autosendApiKey`  | `string`   | unset                      | Bearer token for the AutoSend API                        |
-| `webhookSecret`   | `string`   | unset                      | HMAC secret used to verify incoming webhooks             |
-| `defaultFrom`     | `string`   | unset                      | Fallback sender address when `from` is omitted           |
-| `defaultReplyTo`  | `string`   | unset                      | Fallback reply-to address                                |
-| `testMode`        | `boolean`  | `true`                     | Rewrites every recipient to `sandboxTo`                  |
-| `sandboxTo`       | `string[]` | `[]`                       | Recipients used when `testMode` is enabled               |
-| `rateLimitRps`    | `number`   | `2`                        | Max sends per queue run                                  |
-| `retryDelaysMs`   | `number[]` | `[5000, 10000, 20000]`     | Delay schedule between retries                           |
-| `maxAttempts`     | `number`   | `4`                        | Total attempts including the first try                   |
-| `sendBatchSize`   | `number`   | `25`                       | Max queue items processed per run                        |
-| `autosendBaseUrl` | `string`   | `https://api.autosend.com` | API base URL (override for staging)                      |
-| `projectId`       | `string`   | unset                      | Required when using an Account API Key (`ASA_` prefix)   |
+| Field             | Type       | Default                    | Description                                            |
+| ----------------- | ---------- | -------------------------- | ------------------------------------------------------ |
+| `autosendApiKey`  | `string`   | unset                      | Bearer token for the AutoSend API                      |
+| `webhookSecret`   | `string`   | unset                      | HMAC secret used to verify incoming webhooks           |
+| `defaultFrom`     | `string`   | unset                      | Fallback sender address when `from` is omitted         |
+| `defaultReplyTo`  | `string`   | unset                      | Fallback reply-to address                              |
+| `testMode`        | `boolean`  | `true`                     | Rewrites every recipient to `sandboxTo`                |
+| `sandboxTo`       | `string[]` | `[]`                       | Recipients used when `testMode` is enabled             |
+| `rateLimitRps`    | `number`   | `2`                        | Max sends per queue run                                |
+| `retryDelaysMs`   | `number[]` | `[5000, 10000, 20000]`     | Delay schedule between retries                         |
+| `maxAttempts`     | `number`   | `4`                        | Total attempts including the first try                 |
+| `sendBatchSize`   | `number`   | `25`                       | Max queue items processed per run                      |
+| `autosendBaseUrl` | `string`   | `https://api.autosend.com` | API base URL (override for staging)                    |
+| `projectId`       | `string`   | unset                      | Required when using an Account API Key (`ASA_` prefix) |
 
 To read the current config (without leaking secrets), use `getConfig`. It returns every value above except `autosendApiKey` and `webhookSecret`, plus `hasApiKey` and `hasWebhookSecret` booleans you can use in admin UIs.
 
@@ -374,7 +383,9 @@ const safeConfig = await autosend.getConfig(ctx);
 ```
 
 <Tip>
-  AutoSend supports both Project API Keys (`AS_` prefix, scoped to one project) and Account API Keys (`ASA_` prefix, cross-project). If you use an Account API Key, set `projectId` in config so every request includes the matching project header.
+	AutoSend supports both Project API Keys (`AS_` prefix, scoped to one project) and Account API Keys
+	(`ASA_` prefix, cross-project). If you use an Account API Key, set `projectId` in config so every
+	request includes the matching project header.
 </Tip>
 
 ## Go live checklist
@@ -398,6 +409,7 @@ Before flipping `testMode` to `false`:
     ```
 
     You can also schedule it as a Convex cron job to act as a safety net.
+
   </Accordion>
   <Accordion title="Webhook signature verification fails">
     Make sure the `webhookSecret` in your component config matches the secret shown in the AutoSend dashboard for that exact endpoint. The component validates HMAC SHA-256 over the raw body and rejects timestamps older than 2 minutes. See <a href={APP_PATHS.webhookVerifyRequests}>verifying webhook requests</a> for the full spec.

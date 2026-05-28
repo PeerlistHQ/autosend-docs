@@ -7,6 +7,22 @@ rss: true
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 
+<Update label="May 28, 2026">
+
+## Official Convex component
+
+<Frame>![Official Convex component](/images/changelog/autosend-convex-component.jpg)</Frame>
+
+We just shipped the official AutoSend Convex component, a drop-in integration for sending transactional email straight from your Convex backend. Call `sendEmail` from any mutation and the component handles queueing, idempotency, retries with backoff, webhook signature verification, and the full delivery lifecycle (`queued`, `sending`, `retrying`, `sent`, `failed`, `canceled`) for you.
+
+It also supports templates, CC/BCC, attachments (base64 or URL), bulk sends with per-recipient merge fields, suppression groups, multi-project setups via Account API Keys, and a test sandbox that rewrites recipients while you're wiring things up.
+
+The package is open source on [GitHub](https://github.com/autosendhq/autosend-convex) and published on [npm](https://www.npmjs.com/package/@autosend/convex) as `@autosend/convex`. The guide includes a paste-ready prompt so any AI coding assistant (Cursor, Claude Code, Copilot, Codex) can wire it up for you in one shot.
+
+Read the <a href={APP_PATHS.convexGuide}>Convex integration guide</a> for setup, sending variants, status tracking, and configuration.
+
+</Update>
+
 <Update label="May 26, 2026">
 
 ## Event-Triggered Automations and EU Region
