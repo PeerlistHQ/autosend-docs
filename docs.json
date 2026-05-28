@@ -30,7 +30,8 @@
 									"guides/QStash",
 									"guides/better-auth",
 									"guides/auth0-custom-action",
-									"guides/supabase-edge-functions"
+									"guides/supabase-edge-functions",
+									"guides/convex"
 								]
 							},
 							{

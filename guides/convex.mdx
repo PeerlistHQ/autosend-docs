@@ -1,0 +1,418 @@
+---
+title: 'Send emails with Convex'
+sidebarTitle: 'Convex'
+description: 'Use the official AutoSend Convex component to send transactional emails with built-in queueing, retries, and webhook tracking.'
+icon: '/icons/brand-convex.png'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+## Overview
+
+The official [AutoSend Convex component](https://www.convex.dev/components/autosend/convex) is a drop-in integration for sending transactional email from your Convex backend. It wraps the AutoSend API with queueing, deterministic idempotency, automatic retries, webhook verification, and full delivery lifecycle tracking, so you only need to call `sendEmail` from a mutation and the component handles the rest.
+
+The package is open source on [GitHub](https://github.com/autosendhq/autosend-convex) and published on [npm](https://www.npmjs.com/package/@autosend/convex) as `@autosend/convex`.
+
+<Tip>
+	The component runs entirely inside your Convex deployment. Email jobs, retry state, and webhook events are stored in Convex tables, so you do not need any extra infrastructure to track delivery.
+</Tip>
+
+## Install with your AI assistant
+
+If you use an AI coding assistant (Cursor, Claude Code, Copilot, Codex, etc.), paste the prompt below into your editor. It points the assistant at the official Convex component docs and `llms.txt`, then asks it to produce a setup checklist tailored to your project.
+
+```text Install prompt [expandable]
+Help me install the AutoSend component.
+
+Package: @autosend/convex
+Install: npm install @autosend/convex
+
+Documentation:
+- https://www.convex.dev/components/autosend/convex/convex.md
+- https://www.convex.dev/components/autosend/convex/llms.txt
+
+Please:
+1. Retrieve the install command and documentation
+2. Generate an exact setup checklist for this component
+3. List any required environment variables
+4. Provide verification steps
+```
+
+<Tip>
+	Prefer to wire it up yourself? Skip ahead to <a href="#install">Install</a> and follow the manual steps.
+</Tip>
+
+## What you get
+
+- **Queue-first sending.** `sendEmail` and `sendBulk` enqueue jobs and automatically trigger queue processing.
+- **Idempotency.** Duplicate requests resolve to the same `emailId`, so retried mutations never double-send.
+- **Retries with backoff.** Network errors, `429`, and `5xx` responses are retried on a configurable schedule.
+- **Lifecycle tracking.** Every email moves through `queued`, `sending`, `retrying`, `sent`, `failed`, or `canceled`.
+- **Webhook ingestion.** HMAC SHA-256 signature verification, timestamp skew protection, and per-delivery dedupe out of the box.
+- **Templates, CC/BCC, attachments,** and <a href={APP_PATHS.unsubscribeGroups}>unsubscribe groups</a> are all supported.
+- **Test sandbox.** Optional `sandboxTo` rewrites recipients while you are still wiring things up.
+
+## Prerequisites
+
+Before you begin, make sure you have:
+
+- An [AutoSend account](https://autosend.com/) with an <a href={APP_PATHS.apiKeys}>API key</a>
+- A <a href={APP_PATHS.domainConfiguration}>verified sending domain</a>
+- A [Convex](https://www.convex.dev/) project (Convex CLI installed and `npx convex dev` runnable)
+- Node.js 18+ installed locally
+
+## Install
+
+Add the component and the Convex SDK to your project:
+
+<CodeGroup>
+```bash npm
+npm install @autosend/convex convex
+```
+
+```bash pnpm
+pnpm add @autosend/convex convex
+```
+
+```bash yarn
+yarn add @autosend/convex convex
+```
+</CodeGroup>
+
+## Setup
+
+<Steps>
+  <Step title="Register the component" titleSize="h3">
+    Add the component to your Convex app definition.
+
+    ```ts convex/convex.config.ts
+    import { defineApp } from "convex/server";
+    import autosend from "@autosend/convex/convex.config.js";
+
+    const app = defineApp();
+    app.use(autosend, { name: "autosend" });
+    export default app;
+    ```
+
+  </Step>
+  <Step title="Create a client wrapper" titleSize="h3">
+    Wrap the generated component reference in an `AutoSend` instance you can reuse from any Convex function.
+
+    ```ts convex/email.ts
+    import { AutoSend } from "@autosend/convex";
+    import { components } from "./_generated/api";
+
+    export const autosend = new AutoSend(components.autosend);
+    ```
+
+  </Step>
+  <Step title="Set your secrets" titleSize="h3">
+    Push your AutoSend API key and webhook signing secret to the Convex deployment environment. Both are read by the component at runtime.
+
+    ```bash
+    npx convex env set AUTOSEND_API_KEY <your-api-key>
+    npx convex env set AUTOSEND_WEBHOOK_SECRET <your-webhook-secret>
+    ```
+
+    <Note>
+      The webhook secret is shown when you create a webhook endpoint in the AutoSend dashboard. See <a href={APP_PATHS.webhookVerifyRequests}>Verifying webhook requests</a> for details.
+    </Note>
+
+  </Step>
+  <Step title="Persist component config" titleSize="h3">
+    The component keeps its own config in a Convex table so it can read settings from queries, mutations, and actions. Call `setConfig` once from a mutation to write it.
+
+    ```ts convex/admin.ts
+    import { mutation } from "./_generated/server";
+    import { autosend } from "./email";
+
+    export const configureAutosend = mutation({
+      args: {},
+      handler: async (ctx) => {
+        await autosend.setConfig(ctx, {
+          config: {
+            autosendApiKey: process.env.AUTOSEND_API_KEY!,
+            webhookSecret: process.env.AUTOSEND_WEBHOOK_SECRET!,
+            defaultFrom: "noreply@yourdomain.com",
+            testMode: true,
+            sandboxTo: ["you@yourdomain.com"],
+          },
+        });
+      },
+    });
+    ```
+
+    Run the mutation once from the Convex dashboard, or call it from a setup script. Subsequent calls merge new values into the existing config unless you pass `replace: true`.
+
+    <Warning>
+      Leave `testMode: true` while you are wiring things up. Every send will be rewritten to the addresses in `sandboxTo`, so you cannot accidentally email real users. Flip it to `false` when you are ready to go live.
+    </Warning>
+
+  </Step>
+  <Step title="Mount the webhook route" titleSize="h3">
+    The component ships an HTTP handler that verifies AutoSend webhook signatures and updates the email status table. Register it on your Convex HTTP router.
+
+    ```ts convex/http.ts
+    import { httpRouter } from "convex/server";
+    import { registerRoutes } from "@autosend/convex";
+    import { components } from "./_generated/api";
+
+    const http = httpRouter();
+    registerRoutes(http, components.autosend);
+    export default http;
+    ```
+
+    The route is mounted at `/webhooks/autosend` by default. After your next `npx convex deploy`, point your AutoSend webhook endpoint at:
+
+    ```
+    https://YOUR-DEPLOYMENT.convex.site/webhooks/autosend
+    ```
+
+    Pass `{ path: "/custom/path" }` as a third argument to `registerRoutes` if you need a different URL.
+
+  </Step>
+</Steps>
+
+## Send your first email
+
+Call `sendEmail` from any Convex mutation. The component enqueues the job and triggers the processor automatically, so you do not need to schedule anything yourself.
+
+```ts convex/sendWelcome.ts
+import { mutation } from "./_generated/server";
+import { v } from "convex/values";
+import { autosend } from "./email";
+
+export const sendWelcome = mutation({
+  args: { email: v.string(), name: v.string() },
+  handler: async (ctx, { email, name }) => {
+    const { emailId } = await autosend.sendEmail(ctx, {
+      to: [email],
+      toName: name,
+      subject: "Welcome to Acme",
+      html: `<h1>Hi ${name}</h1><p>Thanks for signing up.</p>`,
+    });
+
+    return emailId;
+  },
+});
+```
+
+If you omit `from`, the component uses the `defaultFrom` you set in config. The returned `emailId` is the handle you use to query status and webhook events later.
+
+## Sending variants
+
+<AccordionGroup>
+  <Accordion title="Send with a template">
+    Reference an AutoSend <a href={APP_PATHS.emailTemplates}>email template</a> by ID and pass merge fields via `dynamicData`.
+
+    ```ts
+    await autosend.sendEmail(ctx, {
+      to: ["jane@example.com"],
+      templateId: "tmpl_welcome",
+      dynamicData: {
+        firstName: "Jane",
+        loginUrl: "https://app.example.com/login",
+      },
+    });
+    ```
+
+    When you use `templateId`, `subject` and `html` are optional. See <a href={APP_PATHS.templateVariables}>template variables</a> for the syntax supported in your template.
+  </Accordion>
+  <Accordion title="CC, BCC, and reply-to">
+    ```ts
+    await autosend.sendEmail(ctx, {
+      to: ["customer@example.com"],
+      cc: [{ email: "team@example.com", name: "Support Team" }],
+      bcc: [{ email: "archive@example.com" }],
+      replyTo: "support@example.com",
+      replyToName: "Acme Support",
+      subject: "Your order",
+      html: "<p>Thanks for your purchase.</p>",
+    });
+    ```
+  </Accordion>
+  <Accordion title="Attachments">
+    Attach files inline as base64 or by URL.
+
+    ```ts
+    await autosend.sendEmail(ctx, {
+      to: ["customer@example.com"],
+      subject: "Your invoice",
+      html: "<p>Invoice attached.</p>",
+      attachments: [
+        {
+          filename: "invoice.pdf",
+          fileUrl: "https://files.example.com/invoice.pdf",
+          contentType: "application/pdf",
+        },
+        {
+          filename: "summary.csv",
+          content: "base64-encoded-content",
+          contentType: "text/csv",
+        },
+      ],
+    });
+    ```
+
+    Provide either `fileUrl` or `content`, never both.
+  </Accordion>
+  <Accordion title="Bulk send">
+    Send the same payload to up to 100 recipients in one call.
+
+    ```ts
+    await autosend.sendBulk(ctx, {
+      recipients: ["alice@example.com", "bob@example.com"],
+      subject: "Product update",
+      html: "<p>We shipped new features this week.</p>",
+    });
+    ```
+
+    Each recipient is queued as a separate email, so retries and webhook events are tracked per recipient.
+  </Accordion>
+  <Accordion title="Bulk send with per-recipient data">
+    Pass `recipientData` keyed by email to interpolate `{{placeholders}}` into `subject`, `html`, and `text` per recipient.
+
+    ```ts
+    await autosend.sendBulk(ctx, {
+      recipients: ["alice@example.com", "bob@example.com"],
+      recipientData: {
+        "alice@example.com": { name: "Alice", role: "admin" },
+        "bob@example.com": { name: "Bob", role: "member" },
+      },
+      subject: "Welcome, {{name}}",
+      html: "<p>Hi {{name}}, you are now a {{role}}.</p>",
+    });
+    ```
+
+    Per-recipient values are also forwarded as `dynamicData` for that recipient, overriding any shared `dynamicData` you pass.
+  </Accordion>
+  <Accordion title="Idempotency">
+    Pass `idempotencyKey` to guarantee a single send for a given logical operation. If your mutation runs twice (Convex retries on conflict), the second call returns the same `emailId` with `deduped: true`.
+
+    ```ts
+    await autosend.sendEmail(ctx, {
+      to: ["customer@example.com"],
+      subject: "Order #1234 confirmation",
+      html: "<p>Thanks for your order.</p>",
+      idempotencyKey: `order:1234:confirmation`,
+    });
+    ```
+
+    Without an explicit key, the component derives one from the payload, so identical payloads also deduplicate.
+  </Accordion>
+</AccordionGroup>
+
+## Track status and events
+
+The component stores every email and its webhook events in Convex, so you can query them from any Convex query.
+
+```ts convex/emailStatus.ts
+import { query } from "./_generated/server";
+import { v } from "convex/values";
+import { autosend } from "./email";
+
+export const getEmailStatus = query({
+  args: { emailId: v.string() },
+  handler: async (ctx, { emailId }) => {
+    const email = await autosend.status(ctx, { emailId });
+    const events = await autosend.listEvents(ctx, { emailId, limit: 20 });
+    return { email, events };
+  },
+});
+```
+
+Other status helpers:
+
+```ts
+// Batch status for multiple emails in one call
+const statuses = await autosend.statusBatch(ctx, {
+  emailIds: [id1, id2, id3],
+});
+
+// Cancel an email that has not been sent yet
+const { canceled } = await autosend.cancelEmail(ctx, { emailId });
+```
+
+`cancelEmail` only works while the email is in `queued` or `retrying`. Once it reaches `sending`, `sent`, or `failed`, it is locked in.
+
+### Email lifecycle
+
+| Status      | Meaning                                                |
+| ----------- | ------------------------------------------------------ |
+| `queued`    | Accepted and waiting to be claimed by the processor    |
+| `sending`   | Currently being sent by the queue processor            |
+| `retrying`  | Previous attempt failed and a retry is scheduled       |
+| `sent`      | Accepted by AutoSend                                   |
+| `failed`    | Retries exhausted or non-retryable error               |
+| `canceled`  | Canceled via `cancelEmail` before send                 |
+
+Default retry policy is 4 attempts total with delays of 5s, 10s, and 20s. Both are tunable via `maxAttempts` and `retryDelaysMs` in config.
+
+## Configuration
+
+`setConfig` accepts these fields. Anything you omit keeps its existing value (unless you pass `replace: true`).
+
+| Field             | Type       | Default                    | Description                                              |
+| ----------------- | ---------- | -------------------------- | -------------------------------------------------------- |
+| `autosendApiKey`  | `string`   | unset                      | Bearer token for the AutoSend API                        |
+| `webhookSecret`   | `string`   | unset                      | HMAC secret used to verify incoming webhooks             |
+| `defaultFrom`     | `string`   | unset                      | Fallback sender address when `from` is omitted           |
+| `defaultReplyTo`  | `string`   | unset                      | Fallback reply-to address                                |
+| `testMode`        | `boolean`  | `true`                     | Rewrites every recipient to `sandboxTo`                  |
+| `sandboxTo`       | `string[]` | `[]`                       | Recipients used when `testMode` is enabled               |
+| `rateLimitRps`    | `number`   | `2`                        | Max sends per queue run                                  |
+| `retryDelaysMs`   | `number[]` | `[5000, 10000, 20000]`     | Delay schedule between retries                           |
+| `maxAttempts`     | `number`   | `4`                        | Total attempts including the first try                   |
+| `sendBatchSize`   | `number`   | `25`                       | Max queue items processed per run                        |
+| `autosendBaseUrl` | `string`   | `https://api.autosend.com` | API base URL (override for staging)                      |
+| `projectId`       | `string`   | unset                      | Required when using an Account API Key (`ASA_` prefix)   |
+
+To read the current config (without leaking secrets), use `getConfig`. It returns every value above except `autosendApiKey` and `webhookSecret`, plus `hasApiKey` and `hasWebhookSecret` booleans you can use in admin UIs.
+
+```ts
+const safeConfig = await autosend.getConfig(ctx);
+```
+
+<Tip>
+  AutoSend supports both Project API Keys (`AS_` prefix, scoped to one project) and Account API Keys (`ASA_` prefix, cross-project). If you use an Account API Key, set `projectId` in config so every request includes the matching project header.
+</Tip>
+
+## Go live checklist
+
+Before flipping `testMode` to `false`:
+
+1. Verify your sending domain in the AutoSend dashboard (<a href={APP_PATHS.domainConfiguration}>domain setup</a>).
+2. Deploy your Convex backend so the webhook route is reachable.
+3. Add the webhook URL `https://YOUR-DEPLOYMENT.convex.site/webhooks/autosend` to your AutoSend project and copy the signing secret into `AUTOSEND_WEBHOOK_SECRET`.
+4. Send a test email with `testMode: true` and confirm the status moves to `sent` and you see `email.delivered` in `listEvents`.
+5. Update config with `testMode: false` and a real `defaultFrom`.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Emails stay in `queued` forever">
+    `sendEmail` triggers the processor automatically, but if a deploy was interrupted you can sweep the queue manually:
+
+    ```ts
+    await autosend.processQueue(ctx, { batchSize: 25 });
+    ```
+
+    You can also schedule it as a Convex cron job to act as a safety net.
+  </Accordion>
+  <Accordion title="Webhook signature verification fails">
+    Make sure the `webhookSecret` in your component config matches the secret shown in the AutoSend dashboard for that exact endpoint. The component validates HMAC SHA-256 over the raw body and rejects timestamps older than 2 minutes. See <a href={APP_PATHS.webhookVerifyRequests}>verifying webhook requests</a> for the full spec.
+  </Accordion>
+  <Accordion title="`projectId is required` error on send">
+    You are using an Account API Key (`ASA_` prefix) without setting `projectId`. Either switch to a Project API Key (`AS_` prefix), or add `projectId` to your config.
+  </Accordion>
+  <Accordion title="Recipients are getting overridden">
+    `testMode` is still `true`. Every send is being rewritten to `sandboxTo`. Update your config with `testMode: false` to send to real recipients.
+  </Accordion>
+</AccordionGroup>
+
+## Resources
+
+- [Component listing on Convex](https://www.convex.dev/components/autosend/convex)
+- [Source code on GitHub](https://github.com/autosendhq/autosend-convex)
+- [`@autosend/convex` on npm](https://www.npmjs.com/package/@autosend/convex)
+- [Live demo](https://convex-autosend.vercel.app/)
