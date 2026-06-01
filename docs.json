@@ -27,11 +27,11 @@
 								"icon": "/icons/api.svg",
 								"pages": [
 									"quickstart/email-using-api",
-									"guides/QStash",
-									"guides/better-auth",
 									"guides/auth0-custom-action",
-									"guides/supabase-edge-functions",
-									"guides/convex"
+									"guides/better-auth",
+									"guides/convex",
+									"guides/QStash",
+									"guides/supabase-edge-functions"
 								]
 							},
 							{
