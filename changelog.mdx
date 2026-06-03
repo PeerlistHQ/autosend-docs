@@ -7,6 +7,23 @@ rss: true
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 
+<Update label="June 3, 2026">
+
+## Project-Specific SMTP Keys
+
+The SMTP password is no longer your API key. Each project now has its own SMTP key that you create from the SMTP tab in Project Settings. API keys continue to work for REST API requests, but SMTP integrations need to be updated to use the new key.
+
+Read the <a href={APP_PATHS.smtpIntroduction}>SMTP quickstart</a> to learn more.
+
+#### Other changes:
+
+- [feat] New billing page is now live with more detailed plan options
+- [feat] New integrations section on the Transactional Email landing page
+- [fix] Logged-out users are now redirected to the login page when hitting protected pages
+- [improv] Added GhostlyX analytics for better visibility into product usage
+
+</Update>
+
 <Update label="May 28, 2026">
 
 ## Official Convex component

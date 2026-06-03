@@ -23,28 +23,23 @@ AutoSend provides an SMTP relay service that allows you to send transactional em
 	</Card>
 </CardGroup>
 
-<Warning>
-	**API Key and SMTP Key are different.** Your API key (used to authenticate REST API requests) cannot
-	be used as your SMTP password. SMTP requires a separate, project-specific SMTP key created from the
-	<a href={AUTOSEND_PATHS.smtpKey} target="_blank" rel="noopener noreferrer">SMTP tab in Project Settings</a>.
-</Warning>
-
 ## SMTP Credentials
 
 Use the following credentials to configure your SMTP client:
 
-| Setting        | Value                                  |
-| -------------- | -------------------------------------- |
-| **Host**       | `smtp.autosend.com`                    |
-| **Port**       | `465`, `587`                           |
-| **Username**   | autosend                               |
-| **Password**   | AS_xxxx (Your AutoSend SMTP key)       |
-| **Encryption** | TLS/SSL (see port guide below)         |
+| Setting        | Value                            |
+| -------------- | -------------------------------- |
+| **Host**       | `smtp.autosend.com`              |
+| **Port**       | `465`, `587`                     |
+| **Username**   | autosend                         |
+| **Password**   | AS_xxxx (Your AutoSend SMTP key) |
+| **Encryption** | TLS/SSL (see port guide below)   |
 
-<Note>
-	The SMTP password is no longer your API key. Each project has its own SMTP key that you can create
-	from the SMTP tab in <a href={AUTOSEND_PATHS.smtpKey} target="_blank" rel="noopener noreferrer">Project Settings</a>.
-</Note>
+<Warning>
+	**API Key and SMTP Key are different.** Your API key (used to authenticate REST API requests)
+	cannot be used as your SMTP password. SMTP requires a separate, project-specific SMTP key created
+	from the [SMTP tab in Project Settings](https://autosend.com/settings/smtp).
+</Warning>
 
 ## Port Configuration
 
@@ -364,7 +359,10 @@ Add `-v` or `-vv` for detailed SMTP conversation logs.
 	<Card title='Webhooks' icon='/icons/webhook.svg' href='/others/webhooks/introduction'>
 		Set up webhooks to track email events in real-time
 	</Card>
-	<Card title='Email Activity' icon='/icons/email-activity.svg' href='/transactional-emails/email-activity'>
+	<Card
+		title='Email Activity'
+		icon='/icons/email-activity.svg'
+		href='/transactional-emails/email-activity'>
 		Monitor your email delivery and engagement
 	</Card>
 </CardGroup>
