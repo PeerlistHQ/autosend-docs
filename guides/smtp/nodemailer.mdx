@@ -18,8 +18,8 @@ import { APP_PATHS } from '/snippets/appPaths.mdx';
 	<Card title='Verified Domain' href='https://autosend.com/settings/domains'>
 		Make sure you have a verified domain added in AutoSend to send emails from.
 	</Card>
-	<Card title='API Key' href='https://autosend.com/settings/api-key'>
-		Create a new API key for SMTP authentication or use the existing one.
+	<Card title='SMTP Key' href={AUTOSEND_PATHS.smtpKey}>
+		Create a project-specific SMTP key from the SMTP tab in Project Settings.
 	</Card>
 </CardGroup>
 
@@ -62,7 +62,7 @@ import { APP_PATHS } from '/snippets/appPaths.mdx';
       secure: true,
       auth: {
         user: 'autosend',
-        pass: 'AS_xxx', // Your AutoSend API key
+        pass: 'AS_xxx', // Your AutoSend SMTP key
       },
     });
     ```
@@ -72,8 +72,12 @@ import { APP_PATHS } from '/snippets/appPaths.mdx';
     | **Host** | `smtp.autosend.com` |
     | **Port** | `465` (recommended) or `587` |
     | **Username** | `autosend` |
-    | **Password** | Your AutoSend API key (AS_xxx) |
+    | **Password** | Your AutoSend SMTP key (AS_xxx) |
     | **Secure** | `true` for port 465, `false` for port 587 |
+
+    <Note>
+      The SMTP password is no longer your API key. Create a project-specific SMTP key from the SMTP tab in <a href={AUTOSEND_PATHS.smtpKey} target="_blank" rel="noopener noreferrer">Project Settings</a>.
+    </Note>
 
   </Step>
   <Step title="Send an Email" titleSize="h3">
@@ -249,8 +253,8 @@ await transporter.sendMail({
 		SMTP connection errors
 	</Accordion>
 	<Accordion title='Authentication failed'>
-		- Double-check your API key is correct - Ensure you're using `autosend` as the username - Verify
-		your API key is active in the AutoSend dashboard - Make sure there are no extra spaces in the
+		- Double-check your SMTP key is correct - Ensure you're using `autosend` as the username - Verify
+		your SMTP key is active in the <a href={AUTOSEND_PATHS.smtpKey} target="_blank" rel="noopener noreferrer">SMTP Settings</a> - Make sure there are no extra spaces in the
 		credentials
 	</Accordion>
 	<Accordion title='Connection errors'>

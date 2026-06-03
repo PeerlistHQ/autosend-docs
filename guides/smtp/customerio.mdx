@@ -18,8 +18,8 @@ Customer.io is a messaging platform for marketing, transactional emails, push no
 	<Card title='Verified Domain' href='https://autosend.com/settings/domains'>
 		Make sure you have a verified domain added in AutoSend to send emails from.
 	</Card>
-	<Card title='API Key' href='https://autosend.com/settings/api-key'>
-		Create a new API key for SMTP authentication or use the existing one.
+	<Card title='SMTP Key' href={AUTOSEND_PATHS.smtpKey}>
+		Create a project-specific SMTP key from the SMTP tab in Project Settings.
 	</Card>
 </CardGroup>
 
@@ -55,7 +55,11 @@ Customer.io is a messaging platform for marketing, transactional emails, push no
     | **Port** | `587` (or `465` for implicit TLS) |
     | **Authentication** | Select `Plain` |
     | **Username** | `autosend` |
-    | **Password** | Your AutoSend API key (AS_xxx) |
+    | **Password** | Your AutoSend SMTP key (AS_xxx) |
+
+    <Note>
+      The SMTP password is no longer your API key. Create a project-specific SMTP key from the SMTP tab in <a href={AUTOSEND_PATHS.smtpKey} target="_blank" rel="noopener noreferrer">Project Settings</a>.
+    </Note>
 
     <Frame>![Supabase Step 1](/images/smtp/customerio-step-4.png)</Frame>
     <Note>
@@ -91,8 +95,8 @@ Customer.io is a messaging platform for marketing, transactional emails, push no
 		logs for SMTP connection errors
 	</Accordion>
 	<Accordion title='Authentication failed'>
-		- Double-check your API key is correct - Ensure you're using `autosend` as the username - Verify
-		your API key is active in the AutoSend dashboard
+		- Double-check your SMTP key is correct - Ensure you're using `autosend` as the username - Verify
+		your SMTP key is active in the <a href={AUTOSEND_PATHS.smtpKey} target="_blank" rel="noopener noreferrer">SMTP Settings</a>
 	</Accordion>
 	<Accordion title='Connection errors'>
 		- Verify the server address is `smtp.autosend.com` - Try using port `465` or `2525` if port

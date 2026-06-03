@@ -22,8 +22,8 @@ Auth0 uses email for authentication flows like password resets, email verificati
 	<Card title='Verified Domain' href='https://autosend.com/settings/domains'>
 		Make sure you have a verified domain added in AutoSend to send emails from.
 	</Card>
-	<Card title='API Key' href='https://autosend.com/settings/api-key'>
-		Create a new API key for SMTP authentication or use the existing one.
+	<Card title='SMTP Key' href={AUTOSEND_PATHS.smtpKey}>
+		Create a project-specific SMTP key from the SMTP tab in Project Settings.
 	</Card>
 </CardGroup>
 
@@ -56,7 +56,11 @@ Auth0 uses email for authentication flows like password resets, email verificati
     | **SMTP Host** | `smtp.autosend.com` |
     | **SMTP Port** | `587` |
     | **SMTP Username** | `autosend` |
-    | **SMTP Password** | Your AutoSend API key (AS_xxx) |
+    | **SMTP Password** | Your AutoSend SMTP key (AS_xxx) |
+
+    <Note>
+      The SMTP password is no longer your API key. Create a project-specific SMTP key from the SMTP tab in <a href={AUTOSEND_PATHS.smtpKey} target="_blank" rel="noopener noreferrer">Project Settings</a>.
+    </Note>
 
   <Frame>![Supabase Step 4](/images/smtp/auth0-step-4.png)</Frame>
   </Step>
@@ -95,8 +99,8 @@ Auth0 email templates use Liquid syntax for dynamic content. Variables like `{{ 
 		connection errors (**Monitoring** → **Logs**)
 	</Accordion>
 	<Accordion title='Authentication failed'>
-		- Double-check your API key is correct - Ensure you're using `autosend` as the username - Verify
-		your API key is active in the AutoSend dashboard
+		- Double-check your SMTP key is correct - Ensure you're using `autosend` as the username - Verify
+		your SMTP key is active in the <a href={AUTOSEND_PATHS.smtpKey} target="_blank" rel="noopener noreferrer">SMTP Settings</a>
 	</Accordion>
 	<Accordion title='Connection errors'>
 		- Verify the hostname is `smtp.autosend.com` - Try using port `465` with implicit TLS if port

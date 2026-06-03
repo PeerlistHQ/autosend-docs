@@ -18,8 +18,8 @@ Supabase uses email for authentication flows like sign-up confirmations, passwor
 	<Card title='Verified Domain' href='https://autosend.com/settings/domains'>
 		Make sure you have a verified domain added in AutoSend to send emails from.
 	</Card>
-	<Card title='API Key' href='https://autosend.com/settings/api-key'>
-		Create a new API key for SMTP authentication or use the existing one.
+	<Card title='SMTP Key' href={AUTOSEND_PATHS.smtpKey}>
+		Create a project-specific SMTP key from the SMTP tab in Project Settings.
 	</Card>
 </CardGroup>
 
@@ -49,8 +49,12 @@ Supabase uses email for authentication flows like sign-up confirmations, passwor
     | **Host** | `smtp.autosend.com` |
     | **Port number** | `587` |
     | **Username** | autosend |
-    | **Password** | AutoSend API key secret |
-    
+    | **Password** | Your AutoSend SMTP key (AS_xxx) |
+
+    <Note>
+      The SMTP password is no longer your API key. Create a project-specific SMTP key from the SMTP tab in <a href={AUTOSEND_PATHS.smtpKey} target="_blank" rel="noopener noreferrer">Project Settings</a>.
+    </Note>
+
     <Frame>![Supabase Step 3](/images/smtp/supabase-step-3.png)</Frame>
   </Step>
   <Step title="Save Settings" titleSize="h3">
@@ -132,8 +136,8 @@ AutoSend's rate limits are separate and typically higher. Check your <a href={AU
 		587 - Contact Supabase support if the issue persists
 	</Accordion>
 	<Accordion title='Authentication failed'>
-		- Double-check your API key is correct - Ensure you're using the same key for both username and
-		password - Verify your API key is active in the AutoSend dashboard
+		- Double-check your SMTP key is correct - Ensure the username is `autosend` and the password is your
+		SMTP key - Verify your SMTP key is active in the <a href={AUTOSEND_PATHS.smtpKey} target="_blank" rel="noopener noreferrer">SMTP Settings</a>
 	</Accordion>
 </AccordionGroup>
 

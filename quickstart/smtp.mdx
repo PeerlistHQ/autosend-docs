@@ -18,10 +18,16 @@ AutoSend provides an SMTP relay service that allows you to send transactional em
 	<Card title='Verified Domain' href='https://autosend.com/settings/domains'>
 		Make sure you have a verified domain added in AutoSend to send emails from.
 	</Card>
-	<Card title='API Key' href='https://autosend.com/settings/api-key'>
-		Create a new API key for SMTP authentication or use the existing one.
+	<Card title='SMTP Key' href={AUTOSEND_PATHS.smtpKey}>
+		Create a project-specific SMTP key from the SMTP tab in Project Settings.
 	</Card>
 </CardGroup>
+
+<Warning>
+	**API Key and SMTP Key are different.** Your API key (used to authenticate REST API requests) cannot
+	be used as your SMTP password. SMTP requires a separate, project-specific SMTP key created from the
+	<a href={AUTOSEND_PATHS.smtpKey} target="_blank" rel="noopener noreferrer">SMTP tab in Project Settings</a>.
+</Warning>
 
 ## SMTP Credentials
 
@@ -32,8 +38,13 @@ Use the following credentials to configure your SMTP client:
 | **Host**       | `smtp.autosend.com`                    |
 | **Port**       | `465`, `587`                           |
 | **Username**   | autosend                               |
-| **Password**   | AS_xxxx (Your AutoSend API key secret) |
+| **Password**   | AS_xxxx (Your AutoSend SMTP key)       |
 | **Encryption** | TLS/SSL (see port guide below)         |
+
+<Note>
+	The SMTP password is no longer your API key. Each project has its own SMTP key that you can create
+	from the SMTP tab in <a href={AUTOSEND_PATHS.smtpKey} target="_blank" rel="noopener noreferrer">Project Settings</a>.
+</Note>
 
 ## Port Configuration
 
@@ -82,7 +93,7 @@ from email.mime.multipart import MIMEMultipart
 smtp_host = "smtp.autosend.com"
 smtp_port = 587
 username = "sender@yourdomain.com"
-password = "as_your_api_key_here"
+password = "as_your_smtp_key_here"
 
 msg = MIMEMultipart("alternative")
 msg["Subject"] = "Hello from AutoSend"
@@ -109,7 +120,7 @@ $mail->isSMTP();
 $mail->Host       = 'smtp.autosend.com';
 $mail->SMTPAuth   = true;
 $mail->Username   = 'sender@yourdomain.com';
-$mail->Password   = 'as_your_api_key_here';
+$mail->Password   = 'as_your_smtp_key_here';
 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
 $mail->Port       = 587;
 
@@ -137,7 +148,7 @@ message = <<~MESSAGE
 MESSAGE
 
 Net::SMTP.start('smtp.autosend.com', 587, 'yourdomain.com',
-                'sender@yourdomain.com', 'as_your_api_key_here', :plain) do |smtp|
+                'sender@yourdomain.com', 'as_your_smtp_key_here', :plain) do |smtp|
   smtp.send_message message, 'sender@yourdomain.com', 'recipient@example.com'
 end
 ```
@@ -150,7 +161,7 @@ import (
 )
 
 func main() {
-    auth := smtp.PlainAuth("", "sender@yourdomain.com", "as_your_api_key_here", "smtp.autosend.com")
+    auth := smtp.PlainAuth("", "sender@yourdomain.com", "as_your_smtp_key_here", "smtp.autosend.com")
 
     to := []string{"recipient@example.com"}
     msg := []byte("To: recipient@example.com\r\n" +
@@ -238,7 +249,7 @@ swaks --to recipient@example.com \
       --server smtp.autosend.com \
       --port 465 \
       --auth-user sender@yourdomain.com \
-      --auth-password as_your_api_key_here \
+      --auth-password as_your_smtp_key_here \
       --tlsc
 ```
 
@@ -250,7 +261,7 @@ swaks --to recipient@example.com \
       --server smtp.autosend.com \
       --port 587 \
       --auth-user sender@yourdomain.com \
-      --auth-password as_your_api_key_here \
+      --auth-password as_your_smtp_key_here \
       --header "Content-Type: text/html" \
       --body "<h1>Test Email</h1><p>This is a test from swaks.</p>"
 ```
@@ -274,11 +285,11 @@ Add `-v` or `-vv` for detailed SMTP conversation logs.
   </Accordion>
   <Accordion title="Authentication failed">
     **Possible causes:**
-    - Invalid API key
+    - Invalid SMTP key
     - Username doesn't match a verified sender
 
     **Solutions:**
-    - Verify your API key in the <a href={AUTOSEND_PATHS.apiKey} target="_blank" rel="noopener noreferrer">Dashboard</a>
+    - Verify your SMTP key in the <a href={AUTOSEND_PATHS.smtpKey} target="_blank" rel="noopener noreferrer">SMTP Settings</a>
     - Ensure the username is a verified sender email address
     - Check that your domain is properly verified
     - Check for any extra whitespace in your credentials

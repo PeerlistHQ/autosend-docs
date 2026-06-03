@@ -18,8 +18,8 @@ WordPress relies on the PHP `mail()` function to send emails by default, which o
 	<Card title='Verified Domain' href='https://autosend.com/settings/domains'>
 		Make sure you have a verified domain added in AutoSend to send emails from.
 	</Card>
-	<Card title='API Key' href='https://autosend.com/settings/api-key'>
-		Create a new API key for SMTP authentication or use the existing one.
+	<Card title='SMTP Key' href={AUTOSEND_PATHS.smtpKey}>
+		Create a project-specific SMTP key from the SMTP tab in Project Settings.
 	</Card>
 </CardGroup>
 
@@ -66,10 +66,10 @@ WordPress relies on the PHP `mail()` function to send emails by default, which o
     | **SMTP Port** | `587` (or `465` for SSL) |
     | **Authentication** | On |
     | **SMTP Username** | `autosend` |
-    | **SMTP Password** | Your AutoSend API key (AS_xxx) |
+    | **SMTP Password** | Your AutoSend SMTP key (AS_xxx) |
 
     <Note>
-    You can create your SMTP API key in the <a href="https://autosend.com/settings/smtp" target="_blank" rel="noopener noreferrer">AutoSend SMTP Settings</a>.
+    The SMTP password is no longer your API key. Create a project-specific SMTP key from the SMTP tab in <a href={AUTOSEND_PATHS.smtpKey} target="_blank" rel="noopener noreferrer">Project Settings</a>.
     </Note>
 
     <Frame>![SMTP Credentials](/images/smtp/wordpress-step-3.png)</Frame>
@@ -98,8 +98,8 @@ WordPress relies on the PHP `mail()` function to send emails by default, which o
 		hosting provider blocks outgoing SMTP connections
 	</Accordion>
 	<Accordion title='Authentication failed'>
-		- Double-check your API key is correct - Ensure you're using `autosend` as the username - Verify
-		your API key is active in the AutoSend dashboard - Make sure there are no extra spaces in the
+		- Double-check your SMTP key is correct - Ensure you're using `autosend` as the username - Verify
+		your SMTP key is active in the <a href={AUTOSEND_PATHS.smtpKey} target="_blank" rel="noopener noreferrer">SMTP Settings</a> - Make sure there are no extra spaces in the
 		credentials
 	</Accordion>
 	<Accordion title='Connection timeout errors'>
