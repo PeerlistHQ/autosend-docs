@@ -1,0 +1,100 @@
+---
+title: 'Usage'
+description: 'Track how many emails you have sent against your plan limit, get notified before you run out, and top up with email credits or auto-reload.'
+sidebarTitle: 'Usage'
+icon: '/icons/usage.svg'
+---
+
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+Open <a href={AUTOSEND_PATHS.accountUsage} target="_blank" rel="noopener noreferrer">Account Settings &gt; Usage</a> to see how many emails you have sent in the current billing cycle, how close you are to your plan limit, and to purchase or manage email credits.
+
+## Usage Limits
+
+Every AutoSend plan includes a monthly email sending limit. You can send emails up to your plan limit during the billing cycle. Once you reach the limit, sending is **paused** until the next cycle begins or until you add more capacity through [email credits](#email-credits).
+
+### Notifications
+
+AutoSend emails workspace Admins automatically as you approach your limit:
+
+- **At 90% of your plan limit**: a heads-up so you have time to upgrade or top up before sending is paused.
+- **At 100% of your plan limit**: confirmation that sending is paused on your account.
+
+### What gets paused
+
+When you hit your limit, both transactional and marketing emails stop sending. Active automation will pause sending until capacity is available again.
+
+### How to keep sending
+
+You have two options when you reach your plan limit:
+
+- **Upgrade your plan**: move to a higher tier to unlock a larger monthly limit. See the [pricing page](https://autosend.com/account/compare-plans).
+- **Buy email credits**: top up your account with [email credits](#email-credits) that add to your sending capacity for the current cycle and beyond.
+
+<Info>
+	Your effective sending limit each cycle is **plan limit + email credit balance**. As long as the
+	total is above zero, sending continues.
+</Info>
+
+## Email Credits
+
+Email credits let you purchase additional sending capacity in advance, on top of your plan. They are useful when you need extra headroom for a campaign, want a buffer against unexpected spikes, or simply prefer to pay for usage upfront.
+
+### How email credits work
+
+- **Top-up in advance**: buy credits whenever you want from the Usage page.
+- **Rollover and never expire**: unused credits stay on your account indefinitely and carry over from one billing cycle to the next.
+- **Stack with your plan**: credits are consumed only after your plan's included emails for the current cycle are used.
+- **Non-refundable**: credits cannot be refunded once purchased.
+- **Non-transferable**: credits are tied to your workspace and cannot be moved to another account.
+
+<Warning>
+	Email credits are non-refundable and non-transferable. Purchase the amount you expect to use.
+</Warning>
+
+### Auto-reload
+
+Auto-reload tops up your email credits automatically when your balance gets low, so sending never pauses unexpectedly.
+
+You can enable auto-reload from the Email Credits section on the Usage page. When configured, AutoSend will:
+
+1. Watch your remaining sending capacity (plan limit + credit balance).
+2. Trigger a top-up as soon as your balance drops to the **threshold** you set.
+3. Charge your default payment method and add the configured amount of credits to your account.
+
+<Note>
+	Auto-reload uses the default payment method on file in [Billing](/others/account/billing). Make
+	sure your card is valid to avoid failed reloads.
+</Note>
+
+## FAQs
+
+<AccordionGroup>
+  <Accordion title="What happens when I hit my plan limit?">
+    Sending is paused on your account until the next billing cycle begins or until you add capacity through an upgrade or email credits. AutoSend notifies Admins by email at 90% and 100% of the limit.
+  </Accordion>
+
+<Accordion title='Do unused emails from my plan roll over?'>
+	No. Plan emails reset at the start of each billing cycle. Only **email credits** roll over and
+	never expire.
+</Accordion>
+
+<Accordion title='When are email credits consumed?'>
+	Email credits are consumed only after you exhaust the emails included with your plan for the
+	current billing cycle.
+</Accordion>
+
+<Accordion title='Can I get a refund on unused email credits?'>
+	No. Email credits are non-refundable. They also cannot be transferred to another workspace.
+</Accordion>
+
+<Accordion title='How does auto-reload decide when to top up?'>
+	Auto-reload triggers when your remaining sending capacity drops to the threshold you set. The
+	configured amount of credits is then purchased using your default payment method.
+</Accordion>
+
+  <Accordion title="Who can buy credits or change auto-reload settings?">
+    Only workspace **Admins** can purchase credits, enable auto-reload, or change billing details. See [Team roles and permissions](/others/team) for the full role breakdown.
+  </Accordion>
+</AccordionGroup>

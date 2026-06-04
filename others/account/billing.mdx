@@ -1,0 +1,99 @@
+---
+title: 'Billing'
+description: 'Manage your AutoSend subscription, payment methods, and invoices. Billing is handled through Stripe and is accessible to workspace Admins only.'
+sidebarTitle: 'Billing'
+icon: '/icons/billing.svg'
+---
+
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+AutoSend uses [Stripe](https://stripe.com) to process payments. Your subscription, payment methods, and invoice history are all managed from one place in the dashboard.
+
+<Note>
+	Billing is restricted to workspace **Admins**. Members do not see the Billing page. See [Team
+	roles and permissions](/others/team) for the full breakdown.
+</Note>
+
+## Access your billing details
+
+Open <a href={AUTOSEND_PATHS.accountBilling} target="_blank" rel="noopener noreferrer">Account Settings &gt; Billing</a> to view and manage everything related to your account's billing.
+
+From this page you can:
+
+- **Review your current plan** and the limits included with it
+- **Upgrade, downgrade, or cancel** your subscription
+- **Update payment methods** (add a new card, change the default card, or remove an old one)
+- **Update billing details** such as company name, billing address, and tax ID
+- **Download past invoices** as PDF for accounting or reimbursement
+
+## Invoices
+
+Every charge generates an invoice that is emailed to the billing contact on file and stored in your Billing page. Invoices include your subscription charges, any add-ons, and any [email credits](/others/account/usage#email-credits) you've purchased.
+
+If you need to update the email address that receives invoices, change it from the billing details section on the same page.
+
+## Payment methods
+
+You can store multiple payment methods and choose which one to use as the default. AutoSend charges the default payment method automatically at the start of each billing cycle.
+
+<Warning>
+	If a charge fails, AutoSend retries it a few times. If the payment continues to fail, **sending
+	will be paused after 7 days until the invoice is cleared.** Make sure your default card is valid
+	and has sufficient funds.
+</Warning>
+
+## Plans and pricing
+
+For a full comparison of available plans and what each one includes, visit the <a href={AUTOSEND_PATHS.pricing} target="_blank" rel="noopener noreferrer">pricing page</a>.
+
+To understand how plan limits work, when sending is paused, and how email credits extend your sending capacity, see [Usage](/others/account/usage).
+
+## Account inactivity
+
+If your account does not have an active subscription, it is considered inactive. Inactive accounts are **queued for permanent deletion after 60 days**, including all projects, contacts, templates, campaigns, and sending history.
+
+To keep your account and data, resubscribe to a paid plan before the 60-day window ends.
+
+For full details, see the <a href={AUTOSEND_PATHS.terms} target="_blank" rel="noopener noreferrer">Account Inactivity and Data Deletion</a> section of our Terms.
+
+## FAQs
+
+<AccordionGroup>
+  <Accordion title="Who can access the Billing page?">
+    Only workspace **Admins** can access billing. Members do not see this page. See [Team roles and permissions](/others/team) for details.
+  </Accordion>
+
+<Accordion title='How do I change the billing email or company details?'>
+	Open{' '}
+	<a href={AUTOSEND_PATHS.accountBilling} target='_blank' rel='noopener noreferrer'>
+		Account Settings &gt; Billing
+	</a>{' '}
+	and edit your billing details from there. Updates apply to all future invoices.
+</Accordion>
+
+<Accordion title='Where can I download past invoices?'>
+	All invoices are listed on the Billing page. Open any invoice to view it in your browser or
+	download the PDF.
+</Accordion>
+
+<Accordion title='What happens if my payment fails?'>
+	AutoSend will retry the payment a few times and notify the billing contact by email. If the
+	payment continues to fail, sending will be paused on your account after 7 days until the invoice
+	is cleared.
+</Accordion>
+
+  <Accordion title="Can I switch plans at any time?">
+    Yes. You can upgrade or downgrade your plan from the Billing page. Upgrades take effect immediately. Downgrades take effect at the end of your current billing cycle.
+  </Accordion>
+
+<Accordion title='What happens to my account if I cancel or stop paying?'>
+	Accounts without an active subscription are considered inactive and are queued for permanent
+	deletion after 60 days, along with all associated data. Resubscribe before the 60-day window ends
+	to keep your data. See the{' '}
+	<a href={AUTOSEND_PATHS.terms} target='_blank' rel='noopener noreferrer'>
+		Account Inactivity and Data Deletion
+	</a>{' '}
+	section of our Terms for the full policy.
+</Accordion>
+</AccordionGroup>

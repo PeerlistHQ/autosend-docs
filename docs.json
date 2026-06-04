@@ -101,7 +101,15 @@
 									"others/webhooks/verify-requests"
 								]
 							},
-							"others/team"
+							"others/team",
+							{
+								"group": "Account",
+								"icon": "/icons/account.svg",
+								"pages": [
+									"others/account/billing",
+									"others/account/usage"
+								]
+							}
 						]
 					},
 					{
