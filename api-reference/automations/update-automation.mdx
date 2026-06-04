@@ -271,7 +271,7 @@ All fields are optional. See [Create Automation](./create-workflow-automation) f
 </ParamField>
 
 <ParamField path="steps" type="object[]">
-  Replacement step list. Fully replaces the existing steps.
+  Replacement step list. Fully replaces the existing steps. Every `email` step must be preceded by a `wait` step (use a delay of `0` to send immediately), including email steps inside a branch.
 </ParamField>
 
 <ParamField path="tags" type="string[]">

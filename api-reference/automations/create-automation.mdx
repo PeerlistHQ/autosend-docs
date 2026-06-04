@@ -12,6 +12,10 @@ openapi: 'POST /automations'
   A workflow runs `steps` in order. Without `branch` steps, `steps` must strictly alternate `wait → email`, starting with `wait` and ending with `email`. Workflows containing `branch` steps use a more flexible graph (each step references the next via `nextStepId`).
 </Info>
 
+<Note>
+  Every `email` step must be preceded by a `wait` step, including email steps inside a branch. Set the wait delay to `{ "value": 0, "unit": "mins" }` if you want the email to send immediately.
+</Note>
+
 <RequestExample>
 
 
@@ -29,8 +33,8 @@ curl --request POST \
     "type": "contact_property_matches_with",
     "filterCriteria": {
       "logicalOperator": "AND",
-      "conditions": [
-        { "field": "customFields.plan", "operator": "is_not_empty", "fieldType": "string" }
+      "groups": [
+        { "field": "customFields.plan", "operator": "is_not_empty", "id": "filter_1", "fieldType": "string" }
       ]
     }
   },
@@ -73,8 +77,8 @@ curl --request POST \
           "appliesTo": "all_branch_steps",
           "filterCriteria": {
             "logicalOperator": "AND",
-            "conditions": [
-              { "field": "customFields.plan", "operator": "equals", "value": "pro", "fieldType": "string" }
+            "groups": [
+              { "field": "customFields.plan", "operator": "equals", "value": "pro", "id": "filter_2", "fieldType": "string" }
             ]
           },
           "nextStepId": "step_wait_pro",
@@ -87,8 +91,8 @@ curl --request POST \
           "appliesTo": "branch_entry",
           "filterCriteria": {
             "logicalOperator": "AND",
-            "conditions": [
-              { "field": "customFields.plan", "operator": "is_not_empty", "fieldType": "string" }
+            "groups": [
+              { "field": "customFields.plan", "operator": "is_not_empty", "id": "filter_3", "fieldType": "string" }
             ]
           },
           "nextStepId": "step_wait_other"
@@ -215,8 +219,8 @@ payload = {
         "type": "contact_property_matches_with",
         "filterCriteria": {
             "logicalOperator": "AND",
-            "conditions": [
-                {"field": "customFields.plan", "operator": "is_not_empty", "fieldType": "string"}
+            "groups": [
+                {"field": "customFields.plan", "operator": "is_not_empty", "id": "filter_1", "fieldType": "string"}
             ]
         }
     },
@@ -236,13 +240,13 @@ payload = {
         {"stepId": "step_branch", "type": "branch", "branches": [
             {"branchId": "br_pro", "label": "Pro plan",
              "triggerType": "contact_property_matches_with", "appliesTo": "all_branch_steps",
-             "filterCriteria": {"logicalOperator": "AND", "conditions": [
-                 {"field": "customFields.plan", "operator": "equals", "value": "pro", "fieldType": "string"}]},
+             "filterCriteria": {"logicalOperator": "AND", "groups": [
+                 {"field": "customFields.plan", "operator": "equals", "value": "pro", "id": "filter_2", "fieldType": "string"}]},
              "nextStepId": "step_wait_pro", "mergeStepId": "step_wait_merged"},
             {"branchId": "br_other", "label": "Catch-all",
              "triggerType": "contact_property_matches_with", "appliesTo": "branch_entry",
-             "filterCriteria": {"logicalOperator": "AND", "conditions": [
-                 {"field": "customFields.plan", "operator": "is_not_empty", "fieldType": "string"}]},
+             "filterCriteria": {"logicalOperator": "AND", "groups": [
+                 {"field": "customFields.plan", "operator": "is_not_empty", "id": "filter_3", "fieldType": "string"}]},
              "nextStepId": "step_wait_other"}
         ]},
         {"type": "wait", "delay": {"value": 2, "unit": "mins"}, "checkExitCriteria": True,
@@ -300,8 +304,8 @@ const payload = {
     type: 'contact_property_matches_with',
     filterCriteria: {
       logicalOperator: 'AND',
-      conditions: [
-        { field: 'customFields.plan', operator: 'is_not_empty', fieldType: 'string' }
+      groups: [
+        { field: 'customFields.plan', operator: 'is_not_empty', id: 'filter_1', fieldType: 'string' }
       ]
     }
   },
@@ -321,14 +325,14 @@ const payload = {
     { stepId: 'step_branch', type: 'branch', branches: [
         { branchId: 'br_pro', label: 'Pro plan',
           triggerType: 'contact_property_matches_with', appliesTo: 'all_branch_steps',
-          filterCriteria: { logicalOperator: 'AND', conditions: [
-            { field: 'customFields.plan', operator: 'equals', value: 'pro', fieldType: 'string' }
+          filterCriteria: { logicalOperator: 'AND', groups: [
+            { field: 'customFields.plan', operator: 'equals', value: 'pro', id: 'filter_2', fieldType: 'string' }
           ]},
           nextStepId: 'step_wait_pro', mergeStepId: 'step_wait_merged' },
         { branchId: 'br_other', label: 'Catch-all',
           triggerType: 'contact_property_matches_with', appliesTo: 'branch_entry',
-          filterCriteria: { logicalOperator: 'AND', conditions: [
-            { field: 'customFields.plan', operator: 'is_not_empty', fieldType: 'string' }
+          filterCriteria: { logicalOperator: 'AND', groups: [
+            { field: 'customFields.plan', operator: 'is_not_empty', id: 'filter_3', fieldType: 'string' }
           ]},
           nextStepId: 'step_wait_other' }
     ]},
@@ -497,8 +501,8 @@ puts http.request(request).body
       "type": "contact_property_matches_with",
       "filterCriteria": {
         "logicalOperator": "AND",
-        "conditions": [
-          { "field": "customFields.plan", "operator": "is_not_empty", "fieldType": "string" }
+        "groups": [
+          { "field": "customFields.plan", "operator": "is_not_empty", "id": "filter_1", "fieldType": "string" }
         ]
       }
     },
@@ -602,7 +606,7 @@ puts http.request(request).body
 </ParamField>
 
 <ParamField path="steps" type="object[]">
-  Ordered steps that contacts walk through. Each step must include a `type`. Linear workflows alternate `wait` and `email`; workflows containing a `branch` step form a graph where each step references the next via `nextStepId`.
+  Ordered steps that contacts walk through. Each step must include a `type`. Linear workflows alternate `wait` and `email`; workflows containing a `branch` step form a graph where each step references the next via `nextStepId`. Every `email` step must be preceded by a `wait` step (use a delay of `0` to send immediately), including email steps inside a branch.
 
   <Expandable title="step attributes">
   <ParamField path="type" type="string" required>
@@ -647,11 +651,12 @@ A `branch` step splits the workflow into multiple paths based on `filterCriteria
       "appliesTo": "all_branch_steps",
       "filterCriteria": {
         "logicalOperator": "AND",
-        "conditions": [
+        "groups": [
           {
             "field": "customFields.plan",
             "operator": "equals",
             "value": "pro",
+            "id": "filter_2",
             "fieldType": "string"
           }
         ]
@@ -666,10 +671,11 @@ A `branch` step splits the workflow into multiple paths based on `filterCriteria
       "appliesTo": "branch_entry",
       "filterCriteria": {
         "logicalOperator": "AND",
-        "conditions": [
+        "groups": [
           {
             "field": "customFields.plan",
             "operator": "is_not_empty",
+            "id": "filter_3",
             "fieldType": "string"
           }
         ]
