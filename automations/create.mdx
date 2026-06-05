@@ -4,9 +4,9 @@ description: 'Learn how to create a contact-triggered email automation in AutoSe
 sidebarTitle: 'Creating Automations'
 icon: '/icons/create-automation.svg'
 ---
+
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
-
 
 ## Prerequisites
 
@@ -39,7 +39,7 @@ Before creating an automation, make sure you have the following ready based on y
       <img src='/images/email-automations/trigger-contact-added.png' alt="Trigger: New contact is added to a list or segment" />
     </Frame>
 
-    <Note>Only new contacts added after activation will enter this automation. Existing contacts won't receive these emails.</Note>
+    <Warning>Only contacts added via API or manually after activation will enter this automation. Existing contacts and CSV imports are excluded.</Warning>
 
     ### Contact property matches with
 
@@ -56,7 +56,7 @@ Before creating an automation, make sure you have the following ready based on y
       <img src='/images/email-automations/trigger-property-matches.png' alt="Trigger: Contact property matches with a condition" />
     </Frame>
 
-    <Note>Only new contacts added after activation and matching the condition(s) will enter this automation. Existing contacts won't receive these emails.</Note>
+    <Warning>Only contacts added via API or manually after activation and matching the condition(s) will enter this automation. Existing contacts and CSV imports are excluded.</Warning>
 
     ### Contact property changes from → to
 
@@ -150,7 +150,6 @@ Before creating an automation, make sure you have the following ready based on y
 
 </Steps>
 
-
 ## Troubleshooting
 
 <AccordionGroup>
@@ -179,15 +178,27 @@ Before creating an automation, make sure you have the following ready based on y
 </Accordion>
 
 <Accordion title="Event-triggered automation didn't fire">
-    <ul>
-      <li>Confirm the automation was in **Active** state before the event was sent. Events received while the automation is in Draft or Paused are not replayed when you activate it later.</li>
-      <li>Check that the `eventName` in your API call matches the event definition exactly (names are case-sensitive).</li>
-      <li>Verify the event identifies a contact that exists in your project. Events sent with an `email` or `contactId` that doesn't resolve to a contact are rejected.</li>
-      <li>Make sure the event still exists. If it was deleted, the automation's trigger no longer resolves and won't fire.</li>
-    </ul>
-  </Accordion>
+	<ul>
+		<li>
+			Confirm the automation was in **Active** state before the event was sent. Events received
+			while the automation is in Draft or Paused are not replayed when you activate it later.
+		</li>
+		<li>
+			Check that the `eventName` in your API call matches the event definition exactly (names are
+			case-sensitive).
+		</li>
+		<li>
+			Verify the event identifies a contact that exists in your project. Events sent with an `email`
+			or `contactId` that doesn't resolve to a contact are rejected.
+		</li>
+		<li>
+			Make sure the event still exists. If it was deleted, the automation's trigger no longer
+			resolves and won't fire.
+		</li>
+	</ul>
+</Accordion>
 
-  <Accordion title='Emails are sending at unexpected times'>
+<Accordion title='Emails are sending at unexpected times'>
 	<ul>
 		<li>Review your **Wait For** settings between each email.</li>
 		<li>
