@@ -162,7 +162,7 @@ puts JSON.parse(response.body)
       "page": 1,
       "limit": 20,
       "total": 2,
-      "totalPages": 1
+      "pages": 1
     }
   }
 }
@@ -220,7 +220,7 @@ puts JSON.parse(response.body)
       Array of campaign objects.
 
       <Expandable title="campaign">
-        <ResponseField name="campaignId" type="string">
+        <ResponseField name="id" type="string">
           Unique identifier of the campaign.
         </ResponseField>
         <ResponseField name="name" type="string">
@@ -266,7 +266,7 @@ puts JSON.parse(response.body)
         <ResponseField name="total" type="integer">
           Total number of matching campaigns.
         </ResponseField>
-        <ResponseField name="totalPages" type="integer">
+        <ResponseField name="pages" type="integer">
           Total number of pages.
         </ResponseField>
       </Expandable>

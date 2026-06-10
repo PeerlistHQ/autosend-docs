@@ -171,6 +171,7 @@ puts response.body
     "id": "6960953e729f65f154369408",
     "fieldName": "company",
     "fieldType": "string",
+    "projectId": "229f1f77bcf86cd9273048038",
     "createdAt": "2026-01-09T05:42:22.171Z",
     "updatedAt": "2026-01-09T05:42:22.171Z"
   }
@@ -220,3 +221,42 @@ puts response.body
 <ParamField body="description" type="string">
   A human-readable description of what the field represents.
 </ParamField>
+
+### Response
+
+<span className='text-sm'>Custom field created successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates whether the request was successful.
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Confirmation message.
+
+  Example: `"Custom field created successfully"`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The created custom field.
+
+  <Expandable title="data">
+    <ResponseField name="data.id" type="string">
+      Unique identifier of the custom field.
+    </ResponseField>
+    <ResponseField name="data.fieldName" type="string">
+      The programmatic name of the custom field.
+    </ResponseField>
+    <ResponseField name="data.fieldType" type="string">
+      The data type: `string`, `number`, `boolean`, or `date`.
+    </ResponseField>
+    <ResponseField name="data.projectId" type="string">
+      The project this custom field belongs to.
+    </ResponseField>
+    <ResponseField name="data.createdAt" type="string">
+      ISO 8601 timestamp when the field was created.
+    </ResponseField>
+    <ResponseField name="data.updatedAt" type="string">
+      ISO 8601 timestamp when the field was last updated.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
