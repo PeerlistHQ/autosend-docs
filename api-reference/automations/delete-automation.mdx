@@ -137,6 +137,7 @@ puts response.body
 ```json Response
 {
   "success": true,
+  "data": null,
   "message": "Workflow automation deleted successfully"
 }
 ```
@@ -161,6 +162,10 @@ puts response.body
 
 <ResponseField name="success" type="boolean">
   Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="null">
+  Always `null` for this endpoint.
 </ResponseField>
 
 <ResponseField name="message" type="string">

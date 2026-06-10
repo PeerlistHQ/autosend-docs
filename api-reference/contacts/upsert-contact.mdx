@@ -249,6 +249,7 @@ puts response.body
       "plan": "premium"
     },
     "listIds": ["507f1f77bcf86cd799439011"],
+    "segmentIds": [],
     "updatedAt": "2024-01-15T10:30:00.000Z",
     "createdAt": "2024-01-15T10:30:00.000Z",
     "projectId": "229f1f77bcf86cd9273048038"
@@ -401,6 +402,11 @@ Contact information to create or update
     Contact List IDs
     
     Example: `["507f1f77bcf86cd799439011"]`
+  </ResponseField>
+  <ResponseField name="data.segmentIds" type="array">
+    Segment IDs the contact belongs to (computed automatically based on contact field values)
+
+    Example: `[]`
   </ResponseField>
   </Expandable>
 </ResponseField>

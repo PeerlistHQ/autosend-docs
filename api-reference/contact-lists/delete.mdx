@@ -135,7 +135,15 @@ puts response.body
 ```json Response
 {
   "success": true,
-  "message": "Contact list successfully deleted."
+  "data": {
+    "id": "60d5ec49f1b2c72d9c8b4567",
+    "name": "Newsletter Subscribers",
+    "type": "static",
+    "contactCount": 1250,
+    "createdAt": "2026-01-10T08:00:00.000Z",
+    "updatedAt": "2026-04-15T12:30:00.000Z"
+  },
+  "message": "Contact list deleted successfully"
 }
 ```
 
@@ -169,8 +177,33 @@ puts response.body
   Example: `true`
 </ResponseField>
 
+<ResponseField name="data" type="object">
+  The deleted contact list object.
+
+  <Expandable title="data">
+    <ResponseField name="data.id" type="string">
+      Unique identifier of the deleted contact list.
+    </ResponseField>
+    <ResponseField name="data.name" type="string">
+      Display name of the contact list.
+    </ResponseField>
+    <ResponseField name="data.type" type="string">
+      Type of the contact list (e.g., `static`).
+    </ResponseField>
+    <ResponseField name="data.contactCount" type="integer">
+      Number of contacts that were in the list.
+    </ResponseField>
+    <ResponseField name="data.createdAt" type="string">
+      ISO 8601 timestamp when the list was created.
+    </ResponseField>
+    <ResponseField name="data.updatedAt" type="string">
+      ISO 8601 timestamp when the list was last updated.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
 <ResponseField name="message" type="string">
   Confirmation message
 
-  Example: `"Contact list successfully deleted."`
+  Example: `"Contact list deleted successfully"`
 </ResponseField>

@@ -154,13 +154,19 @@ puts response.body
     "status": "active",
     "entryCriteria": { "type": "contact_created" },
     "exitCriteria": { "type": "workflow_complete" },
+    "trackingOpen": true,
+    "trackingClick": true,
+    "settings": {
+      "maxExecutionDays": 60,
+      "allowReentry": false,
+      "timezone": "UTC",
+      "priority": 1
+    },
     "steps": [
       { "stepId": "step_aa11", "type": "wait", "delay": { "value": 0, "unit": "minutes" } },
       { "stepId": "step_bb22", "type": "email", "email": { "templateId": "60d5ec49f1b2c72d9c8b1234" } }
     ],
     "tags": ["onboarding"],
-    "trackingOpen": true,
-    "trackingClick": true,
     "analytics": {
       "totalEntered": 1250,
       "totalCompleted": 980,
@@ -223,17 +229,35 @@ puts response.body
     <ResponseField name="data.exitCriteria" type="object">
       Conditions that cause contacts to exit the workflow early.
     </ResponseField>
-    <ResponseField name="data.steps" type="object[]">
-      Full ordered step graph, with email steps enriched with template metadata.
-    </ResponseField>
-    <ResponseField name="data.tags" type="string[]">
-      Tags for filtering and organization.
-    </ResponseField>
     <ResponseField name="data.trackingOpen" type="boolean">
       Whether open tracking is enabled.
     </ResponseField>
     <ResponseField name="data.trackingClick" type="boolean">
       Whether click tracking is enabled.
+    </ResponseField>
+    <ResponseField name="data.settings" type="object">
+      Automation configuration settings.
+
+      <Expandable title="settings">
+        <ResponseField name="data.settings.maxExecutionDays" type="integer">
+          Maximum number of days a contact can remain active in the workflow.
+        </ResponseField>
+        <ResponseField name="data.settings.allowReentry" type="boolean">
+          Whether contacts can re-enter the workflow after completing it.
+        </ResponseField>
+        <ResponseField name="data.settings.timezone" type="string">
+          Timezone used for scheduling steps (e.g., `UTC`).
+        </ResponseField>
+        <ResponseField name="data.settings.priority" type="integer">
+          Execution priority when multiple automations are triggered simultaneously.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="data.steps" type="object[]">
+      Full ordered step graph, with email steps enriched with template metadata.
+    </ResponseField>
+    <ResponseField name="data.tags" type="string[]">
+      Tags for filtering and organization.
     </ResponseField>
     <ResponseField name="data.analytics" type="object">
       Live engagement metrics (`totalEntered`, `totalCompleted`, `totalExited`, `totalActive`).

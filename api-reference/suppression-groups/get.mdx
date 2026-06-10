@@ -111,11 +111,15 @@ puts response.body
 {
   "success": true,
   "data": {
-    "id": "AB12C3",
+    "id": "60d5ec49f1b2c72d9c8b4567",
+    "groupId": "AB12C3",
     "name": "Marketing Unsubscribes",
     "description": "Users who opted out of marketing",
     "isActive": true,
-    "isGlobal": false
+    "isGlobal": false,
+    "suppressionCount": 42,
+    "createdAt": "2026-01-10T08:00:00.000Z",
+    "updatedAt": "2026-04-15T12:30:00.000Z"
   }
 }
 ```
@@ -147,6 +151,9 @@ puts response.body
     <ResponseField name="data.id" type="string">
       Unique identifier for the suppression group.
     </ResponseField>
+    <ResponseField name="data.groupId" type="string">
+      Short identifier used in path parameters (e.g., `AB12C3`).
+    </ResponseField>
     <ResponseField name="data.name" type="string">
       Display name of the suppression group.
     </ResponseField>
@@ -158,6 +165,15 @@ puts response.body
     </ResponseField>
     <ResponseField name="data.isGlobal" type="boolean">
       Whether this is a global suppression group.
+    </ResponseField>
+    <ResponseField name="data.suppressionCount" type="integer">
+      Number of email addresses suppressed in this group.
+    </ResponseField>
+    <ResponseField name="data.createdAt" type="string">
+      ISO 8601 timestamp when the group was created.
+    </ResponseField>
+    <ResponseField name="data.updatedAt" type="string">
+      ISO 8601 timestamp when the group was last updated.
     </ResponseField>
   </Expandable>
 </ResponseField>
