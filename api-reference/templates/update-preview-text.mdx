@@ -240,10 +240,26 @@ puts response.body
     Example: `"Welcome Email"`
   </ResponseField>
 
+  <ResponseField name="data.description" type="string">
+    Template description.
+  </ResponseField>
+
+  <ResponseField name="data.subject" type="string">
+    Email subject line.
+  </ResponseField>
+
   <ResponseField name="data.previewText" type="string">
     Updated preview text
 
     Example: `"Don't miss out on our latest updates"`
+  </ResponseField>
+
+  <ResponseField name="data.templateType" type="string">
+    Template type: `transactional` , `marketing` or `automations`.
+  </ResponseField>
+
+  <ResponseField name="data.builderType" type="string">
+    How the template was built: `code` or `visual`.
   </ResponseField>
 
   <ResponseField name="data.createdAt" type="string">

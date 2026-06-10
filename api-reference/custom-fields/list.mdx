@@ -162,3 +162,43 @@ puts response.body
 <ParamField query="includeReservedFields" type="boolean">
   Whether to include built-in reserved fields (email, firstName, lastName, createdAt, userId) in the response. Defaults to `true`.
 </ParamField>
+
+### Response
+
+<span className='text-sm'>Custom fields retrieved successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates whether the request was successful.
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Confirmation message.
+
+  Example: `"Custom fields retrieved successfully"`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="data">
+    <ResponseField name="data.customFields" type="array">
+      Array of custom field objects.
+
+      <Expandable title="customField">
+        <ResponseField name="id" type="string">
+          Unique identifier of the custom field.
+        </ResponseField>
+        <ResponseField name="fieldName" type="string">
+          The programmatic name of the custom field.
+        </ResponseField>
+        <ResponseField name="fieldType" type="string">
+          The data type: `string`, `number`, `boolean`, or `date`.
+        </ResponseField>
+        <ResponseField name="createdAt" type="string">
+          ISO 8601 timestamp when the field was created.
+        </ResponseField>
+        <ResponseField name="updatedAt" type="string">
+          ISO 8601 timestamp when the field was last updated.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
