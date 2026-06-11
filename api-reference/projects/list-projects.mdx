@@ -156,10 +156,11 @@ puts response.body
           {
             "id": "60d5ec49f1b2c72d9c8b5678",
             "domainName": "example.com",
-            "verificationStatus": "VERIFIED"
+            "verificationStatus": "VERIFIED",
+             "regionKey": "us-east-1",
           }
         ],
-        "regionKey": "us-east-1",
+       
         "trackingOpen": true,
         "trackingClick": true
       },
@@ -168,7 +169,6 @@ puts response.body
         "name": "Staging App",
         "domain": null,
         "domains": [],
-        "regionKey": "us-east-1",
         "trackingOpen": false,
         "trackingClick": false
       }
@@ -236,12 +236,13 @@ puts response.body
       <ResponseField name="verificationStatus" type="string">
         Domain verification status: `PENDING_CONFIGURATION`, `PENDING`, or `VERIFIED`
       </ResponseField>
+      <ResponseField name="regionKey" type="string">
+    Account region for the project. One of `us-east-1`, `us-east-2`, `ap-south-1`, or `eu-central-1`
+  </ResponseField>
       </Expandable>
     </ResponseField>
 
-      <ResponseField name="data.regionKey" type="string | null">
-    Account region for the project. One of `us-east-1`, `us-east-2`, `ap-south-1`, or `eu-central-1`
-  </ResponseField>
+  
 
     <ResponseField name="trackingOpen" type="boolean">
       Whether open tracking is enabled

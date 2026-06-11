@@ -137,14 +137,7 @@ puts response.body
 ```json Response
 {
   "success": true,
-  "data": {
-    "id": "60d5ec49f1b2c72d9c8b1234",
-    "eventName": "order_completed",
-    "description": "Fired when a customer completes a checkout",
-    "properties": [],
-    "createdAt": "2026-05-08T10:00:00.000Z",
-    "updatedAt": "2026-05-08T12:00:00.000Z"
-  }
+  "message": "Event deleted successfully"
 }
 ```
 
@@ -172,29 +165,10 @@ puts response.body
   Example: `true`
 </ResponseField>
 
-<ResponseField name="data" type="object">
-  The deleted event definition.
+<ResponseField name="message" type="string">
+  Confirmation message.
 
-  <Expandable title="child attributes">
-    <ResponseField name="data.id" type="string">
-      Unique event definition identifier.
-    </ResponseField>
-    <ResponseField name="data.eventName" type="string">
-      Event name.
-    </ResponseField>
-    <ResponseField name="data.description" type="string | null">
-      Human-readable description, or `null`.
-    </ResponseField>
-    <ResponseField name="data.properties" type="object[]">
-      Property schema at the time of deletion.
-    </ResponseField>
-    <ResponseField name="data.createdAt" type="string">
-      ISO 8601 creation timestamp.
-    </ResponseField>
-    <ResponseField name="data.updatedAt" type="string">
-      ISO 8601 last-updated timestamp.
-    </ResponseField>
-  </Expandable>
+  Example: `"Event deleted successfully"`
 </ResponseField>
 
 #### Error Responses

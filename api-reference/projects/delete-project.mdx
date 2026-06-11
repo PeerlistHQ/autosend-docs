@@ -220,3 +220,18 @@ puts response.body
   }
   ```
 </ResponseField>
+
+<ResponseField name="400 - Last project" type="object">
+  Returned when attempting to delete the only remaining project in the organization.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Cannot delete the last project in the organization. At least one project must exist.",
+      "code": "LAST_PROJECT_CANNOT_BE_DELETED",
+      "status": 400
+    }
+  }
+  ```
+</ResponseField>

@@ -111,9 +111,7 @@ puts response.body
 ```json Response
 {
   "success": true,
-  "data": {
-    "success": true
-  }
+  "message": "Suppression group deleted successfully"
 }
 ```
 
@@ -137,12 +135,40 @@ puts response.body
   Example: `true`
 </ResponseField>
 
-<ResponseField name="data" type="object">
-  Deletion confirmation payload.
+<ResponseField name="message" type="string">
+  Confirmation message.
 
-  <Expandable title="data">
-    <ResponseField name="data.success" type="boolean">
-      Confirms the suppression group was successfully deleted. Always `true`.
-    </ResponseField>
-  </Expandable>
+  Example: `"Suppression group deleted successfully"`
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="400 - Cannot delete global group" type="object">
+  Returned when attempting to delete the global suppression group.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Cannot delete global suppression group",
+      "code": "CANNOT_DELETE_GLOBAL_GROUP",
+      "status": 400
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="404 - Suppression group not found" type="object">
+  Returned when no suppression group with the given ID exists on the project.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Suppression group not found",
+      "code": "GROUP_NOT_FOUND",
+      "status": 404
+    }
+  }
+  ```
 </ResponseField>

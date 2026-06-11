@@ -135,14 +135,6 @@ puts response.body
 ```json Response
 {
   "success": true,
-  "data": {
-    "id": "60d5ec49f1b2c72d9c8b4567",
-    "name": "Newsletter Subscribers",
-    "type": "static",
-    "contactCount": 1250,
-    "createdAt": "2026-01-10T08:00:00.000Z",
-    "updatedAt": "2026-04-15T12:30:00.000Z"
-  },
   "message": "Contact list deleted successfully"
 }
 ```
@@ -177,33 +169,40 @@ puts response.body
   Example: `true`
 </ResponseField>
 
-<ResponseField name="data" type="object">
-  The deleted contact list object.
-
-  <Expandable title="data">
-    <ResponseField name="data.id" type="string">
-      Unique identifier of the deleted contact list.
-    </ResponseField>
-    <ResponseField name="data.name" type="string">
-      Display name of the contact list.
-    </ResponseField>
-    <ResponseField name="data.type" type="string">
-      Type of the contact list (e.g., `static`).
-    </ResponseField>
-    <ResponseField name="data.contactCount" type="integer">
-      Number of contacts that were in the list.
-    </ResponseField>
-    <ResponseField name="data.createdAt" type="string">
-      ISO 8601 timestamp when the list was created.
-    </ResponseField>
-    <ResponseField name="data.updatedAt" type="string">
-      ISO 8601 timestamp when the list was last updated.
-    </ResponseField>
-  </Expandable>
-</ResponseField>
-
 <ResponseField name="message" type="string">
   Confirmation message
 
   Example: `"Contact list deleted successfully"`
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="400 - Contact list in use" type="object">
+  Returned when the contact list is used in active workflow automations.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Cannot delete contact list as it is used in active resources.",
+      "code": "CANNOT_DELETE_CONTACT_LIST_IN_USE",
+      "status": 400
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="404 - Contact list not found" type="object">
+  Returned when no contact list with the given ID exists on the project.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Contact list not found",
+      "code": "CONTACT_LIST_NOT_FOUND",
+      "status": 404
+    }
+  }
+  ```
 </ResponseField>

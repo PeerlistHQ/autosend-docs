@@ -169,12 +169,16 @@ puts response.body
 #### Error Responses
 
 <ResponseField name="400 - Sender in use" type="object">
-  Returned when the sender is used by active campaigns or workflow automations and cannot be deleted.
+  Returned when the sender is used in templates and cannot be deleted.
 
   ```json
   {
     "success": false,
-    "error": "This sender cannot be deleted as it is currently in use by active campaigns or automations"
+    "error": {
+      "message": "Cannot delete authenticated sender as it is used in templates",
+      "code": "AUTHENTICATED_SENDER_IN_USE",
+      "status": 400
+    }
   }
   ```
 </ResponseField>
@@ -185,7 +189,11 @@ puts response.body
   ```json
   {
     "success": false,
-    "error": "Authenticated sender not found"
+    "error": {
+      "message": "Authenticated sender not found",
+      "code": "AUTHENTICATED_SENDER_NOT_FOUND",
+      "status": 404
+    }
   }
   ```
 </ResponseField>

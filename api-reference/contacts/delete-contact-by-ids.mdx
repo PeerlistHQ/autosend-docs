@@ -130,7 +130,8 @@ puts response.body
 
 ```json Response
 {
-  "success": true
+  "success": true,
+  "message": "Contact deleted successfully"
 }
 ```
 
@@ -158,3 +159,25 @@ puts response.body
   Example: `true`
 </ResponseField>
 
+<ResponseField name="message" type="string">
+  Confirmation message.
+
+  Example: `"Contact deleted successfully"`
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="500 - Deletion failed" type="object">
+  Returned when a database error occurs during deletion.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Contact deletion failed. Please try again.",
+      "code": "CONTACT_DELETION_FAILED",
+      "status": 500
+    }
+  }
+  ```
+</ResponseField>

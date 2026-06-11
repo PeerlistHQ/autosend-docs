@@ -165,3 +165,20 @@ puts response.body
 
   Example: `"Template successfully deleted."`
 </ResponseField>
+
+#### Error Responses
+
+<ResponseField name="400 - Template deletion failed" type="object">
+  Returned when the template could not be found or the deletion failed.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Template delete failed",
+      "code": "DELETE_TEMPLATE_FAILED",
+      "status": 400
+    }
+  }
+  ```
+</ResponseField>
