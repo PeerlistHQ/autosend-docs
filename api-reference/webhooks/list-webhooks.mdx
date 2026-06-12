@@ -1,0 +1,238 @@
+---
+title: 'List Webhooks'
+sidebarTitle: 'List Webhooks'
+openapi: 'GET /webhooks'
+---
+
+<Note>
+  This endpoint accepts a **project API key** (`AS_` prefix). Secrets are never included in list responses.
+</Note>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url 'https://api.autosend.com/v1/webhooks?isActive=true&page=1&limit=50' \
+  --header 'Authorization: Bearer AS_your-api-key'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/webhooks"
+
+headers = {
+    "Authorization": "Bearer AS_your-api-key"
+}
+
+params = {
+    "isActive": "true",
+    "page": 1,
+    "limit": 50
+}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/webhooks?isActive=true&page=1&limit=50', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer AS_your-api-key'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/webhooks?isActive=true&page=1&limit=50';
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer AS_your-api-key'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/webhooks?isActive=true&page=1&limit=50"
+
+    req, _ := http.NewRequest("GET", url, nil)
+    req.Header.Set("Authorization", "Bearer AS_your-api-key")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class ListWebhooks {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/webhooks?isActive=true&page=1&limit=50");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Authorization", "Bearer AS_your-api-key");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+            System.out.println(content.toString());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/webhooks?isActive=true&page=1&limit=50')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Get.new(uri.request_uri)
+request['Authorization'] = 'Bearer AS_your-api-key'
+
+response = http.request(request)
+puts response.body
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Response
+{
+  "success": true,
+  "data": {
+    "webhooks": [
+      {
+        "id": "60d5ec49f1b2c72d9c8b1234",
+        "organizationId": "60d5ec49f1b2c72d9c8b0000",
+        "projectId": "60d5ec49f1b2c72d9c8b1111",
+        "url": "https://example.com/webhooks/autosend",
+        "secret": "***hidden***",
+        "events": ["email.delivered", "email.bounced"],
+        "isActive": true,
+        "createdAt": "2026-06-01T09:00:00.000Z",
+        "updatedAt": "2026-06-12T10:15:00.000Z"
+      }
+    ],
+    "total": 1,
+    "page": 1,
+    "limit": 50,
+    "totalPages": 1
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Project API key header of the form Bearer `AS_<key>`.
+</ParamField>
+
+### Query Parameters
+
+<ParamField query="isActive" type="boolean">
+  Filter webhooks by active state. Omit to return both active and inactive webhooks.
+
+  Allowed values: `true`, `false`
+</ParamField>
+
+<ParamField query="page" type="integer">
+  Page number for pagination.
+
+  Default: `1`
+
+  Example: `1`
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Number of webhooks to return per page.
+
+  Default: `50`
+
+  Range: `1`–`100`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Webhooks retrieved successfully (200)</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The paginated list of webhooks
+
+  <Expandable title="child attributes">
+  <ResponseField name="data.webhooks" type="object[]">
+    Array of webhook objects. Secrets are masked as `***hidden***` in list responses.
+  </ResponseField>
+
+  <ResponseField name="data.total" type="integer">
+    Total number of webhooks matching the query
+  </ResponseField>
+
+  <ResponseField name="data.page" type="integer">
+    Current page number
+  </ResponseField>
+
+  <ResponseField name="data.limit" type="integer">
+    Page size
+  </ResponseField>
+
+  <ResponseField name="data.totalPages" type="integer">
+    Total number of pages
+  </ResponseField>
+  </Expandable>
+</ResponseField>

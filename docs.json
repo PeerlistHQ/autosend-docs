@@ -254,6 +254,19 @@
 							"api-reference/projects/create-project",
 							"api-reference/projects/delete-project"
 						]
+					},
+					{
+						"group": "Webhooks",
+						"pages": [
+							"api-reference/webhooks/list-webhooks",
+							"api-reference/webhooks/get-webhook",
+							"api-reference/webhooks/create-webhook",
+							"api-reference/webhooks/update-webhook",
+							"api-reference/webhooks/delete-webhook",
+							"api-reference/webhooks/list-delivery-logs",
+							"api-reference/webhooks/reveal-webhook-secret",
+							"api-reference/webhooks/resend-webhook"
+						]
 					}
 				]
 			},

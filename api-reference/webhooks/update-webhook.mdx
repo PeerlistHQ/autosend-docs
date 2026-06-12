@@ -1,0 +1,297 @@
+---
+title: 'Update Webhook'
+sidebarTitle: 'Update Webhook'
+openapi: 'PUT /webhooks/{id}'
+---
+
+<Note>
+  This endpoint accepts a **project API key** (`AS_` prefix). The signing secret is immutable — create a new webhook to rotate it. Supplying a `secret` field returns a `400` error.
+</Note>
+
+<RequestExample>
+
+```bash cURL
+curl --request PUT \
+  --url https://api.autosend.com/v1/webhooks/60d5ec49f1b2c72d9c8b1234 \
+  --header 'Authorization: Bearer AS_your-api-key' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "events": ["email.delivered", "email.opened", "email.clicked"],
+  "isActive": false
+}'
+```
+
+```python Python
+import requests
+
+webhook_id = "60d5ec49f1b2c72d9c8b1234"
+url = f"https://api.autosend.com/v1/webhooks/{webhook_id}"
+
+headers = {
+    "Authorization": "Bearer AS_your-api-key",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "events": ["email.delivered", "email.opened", "email.clicked"],
+    "isActive": False
+}
+
+response = requests.put(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+const webhookId = '60d5ec49f1b2c72d9c8b1234';
+
+fetch(`https://api.autosend.com/v1/webhooks/${webhookId}`, {
+  method: 'PUT',
+  headers: {
+    'Authorization': 'Bearer AS_your-api-key',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    events: ['email.delivered', 'email.opened', 'email.clicked'],
+    isActive: false
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$webhookId = '60d5ec49f1b2c72d9c8b1234';
+$url = "https://api.autosend.com/v1/webhooks/{$webhookId}";
+
+$data = [
+    'events' => ['email.delivered', 'email.opened', 'email.clicked'],
+    'isActive' => false
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer AS_your-api-key',
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    webhookID := "60d5ec49f1b2c72d9c8b1234"
+    url := "https://api.autosend.com/v1/webhooks/" + webhookID
+
+    payload := map[string]interface{}{
+        "events":   []string{"email.delivered", "email.opened", "email.clicked"},
+        "isActive": false,
+    }
+
+    jsonData, _ := json.Marshal(payload)
+
+    req, _ := http.NewRequest("PUT", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer AS_your-api-key")
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class UpdateWebhook {
+    public static void main(String[] args) {
+        try {
+            String webhookId = "60d5ec49f1b2c72d9c8b1234";
+            URL url = new URL("https://api.autosend.com/v1/webhooks/" + webhookId);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("PUT");
+            con.setRequestProperty("Authorization", "Bearer AS_your-api-key");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+
+            String jsonInputString = "{\n" +
+                "  \"events\": [\"email.delivered\", \"email.opened\", \"email.clicked\"],\n" +
+                "  \"isActive\": false\n" +
+                "}";
+
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+require 'uri'
+
+webhook_id = '60d5ec49f1b2c72d9c8b1234'
+uri = URI("https://api.autosend.com/v1/webhooks/#{webhook_id}")
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Put.new(uri.request_uri)
+request['Authorization'] = 'Bearer AS_your-api-key'
+request['Content-Type'] = 'application/json'
+
+request.body = {
+  events: ['email.delivered', 'email.opened', 'email.clicked'],
+  isActive: false
+}.to_json
+
+response = http.request(request)
+puts response.body
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Response
+{
+  "success": true,
+  "message": "Webhook updated successfully",
+  "data": {
+    "webhook": {
+      "id": "60d5ec49f1b2c72d9c8b1234",
+      "organizationId": "60d5ec49f1b2c72d9c8b0000",
+      "projectId": "60d5ec49f1b2c72d9c8b1111",
+      "url": "https://example.com/webhooks/autosend",
+      "secret": "***hidden***",
+      "events": ["email.delivered", "email.opened", "email.clicked"],
+      "isActive": false,
+      "createdAt": "2026-06-01T09:00:00.000Z",
+      "updatedAt": "2026-06-12T11:00:00.000Z"
+    }
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Project API key header of the form Bearer `AS_<key>`.
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the webhook.
+
+  Example: `"60d5ec49f1b2c72d9c8b1234"`
+</ParamField>
+
+### Body
+
+All fields are optional — only the fields you supply are updated.
+
+<ParamField body="url" type="string">
+  A new destination URL (must include the `http`/`https` protocol).
+
+  Example: `"https://example.com/webhooks/autosend"`
+</ParamField>
+
+<ParamField body="events" type="string[]">
+  Replaces the subscribed event list. Must contain at least one valid event.
+
+  Example: `["email.delivered", "email.opened"]`
+</ParamField>
+
+<ParamField body="isActive" type="boolean">
+  Enable or disable delivery without deleting the webhook.
+
+  Example: `false`
+</ParamField>
+
+<ParamField body="metadata" type="object">
+  Replaces the stored metadata object.
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Webhook updated successfully (200)</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Wrapper containing the updated webhook object (secret masked)
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="400 - Secret update not allowed" type="object">
+  Returned when a `secret` field is included in the request body.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Secret cannot be updated. Create a new webhook instead.",
+      "code": "VALIDATION_ERROR",
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="404 - Webhook not found" type="object">
+  Returned when no webhook with the given ID exists in the project.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Webhook not found",
+      "code": "WEBHOOK_NOT_FOUND",
+    }
+  }
+  ```
+</ResponseField>
