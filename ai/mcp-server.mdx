@@ -1,6 +1,6 @@
 ---
 title: 'AutoSend MCP Server'
-description: "Connect AutoSend's MCP server to AI tools for managing campaigns, templates, contacts, senders, and more."
+description: "Manage AutoSend campaigns, automations, templates, contacts, senders, and analytics from any MCP-compatible AI assistant."
 sidebarTitle: 'Introduction'
 icon: '/icons/introduction.svg'
 ---
@@ -10,7 +10,7 @@ import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
 
 <Frame>![Autosend MCP](/images/ai-tools/autosend-mcp.jpg)</Frame>
 
-The AutoSend MCP (Model Context Protocol) server lets you manage email campaigns, templates, contacts, and senders directly from AI assistants like Claude, Cursor, Codex, Antigravity, and other MCP-compatible clients.
+The AutoSend MCP (Model Context Protocol) server lets you manage email campaigns, automations, templates, contacts, senders, and analytics directly from AI assistants like Claude, Cursor, Codex, Antigravity, and other MCP-compatible clients.
 
 It's a remote MCP server with OAuth that gives AI tools secure access to your AutoSend project, available at:
 
@@ -20,10 +20,13 @@ https://mcp.autosend.com/
 
 Instead of switching between your AI assistant and the AutoSend dashboard, you can use natural language to:
 
-- Create and manage email campaigns
+- Create, schedule, and send email campaigns
 - Design and update email templates
-- Browse your contact lists and segments
+- Build and activate multi-step email automations
+- Browse your contact lists, segments, custom fields, and event definitions
 - Look up verified senders and suppression groups
+- Pull campaign and email activity analytics
+- Switch between AutoSend projects on the fly
 
 ## Prerequisites
 
@@ -80,13 +83,28 @@ When you first connect, you'll be redirected to AutoSend to log in and authorize
 
 ## Available Tools
 
-AutoSend MCP exposes 17 tools across 5 categories. Your AI assistant automatically uses the right tools based on your requests.
+AutoSend MCP exposes 34 tools across 10 categories. Your AI assistant automatically uses the right tools based on your requests.
+
+### Projects
+
+| Tool                  | Description                                                 |
+| --------------------- | ----------------------------------------------------------- |
+| `get_current_project` | Get the active project's name, domain, and ID               |
+| `list_projects`       | List all projects you have access to and see the active one |
+| `switch_project`      | Switch the active project for the current MCP session       |
 
 ### Lists & Segments
 
-| Tool                     | Description                                                   |
-| ------------------------ | ------------------------------------------------------------- |
-| `get_lists_and_segments` | Fetch your contact lists and segments for targeting campaigns |
+| Tool                     | Description                                         |
+| ------------------------ | --------------------------------------------------- |
+| `get_lists_and_segments` | Fetch your contact lists and segments for targeting |
+| `create_contact_list`    | Create a new contact list                           |
+
+### Custom Fields
+
+| Tool                 | Description                                           |
+| -------------------- | ----------------------------------------------------- |
+| `list_custom_fields` | List custom contact fields with their names and types |
 
 ### Templates
 
@@ -101,32 +119,74 @@ AutoSend MCP exposes 17 tools across 5 categories. Your AI assistant automatical
 
 ### Senders
 
-| Tool           | Description                               |
-| -------------- | ----------------------------------------- |
-| `list_senders` | List all verified senders in your account |
-| `get_sender`   | Get details of a specific verified sender |
+| Tool            | Description                               |
+| --------------- | ----------------------------------------- |
+| `list_senders`  | List all verified senders in your account |
+| `get_sender`    | Get details of a specific verified sender |
+| `create_sender` | Add a new verified sender                 |
 
 ### Suppression Groups
 
-| Tool                      | Description                                 |
-| ------------------------- | ------------------------------------------- |
-| `list_suppression_groups` | List suppression (unsubscribe) groups       |
-| `get_suppression_group`   | Get details of a specific suppression group |
+| Tool                       | Description                                 |
+| -------------------------- | ------------------------------------------- |
+| `list_suppression_groups`  | List suppression (unsubscribe) groups       |
+| `get_suppression_group`    | Get details of a specific suppression group |
+| `create_suppression_group` | Create a new suppression group              |
 
 ### Campaigns
 
-| Tool                 | Description                                                   |
-| -------------------- | ------------------------------------------------------------- |
-| `list_campaigns`     | List campaigns with optional filters by status, name, or date |
-| `get_campaign`       | Get details of a specific campaign including metrics          |
-| `create_campaign`    | Create a draft campaign with HTML content in one call         |
-| `update_campaign`    | Update an existing draft campaign's settings or content       |
-| `delete_campaign`    | Permanently delete a campaign                                 |
-| `duplicate_campaign` | Duplicate an existing campaign as a new draft                 |
+| Tool                 | Description                                                             |
+| -------------------- | ----------------------------------------------------------------------- |
+| `list_campaigns`     | List campaigns with optional filters by status, name, or date           |
+| `get_campaign`       | Get details of a specific campaign including metrics                    |
+| `create_campaign`    | Create a draft campaign with HTML content in one call                   |
+| `update_campaign`    | Update an existing draft campaign's settings or content                 |
+| `delete_campaign`    | Permanently delete a campaign                                           |
+| `duplicate_campaign` | Duplicate an existing campaign as a new draft                           |
+| `send_campaign`      | Send a draft campaign now or schedule it for later (confirmation gate)  |
+| `send_test_email`    | Send a test email to preview a template or campaign (confirmation gate) |
+
+### Events
+
+| Tool                     | Description                                              |
+| ------------------------ | -------------------------------------------------------- |
+| `list_event_definitions` | List custom event types defined for the project          |
+| `get_event_definition`   | Get full details of an event, including known properties |
+
+### Automations
+
+| Tool                  | Description                                                                     |
+| --------------------- | ------------------------------------------------------------------------------- |
+| `list_automations`    | List automations with optional filters for status, tags, and pagination         |
+| `get_automation`      | Get full details of an automation, including entry criteria and steps           |
+| `create_automation`   | Create a draft automation (workflow) with triggers, waits, emails, and branches |
+| `activate_automation` | Activate a draft automation so it starts enrolling contacts (confirmation gate) |
+
+### Analytics
+
+| Tool                           | Description                                                                         |
+| ------------------------------ | ----------------------------------------------------------------------------------- |
+| `get_campaign_analytics`       | Get delivery analytics for a campaign (sent, opened, clicked, bounced, unsubscribed)|
+| `get_email_activity_analytics` | Get aggregated email activity, optionally filtered by date range, template, or campaign |
+
+## Building Automations
+
+Email automations are multi-step workflows that send sequences of emails triggered by contact actions. You build them through MCP in two stages:
+
+1. **Create a draft** with `create_automation`. You define the entry criteria (contact created, property matches, property changes, or event received), optional exit criteria, and a flat list of steps made up of `wait`, `email`, and `branch` blocks. Drafts never enrol contacts or send anything.
+2. **Activate the draft** with `activate_automation`. The tool has a confirmation gate, call it first with `confirmed: false` to preview the workflow, then again with `confirmed: true` to start enrolling contacts and sending emails.
+
+A few preconditions to keep in mind:
+
+- Every email step must reference an automation-type template. Call `create_template` with `templateType: "automation"` first, then pass the returned `templateId` into the step.
+- Before referencing a contact field in a filter, call `list_custom_fields` so you use the exact bare field name.
+- For event-triggered automations or event-property branches, call `list_event_definitions` (or `get_event_definition` for a single event) to discover the available property keys.
+
+Learn more about <a href={APP_PATHS.automations}>Email Automations</a>, <a href={APP_PATHS.events}>Events</a>, and <a href={APP_PATHS.contactsCustomFields}>Custom Fields</a>.
 
 ## Guided Workflows
 
-AutoSend MCP includes two guided workflow prompts that walk your AI assistant through multi-step processes. These prompts provide structured instructions so the assistant gathers the right information and calls the right tools in sequence.
+AutoSend MCP includes three guided workflow prompts that walk your AI assistant through multi-step processes. These prompts provide structured instructions so the assistant gathers the right information and calls the right tools in sequence.
 
 ### `create-campaign`
 
@@ -155,10 +215,24 @@ A step-by-step workflow to create a reusable email template:
 | --------- | ------ | -------- | ------------------------------------------ |
 | `context` | string | No       | Initial context about the template purpose |
 
+### `create-automation`
+
+A step-by-step workflow to build a draft email automation:
+
+1. **Gathers data** - Fetches your lists, segments, senders, suppression groups, custom fields, and event definitions
+2. **Asks for details** - Automation name, trigger type, exit conditions, number of emails, timing between them, and any branch logic
+3. **Designs the workflow** - Creates the automation-type templates each step needs and proposes the wait, email, and branch sequence
+4. **Creates the draft** - Calls `create_automation` to assemble the workflow as a draft
+5. **Reviews** - Shows a summary with the automation ID and how to go live with `activate_automation`
+
+| Argument  | Type   | Required | Description                                  |
+| --------- | ------ | -------- | -------------------------------------------- |
+| `context` | string | No       | Initial context about the automation purpose |
+
 <Info>
-	Both prompts support an **auto mode**. Say "auto", "take over", or "just do it" at any point, and
-	the assistant will make reasonable decisions for all remaining steps without asking for
-	confirmation.
+	All three prompts support an **auto mode**. Say "auto", "take over", or "just do it" at any
+	point, and the assistant will make reasonable decisions for all remaining steps without asking
+	for confirmation.
 </Info>
 
 ## Example Conversations
@@ -178,11 +252,28 @@ Here are some things you can ask your AI assistant once AutoSend MCP is connecte
 - "Search for templates related to onboarding"
 - "Update the welcome email template with a new header design"
 
+**Automation workflows:**
+
+- "Build a 3-email onboarding automation for new Pro plan signups"
+- "Show me all my active automations"
+- "Activate the welcome series draft we built yesterday"
+- "Create an automation that fires when the `order_placed` event is logged"
+
+**Analytics:**
+
+- "What were the open and click rates on last week's newsletter?"
+- "Show me email activity for the past 30 days"
+
+**Projects:**
+
+- "Which AutoSend project am I currently on?"
+- "Switch me to the staging project"
+
 **Looking up data:**
 
 - "List all my contact segments and their sizes"
 - "Show me my verified senders"
-- "What suppression groups do I have?"
+- "What suppression groups and custom fields do I have?"
 
 **End-to-end workflows:**
 
@@ -196,10 +287,12 @@ Here are some things you can ask your AI assistant once AutoSend MCP is connecte
 	AutoSend dashboard. This is a safety measure to prevent accidental sends.
 </Note>
 
+- **Confirmation gates** - `send_campaign`, `send_test_email`, and `activate_automation` all require `confirmed: true` to actually execute. Call them first with `confirmed: false` to preview what will happen before committing.
+- **Project scope** - Each MCP session has one active project at a time. Use `list_projects` to see all projects you can access and `switch_project` to change focus mid-session.
 - **Template variables** - Use Handlebars syntax (`{{variableName}}`) for dynamic content. Variable names must start with a letter and can include letters, numbers, and underscores.
 - **Character limits** - Campaign name: 200 characters, subject line: 988 characters, preview text: 140 characters.
 - **Email HTML** - The MCP server's guided workflows generate email-safe HTML using table-based layouts, inline CSS, and responsive design patterns that work across all major email clients.
-- **Scoped access** - Each MCP connection is scoped to a single AutoSend project and organization. The server cannot access data from other projects.
+- **Scoped access** - Each MCP connection is scoped to a single AutoSend organization. The server cannot access data from organizations you don't belong to.
 
 ## Next Steps
 
