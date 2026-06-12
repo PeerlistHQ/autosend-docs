@@ -4,17 +4,11 @@ sidebarTitle: 'Create Automation'
 openapi: 'POST /automations'
 ---
 
-<Note>
-  Creates a new workflow automation. By default the workflow is created in `draft` status — pass `active: true` to validate and activate it as part of the create call.
-</Note>
+## Quick note before you begin
 
-<Info>
-  A workflow runs `steps` in order. Without `branch` steps, `steps` must strictly alternate `wait → email`, starting with `wait` and ending with `email`. Workflows containing `branch` steps use a more flexible graph (each step references the next via `nextStepId`).
-</Info>
-
-<Note>
-  Every `email` step must be preceded by a `wait` step, including email steps inside a branch. Set the wait delay to `{ "value": 0, "unit": "mins" }` if you want the email to send immediately.
-</Note>
+- Creates a new workflow automation. By default the workflow is created in `draft` status. Pass `active: true` to validate and activate it as part of the create call.
+- A workflow runs `steps` in order. Without `branch` steps, `steps` must strictly alternate `wait → email`, starting with `wait` and ending with `email`. Workflows containing `branch` steps use a more flexible graph (each step references the next via `nextStepId`).
+- Every `email` step must be preceded by a `wait` step, including email steps inside a branch. Set the wait delay to `{ "value": 0, "unit": "mins" }` if you want the email to send immediately.
 
 <RequestExample>
 
