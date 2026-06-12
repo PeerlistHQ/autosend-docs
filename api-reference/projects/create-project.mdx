@@ -205,9 +205,6 @@ puts response.body
     "domain": "example.com",
     "domains": [],
     "regionKey": "us-east-1",
-    "industry": null,
-    "logo": null,
-    "address": null,
     "trackingOpen": false,
     "trackingClick": false
   }
@@ -241,7 +238,7 @@ puts response.body
 <ParamField path="regionKey" type="string">
   Account region where the project data will be stored.
 
-  Allowed values: `us-east-1`, `us-east-2`, `ap-south-1`
+  Allowed values: `us-east-1`, `us-east-2`, `ap-south-1`, `eu-central-1`
 
   Example: `"us-east-1"`
 </ParamField>
@@ -281,19 +278,7 @@ puts response.body
   </ResponseField>
 
   <ResponseField name="data.regionKey" type="string | null">
-    Account region for the project. One of `us-east-1`, `us-east-2`, or `ap-south-1`
-  </ResponseField>
-
-  <ResponseField name="data.industry" type="string | null">
-    Industry category
-  </ResponseField>
-
-  <ResponseField name="data.logo" type="string | null">
-    Project logo URL
-  </ResponseField>
-
-  <ResponseField name="data.address" type="object | null">
-    Physical address for CAN-SPAM compliance
+    Account region for the project. One of `us-east-1`, `us-east-2`, `ap-south-1`, or `eu-central-1`
   </ResponseField>
 
   <ResponseField name="data.trackingOpen" type="boolean">

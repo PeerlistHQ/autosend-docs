@@ -111,7 +111,9 @@ puts response.body
 ```json Response
 {
   "success": true,
-  "message": "Suppression group deleted successfully."
+  "data": {
+    "success": true
+  }
 }
 ```
 
@@ -135,8 +137,12 @@ puts response.body
   Example: `true`
 </ResponseField>
 
-<ResponseField name="message" type="string">
-  Confirmation message.
+<ResponseField name="data" type="object">
+  Deletion confirmation payload.
 
-  Example: `"Suppression group deleted successfully."`
+  <Expandable title="data">
+    <ResponseField name="data.success" type="boolean">
+      Confirms the suppression group was successfully deleted. Always `true`.
+    </ResponseField>
+  </Expandable>
 </ResponseField>

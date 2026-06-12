@@ -113,8 +113,16 @@ puts JSON.parse(response.body)
   "success": true,
   "data": {
     "id": "60d5ec49f1b2c72d9c8b4567",
-    "deleted": true
-  }
+    "name": "Spring Sale Campaign",
+    "subject": "Don't miss our Spring Sale!",
+    "status": "sent",
+    "sendMode": "immediate",
+    "trackingClick": true,
+    "trackingOpen": true,
+    "createdAt": "2026-02-15T08:00:00.000Z",
+    "updatedAt": "2026-02-20T09:45:00.000Z"
+  },
+  "message": "Campaign deleted successfully"
 }
 ```
 
@@ -139,14 +147,41 @@ puts JSON.parse(response.body)
 </ResponseField>
 
 <ResponseField name="data" type="object">
-  Deletion confirmation payload.
+  The deleted campaign object.
 
   <Expandable title="data">
-    <ResponseField name="campaignId" type="string">
+    <ResponseField name="id" type="string">
       The ID of the campaign that was deleted.
     </ResponseField>
-    <ResponseField name="deleted" type="boolean">
-      Confirms the campaign was successfully deleted.
+    <ResponseField name="name" type="string">
+      Display name of the campaign.
+    </ResponseField>
+    <ResponseField name="subject" type="string">
+      Email subject line.
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      Status of the campaign at the time of deletion.
+    </ResponseField>
+    <ResponseField name="sendMode" type="string">
+      How the campaign was delivered: `immediate`, `scheduled`, or `gradual`.
+    </ResponseField>
+    <ResponseField name="trackingClick" type="boolean">
+      Whether click tracking was enabled.
+    </ResponseField>
+    <ResponseField name="trackingOpen" type="boolean">
+      Whether open tracking was enabled.
+    </ResponseField>
+    <ResponseField name="createdAt" type="string">
+      ISO 8601 timestamp when the campaign was created.
+    </ResponseField>
+    <ResponseField name="updatedAt" type="string">
+      ISO 8601 timestamp when the campaign was last updated.
     </ResponseField>
   </Expandable>
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Confirmation message.
+
+  Example: `"Campaign deleted successfully"`
 </ResponseField>

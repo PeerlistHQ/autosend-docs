@@ -155,13 +155,11 @@ puts response.body
         "domains": [
           {
             "id": "60d5ec49f1b2c72d9c8b5678",
-            "domain": "example.com",
+            "domainName": "example.com",
             "verificationStatus": "VERIFIED"
           }
         ],
-        "industry": "saas",
-        "logo": null,
-        "address": null,
+        "regionKey": "us-east-1",
         "trackingOpen": true,
         "trackingClick": true
       },
@@ -170,9 +168,7 @@ puts response.body
         "name": "Staging App",
         "domain": null,
         "domains": [],
-        "industry": null,
-        "logo": null,
-        "address": null,
+        "regionKey": "us-east-1",
         "trackingOpen": false,
         "trackingClick": false
       }
@@ -231,7 +227,7 @@ puts response.body
         Domain identifier
       </ResponseField>
 
-      <ResponseField name="domain" type="string">
+      <ResponseField name="domainName" type="string">
         Domain name
 
         Example: `"example.com"`
@@ -243,19 +239,9 @@ puts response.body
       </Expandable>
     </ResponseField>
 
-
-    <ResponseField name="industry" type="string | null">
-      Industry category
-    </ResponseField>
-
-    <ResponseField name="logo" type="string | null">
-      Project logo URL (CloudFront)
-    </ResponseField>
-
-    <ResponseField name="address" type="object | null">
-      Physical address for CAN-SPAM compliance
-    </ResponseField>
-
+      <ResponseField name="data.regionKey" type="string | null">
+    Account region for the project. One of `us-east-1`, `us-east-2`, `ap-south-1`, or `eu-central-1`
+  </ResponseField>
 
     <ResponseField name="trackingOpen" type="boolean">
       Whether open tracking is enabled

@@ -162,7 +162,7 @@ puts JSON.parse(response.body)
       "page": 1,
       "limit": 20,
       "total": 2,
-      "totalPages": 1
+      "pages": 1
     }
   }
 }
@@ -220,7 +220,7 @@ puts JSON.parse(response.body)
       Array of campaign objects.
 
       <Expandable title="campaign">
-        <ResponseField name="campaignId" type="string">
+        <ResponseField name="id" type="string">
           Unique identifier of the campaign.
         </ResponseField>
         <ResponseField name="name" type="string">
@@ -244,6 +244,26 @@ puts JSON.parse(response.body)
         <ResponseField name="trackingOpen" type="boolean">
           Whether open tracking is enabled.
         </ResponseField>
+        <ResponseField name="metrics" type="object">
+          Send and engagement metrics. Only present on campaigns that have been sent.
+
+          <Expandable title="metrics">
+            <ResponseField name="metrics.sent" type="integer">Total emails sent.</ResponseField>
+            <ResponseField name="metrics.delivered" type="integer">Total emails delivered.</ResponseField>
+            <ResponseField name="metrics.opened" type="integer">Total emails opened.</ResponseField>
+            <ResponseField name="metrics.clicked" type="integer">Total link clicks.</ResponseField>
+            <ResponseField name="metrics.bounced" type="integer">Total bounced emails.</ResponseField>
+            <ResponseField name="metrics.unsubscribed" type="integer">Total unsubscribes.</ResponseField>
+            <ResponseField name="metrics.suppressed" type="integer">Total suppressed emails.</ResponseField>
+            <ResponseField name="metrics.spamReported" type="integer">Total spam complaints.</ResponseField>
+            <ResponseField name="metrics.processedCount" type="integer">Total emails processed.</ResponseField>
+            <ResponseField name="metrics.totalContacts" type="integer">Total contacts targeted.</ResponseField>
+            <ResponseField name="metrics.failedCount" type="integer">Total failed sends.</ResponseField>
+          </Expandable>
+        </ResponseField>
+        <ResponseField name="sentAt" type="string">
+          ISO 8601 timestamp when the campaign was sent. Only present on sent campaigns.
+        </ResponseField>
         <ResponseField name="createdAt" type="string">
           ISO 8601 timestamp when the campaign was created.
         </ResponseField>
@@ -266,7 +286,7 @@ puts JSON.parse(response.body)
         <ResponseField name="total" type="integer">
           Total number of matching campaigns.
         </ResponseField>
-        <ResponseField name="totalPages" type="integer">
+        <ResponseField name="pages" type="integer">
           Total number of pages.
         </ResponseField>
       </Expandable>

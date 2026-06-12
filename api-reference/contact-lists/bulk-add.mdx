@@ -229,7 +229,36 @@ puts response.body
       "invalid": [],
       "suppressed": []
     },
-    "totalContactsInList": 343
+    "totalContactsInList": 343,
+    "contacts": [
+      {
+        "id": "6a27dd38aa5fe8d43df734d4",
+        "email": "jane@example.com",
+        "updatedAt": "2026-06-09T09:30:32.172Z",
+        "createdAt": "2026-06-09T09:30:32.172Z",
+        "projectId": "6a045963cbaa3dd6f0f7da61",
+        "listIds": ["60d5ec49f1b2c72d9c8b4567"],
+        "segmentIds": []
+      },
+      {
+        "id": "6a27dd38aa5fe8d43df734d5",
+        "email": "john@example.com",
+        "updatedAt": "2026-06-09T09:30:32.172Z",
+        "createdAt": "2026-06-09T09:30:32.172Z",
+        "projectId": "6a045963cbaa3dd6f0f7da61",
+        "listIds": ["60d5ec49f1b2c72d9c8b4567"],
+        "segmentIds": []
+      },
+      {
+        "id": "6a27dd38aa5fe8d43df734d6",
+        "email": "alice@example.com",
+        "updatedAt": "2026-06-09T09:30:32.172Z",
+        "createdAt": "2026-06-09T09:30:32.172Z",
+        "projectId": "6a045963cbaa3dd6f0f7da61",
+        "listIds": ["60d5ec49f1b2c72d9c8b4567"],
+        "segmentIds": []
+      }
+    ]
   }
 }
 ```
@@ -245,13 +274,13 @@ puts response.body
 ### Body
 Add contacts to a list by email addresses or contact IDs. Provide either `emails` or `contactIds`, not both.
 
-<ParamField path="contactListId" type="string" required>
+<ParamField path="contactListId" type="string">
   The ID of the contact list to add contacts to.
 
   Example: `"60d5ec49f1b2c72d9c8b4567"`
 </ParamField>
 
-<ParamField path="emails" type="string[]">
+<ParamField path="emails" type="string[]" required>
   Array of email addresses to add to the list. New contacts will be created for emails that don't already exist.
 
   <Note>
@@ -364,6 +393,34 @@ Add contacts to a list by email addresses or contact IDs. Provide either `emails
     Total number of contacts now in the list
 
     Example: `343`
+  </ResponseField>
+
+  <ResponseField name="data.contacts" type="object[]">
+    Array of contact objects that were added or created
+
+    <Expandable title="child attributes">
+    <ResponseField name="id" type="string">
+      Unique identifier for the contact
+    </ResponseField>
+    <ResponseField name="email" type="string">
+      Email address of the contact
+    </ResponseField>
+    <ResponseField name="createdAt" type="string">
+      ISO 8601 timestamp when the contact was created
+    </ResponseField>
+    <ResponseField name="updatedAt" type="string">
+      ISO 8601 timestamp when the contact was last updated
+    </ResponseField>
+    <ResponseField name="projectId" type="string">
+      ID of the project the contact belongs to
+    </ResponseField>
+    <ResponseField name="listIds" type="string[]">
+      IDs of contact lists the contact belongs to
+    </ResponseField>
+    <ResponseField name="segmentIds" type="string[]">
+      IDs of segments the contact belongs to
+    </ResponseField>
+    </Expandable>
   </ResponseField>
   </Expandable>
 </ResponseField>
