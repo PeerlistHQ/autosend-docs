@@ -116,7 +116,7 @@ puts response.body
 ```json Response
 {
   "success": true,
-  "data": null
+  "message": "Domain deleted successfully"
 }
 ```
 
@@ -138,12 +138,26 @@ puts response.body
   Indicates whether the domain was removed successfully.
 </ResponseField>
 
-<ResponseField name="data" type="null">
-  Always `null` on a successful delete.
+
+<ResponseField name="message" type="string">
+  Confirmation message.
+
+  Example: `"Domain deleted successfully"`
 </ResponseField>
 
-#### Errors
+#### Error Responses
 
-<ResponseField name="404" type="object">
-  Returned when no domain with the given `domainId` exists in the project.
+<ResponseField name="404 - Domain not found" type="object">
+  Returned when no domain with the given ID exists on the project.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Domain not found",
+      "code": "DOMAIN_NOT_FOUND",
+      "status": 404
+    }
+  }
+  ```
 </ResponseField>

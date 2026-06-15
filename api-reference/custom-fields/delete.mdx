@@ -130,14 +130,6 @@ puts response.body
 }
 ```
 
-```json 404 Not Found
-{
-  "success": false,
-  "message": "Custom field not found",
-  "code": "CUSTOM_FIELD_NOT_FOUND"
-}
-```
-
 </ResponseExample>
 
 ### Authorizations
@@ -162,4 +154,21 @@ puts response.body
   Confirmation message.
 
   Example: `"Custom field deleted successfully"`
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="404 - Custom field not found" type="object">
+  Returned when no custom field with the given name exists on the project.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Custom field not found",
+      "code": "CUSTOM_FIELD_NOT_FOUND",
+      "status": 404
+    }
+  }
+  ```
 </ResponseField>

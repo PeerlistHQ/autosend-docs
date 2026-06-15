@@ -178,29 +178,6 @@ puts response.body
 }
 ```
 
-```json 400 Reserved Field Name
-{
-  "success": false,
-  "message": "Cannot create custom field with reserved name. Please use a different field name.",
-  "code": "RESERVED_FIELD_NAME"
-}
-```
-
-```json 400 Invalid Field Type
-{
-  "success": false,
-  "message": "Invalid field type. Must be one of: string, number, boolean, date",
-  "code": "INVALID_FIELD_TYPE"
-}
-```
-
-```json 409 Field Already Exists
-{
-  "success": false,
-  "message": "Custom field with this name already exists in the project",
-  "code": "FIELD_ALREADY_EXISTS"
-}
-```
 
 </ResponseExample>
 
@@ -220,6 +197,10 @@ puts response.body
 
 <ParamField body="description" type="string">
   A human-readable description of what the field represents.
+</ParamField>
+
+<ParamField body="defaultValue" type="string">
+  A fallback value used when a contact does not have an explicit value for this field.
 </ParamField>
 
 ### Response
