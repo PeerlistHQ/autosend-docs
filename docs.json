@@ -114,7 +114,7 @@
 					},
 					{
 						"group": "Migration",
-						"pages": ["migration/sendgrid"]
+						"pages": ["migration/sendgrid", "migration/resend"]
 					}
 				]
 			},

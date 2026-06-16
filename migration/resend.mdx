@@ -1,0 +1,464 @@
+---
+title: 'Migrate from Resend to AutoSend'
+sidebarTitle: 'Resend'
+description: 'Use the Resend Migration API to move templates, contacts, audiences, custom fields, topics, and unsubscribes from Resend into AutoSend.'
+icon: '/icons/brand-resend.png'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+
+## Overview
+
+AutoSend provides a set of public API endpoints to migrate your Resend assets into your AutoSend project:
+
+- Templates
+- Contacts and audiences (contact lists)
+- Contact properties (custom fields)
+- Topics (suppression groups)
+- Unsubscribed contacts
+
+All endpoints are authenticated with your <a href={APP_PATHS.apiKeys}>**AutoSend project API key**</a> sent as a Bearer token. The Resend API key required to read from your Resend account is passed in the request body for each call. It is never persisted in plaintext - it is encrypted while the background job is queued.
+
+## Prerequisites
+
+Before you start, make sure you have:
+
+1. An <a href={APP_PATHS.apiKeys}>**AutoSend project API key**</a> - create one on the <a href={AUTOSEND_PATHS.apiKey} target='_blank'>**API Keys**</a> page. Keys look like `AS_xxxxxxxx_xxxxxxxxxxxxxxxxxxxx`.
+2. A **Resend API key** - generate one in Resend under *API Keys*. The key needs read access to templates, contacts, audiences, contact properties, and topics. Keys look like `re_xxxxxxxxxxxxxxxxxxxxxxxx`.
+3. The base URL for all requests: `https://api.autosend.com/v1`
+
+### Authentication
+
+Every request uses two headers:
+
+| Header          | Value                            |
+| --------------- | -------------------------------- |
+| `Authorization` | `Bearer <YOUR_AUTOSEND_API_KEY>` |
+| `Content-Type`  | `application/json`               |
+
+## How Resend Maps to AutoSend
+
+Resend and AutoSend model their assets a little differently. The migration applies these mappings:
+
+| Resend               | AutoSend                 | Notes                                                                                 |
+| -------------------- | ------------------------ | ------------------------------------------------------------------------------------- |
+| Template             | Template                 | HTML, subject, and name are migrated. Templates using `#each` are flagged for review. |
+| Contact property     | Custom field             | Type is mapped (`string`/`text` to string, `number`, `boolean`, `date`).              |
+| Audience             | Contact list             | List metadata is created; members are associated in the contacts phase.               |
+| Topic                | Suppression group        | Created as an **empty** group - Resend's API exposes no per-topic subscription state.  |
+| Unsubscribed contact | Global suppression entry | Resend has no unsubscribe groups, so unsubscribed contacts are suppressed globally.    |
+
+## Recommended Flow
+
+<Steps>
+  <Step title="Preview the migration" titleSize="h3">
+    Call `POST /migrations/resend/plan` to confirm the Resend key is valid and see what will be migrated.
+  </Step>
+  <Step title="Run the full migration" titleSize="h3">
+    Call `POST /migrations/resend/migrate` with `migrateAll: true` or with specific IDs you want to import.
+  </Step>
+  <Step title="Or run a targeted migration" titleSize="h3">
+    Use `POST /migrations/resend/template` to migrate selected templates only.
+  </Step>
+</Steps>
+
+## Endpoints
+
+### Get migration plan
+
+Fetches a preview of everything that can be migrated from your Resend account: templates, contact properties (custom fields), audiences, topics, the total contact count, and the count of unsubscribed contacts.
+
+**`POST /v1/migrations/resend/plan`**
+
+#### Request body
+
+| Field          | Type   | Required | Description         |
+| -------------- | ------ | -------- | ------------------- |
+| `resendApiKey` | string | yes      | Your Resend API key |
+
+<CodeGroup>
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/migrations/resend/plan \
+  --header 'Authorization: Bearer AS_YOUR_AUTOSEND_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "resendApiKey": "re_your_resend_api_key"
+  }'
+```
+
+```javascript NodeJS
+const res = await fetch("https://api.autosend.com/v1/migrations/resend/plan", {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${process.env.AUTOSEND_API_KEY}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    resendApiKey: process.env.RESEND_API_KEY,
+  }),
+});
+
+const data = await res.json();
+```
+
+```python Python
+import os
+import requests
+
+res = requests.post(
+    "https://api.autosend.com/v1/migrations/resend/plan",
+    headers={
+        "Authorization": f"Bearer {os.environ['AUTOSEND_API_KEY']}",
+        "Content-Type": "application/json",
+    },
+    json={"resendApiKey": os.environ["RESEND_API_KEY"]},
+)
+
+data = res.json()
+```
+</CodeGroup>
+
+#### Response `200`
+
+```json expandable
+{
+  "success": true,
+  "message": "Migration plan fetched successfully",
+  "data": {
+    "contactsCount": 12453,
+    "unsubscribedCount": 87,
+    "templatesCount": 24,
+    "templates": [
+      {
+        "templateId": "tmpl_abc123",
+        "templateName": "Welcome email",
+        "status": "active",
+        "updatedAt": "2025-08-12T10:24:11Z"
+      }
+    ],
+    "customFields": [
+      {
+        "resendFieldId": "1",
+        "resendFieldName": "company",
+        "autosendFieldName": "company",
+        "fieldType": "string"
+      }
+    ],
+    "audiences": [
+      {
+        "id": "aud-uuid-1",
+        "name": "Newsletter subscribers"
+      }
+    ],
+    "audiencesCount": 5,
+    "topics": [
+      {
+        "id": "topic-uuid-1",
+        "name": "Product updates",
+        "description": "Monthly product newsletter",
+        "defaultSubscription": "opt_in",
+        "visibility": "public"
+      }
+    ],
+    "topicsCount": 3
+  }
+}
+```
+
+### Run the full migration
+
+Kicks off a background migration job that imports the selected Resend assets into your AutoSend project. Returns a `bulkOperationId` immediately; the work continues in the background.
+
+**`POST /v1/migrations/resend/migrate`**
+
+#### Request body
+
+| Field                 | Type     | Required | Default | Description                                                                                                         |
+| --------------------- | -------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
+| `resendApiKey`        | string   | yes      | -       | Your Resend API key                                                                                                 |
+| `migrateAll`          | boolean  | no       | `false` | If `true`, migrate everything returned by `/plan`. Per-type ID arrays below are populated from the plan when empty. |
+| `templateIds`         | string[] | no       | `[]`    | Specific Resend template IDs to migrate                                                                             |
+| `audienceIds`         | string[] | no       | `[]`    | Specific Resend audience IDs to migrate (each becomes an AutoSend contact list)                                     |
+| `topicIds`            | string[] | no       | `[]`    | Specific Resend topic IDs to migrate (each becomes an AutoSend suppression group)                                   |
+| `customFieldMappings` | object[] | no       | `[]`    | Resend to AutoSend custom field mappings (see schema below)                                                         |
+| `ignoreTemplates`     | boolean  | no       | `false` | Skip templates phase                                                                                                |
+| `ignoreCustomFields`  | boolean  | no       | `false` | Skip custom fields phase                                                                                            |
+| `ignoreAudiences`     | boolean  | no       | `false` | Skip audiences (contact lists) phase                                                                                |
+| `ignoreTopics`        | boolean  | no       | `false` | Skip topics (suppression groups) phase                                                                              |
+| `ignoreContacts`      | boolean  | no       | `false` | Skip contacts phase                                                                                                 |
+| `ignoreSuppressions`  | boolean  | no       | `false` | Skip the global unsubscribe (suppression) phase                                                                     |
+
+`customFieldMappings` item schema:
+
+```json
+{
+  "resendFieldId": "1",
+  "resendFieldName": "company",
+  "autosendFieldName": "company",
+  "fieldType": "string"
+}
+```
+
+`fieldType` must be one of: `string`, `number`, `boolean`, `date`.
+
+#### Migration phases
+
+The job runs in this order:
+
+1. **Custom fields** - creates AutoSend custom field definitions from the mappings.
+2. **Templates** - fetches each Resend template's HTML and subject and creates the matching AutoSend template. Templates containing `#each` are flagged for manual review.
+3. **Audiences to contact lists** - creates the AutoSend list metadata for each audience.
+4. **Contacts** - imports all global Resend contacts, then associates each audience's members with the contact list created in step 3. Contact properties are mapped onto custom fields via `customFieldMappings`.
+5. **Topics to suppression groups** - creates a matching (empty) suppression group for each topic.
+6. **Suppressions** - globally suppresses every Resend contact marked as `unsubscribed`.
+
+#### Example A - migrate everything
+
+<CodeGroup>
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/migrations/resend/migrate \
+  --header 'Authorization: Bearer AS_YOUR_AUTOSEND_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "resendApiKey": "re_your_resend_api_key",
+    "migrateAll": true
+  }'
+```
+
+```javascript NodeJS
+const res = await fetch("https://api.autosend.com/v1/migrations/resend/migrate", {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${process.env.AUTOSEND_API_KEY}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    resendApiKey: process.env.RESEND_API_KEY,
+    migrateAll: true,
+  }),
+});
+
+const { data } = await res.json();
+console.log(data.bulkOperationId);
+```
+
+```python Python
+import os
+import requests
+
+res = requests.post(
+    "https://api.autosend.com/v1/migrations/resend/migrate",
+    headers={
+        "Authorization": f"Bearer {os.environ['AUTOSEND_API_KEY']}",
+        "Content-Type": "application/json",
+    },
+    json={
+        "resendApiKey": os.environ["RESEND_API_KEY"],
+        "migrateAll": True,
+    },
+)
+
+print(res.json()["data"]["bulkOperationId"])
+```
+</CodeGroup>
+
+#### Example B - migrate selected assets only
+
+```bash
+curl --request POST \
+  --url https://api.autosend.com/v1/migrations/resend/migrate \
+  --header 'Authorization: Bearer AS_YOUR_AUTOSEND_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "resendApiKey": "re_your_resend_api_key",
+    "templateIds": ["tmpl_abc123", "tmpl_def456"],
+    "audienceIds": ["aud-uuid-1"],
+    "customFieldMappings": [
+      {
+        "resendFieldId": "1",
+        "resendFieldName": "company",
+        "autosendFieldName": "company",
+        "fieldType": "string"
+      }
+    ],
+    "ignoreTopics": true
+  }'
+```
+
+#### Example C - contacts only, skip everything else
+
+```bash
+curl --request POST \
+  --url https://api.autosend.com/v1/migrations/resend/migrate \
+  --header 'Authorization: Bearer AS_YOUR_AUTOSEND_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "resendApiKey": "re_your_resend_api_key",
+    "migrateAll": true,
+    "ignoreTemplates": true,
+    "ignoreCustomFields": true,
+    "ignoreAudiences": true,
+    "ignoreTopics": true,
+    "ignoreSuppressions": true
+  }'
+```
+
+#### Response `202 Accepted`
+
+```json
+{
+  "success": true,
+  "message": "Resend migration initiated successfully",
+  "data": {
+    "bulkOperationId": "65fa1d2b8c9a4f1234567890",
+    "status": "PENDING",
+    "message": "Resend migration initiated successfully"
+  }
+}
+```
+
+<Info>
+  Hold on to the `bulkOperationId`. Your AutoSend dashboard shows progress against it, and progress is also published in real time over the project's Pusher channel as the job moves through each phase.
+</Info>
+
+#### Common errors
+
+| HTTP | Code                               | Meaning                                                                 |
+| ---- | ---------------------------------- | ----------------------------------------------------------------------- |
+| 400  | `RESEND_MIGRATION_IN_PROGRESS`     | A migration is already running for this project - wait for it to finish |
+| 400  | `RESEND_NO_ITEMS_TO_MIGRATE`       | Nothing selected and `migrateAll` was not set                           |
+| 500  | `RESEND_FAILED_TO_FETCH_PLAN`      | Resend API key is invalid or rejected                                   |
+| 500  | `RESEND_MIGRATION_CREATION_FAILED` | Could not schedule the migration job - retry shortly                    |
+
+### Migrate one or more templates
+
+Migrate specific Resend templates without touching anything else. Useful for one-off moves or for syncing a template after edits in Resend.
+
+<Warning>
+  Always test migrated templates that contain complex Handlebars expressions such as `#each` before sending production traffic to them.
+</Warning>
+
+**`POST /v1/migrations/resend/template`**
+
+#### Request body
+
+| Field               | Type     | Required | Default | Description                                                                                |
+| ------------------- | -------- | -------- | ------- | ------------------------------------------------------------------------------------------ |
+| `resendApiKey`      | string   | yes      | -       | Your Resend API key                                                                        |
+| `resendTemplateIds` | string[] | yes      | -       | Resend template IDs to migrate (min 1)                                                     |
+| `onExistUpdateHTML` | boolean  | no       | `false` | If a template with the same ID already exists in AutoSend, overwrite its HTML and subject |
+
+<CodeGroup>
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/migrations/resend/template \
+  --header 'Authorization: Bearer AS_YOUR_AUTOSEND_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "resendApiKey": "re_your_resend_api_key",
+    "resendTemplateIds": ["tmpl_abc123", "tmpl_def456"],
+    "onExistUpdateHTML": true
+  }'
+```
+
+```javascript NodeJS
+const res = await fetch("https://api.autosend.com/v1/migrations/resend/template", {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${process.env.AUTOSEND_API_KEY}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    resendApiKey: process.env.RESEND_API_KEY,
+    resendTemplateIds: ["tmpl_abc123", "tmpl_def456"],
+    onExistUpdateHTML: true,
+  }),
+});
+```
+
+```python Python
+import os
+import requests
+
+res = requests.post(
+    "https://api.autosend.com/v1/migrations/resend/template",
+    headers={
+        "Authorization": f"Bearer {os.environ['AUTOSEND_API_KEY']}",
+        "Content-Type": "application/json",
+    },
+    json={
+        "resendApiKey": os.environ["RESEND_API_KEY"],
+        "resendTemplateIds": ["tmpl_abc123", "tmpl_def456"],
+        "onExistUpdateHTML": True,
+    },
+)
+```
+</CodeGroup>
+
+#### Response `200`
+
+```json
+{
+  "success": true,
+  "message": "Template migrated successfully",
+  "data": [
+    {
+      "templateId": "tmpl_abc123",
+      "templateName": "Welcome email",
+      "subject": "Welcome to Acme",
+      "templateType": "TRANSACTIONAL",
+      "createdAt": "2026-05-14T08:12:11.234Z"
+    }
+  ]
+}
+```
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Is my Resend API key stored anywhere?">
+    The key is held in memory for the lifetime of the migration request and encrypted at rest while the background job is queued. It is never logged or stored in plaintext.
+  </Accordion>
+  <Accordion title="Why are my topics imported as empty suppression groups?">
+    Resend's contact object exposes no per-topic subscription state, so the migration can create the group but cannot derive its members from the API. Globally unsubscribed contacts are still captured in the separate suppressions phase.
+  </Accordion>
+  <Accordion title="Can I re-run a migration?">
+    Yes. Templates are upserted by their Resend `templateId` when `onExistUpdateHTML: true`. Contacts and suppressed emails are upserted by email address, so duplicates are safe. Re-creating an already-existing custom field will fail that one creation and be reported in the metrics, but the run continues. Only one migration can run per project at a time.
+  </Accordion>
+  <Accordion title="How long does it take?">
+    Templates and topics are usually done in seconds. Contacts depend on how many you have. Resend's API is rate-limited to roughly 2 requests/second, and the migration spaces requests out and retries on `429` to stay within that limit, so large contact counts take proportionally longer. The request returns immediately - the job keeps running after your HTTP connection closes.
+  </Accordion>
+  <Accordion title="How do custom field values get attached to contacts?">
+    During the contacts phase, each Resend contact's `properties` are matched against your `customFieldMappings` (by `resendFieldId`, falling back to `resendFieldName`) and written onto the AutoSend contact's custom fields. Include the mappings in `/migrate` (or use `migrateAll`) to populate them.
+  </Accordion>
+</AccordionGroup>
+
+## Support
+
+If a migration fails or produces unexpected results, send us:
+
+1. The `bulkOperationId` returned by `/migrate`
+2. Your AutoSend project ID
+3. The approximate time of the request
+
+Email [support@autosend.com](mailto:support@autosend.com) with these details and we'll investigate.
+
+## Next Steps
+
+<Columns cols={2}>
+  <Card title='Email Templates' icon='/icons/email-templates.svg' href={APP_PATHS.emailTemplates}>
+    Manage the templates you just migrated from Resend.
+  </Card>
+  <Card title='Contacts' icon='/icons/contacts.svg' href={APP_PATHS.contactsIntroduction}>
+    Browse and segment the contacts imported from Resend.
+  </Card>
+  <Card title='Unsubscribe Groups' icon='/icons/unsubscribe-groups.svg' href={APP_PATHS.unsubscribeGroups}>
+    Review the suppression groups created during migration.
+  </Card>
+  <Card title='Sending Domain' icon='/icons/domain.svg' href={APP_PATHS.domainConfiguration}>
+    Verify your sending domain so migrated templates can start sending.
+  </Card>
+</Columns>
