@@ -1,0 +1,192 @@
+---
+title: 'Delete Webhook'
+sidebarTitle: 'Delete Webhook'
+openapi: 'DELETE /webhooks/{id}'
+---
+
+<Note>
+  This endpoint accepts a **project API key** (`AS_` prefix). The webhook must belong to the authenticated project.
+</Note>
+
+<RequestExample>
+
+```bash cURL
+curl --request DELETE \
+  --url https://api.autosend.com/v1/webhooks/60d5ec49f1b2c72d9c8b1234 \
+  --header 'Authorization: Bearer AS_your-api-key'
+```
+
+```python Python
+import requests
+
+webhook_id = "60d5ec49f1b2c72d9c8b1234"
+url = f"https://api.autosend.com/v1/webhooks/{webhook_id}"
+
+headers = {
+    "Authorization": "Bearer AS_your-api-key"
+}
+
+response = requests.delete(url, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+const webhookId = '60d5ec49f1b2c72d9c8b1234';
+
+fetch(`https://api.autosend.com/v1/webhooks/${webhookId}`, {
+  method: 'DELETE',
+  headers: {
+    'Authorization': 'Bearer AS_your-api-key'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$webhookId = '60d5ec49f1b2c72d9c8b1234';
+$url = "https://api.autosend.com/v1/webhooks/{$webhookId}";
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer AS_your-api-key'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    webhookID := "60d5ec49f1b2c72d9c8b1234"
+    url := "https://api.autosend.com/v1/webhooks/" + webhookID
+
+    req, _ := http.NewRequest("DELETE", url, nil)
+    req.Header.Set("Authorization", "Bearer AS_your-api-key")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class DeleteWebhook {
+    public static void main(String[] args) {
+        try {
+            String webhookId = "60d5ec49f1b2c72d9c8b1234";
+            URL url = new URL("https://api.autosend.com/v1/webhooks/" + webhookId);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("DELETE");
+            con.setRequestProperty("Authorization", "Bearer AS_your-api-key");
+
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'uri'
+
+webhook_id = '60d5ec49f1b2c72d9c8b1234'
+uri = URI("https://api.autosend.com/v1/webhooks/#{webhook_id}")
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Delete.new(uri.request_uri)
+request['Authorization'] = 'Bearer AS_your-api-key'
+
+response = http.request(request)
+puts response.body
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Response
+{
+  "success": true,
+  "message": "Webhook deleted successfully",
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Project API key header of the form Bearer `AS_<key>`.
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the webhook to delete.
+
+  Example: `"60d5ec49f1b2c72d9c8b1234"`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Webhook deleted successfully (200)</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Confirmation message
+
+  Example: `"Webhook deleted successfully"`
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="404 - Webhook not found" type="object">
+  Returned when no webhook with the given ID exists in the project.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Webhook not found",
+      "code": "WEBHOOK_NOT_FOUND",
+    }
+  }
+  ```
+</ResponseField>

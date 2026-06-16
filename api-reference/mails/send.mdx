@@ -576,6 +576,14 @@ headers: {
   ```
 </ParamField>
 
+<ParamField path='bypassSuppressions' type='boolean'>
+	When set to `true`, the email is delivered even if the recipient has unsubscribed from all groups or is on your suppression list. Reserve this for critical transactional emails that a recipient must receive regardless of their marketing preferences, such as one-time passwords, security alerts, and account verifications.
+
+	<Warning>
+		Use this flag sparingly and only for genuinely essential messages. Sending to suppressed or bounced addresses drives up your bounce rate, and a high bounce rate can place your account under review or affect your sending reputation.
+	</Warning>
+</ParamField>
+
 ### Response
 
 <span className='text-sm'>Email queued successfully</span>

@@ -1,0 +1,293 @@
+---
+title: 'Create Webhook'
+sidebarTitle: 'Create Webhook'
+openapi: 'POST /webhooks'
+---
+
+<Note>
+  This endpoint accepts a **project API key** (`AS_` prefix). The signing `secret` is returned **only** on creation — store it securely. You can later retrieve it via the [Reveal Webhook Secret](/webhooks/reveal-webhook-secret) endpoint.
+</Note>
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/webhooks \
+  --header 'Authorization: Bearer AS_your-api-key' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "url": "https://example.com/webhooks/autosend",
+  "events": ["email.delivered", "email.bounced"],
+  "metadata": { "team": "growth" }
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/webhooks"
+
+headers = {
+    "Authorization": "Bearer AS_your-api-key",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "url": "https://example.com/webhooks/autosend",
+    "events": ["email.delivered", "email.bounced"],
+    "metadata": {"team": "growth"}
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/webhooks', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer AS_your-api-key',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    url: 'https://example.com/webhooks/autosend',
+    events: ['email.delivered', 'email.bounced']
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/webhooks';
+
+$data = [
+    'url' => 'https://example.com/webhooks/autosend',
+    'events' => ['email.delivered', 'email.bounced'],
+    'metadata' => ['team' => 'growth']
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer AS_your-api-key',
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/webhooks"
+
+    payload := map[string]interface{}{
+        "url":      "https://example.com/webhooks/autosend",
+        "events":   []string{"email.delivered", "email.bounced"},
+        "metadata": map[string]string{"team": "growth"},
+    }
+
+    jsonData, _ := json.Marshal(payload)
+
+    req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer AS_your-api-key")
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class CreateWebhook {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/webhooks");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Authorization", "Bearer AS_your-api-key");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+
+            String jsonInputString = "{\n" +
+                "  \"url\": \"https://example.com/webhooks/autosend\",\n" +
+                "  \"events\": [\"email.delivered\", \"email.bounced\"],\n" +
+                "  \"metadata\": { \"team\": \"growth\" }\n" +
+                "}";
+
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/webhooks')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(uri.path)
+request['Authorization'] = 'Bearer AS_your-api-key'
+request['Content-Type'] = 'application/json'
+
+request.body = {
+  url: 'https://example.com/webhooks/autosend',
+  events: ['email.delivered', 'email.bounced']
+}.to_json
+
+response = http.request(request)
+puts response.body
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 201 Response
+{
+  "success": true,
+  "message": "Webhook created successfully",
+  "data": {
+    "webhook": {
+      "id": "60d5ec49f1b2c72d9c8b1234",
+      "organizationId": "60d5ec49f1b2c72d9c8b0000",
+      "projectId": "60d5ec49f1b2c72d9c8b1111",
+      "url": "https://example.com/webhooks/autosend",
+      "secret": "whsec_8f3a1c2d4e5b6a7c8d9e0f1a2b3c4d5e",
+      "events": ["email.delivered", "email.bounced"],
+      "isActive": true,
+      "createdAt": "2026-06-12T10:15:00.000Z",
+      "updatedAt": "2026-06-12T10:15:00.000Z"
+    }
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Project API key header of the form Bearer `AS_<key>`.
+</ParamField>
+
+### Body
+
+<ParamField body="url" type="string" required>
+  The HTTPS (or HTTP) endpoint AutoSend will POST events to. Must include the protocol.
+
+  Example: `"https://example.com/webhooks/autosend"`
+</ParamField>
+
+<ParamField body="events" type="string[]" required>
+  One or more event types to subscribe to. Must contain at least one valid event. See [List Available Events](/webhooks/list-available-events) for the full set.
+
+  Example: `["email.delivered", "email.bounced"]`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Webhook created (201)</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Wrapper containing the created webhook
+
+  <Expandable title="child attributes">
+  <ResponseField name="data.webhook.id" type="string">
+    Unique webhook identifier
+  </ResponseField>
+
+  <ResponseField name="data.webhook.url" type="string">
+    The destination URL events are delivered to
+  </ResponseField>
+
+  <ResponseField name="data.webhook.secret" type="string">
+    HMAC signing secret used to verify payload signatures. **Returned only on creation.**
+  </ResponseField>
+
+  <ResponseField name="data.webhook.events" type="string[]">
+    The subscribed event types
+  </ResponseField>
+
+  <ResponseField name="data.webhook.isActive" type="boolean">
+    Whether the webhook is currently active
+  </ResponseField>
+
+  <ResponseField name="data.webhook.status" type="string">
+    Delivery status. One of `active`, `inactive`, or `disabled`
+  </ResponseField>
+
+  <ResponseField name="data.webhook.createdAt" type="string">
+    ISO 8601 creation timestamp
+  </ResponseField>
+  </Expandable>
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="400 - Validation error" type="object">
+  Returned when the URL is invalid or no valid events are supplied.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "A valid webhook URL is required",
+      "code": "VALIDATION_ERROR",
+    }
+  }
+  ```
+</ResponseField>

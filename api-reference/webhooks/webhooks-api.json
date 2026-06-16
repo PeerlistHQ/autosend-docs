@@ -1,0 +1,62 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AutoSend API",
+    "description": "AutoSend REST API for managing project webhooks. These endpoints accept a project API key (AS_ prefix) and let you subscribe to email and contact events, inspect delivery logs, and test deliveries.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.autosend.com/v1"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/webhooks": {
+      "get": {
+        "summary": "List Webhooks",
+        "description": "Retrieves all webhooks for the authenticated project. Supports filtering by active state and pagination. Secrets are never included in list responses."
+      },
+      "post": {
+        "summary": "Create Webhook",
+        "description": "Creates a new webhook subscribed to one or more events. The signing secret is returned only on creation — store it securely, as it cannot be retrieved again except via the reveal endpoint."
+      }
+    },
+    "/webhooks/{id}": {
+      "get": {
+        "summary": "Get Webhook",
+        "description": "Retrieves a single webhook by its ID. The webhook must belong to the authenticated project. The signing secret is not included."
+      },
+      "put": {
+        "summary": "Update Webhook",
+        "description": "Updates a webhook's URL, subscribed events, active state, or metadata. The signing secret is immutable — create a new webhook to rotate it."
+      },
+      "delete": {
+        "summary": "Delete Webhook",
+        "description": "Deletes a webhook by its ID. The webhook must belong to the authenticated project."
+      }
+    },
+    "/webhooks/{id}/logs": {
+      "get": {
+        "summary": "List Delivery Logs",
+        "description": "Retrieves the delivery attempt history for a webhook, including response status and timestamps. Supports pagination."
+      }
+    },
+    "/webhooks/{id}/reveal": {
+      "get": {
+        "summary": "Reveal Webhook Secret",
+        "description": "Returns the raw signing secret for a webhook so you can verify payload signatures. The webhook must belong to the authenticated organization."
+      }
+    },
+    "/webhooks/{id}/resend": {
+      "post": {
+        "summary": "Resend Webhook",
+        "description": "Queues a test delivery of a given event to the webhook's URL. The webhook must be subscribed to the supplied event."
+      }
+    }
+  }
+}
