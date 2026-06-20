@@ -1,0 +1,413 @@
+---
+title: 'Reply to Message'
+sidebarTitle: 'Reply to Message'
+openapi: 'POST /inbound/messages/{id}/reply'
+---
+
+<Note>
+  This endpoint uses a standard **project API key** (`AS_` prefix). The reply is threaded into the original conversation (via `In-Reply-To` and `References`) and queued through the standard sending pipeline. The response returns `202 Accepted`.
+</Note>
+
+<Info>
+  The `from.email` domain must be a **verified sending domain** on the project. By default (`strict: true`), `from.email` must also match a configured inbound route so the recipient's reply routes back. Pass `strict: false` to send from a one-off address on a verified domain.
+</Info>
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/inbound/messages/60d5ec49f1b2c72d9c8b1234/reply \
+  --header 'Authorization: Bearer as_your-api-key' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "from": { "email": "help@support.example.com", "name": "Support Team" },
+  "subject": "Re: Question about my order",
+  "html": "<p>Hi Jane, your order #4821 shipped today.</p>",
+  "text": "Hi Jane, your order #4821 shipped today."
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/inbound/messages/60d5ec49f1b2c72d9c8b1234/reply"
+
+headers = {
+    "Authorization": "Bearer as_your-api-key",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "from": {"email": "help@support.example.com", "name": "Support Team"},
+    "subject": "Re: Question about my order",
+    "html": "<p>Hi Jane, your order #4821 shipped today.</p>",
+    "text": "Hi Jane, your order #4821 shipped today."
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/inbound/messages/60d5ec49f1b2c72d9c8b1234/reply', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer as_your-api-key',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    from: { email: 'help@support.example.com', name: 'Support Team' },
+    subject: 'Re: Question about my order',
+    html: '<p>Hi Jane, your order #4821 shipped today.</p>',
+    text: 'Hi Jane, your order #4821 shipped today.'
+  })
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$messageId = '60d5ec49f1b2c72d9c8b1234';
+$url = "https://api.autosend.com/v1/inbound/messages/{$messageId}/reply";
+
+$data = [
+    'from' => ['email' => 'help@support.example.com', 'name' => 'Support Team'],
+    'subject' => 'Re: Question about my order',
+    'html' => '<p>Hi Jane, your order #4821 shipped today.</p>',
+    'text' => 'Hi Jane, your order #4821 shipped today.'
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer as_your-api-key',
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/inbound/messages/60d5ec49f1b2c72d9c8b1234/reply"
+
+    payload := map[string]interface{}{
+        "from":    map[string]string{"email": "help@support.example.com", "name": "Support Team"},
+        "subject": "Re: Question about my order",
+        "html":    "<p>Hi Jane, your order #4821 shipped today.</p>",
+        "text":    "Hi Jane, your order #4821 shipped today.",
+    }
+
+    jsonData, _ := json.Marshal(payload)
+
+    req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+    req.Header.Set("Authorization", "Bearer as_your-api-key")
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+public class ReplyToMessage {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/inbound/messages/60d5ec49f1b2c72d9c8b1234/reply");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Authorization", "Bearer as_your-api-key");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+
+            String jsonInputString = "{\n" +
+                "  \"from\": { \"email\": \"help@support.example.com\", \"name\": \"Support Team\" },\n" +
+                "  \"subject\": \"Re: Question about my order\",\n" +
+                "  \"html\": \"<p>Hi Jane, your order #4821 shipped today.</p>\",\n" +
+                "  \"text\": \"Hi Jane, your order #4821 shipped today.\"\n" +
+                "}";
+
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int status = con.getResponseCode();
+            System.out.println("Response Status: " + status);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'json'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/inbound/messages/60d5ec49f1b2c72d9c8b1234/reply')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(uri.path)
+request['Authorization'] = 'Bearer as_your-api-key'
+request['Content-Type'] = 'application/json'
+
+request.body = {
+  from: { email: 'help@support.example.com', name: 'Support Team' },
+  subject: 'Re: Question about my order',
+  html: '<p>Hi Jane, your order #4821 shipped today.</p>',
+  text: 'Hi Jane, your order #4821 shipped today.'
+}.to_json
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 202 Response
+{
+  "success": true,
+  "message": "Reply queued",
+  "data": {
+    "messageId": "0102018f...000000",
+    "status": "QUEUED"
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Project API key header of the form Bearer `as_<key>`. You can also pass the key via the `x-api-key` header.
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the inbound message to reply to (MongoDB ObjectId). The message must belong to the authenticated project.
+
+  Example: `"60d5ec49f1b2c72d9c8b1234"`
+</ParamField>
+
+### Body
+
+<ParamField body="from" type="object" required>
+  The sender address for the reply. The email's domain must be a verified sending domain on the project.
+
+  <Expandable title="child attributes">
+  <ParamField body="from.email" type="string" required>
+    Sender email address.
+
+    Example: `"help@support.example.com"`
+  </ParamField>
+
+  <ParamField body="from.name" type="string">
+    Sender display name. Falls back to the project's sender name when omitted.
+
+    Maximum length: `256`
+
+    Example: `"Support Team"`
+  </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="subject" type="string">
+  Subject line for the reply. When omitted, defaults to the original subject prefixed with `Re:` (no double prefixing).
+
+  Minimum length: `1`
+
+  Maximum length: `998`
+
+  Example: `"Re: Question about my order"`
+</ParamField>
+
+<ParamField body="html" type="string">
+  HTML body of the reply.
+</ParamField>
+
+<ParamField body="text" type="string">
+  Plain-text body of the reply.
+</ParamField>
+
+<ParamField body="strict" type="boolean" default="true">
+  When `true`, `from.email` must match an active configured inbound route so the recipient's reply can be routed back. Set to `false` to send from a one-off address on a verified domain. Ignored for cross-domain replies.
+
+  Example: `true`
+</ParamField>
+
+<ParamField body="cc" type="object[]">
+  CC recipients. Each entry has a required `email` and optional `name`.
+
+  Maximum items: `50`
+</ParamField>
+
+<ParamField body="bcc" type="object[]">
+  BCC recipients. Each entry has a required `email` and optional `name`.
+
+  Maximum items: `50`
+</ParamField>
+
+<ParamField body="attachments" type="object[]">
+  Attachments to include on the reply. Provide each attachment either inline (base64 `content`) or by `fileUrl`.
+
+  Maximum items: `20`
+
+  <Expandable title="child attributes">
+  <ParamField body="attachments.fileName" type="string" required>
+    Attachment file name.
+
+    Minimum length: `1`
+
+    Maximum length: `256`
+  </ParamField>
+
+  <ParamField body="attachments.fileUrl" type="string">
+    Public URL to fetch the attachment content from (alternative to `content`).
+  </ParamField>
+
+  <ParamField body="attachments.content" type="string">
+    Base64-encoded attachment content (alternative to `fileUrl`).
+  </ParamField>
+
+  <ParamField body="attachments.contentType" type="string">
+    MIME type of the attachment (e.g. `application/pdf`).
+  </ParamField>
+
+  <ParamField body="attachments.fileSize" type="integer">
+    Size of the attachment in bytes.
+
+    Minimum: `1`
+  </ParamField>
+
+  <ParamField body="attachments.contentId" type="string">
+    Content-ID for inline attachments referenced from the HTML body.
+
+    Maximum length: `128`
+  </ParamField>
+
+  <ParamField body="attachments.description" type="string">
+    Optional description of the attachment.
+
+    Maximum length: `256`
+  </ParamField>
+  </Expandable>
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Reply queued successfully (202)</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Confirmation message
+
+  Example: `"Reply queued"`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Result of queuing the reply through the sending pipeline (shape mirrors the standard send endpoint, e.g. the queued message identifier and status).
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="400 - From address required" type="object">
+  Returned when `from.email` is missing.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "A `from` address is required to reply"
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="400 - From domain not verified" type="object">
+  Returned when the `from` domain is not a verified sending domain on the project.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Reply `from` address must use the same domain that received the message"
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="400 - From address not routable" type="object">
+  Returned in strict mode when `from.email` does not match a configured inbound route. Pass `strict: false` to bypass.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Reply `from` address must be a configured inbound route so replies route back."
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="404 - Message not found" type="object">
+  Returned when the inbound message does not exist or does not belong to the authenticated project, or when it has no usable reply target address.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Inbound email not found"
+    }
+  }
+  ```
+</ResponseField>

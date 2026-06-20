@@ -1,0 +1,239 @@
+---
+title: 'Get Raw MIME URL'
+sidebarTitle: 'Get Raw MIME URL'
+openapi: 'GET /inbound/messages/{id}/raw'
+---
+
+<Note>
+  This endpoint uses a standard **project API key** (`AS_` prefix). It returns a short-lived signed URL (valid for 5 minutes) to download the raw MIME (`.eml`) source of the message.
+</Note>
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request GET \
+  --url https://api.autosend.com/v1/inbound/messages/60d5ec49f1b2c72d9c8b1234/raw \
+  --header 'Authorization: Bearer as_your-api-key'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/inbound/messages/60d5ec49f1b2c72d9c8b1234/raw"
+
+headers = {
+    "Authorization": "Bearer as_your-api-key"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/inbound/messages/60d5ec49f1b2c72d9c8b1234/raw', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer as_your-api-key'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$messageId = '60d5ec49f1b2c72d9c8b1234';
+$url = "https://api.autosend.com/v1/inbound/messages/{$messageId}/raw";
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer as_your-api-key'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/inbound/messages/60d5ec49f1b2c72d9c8b1234/raw"
+
+    req, _ := http.NewRequest("GET", url, nil)
+    req.Header.Set("Authorization", "Bearer as_your-api-key")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class GetRawMime {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/inbound/messages/60d5ec49f1b2c72d9c8b1234/raw");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Authorization", "Bearer as_your-api-key");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+            con.disconnect();
+
+            System.out.println(content.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/inbound/messages/60d5ec49f1b2c72d9c8b1234/raw')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Get.new(uri)
+request['Authorization'] = 'Bearer as_your-api-key'
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "url": "https://s3.us-east-1.amazonaws.com/autosend-inbound/...&X-Amz-Signature=...",
+    "expiresIn": 300
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Project API key header of the form Bearer `as_<key>`. You can also pass the key via the `x-api-key` header.
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the inbound message (MongoDB ObjectId). The message must belong to the authenticated project.
+
+  Example: `"60d5ec49f1b2c72d9c8b1234"`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Signed URL generated successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="child attributes">
+  <ResponseField name="data.url" type="string">
+    Pre-signed URL to download the raw MIME (`.eml`) source. The URL expires after `expiresIn` seconds.
+  </ResponseField>
+
+  <ResponseField name="data.expiresIn" type="integer">
+    Number of seconds the signed URL remains valid
+
+    Example: `300`
+  </ResponseField>
+  </Expandable>
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="400 - Invalid message ID" type="object">
+  Returned when the `id` parameter is not a valid MongoDB ObjectId.
+
+  ```json
+  {
+    "success": false,
+    "error": [
+      {
+        "message": "Invalid value",
+        "path": "id"
+      }
+    ]
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="404 - Message not found" type="object">
+  Returned when the message does not exist or does not belong to the authenticated project.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Inbound email not found"
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="404 - Raw MIME not available" type="object">
+  Returned when the raw MIME source has not yet been stored for this message.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Raw MIME is not yet available for this message"
+    }
+  }
+  ```
+</ResponseField>

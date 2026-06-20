@@ -1,0 +1,407 @@
+---
+title: 'List Messages'
+sidebarTitle: 'List Messages'
+openapi: 'GET /inbound/messages'
+---
+
+<Note>
+  This endpoint uses a standard **project API key** (`AS_` prefix). Messages are scoped to the project the key belongs to. Blocked and unrouted messages are excluded unless `includeBlocked=true` is set.
+</Note>
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request GET \
+  --url 'https://api.autosend.com/v1/inbound/messages?page=1&limit=50' \
+  --header 'Authorization: Bearer as_your-api-key'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/inbound/messages"
+
+headers = {
+    "Authorization": "Bearer as_your-api-key"
+}
+
+params = {
+    "page": 1,
+    "limit": 50
+}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```javascript JavaScript
+const params = new URLSearchParams({ page: '1', limit: '50' });
+
+fetch(`https://api.autosend.com/v1/inbound/messages?${params}`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer as_your-api-key'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/inbound/messages?page=1&limit=50';
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer as_your-api-key'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/inbound/messages?page=1&limit=50"
+
+    req, _ := http.NewRequest("GET", url, nil)
+    req.Header.Set("Authorization", "Bearer as_your-api-key")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class ListMessages {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/inbound/messages?page=1&limit=50");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Authorization", "Bearer as_your-api-key");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+            con.disconnect();
+
+            System.out.println(content.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/inbound/messages?page=1&limit=50')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Get.new(uri)
+request['Authorization'] = 'Bearer as_your-api-key'
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "_id": "60d5ec49f1b2c72d9c8b1234",
+        "providerMessageId": "abc123def456",
+        "messageId": "<CADxyz@mail.gmail.com>",
+        "domainName": "support.example.com",
+        "from": {
+          "email": "customer@gmail.com",
+          "name": "Jane Customer"
+        },
+        "to": [
+          {
+            "email": "help@support.example.com",
+            "name": null
+          }
+        ],
+        "cc": [],
+        "subject": "Question about my order",
+        "snippet": "Hi, I wanted to check on the status of order #4821…",
+        "status": "PROCESSED",
+        "threadId": "60d5ec49f1b2c72d9c8b1234",
+        "inReplyToEmailActivityId": null,
+        "attachments": [],
+        "hasAttachments": false,
+        "attachmentCount": 0,
+        "receivedAt": "2026-06-20T10:15:30.000Z",
+        "createdAt": "2026-06-20T10:15:31.000Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 50,
+      "total": 1,
+      "pages": 1
+    }
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Project API key header of the form Bearer `as_<key>`. You can also pass the key via the `x-api-key` header.
+</ParamField>
+
+### Query Parameters
+
+<ParamField query="domainId" type="string">
+  Filter to messages received on a specific domain (MongoDB ObjectId of the project's `sesDomains` entry).
+
+  Example: `"60d5ec49f1b2c72d9c8b5678"`
+</ParamField>
+
+<ParamField query="from" type="string">
+  Filter by sender email address (exact match, case-insensitive).
+
+  Example: `"customer@gmail.com"`
+</ParamField>
+
+<ParamField query="to" type="string">
+  Filter by recipient email address (exact match, case-insensitive).
+
+  Example: `"help@support.example.com"`
+</ParamField>
+
+<ParamField query="threadId" type="string">
+  Filter to messages belonging to a specific conversation thread (MongoDB ObjectId).
+
+  Example: `"60d5ec49f1b2c72d9c8b1234"`
+</ParamField>
+
+<ParamField query="search" type="string">
+  Case-insensitive substring search against the message subject.
+
+  Maximum length: `200`
+</ParamField>
+
+<ParamField query="dateFrom" type="string">
+  Return only messages created on or after this timestamp (ISO 8601).
+
+  Example: `"2026-06-01T00:00:00.000Z"`
+</ParamField>
+
+<ParamField query="dateTo" type="string">
+  Return only messages created on or before this timestamp (ISO 8601).
+
+  Example: `"2026-06-30T23:59:59.000Z"`
+</ParamField>
+
+<ParamField query="includeBlocked" type="boolean">
+  When `true`, also include `BLOCKED_UNVERIFIED` and `BLOCKED_UNROUTED` messages. Defaults to `false`.
+
+  Example: `false`
+</ParamField>
+
+<ParamField query="page" type="integer">
+  Page number (1-based). Defaults to `1`.
+
+  Minimum: `1`
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Number of messages per page. Defaults to `50`.
+
+  Minimum: `1`
+
+  Maximum: `200`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Messages retrieved successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="child attributes">
+  <ResponseField name="data.items" type="object[]">
+    Array of inbound message summaries, newest first
+
+    <Expandable title="child attributes">
+    <ResponseField name="_id" type="string">
+      Unique inbound message identifier
+    </ResponseField>
+
+    <ResponseField name="providerMessageId" type="string">
+      Provider (SES) message ID — the idempotency key for the message
+    </ResponseField>
+
+    <ResponseField name="messageId" type="string">
+      RFC 5322 `Message-ID` header from the original email
+    </ResponseField>
+
+    <ResponseField name="domainName" type="string">
+      Domain the message was received on
+    </ResponseField>
+
+    <ResponseField name="from" type="object">
+      Sender address (`email`, `name`)
+    </ResponseField>
+
+    <ResponseField name="to" type="object[]">
+      Recipient addresses (`email`, `name`)
+    </ResponseField>
+
+    <ResponseField name="cc" type="object[]">
+      CC addresses (`email`, `name`)
+    </ResponseField>
+
+    <ResponseField name="subject" type="string">
+      Message subject
+    </ResponseField>
+
+    <ResponseField name="snippet" type="string">
+      Short plain-text preview of the message body
+    </ResponseField>
+
+    <ResponseField name="status" type="string">
+      Message status: `PROCESSED`, `PROCESSING`, `FAILED`, `BLOCKED_UNVERIFIED`, or `BLOCKED_UNROUTED`
+    </ResponseField>
+
+    <ResponseField name="threadId" type="string">
+      Identifier of the conversation thread this message belongs to
+    </ResponseField>
+
+    <ResponseField name="inReplyToEmailActivityId" type="string | null">
+      ID of the outbound email this message is a reply to, if matched
+    </ResponseField>
+
+    <ResponseField name="attachments" type="object[]">
+      Attachment metadata (`filename`, `contentType`, `size`, `contentId`, `isInline`, `partIndex`)
+    </ResponseField>
+
+    <ResponseField name="hasAttachments" type="boolean">
+      Whether the message has any attachments
+    </ResponseField>
+
+    <ResponseField name="attachmentCount" type="integer">
+      Number of attachments on the message
+    </ResponseField>
+
+    <ResponseField name="receivedAt" type="string">
+      Timestamp the message was received (ISO 8601)
+    </ResponseField>
+
+    <ResponseField name="createdAt" type="string">
+      Timestamp the record was created (ISO 8601)
+    </ResponseField>
+    </Expandable>
+  </ResponseField>
+
+  <ResponseField name="data.pagination" type="object">
+    Pagination metadata
+
+    <Expandable title="child attributes">
+    <ResponseField name="page" type="integer">
+      Current page number
+    </ResponseField>
+
+    <ResponseField name="limit" type="integer">
+      Page size used for this response
+    </ResponseField>
+
+    <ResponseField name="total" type="integer">
+      Total number of matching messages
+    </ResponseField>
+
+    <ResponseField name="pages" type="integer">
+      Total number of pages
+    </ResponseField>
+    </Expandable>
+  </ResponseField>
+  </Expandable>
+</ResponseField>
+
+#### Error Responses
+
+<ResponseField name="400 - Invalid query parameter" type="object">
+  Returned when a query parameter fails validation (e.g. a malformed `domainId`, invalid email, or out-of-range `limit`).
+
+  ```json
+  {
+    "success": false,
+    "error": [
+      {
+        "message": "Invalid value",
+        "path": "limit"
+      }
+    ]
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="401 - Unauthorized" type="object">
+  Returned when the API key is missing or invalid.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Invalid or missing API key"
+    }
+  }
+  ```
+</ResponseField>
