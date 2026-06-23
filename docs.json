@@ -273,7 +273,6 @@
 						"pages": [
 							"api-reference/inbound-emails/list-messages",
 							"api-reference/inbound-emails/get-message",
-							"api-reference/inbound-emails/get-raw-mime",
 							"api-reference/inbound-emails/download-attachment",
 							"api-reference/inbound-emails/reply-to-message"
 						]
