@@ -1,0 +1,228 @@
+---
+title: 'Download Attachment'
+sidebarTitle: 'Download Attachment'
+openapi: 'GET /inbound/messages/{id}/attachments/{idx}'
+---
+
+<Note>
+  This endpoint uses a standard **project API key** (`AS_` prefix). It streams the raw binary content of a single attachment, identified either by its zero-based index from the message's `attachments` array or by its `attachmentId`. Response headers carry `Content-Type` and `Content-Disposition: attachment; filename="…"`.
+</Note>
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request GET \
+  --url https://api.autosend.com/v1/inbound/messages/60d5ec49f1b2c72d9c8b1234/attachments/0 \
+  --header 'Authorization: Bearer as_your-api-key' \
+  --output receipt.pdf
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/inbound/messages/60d5ec49f1b2c72d9c8b1234/attachments/0"
+
+headers = {
+    "Authorization": "Bearer as_your-api-key"
+}
+
+response = requests.get(url, headers=headers)
+with open("receipt.pdf", "wb") as f:
+    f.write(response.content)
+```
+
+```javascript JavaScript
+const response = await fetch(
+  'https://api.autosend.com/v1/inbound/messages/60d5ec49f1b2c72d9c8b1234/attachments/0',
+  {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer as_your-api-key'
+    }
+  }
+);
+
+const blob = await response.blob();
+// Save or process the blob as needed
+```
+
+```php PHP
+<?php
+
+$messageId = '60d5ec49f1b2c72d9c8b1234';
+$index = 0;
+$url = "https://api.autosend.com/v1/inbound/messages/{$messageId}/attachments/{$index}";
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer as_your-api-key'
+]);
+
+$content = curl_exec($ch);
+curl_close($ch);
+
+file_put_contents('receipt.pdf', $content);
+?>
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+    "os"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/inbound/messages/60d5ec49f1b2c72d9c8b1234/attachments/0"
+
+    req, _ := http.NewRequest("GET", url, nil)
+    req.Header.Set("Authorization", "Bearer as_your-api-key")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    out, _ := os.Create("receipt.pdf")
+    defer out.Close()
+    io.Copy(out, resp.Body)
+}
+```
+
+```java Java
+import java.io.InputStream;
+import java.io.FileOutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class DownloadAttachment {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/inbound/messages/60d5ec49f1b2c72d9c8b1234/attachments/0");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Authorization", "Bearer as_your-api-key");
+
+            try (InputStream in = con.getInputStream();
+                 FileOutputStream out = new FileOutputStream("receipt.pdf")) {
+                byte[] buffer = new byte[8192];
+                int n;
+                while ((n = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, n);
+                }
+            }
+            con.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/inbound/messages/60d5ec49f1b2c72d9c8b1234/attachments/0')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Get.new(uri)
+request['Authorization'] = 'Bearer as_your-api-key'
+
+response = http.request(request)
+File.open('receipt.pdf', 'wb') { |f| f.write(response.body) }
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```text 200 Response
+<binary attachment content>
+
+Content-Type: application/pdf
+Content-Disposition: attachment; filename="receipt.pdf"
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Project API key header of the form Bearer `as_<key>`. You can also pass the key via the `x-api-key` header.
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the inbound message. The message must belong to the authenticated project.
+
+  Example: `"60d5ec49f1b2c72d9c8b1234"`
+</ParamField>
+
+<ParamField path="idx" type="string" required>
+  Identifies the attachment to download. Accepts either a zero-based index into the message's `attachments` array (e.g. `0`) or the attachment's `attachmentId` (e.g. `att_60d5ec49f1b2c72d9c8b9999`).
+
+  Example: `0`
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Attachment streamed successfully. The body is the raw binary content; the `Content-Type` and `Content-Disposition` response headers describe the file.</span>
+
+#### Error Responses
+
+<ResponseField name="400 - Invalid parameters" type="object">
+  Returned when `id` is not valid or `idx` is neither a non-negative integer nor a valid `attachmentId`.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+        "message": "Invalid value",
+      }
+    
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="404 - Message not found" type="object">
+  Returned when the message does not exist or does not belong to the authenticated project.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Inbound email not found"
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="404 - Attachment not found" type="object">
+  Returned when no attachment exists at the given index.
+
+  ```json
+  {
+    "success": false,
+    "error": {
+      "message": "Attachment not found"
+    }
+  }
+  ```
+</ResponseField>
+

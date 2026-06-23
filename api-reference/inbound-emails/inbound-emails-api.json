@@ -1,0 +1,50 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AutoSend API",
+    "description": "AutoSend REST API for reading and replying to inbound emails received on a project's inbound-enabled domains. These endpoints use a standard project API key (AS_ prefix).",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.autosend.com/v1"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/inbound/messages": {
+      "get": {
+        "summary": "List Messages",
+        "description": "Retrieves inbound email messages received on the authenticated project's inbound-enabled domains. Supports filtering by domain, sender, recipient, thread, subject search, and date range, with pagination. Blocked/unrouted messages are excluded unless includeBlocked is set."
+      }
+    },
+    "/inbound/messages/{id}": {
+      "get": {
+        "summary": "Get Message",
+        "description": "Retrieves a single inbound email message by its ID, including full text/HTML bodies, headers, attachments metadata, threading information, and verdicts."
+      }
+    },
+    "/inbound/messages/{id}/raw": {
+      "get": {
+        "summary": "Get Raw MIME URL",
+        "description": "Returns a short-lived signed URL to download the raw MIME (.eml) source of the inbound message from storage."
+      }
+    },
+    "/inbound/messages/{id}/attachments/{idx}": {
+      "get": {
+        "summary": "Download Attachment",
+        "description": "Downloads a single attachment from an inbound message by its zero-based index. Returns the binary attachment content with the appropriate Content-Type and Content-Disposition headers."
+      }
+    },
+    "/inbound/messages/{id}/reply": {
+      "post": {
+        "summary": "Reply to Message",
+        "description": "Sends a reply to an inbound email message. The reply is threaded into the original conversation via In-Reply-To and References headers, and queued through the standard sending pipeline. The from domain must be a verified sending domain on the project."
+      }
+    }
+  }
+}
