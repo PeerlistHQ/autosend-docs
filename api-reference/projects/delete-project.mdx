@@ -157,7 +157,7 @@ puts response.body
 ### Path Parameters
 
 <ParamField path="projectId" type="string" required>
-  The unique identifier of the project to delete (MongoDB ObjectId). The project must belong to the authenticated organization.
+  The unique identifier of the project to delete. The project must belong to the authenticated organization.
 
   Example: `"60d5ec49f1b2c72d9c8b1234"`
 </ParamField>
@@ -194,7 +194,7 @@ puts response.body
 </ResponseField>
 
 <ResponseField name="400 - Invalid project ID" type="object">
-  Returned when the `projectId` parameter is not a valid MongoDB ObjectId.
+  Returned when the `projectId` parameter is not valid.
 
   ```json
   {

@@ -208,7 +208,7 @@ puts response.body
 ### Path Parameters
 
 <ParamField path="id" type="string" required>
-  The unique identifier of the inbound message (MongoDB ObjectId). The message must belong to the authenticated project.
+  The unique identifier of the inbound message. The message must belong to the authenticated project.
 
   Example: `"60d5ec49f1b2c72d9c8b1234"`
 </ParamField>
@@ -332,17 +332,15 @@ puts response.body
 #### Error Responses
 
 <ResponseField name="400 - Invalid message ID" type="object">
-  Returned when the `id` parameter is not a valid MongoDB ObjectId.
+  Returned when the `id` parameter is not valid.
 
   ```json
   {
     "success": false,
-    "error": [
-      {
+    "error": {
         "message": "Invalid value",
-        "path": "id"
       }
-    ]
+    
   }
   ```
 </ResponseField>

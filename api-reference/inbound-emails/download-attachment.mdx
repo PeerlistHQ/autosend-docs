@@ -169,7 +169,7 @@ Content-Disposition: attachment; filename="receipt.pdf"
 ### Path Parameters
 
 <ParamField path="id" type="string" required>
-  The unique identifier of the inbound message (MongoDB ObjectId). The message must belong to the authenticated project.
+  The unique identifier of the inbound message. The message must belong to the authenticated project.
 
   Example: `"60d5ec49f1b2c72d9c8b1234"`
 </ParamField>
@@ -187,17 +187,15 @@ Content-Disposition: attachment; filename="receipt.pdf"
 #### Error Responses
 
 <ResponseField name="400 - Invalid parameters" type="object">
-  Returned when `id` is not a valid MongoDB ObjectId or `idx` is neither a non-negative integer nor a valid `attachmentId`.
+  Returned when `id` is not valid or `idx` is neither a non-negative integer nor a valid `attachmentId`.
 
   ```json
   {
     "success": false,
-    "error": [
-      {
+    "error": {
         "message": "Invalid value",
-        "path": "idx"
       }
-    ]
+    
   }
   ```
 </ResponseField>
@@ -228,15 +226,3 @@ Content-Disposition: attachment; filename="receipt.pdf"
   ```
 </ResponseField>
 
-<ResponseField name="404 - Raw MIME not available" type="object">
-  Returned when the raw MIME source needed to extract the attachment has not yet been stored.
-
-  ```json
-  {
-    "success": false,
-    "error": {
-      "message": "Raw MIME is not yet available for this message"
-    }
-  }
-  ```
-</ResponseField>

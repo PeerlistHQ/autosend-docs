@@ -210,7 +210,6 @@ puts response.body
 ```json 202 Response
 {
   "success": true,
-  "message": "Reply queued",
   "data": {
     "messageId": "0102018f...000000",
     "status": "QUEUED"
@@ -229,7 +228,7 @@ puts response.body
 ### Path Parameters
 
 <ParamField path="id" type="string" required>
-  The unique identifier of the inbound message to reply to (MongoDB ObjectId). The message must belong to the authenticated project.
+  The unique identifier of the inbound message to reply to. The message must belong to the authenticated project.
 
   Example: `"60d5ec49f1b2c72d9c8b1234"`
 </ParamField>

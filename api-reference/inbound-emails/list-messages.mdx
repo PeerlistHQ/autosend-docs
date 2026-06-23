@@ -196,12 +196,6 @@ puts response.body
 
 ### Query Parameters
 
-<ParamField query="domainId" type="string">
-  Filter to messages received on a specific domain (MongoDB ObjectId of the project's `sesDomains` entry).
-
-  Example: `"60d5ec49f1b2c72d9c8b5678"`
-</ParamField>
-
 <ParamField query="from" type="string">
   Filter by sender email address (exact match, case-insensitive).
 
@@ -215,7 +209,7 @@ puts response.body
 </ParamField>
 
 <ParamField query="threadId" type="string">
-  Filter to messages belonging to a specific conversation thread (MongoDB ObjectId).
+  Filter to messages belonging to a specific conversation thread .
 
   Example: `"60d5ec49f1b2c72d9c8b1234"`
 </ParamField>
@@ -348,12 +342,11 @@ puts response.body
   ```json
   {
     "success": false,
-    "error": [
-      {
+    "error": {
         "message": "Invalid value",
         "path": "limit"
       }
-    ]
+    
   }
   ```
 </ResponseField>
