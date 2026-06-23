@@ -25,7 +25,7 @@
     "/inbound/messages/{id}": {
       "get": {
         "summary": "Get Message",
-        "description": "Retrieves a single inbound email message by its ID, including full text/HTML bodies, headers, attachments metadata, threading information, and SES verdicts."
+        "description": "Retrieves a single inbound email message by its ID, including full text/HTML bodies, headers, attachments metadata, threading information, and verdicts."
       }
     },
     "/inbound/messages/{id}/raw": {
