@@ -5,7 +5,7 @@ openapi: 'GET /inbound/messages/{id}/attachments/{idx}'
 ---
 
 <Note>
-  This endpoint uses a standard **project API key** (`AS_` prefix). It streams the raw binary content of a single attachment, identified by its zero-based index from the message's `attachments` array. Response headers carry `Content-Type` and `Content-Disposition: attachment; filename="…"`.
+  This endpoint uses a standard **project API key** (`AS_` prefix). It streams the raw binary content of a single attachment, identified either by its zero-based index from the message's `attachments` array or by its `attachmentId`. Response headers carry `Content-Type` and `Content-Disposition: attachment; filename="…"`.
 </Note>
 
 <RequestExample>
@@ -174,10 +174,8 @@ Content-Disposition: attachment; filename="receipt.pdf"
   Example: `"60d5ec49f1b2c72d9c8b1234"`
 </ParamField>
 
-<ParamField path="idx" type="integer" required>
-  Zero-based index of the attachment within the message's `attachments` array.
-
-  Minimum: `0`
+<ParamField path="idx" type="string" required>
+  Identifies the attachment to download. Accepts either a zero-based index into the message's `attachments` array (e.g. `0`) or the attachment's `attachmentId` (e.g. `att_60d5ec49f1b2c72d9c8b9999`).
 
   Example: `0`
 </ParamField>
@@ -189,7 +187,7 @@ Content-Disposition: attachment; filename="receipt.pdf"
 #### Error Responses
 
 <ResponseField name="400 - Invalid parameters" type="object">
-  Returned when `id` is not a valid MongoDB ObjectId or `idx` is not a non-negative integer.
+  Returned when `id` is not a valid MongoDB ObjectId or `idx` is neither a non-negative integer nor a valid `attachmentId`.
 
   ```json
   {

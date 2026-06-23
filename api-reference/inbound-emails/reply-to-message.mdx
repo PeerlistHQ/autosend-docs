@@ -9,7 +9,7 @@ openapi: 'POST /inbound/messages/{id}/reply'
 </Note>
 
 <Info>
-  The `from.email` domain must be a **verified sending domain** on the project. By default (`strict: true`), `from.email` must also match a configured inbound route so the recipient's reply routes back. Pass `strict: false` to send from a one-off address on a verified domain.
+  The `from.email` domain must be a **verified sending domain** on the project.
 </Info>
 
 <RequestExample>
@@ -274,12 +274,6 @@ puts response.body
   Plain-text body of the reply.
 </ParamField>
 
-<ParamField body="strict" type="boolean" default="true">
-  When `true`, `from.email` must match an active configured inbound route so the recipient's reply can be routed back. Set to `false` to send from a one-off address on a verified domain. Ignored for cross-domain replies.
-
-  Example: `true`
-</ParamField>
-
 <ParamField body="cc" type="object[]">
   CC recipients. Each entry has a required `email` and optional `name`.
 
@@ -381,19 +375,6 @@ puts response.body
     "success": false,
     "error": {
       "message": "Reply `from` address must use the same domain that received the message"
-    }
-  }
-  ```
-</ResponseField>
-
-<ResponseField name="400 - From address not routable" type="object">
-  Returned in strict mode when `from.email` does not match a configured inbound route. Pass `strict: false` to bypass.
-
-  ```json
-  {
-    "success": false,
-    "error": {
-      "message": "Reply `from` address must be a configured inbound route so replies route back."
     }
   }
   ```

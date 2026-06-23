@@ -156,8 +156,7 @@ puts response.body
   "data": {
     "items": [
       {
-        "_id": "60d5ec49f1b2c72d9c8b1234",
-        "providerMessageId": "abc123def456",
+        "id": "60d5ec49f1b2c72d9c8b1234",
         "messageId": "<CADxyz@mail.gmail.com>",
         "domainName": "support.example.com",
         "from": {
@@ -172,15 +171,9 @@ puts response.body
         ],
         "cc": [],
         "subject": "Question about my order",
-        "snippet": "Hi, I wanted to check on the status of order #4821…",
         "status": "PROCESSED",
-        "threadId": "60d5ec49f1b2c72d9c8b1234",
-        "inReplyToEmailActivityId": null,
-        "attachments": [],
-        "hasAttachments": false,
         "attachmentCount": 0,
-        "receivedAt": "2026-06-20T10:15:30.000Z",
-        "createdAt": "2026-06-20T10:15:31.000Z"
+        "receivedAt": "2026-06-20T10:15:30.000Z"
       }
     ],
     "pagination": {
@@ -281,12 +274,8 @@ puts response.body
     Array of inbound message summaries, newest first
 
     <Expandable title="child attributes">
-    <ResponseField name="_id" type="string">
+    <ResponseField name="id" type="string">
       Unique inbound message identifier
-    </ResponseField>
-
-    <ResponseField name="providerMessageId" type="string">
-      Provider (SES) message ID — the idempotency key for the message
     </ResponseField>
 
     <ResponseField name="messageId" type="string">
@@ -313,28 +302,8 @@ puts response.body
       Message subject
     </ResponseField>
 
-    <ResponseField name="snippet" type="string">
-      Short plain-text preview of the message body
-    </ResponseField>
-
     <ResponseField name="status" type="string">
       Message status: `PROCESSED`, `PROCESSING`, `FAILED`, `BLOCKED_UNVERIFIED`, or `BLOCKED_UNROUTED`
-    </ResponseField>
-
-    <ResponseField name="threadId" type="string">
-      Identifier of the conversation thread this message belongs to
-    </ResponseField>
-
-    <ResponseField name="inReplyToEmailActivityId" type="string | null">
-      ID of the outbound email this message is a reply to, if matched
-    </ResponseField>
-
-    <ResponseField name="attachments" type="object[]">
-      Attachment metadata (`filename`, `contentType`, `size`, `contentId`, `isInline`, `partIndex`)
-    </ResponseField>
-
-    <ResponseField name="hasAttachments" type="boolean">
-      Whether the message has any attachments
     </ResponseField>
 
     <ResponseField name="attachmentCount" type="integer">
@@ -343,10 +312,6 @@ puts response.body
 
     <ResponseField name="receivedAt" type="string">
       Timestamp the message was received (ISO 8601)
-    </ResponseField>
-
-    <ResponseField name="createdAt" type="string">
-      Timestamp the record was created (ISO 8601)
     </ResponseField>
     </Expandable>
   </ResponseField>

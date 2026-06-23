@@ -168,15 +168,12 @@ puts response.body
     "subject": "Question about my order",
     "text": "Hi, I wanted to check on the status of order #4821.",
     "html": "<p>Hi, I wanted to check on the status of order #4821.</p>",
-    "snippet": "Hi, I wanted to check on the status of order #4821.",
     "attachments": [
       {
+        "attachmentId": "att_60d5ec49f1b2c72d9c8b9999",
         "filename": "receipt.pdf",
         "contentType": "application/pdf",
         "size": 20480,
-        "contentId": null,
-        "isInline": false,
-        "partIndex": 0,
         "index": 0
       }
     ],
@@ -195,8 +192,7 @@ puts response.body
     "inReplyTo": null,
     "inReplyToEmailActivityId": null,
     "inReplyToInboundEmailId": null,
-    "receivedAt": "2026-06-20T10:15:30.000Z",
-    "createdAt": "2026-06-20T10:15:31.000Z"
+    "receivedAt": "2026-06-20T10:15:30.000Z"
   }
 }
 ```
@@ -279,12 +275,8 @@ puts response.body
     HTML body (truncated; raw MIME in storage is the source of truth)
   </ResponseField>
 
-  <ResponseField name="data.snippet" type="string">
-    Short plain-text preview of the message body
-  </ResponseField>
-
   <ResponseField name="data.attachments" type="object[]">
-    Attachment metadata. Each entry includes `filename`, `contentType`, `size`, `contentId`, `isInline`, `partIndex`, and a zero-based `index` used to download the attachment.
+    Attachment metadata. Each entry includes `attachmentId`, `filename`, `contentType`, `size`, and a zero-based `index` used to download the attachment.
   </ResponseField>
 
   <ResponseField name="data.headers" type="object">
@@ -333,10 +325,6 @@ puts response.body
 
   <ResponseField name="data.receivedAt" type="string">
     Timestamp the message was received (ISO 8601)
-  </ResponseField>
-
-  <ResponseField name="data.createdAt" type="string">
-    Timestamp the record was created (ISO 8601)
   </ResponseField>
   </Expandable>
 </ResponseField>
