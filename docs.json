@@ -87,6 +87,10 @@
 						"pages": ["automations", "automations/events", "automations/create", "automations/branching"]
 					},
 					{
+						"group": "Inbound",
+						"pages": ["inbound/introduction"]
+					},
+					{
 						"group": "Others",
 						"pages": [
 							"others/suppressions",

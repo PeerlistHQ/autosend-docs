@@ -1,0 +1,191 @@
+---
+title: 'Inbound Email API'
+description: 'Receive incoming emails on AutoSend through webhooks, then read, parse, or reply to them programmatically with the Inbound Email API.'
+sidebarTitle: 'Introduction'
+icon: '/icons/inbound.svg'
+keywords:
+  [
+    'inbound email API',
+    'receive emails via API',
+    'email receiving API',
+    'incoming email webhook',
+    'parse inbound emails',
+    'reply to incoming emails',
+  ]
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+
+The AutoSend Inbound Email API lets your application receive incoming emails programmatically. When a message lands on one of your receiving domains, AutoSend fires an `email.received` webhook carrying the message metadata (message ID, sender, recipients, subject, receiving domain, and threading). Your application then calls a structured REST endpoint with that message ID to fetch the full message, including headers, plain text and HTML bodies, attachments, and verdicts. Use it to build support inboxes, parse customer replies, route email into internal tools, or store conversations alongside the rest of your data.
+
+<Info>
+	Jump straight to the [Inbound Emails API reference](/api-reference/inbound-emails/list-messages)
+	for endpoints, request schemas, and response samples.
+</Info>
+
+## How the Inbound Email API works
+
+<Steps>
+<Step titleSize="h3" title="Subscribe to the email.received event">
+
+Create a new webhook or reuse an existing one, and subscribe it to the `email.received` event. You can set this up from the <a href={AUTOSEND_PATHS.webhooks}>Webhooks</a> section of the dashboard. See the <a href={APP_PATHS.webhookIntroduction}>Webhooks introduction</a> if you need a refresher on creating endpoints.
+
+</Step>
+
+<Step titleSize="h3" title="Receive an inbound notification">
+
+When an email arrives on one of your receiving domains, AutoSend delivers an `email.received` webhook to your endpoint. The payload includes the message ID, sender, recipient, subject, receiving domain, and threading metadata. See the full payload in the <a href={APP_PATHS.webhookEventType}>event types reference</a>.
+
+</Step>
+
+<Step titleSize="h3" title="Fetch the full message via API">
+
+Use the message ID from the webhook payload to fetch the complete structured JSON, including headers, text and HTML bodies, attachments metadata, and verdicts, via the <a href={APP_PATHS.getInboundMessageApi}>Get Message</a> endpoint.
+
+</Step>
+</Steps>
+
+<Tip>
+	To browse every inbound message your project has received, open the [Email Activity > Inbound tab](https://autosend.com/email-activities/inbound) in the dashboard.
+</Tip>
+
+---
+
+## Receiving domains
+
+Every project comes with a default receiving domain. You can also enable Inbound on a custom domain if you need email to arrive at an address you control.
+
+### Default receiving domain
+
+Each project is provisioned with a unique receiving subdomain in the form `{prefix}@{uniquesubdomain}.autosend.email`. You pick any prefix and immediately start receiving email at that address. **No DNS setup is required**.
+
+<Frame>
+	<img
+		src='/images/inbound/default-receiving-domain.png'
+		alt='Default receiving domain configuration in AutoSend'
+	/>
+</Frame>
+
+<Tip>
+	The default receiving domain is the fastest way to get started and is the recommended option for
+	most projects.
+</Tip>
+
+### Use your own domain
+
+You can also enable Inbound on a domain you've already verified for sending on AutoSend, or add a brand-new domain. Follow the MX record instructions shown in the dashboard to point incoming mail to AutoSend.
+
+<Frame>
+	<img
+		src='/images/inbound/custom-receiving-domain.png'
+		alt='Enabling Inbound for a custom domain in AutoSend'
+	/>
+</Frame>
+
+<Warning>
+	If your domain is already serving inboxes through Gmail, Outlook, or another mail provider, you
+	cannot also use it for receiving on AutoSend. MX records can only point to one provider at a time.
+	To work around this, set up [email forwarding](https://support.google.com/mail/answer/10957) from
+	your existing mail provider to your AutoSend default receiving address.
+</Warning>
+
+---
+
+## Reading and replying to messages
+
+Once an `email.received` webhook fires, you can use the Inbound Emails API to read the full message, download attachments, and reply in the same thread.
+
+<Columns cols={2}>
+	<Card
+		title='List messages'
+		icon='/icons/list-message.svg'
+		href={APP_PATHS.listInboundMessagesApi}>
+		Paginate, filter, and search messages received on your project's inbound-enabled domains.
+	</Card>
+	<Card title='Get a message' icon='/icons/get-a-message.svg' href={APP_PATHS.getInboundMessageApi}>
+		Fetch a single message with full body, headers, attachments metadata, and threading.
+	</Card>
+	<Card
+		title='Download attachment'
+		icon='/icons/download-attachment.svg'
+		href={APP_PATHS.downloadInboundAttachmentApi}>
+		Download a single attachment by its zero-based index.
+	</Card>
+	<Card
+		title='Reply to a message'
+		icon='/icons/reply-to-a-message.svg'
+		href={APP_PATHS.replyToInboundMessageApi}>
+		Send a threaded reply via In-Reply-To and References headers using a verified sending domain.
+	</Card>
+</Columns>
+
+---
+
+## Common use cases
+
+- **AI agent inbox**: Pair Inbound with the AutoSend sending API to give your AI agents a fully two-way email address. Your agents can both send outbound messages and receive replies in the same project, enabling real email conversations driven by an LLM.
+- **Support portal or helpdesk**: Route customer replies into your ticketing system and let agents respond from a unified inbox.
+- **CRM email logging**: Capture incoming emails as activities on the matching contact, lead, or deal record.
+- **Applicant tracking system (ATS)**: Parse candidate replies to recruiting outreach and attach them to the right pipeline stage.
+- **Custom email client or inbox**: Build a fully featured mailbox without running your own mail server, MX records, or IMAP plumbing.
+
+---
+
+## Frequently asked questions
+
+<AccordionGroup>
+	<Accordion title='Can I receive emails using an API?'>
+		Yes. The AutoSend Inbound Email API delivers incoming messages to your application in two steps.
+		First, an `email.received` webhook notifies you when a new email arrives on one of your
+		receiving domains. Second, a REST endpoint returns the full structured message, including
+		headers, plain text and HTML bodies, attachments, and threading metadata.
+	</Accordion>
+	<Accordion title='How do I receive incoming emails on AutoSend?'>
+		Pick or enable a receiving domain in the dashboard, create a webhook subscribed to the
+		`email.received` event, and call the <a href={APP_PATHS.getInboundMessageApi}>Get Message</a>{' '}
+		endpoint with the message ID from the webhook payload to fetch the full email.
+	</Accordion>
+	<Accordion title='Do I need a custom domain to use the Inbound Email API?'>
+		No. Every project is provisioned with a default receiving domain in the form `{prefix}@
+		{uniquesubdomain}.autosend.email` and you can start receiving email immediately without any DNS
+		setup. You can also enable Inbound on a verified custom domain when you need email to arrive at
+		an address you control.
+	</Accordion>
+	<Accordion title='Can I reply to inbound emails through the API?'>
+		Yes. Use the <a href={APP_PATHS.replyToInboundMessageApi}>Reply to Message</a> endpoint to send
+		a threaded reply. AutoSend sets the `In-Reply-To` and `References` headers automatically so the
+		reply lands in the same conversation in the recipient's inbox.
+	</Accordion>
+	<Accordion title='How do I parse attachments from an inbound email?'>
+		The <a href={APP_PATHS.getInboundMessageApi}>Get Message</a> response includes attachment
+		metadata for every message. Download the binary content of a specific attachment by its
+		zero-based index via the{' '}
+		<a href={APP_PATHS.downloadInboundAttachmentApi}>Download Attachment</a> endpoint.
+	</Accordion>
+</AccordionGroup>
+
+---
+
+## Related resources
+
+<Columns cols={2}>
+	<Card
+		title='email.received event'
+		icon='/icons/event-types.svg'
+		href={`${APP_PATHS.webhookEventType}#email-received`}>
+		Full webhook payload reference for inbound notifications.
+	</Card>
+	<Card
+		title='Webhooks introduction'
+		icon='/icons/webhook.svg'
+		href={APP_PATHS.webhookIntroduction}>
+		Set up a webhook endpoint and verify requests.
+	</Card>
+	<Card title='Manage Inbound' icon='/icons/at-sign.svg' href={AUTOSEND_PATHS.inbound}>
+		Configure receiving domains and view incoming messages in the dashboard.
+	</Card>
+	<Card title='Domains' icon='/icons/domain.svg' href={AUTOSEND_PATHS.domains}>
+		Verify a domain or add a new one to use with Inbound.
+	</Card>
+</Columns>
