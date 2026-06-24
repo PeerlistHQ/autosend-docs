@@ -7,6 +7,22 @@ rss: true
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 
+<Update label="June 24, 2026">
+
+## Inbound Email API
+
+<Frame>![Official Convex component](/images/changelog/inbound-email-api.jpg)</Frame>
+
+AutoSend now lets your application receive incoming emails. When a message lands on one of your receiving domains, AutoSend fires an `email.received` webhook with the message metadata, and your app calls a structured REST endpoint to fetch the full message including headers, plain text and HTML bodies, attachments, and verdicts.
+
+Every project is provisioned with a default receiving domain in the form `{prefix}@{uniquesubdomain}.autosend.email`, so you can start receiving email immediately without any DNS setup. You can also enable Inbound on a verified custom domain.
+
+Use it to give your AI agents a fully two-way email address, route customer replies into a support portal, log incoming emails into your CRM, attach candidate replies to your ATS, or build a custom email client.
+
+Read <a href={APP_PATHS.inboundIntroduction}>how to setup and use the Inbound Email API</a> and browse the <a href={APP_PATHS.listInboundMessagesApi}>API reference</a> to learn more.
+
+</Update>
+
 <Update label="June 4, 2026">
 
 ## Revamped Billing and Usage with Email Credits
