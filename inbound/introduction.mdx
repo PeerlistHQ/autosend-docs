@@ -141,6 +141,10 @@ Once an `email.received` webhook fires, you can use the Inbound Emails API to re
 		receiving domains. Second, a REST endpoint returns the full structured message, including
 		headers, plain text and HTML bodies, attachments, and threading metadata.
 	</Accordion>
+	<Accordion title='Which AutoSend plan do I need to use the Inbound Email API?'>
+		The Inbound Email API is available on the **Starter 10k** plan and above. Free and trial plans
+		do not include inbound receiving. Upgrade your project from the Billing page to enable it.
+	</Accordion>
 	<Accordion title='How do I receive incoming emails on AutoSend?'>
 		Pick or enable a receiving domain in the dashboard, create a webhook subscribed to the
 		`email.received` event, and call the <a href={APP_PATHS.getInboundMessageApi}>Get Message</a>{' '}
