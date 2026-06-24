@@ -118,6 +118,18 @@ li[data-active='true'] .sidebar-group a.group {
 	width: 20px !important;
 	height: 20px !important;
 }
+
+/* Mintlify Card icon wrapper gets squeezed by its flex parent when it
+   contains an <img> (PNG icons). Force it to keep its square size. */
+div.size-6:has(> img) {
+	flex-shrink: 0;
+	min-width: 1.5rem;
+}
+div.size-6 > img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
 :not(pre) > code {
 	font-family: 'Geist Mono', monospace;
 	background-color: #e7e5e4;
