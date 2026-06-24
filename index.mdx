@@ -1,6 +1,6 @@
 ---
 title: 'What is AutoSend?'
-description: 'AutoSend is an email platform for developers and marketers to send transactional and marketing emails, and integrate with AI agents.'
+description: 'AutoSend is an email platform for developers and marketers to send transactional and marketing emails, receive inbound emails via API, and integrate with AI agents.'
 sidebarTitle: 'Introduction'
 icon: '/icons/introduction.svg'
 ---
@@ -41,6 +41,19 @@ Learn how to send marketing emails like newsletters, product updates, and announ
 	</Card>
 </Columns>
 
+## Inbound Emails
+
+Receive incoming emails on AutoSend through webhooks, then read, parse, or reply to them programmatically with the Inbound Email API.
+
+<Columns cols={2}>
+	<Card title='Inbound' icon='/icons/inbound.svg' href={APP_PATHS.inboundIntroduction}>
+		Learn how to receive and process incoming emails on AutoSend using the Inbound Email API.
+	</Card>
+	<Card title='API Reference' icon='/icons/api.svg' href={APP_PATHS.listInboundMessagesApi}>
+		Browse the Inbound Emails API endpoints, request schemas, and response samples.
+	</Card>
+</Columns>
+
 ## Agentic Integration
 
 Use AutoSend with AI coding agents and no-code AI tools to send emails, manage contacts, and trigger automations from AI-built apps.
@@ -62,14 +75,24 @@ Migrate your existing email infrastructure to AutoSend smoothly.
 
 <Columns cols={2}>
 	<Card title='Resend' icon='/icons/brand-resend.png' href={APP_PATHS.migrationResend} horizontal />
-	<Card title='SendGrid' icon='/icons/brand-sendgrid.png' href={APP_PATHS.migrationSendgrid} horizontal />
+	<Card
+		title='SendGrid'
+		icon='/icons/brand-sendgrid.png'
+		href={APP_PATHS.migrationSendgrid}
+		horizontal
+	/>
 </Columns>
 
 ## Need Help ?
 
 <Columns cols={2}>
 	<Card title='FAQs' icon='/icons/faq.svg' href={AUTOSEND_PATHS.faqs} horizontal />
-	<Card title='Contact Support' icon='/icons/support.svg' href={`mailto:${SUPPORT_EMAIL}`} horizontal />
+	<Card
+		title='Contact Support'
+		icon='/icons/support.svg'
+		href={`mailto:${SUPPORT_EMAIL}`}
+		horizontal
+	/>
 </Columns>
 
 ---

@@ -20,6 +20,7 @@ All AutoSend webhooks use HTTPS and deliver a JSON payload that your application
 - **Automatically remove bounced email addresses** from your mailing lists
 - **Track email engagement** in real-time (opens, clicks, unsubscribes)
 - **Sync contact changes** across multiple systems
+- **Receive incoming emails in your app** with the `email.received` event and the <a href={APP_PATHS.inboundIntroduction}>Inbound Email API</a>
 - **Create alerts** in your messaging or incident tools based on event types
 - **Store all events** in your own database for custom reporting and retention
 - **Trigger workflows** when specific events occur (e.g., send a Slack notification when an email bounces)
@@ -350,5 +351,9 @@ From the <a href={AUTOSEND_PATHS.webhooks} title="Webhook AutoSend" target="_bla
 
   <Card title="Webhooks" icon="/icons/webhook.svg" href={AUTOSEND_PATHS.webhooks}>
     Manage your webhooks from the AutoSend sidebar
+  </Card>
+
+  <Card title="Inbound Email API" icon="/icons/inbound.svg" href={APP_PATHS.inboundIntroduction}>
+    Receive incoming emails via the `email.received` event and the Inbound Email API
   </Card>
 </Columns>
