@@ -95,6 +95,7 @@
 						"pages": [
 							"others/suppressions",
 							"others/unsubscribe-groups",
+							"others/encrypted-payloads",
 							{
 								"group": "Webhooks",
 								"icon": "/icons/webhook.svg",
