@@ -1,0 +1,40 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Contact Properties API",
+    "description": "API for managing contact properties in an Autosend project. Contact properties let you define dynamic attributes that are attached to every contact in your project. Reserved built-in property names cannot be used when creating contact properties. Contact properties were previously called custom fields; the `/custom-fields` endpoints remain available as a deprecated alias.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.autosend.com/v1"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/contact-properties": {
+      "get": {
+        "summary": "List Contact Properties",
+        "description": "Returns all contact properties defined for the authenticated project. Pass `includeReservedFields=false` to omit the built-in fields (email, firstName, lastName, createdAt, userId) from the response."
+      },
+      "post": {
+        "summary": "Create Contact Property",
+        "description": "Creates a new contact property for the authenticated project. The `name` must be unique within the project and must not conflict with any reserved built-in property name. The legacy `fieldName`/`fieldType` body parameters are still accepted as aliases for `name`/`type`."
+      }
+    },
+    "/contact-properties/name/{propertyName}": {
+      "get": {
+        "summary": "Get Contact Property by Name",
+        "description": "Retrieves a single contact property by its `name`."
+      },
+      "delete": {
+        "summary": "Delete Contact Property by Name",
+        "description": "Permanently deletes a contact property by its `name`. This action cannot be undone. Any contact data stored against this property will no longer be accessible via the property definition."
+      }
+    }
+  }
+}

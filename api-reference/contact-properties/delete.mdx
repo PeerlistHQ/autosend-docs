@@ -1,28 +1,22 @@
 ---
-title: 'Delete Custom Field by Name'
-description: 'Delete a custom field by name to remove it from all contacts using the AutoSend API.'
-sidebarTitle: 'Delete Custom Field by Name'
-openapi: 'DELETE /custom-fields/fieldName/{customFieldName}'
+title: 'Delete Contact Property by Name'
+description: 'Delete a contact property by name to remove it from all contacts using the AutoSend API.'
+sidebarTitle: 'Delete Contact Property by Name'
+openapi: 'DELETE /contact-properties/name/{propertyName}'
 ---
-
-import { APP_PATHS } from '/snippets/appPaths.mdx';
-
-<Warning>
-  **Deprecated.** Custom fields are now called contact properties. This `/custom-fields` endpoint still works as an alias, but new integrations should use <a href={APP_PATHS.deleteContactPropertyApiRef}>Delete Contact Property by Name</a>.
-</Warning>
 
 <RequestExample>
 
 ```bash cURL
 curl --request DELETE \
-  --url https://api.autosend.com/v1/custom-fields/fieldName/planTier \
+  --url https://api.autosend.com/v1/contact-properties/name/planTier \
   --header 'Authorization: Bearer <token>'
 ```
 
 ```python Python
 import requests
 
-url = "https://api.autosend.com/v1/custom-fields/fieldName/planTier"
+url = "https://api.autosend.com/v1/contact-properties/name/planTier"
 
 headers = {
     "Authorization": "Bearer <token>"
@@ -34,7 +28,7 @@ print(response.json())
 
 ```javascript JavaScript
 const response = await fetch(
-  "https://api.autosend.com/v1/custom-fields/fieldName/planTier",
+  "https://api.autosend.com/v1/contact-properties/name/planTier",
   {
     method: "DELETE",
     headers: {
@@ -52,7 +46,7 @@ console.log(data);
 $curl = curl_init();
 
 curl_setopt_array($curl, [
-  CURLOPT_URL => "https://api.autosend.com/v1/custom-fields/fieldName/planTier",
+  CURLOPT_URL => "https://api.autosend.com/v1/contact-properties/name/planTier",
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_CUSTOMREQUEST => "DELETE",
   CURLOPT_HTTPHEADER => [
@@ -76,7 +70,7 @@ import (
 )
 
 func main() {
-  req, _ := http.NewRequest("DELETE", "https://api.autosend.com/v1/custom-fields/fieldName/planTier", nil)
+  req, _ := http.NewRequest("DELETE", "https://api.autosend.com/v1/contact-properties/name/planTier", nil)
   req.Header.Set("Authorization", "Bearer <token>")
 
   client := &http.Client{}
@@ -99,7 +93,7 @@ public class Main {
     HttpClient client = HttpClient.newHttpClient();
 
     HttpRequest request = HttpRequest.newBuilder()
-      .uri(URI.create("https://api.autosend.com/v1/custom-fields/fieldName/planTier"))
+      .uri(URI.create("https://api.autosend.com/v1/contact-properties/name/planTier"))
       .header("Authorization", "Bearer <token>")
       .DELETE()
       .build();
@@ -114,7 +108,7 @@ public class Main {
 require "net/http"
 require "uri"
 
-uri = URI.parse("https://api.autosend.com/v1/custom-fields/fieldName/planTier")
+uri = URI.parse("https://api.autosend.com/v1/contact-properties/name/planTier")
 http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true
 
@@ -132,7 +126,7 @@ puts response.body
 ```json Response
 {
   "success": true,
-  "message": "Custom field deleted successfully"
+  "message": "Contact property deleted successfully"
 }
 ```
 
@@ -144,13 +138,13 @@ puts response.body
 </ParamField>
 
 #### Path Parameters
-<ParamField path="customFieldName" type="string" required>
-  The `fieldName` of the custom field to delete.
+<ParamField path="propertyName" type="string" required>
+  The `name` of the contact property to delete.
 </ParamField>
 
 ### Response
 
-<span className='text-sm'>Custom field deleted successfully</span>
+<span className='text-sm'>Contact property deleted successfully</span>
 
 <ResponseField name="success" type="boolean">
   Indicates whether the request was successful.
@@ -159,20 +153,20 @@ puts response.body
 <ResponseField name="message" type="string">
   Confirmation message.
 
-  Example: `"Custom field deleted successfully"`
+  Example: `"Contact property deleted successfully"`
 </ResponseField>
 
 #### Error Responses
 
-<ResponseField name="404 - Custom field not found" type="object">
-  Returned when no custom field with the given name exists on the project.
+<ResponseField name="404 - Contact property not found" type="object">
+  Returned when no contact property with the given name exists on the project.
 
   ```json
   {
     "success": false,
     "error": {
-      "message": "Custom field not found",
-      "code": "CUSTOM_FIELD_NOT_FOUND",
+      "message": "Contact property not found",
+      "code": "CONTACT_PROPERTY_NOT_FOUND",
       "status": 404
     }
   }
