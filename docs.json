@@ -256,6 +256,7 @@
 						"group": "Projects",
 						"pages": [
 							"api-reference/projects/list-projects",
+							"api-reference/projects/get-project",
 							"api-reference/projects/create-project",
 							"api-reference/projects/delete-project"
 						]
