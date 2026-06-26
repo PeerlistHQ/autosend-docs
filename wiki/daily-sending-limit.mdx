@@ -1,0 +1,132 @@
+---
+title: 'Why does my account have a daily sending limit?'
+description: 'Understand why AutoSend applies a 300 emails/day limit to every new sending domain, how it protects your deliverability, and how the limit grows as you warm up.'
+sidebarTitle: 'Daily sending limit'
+keywords:
+  [
+    'daily sending limit',
+    '300 emails per day',
+    'new sending domain',
+    'domain warmup',
+    'sender reputation',
+    'email deliverability',
+  ]
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+
+When you add a new sending domain to AutoSend, it starts with a daily sending limit of **300 emails per day**. The limit is applied **per sending domain**, not per account or per workspace. If you add three new domains, each one starts with its own independent 300/day cap, and each one grows independently as it warms up.
+
+<Info>
+	The limit only affects new sending domains. Domains that have already been warmed up on AutoSend
+	or migrated with a strong sending history are reviewed separately.
+</Info>
+
+## Why the daily limit exists
+
+A new domain has no sending history. Mailbox providers like Gmail, Outlook, and Yahoo have nothing to judge it by, so they treat it cautiously by default. The daily limit is the safest starting point for protecting your future deliverability.
+
+Here's what the limit actually does for you:
+
+- **Builds your sender reputation gradually.** Mailbox providers track every send from your domain. A small, consistent volume on day one signals a real sender, not a spammer. Sending thousands of emails on a brand new domain looks suspicious no matter how good your content is.
+- **Protects your domain from being blocklisted.** Sudden spikes in volume from a cold domain are one of the most common reasons new domains end up on blocklists. Once a domain is flagged, it can take weeks or months to recover.
+- **Catches problems early.** A small daily volume means a bad list or a broken signup form will hit a low ceiling before it can damage your reputation. You get a chance to fix the issue before it scales.
+- **Protects the wider AutoSend sending infrastructure.** All AutoSend domains share a sending platform. Unverified senders bursting out of the gate would put every other customer's deliverability at risk. The per-domain cap keeps the network healthy for everyone.
+- **Keeps you aligned with mailbox provider expectations.** Gmail and Yahoo's sender requirements explicitly favor predictable, gradual ramps from new domains. The 300/day floor is calibrated to stay well inside those expectations.
+
+## How to start sending past the limit
+
+The way to grow past 300 emails/day is to warm the domain up. AutoSend has a built-in workflow for this called **Gradual Send**, and we recommend using it for your first campaign on any new domain.
+
+<Steps>
+<Step title="Set up your first campaign" titleSize="h3">
+
+<a href={APP_PATHS.campaigns}>Create a new campaign</a> as you normally would. Design the email,
+pick the contact list you want to warm into, and continue to the campaign details screen.
+
+</Step>
+<Step title="Choose Gradual Send as the sending option" titleSize="h3">
+
+In the **When to send?** section, select **Gradual Send** instead of Now or Schedule. AutoSend will spread the send across multiple days, starting small and increasing each day, so your domain warms up automatically while the campaign runs.
+
+</Step>
+<Step title="Let AutoSend handle the ramp" titleSize="h3">
+
+Once Gradual Send is running, you don't have to manage daily limits manually. AutoSend monitors your bounce rate and complaint rate in the background and auto-increases your daily sending limit as long as both stay healthy.
+
+</Step>
+</Steps>
+
+<Tip>
+	Read the full [Domain Warmup with Gradual Send](/marketing-emails/domain-warmup) guide for
+	starting volumes, daily increment options, and safety thresholds.
+</Tip>
+
+## How the limit auto-increases
+
+Your daily sending limit isn't a static cap. As long as your domain is sending healthy email, AutoSend raises it automatically. Two signals drive the ramp:
+
+- **Bounce rate.** The percentage of emails that mailbox providers reject. A high bounce rate usually means your list contains invalid or stale addresses, which damages your reputation. Lower is better.
+- **Complaint rate.** The percentage of recipients who mark your email as spam. Even a small complaint rate has an outsized impact on your deliverability. Lower is better.
+
+When both rates stay below the safety thresholds you set in Gradual Send, AutoSend increases the next day's volume according to your chosen increment (for example, 1.25x or 2x). Over the course of a typical warmup, the per-domain limit moves from 300/day into the thousands and beyond, without you having to do anything.
+
+<Warning>
+	If your bounce or complaint rate crosses the threshold, AutoSend pauses the ramp and notifies you.
+	The daily limit stops increasing until you review the campaign and resume. This is by design. It
+	protects your domain from sending its way into the spam folder.
+</Warning>
+
+## I have a large list and need a higher limit faster
+
+If you have a large existing list with a strong prior sending history, and 300 emails/day feels too restrictive for your first send, you can request a higher starting limit.
+
+Open the **in-app support chat** from your AutoSend dashboard and share:
+
+- The domain you want a higher limit on.
+- Your typical monthly sending volume.
+- The list you plan to send to and how recently it was collected.
+
+Our team reviews each request individually. If your sending history supports a higher starting volume, we'll raise the limit on that specific domain.
+
+<Note>
+	Raising the limit doesn't skip warmup. It just gives you a higher floor to start from. We still
+	recommend running your first campaign on Gradual Send so the ramp happens safely.
+</Note>
+
+## Frequently asked questions
+
+<AccordionGroup>
+	<Accordion title='Is the 300/day limit per account or per domain?'>
+		Per sending domain. Every new domain you add to AutoSend starts with its own independent 300/day
+		cap, regardless of how many other domains you already have. This is because each domain builds
+		its own reputation with mailbox providers.
+	</Accordion>
+	<Accordion title='Does the limit apply to transactional emails too?'>
+		Yes. The daily limit applies to all email sent from the domain, both transactional and
+		marketing. Mailbox providers don't distinguish between the two when judging a new domain's
+		reputation, so we don't either during warmup.
+	</Accordion>
+	<Accordion title='How long until my limit is fully lifted?'>
+		It depends on your list size, your starting volume, and the increment you choose in Gradual
+		Send. Most domains reach full sending capacity within 2 to 4 weeks of consistent, healthy
+		sending. Larger lists with strong engagement can ramp faster.
+	</Accordion>
+	<Accordion title='What happens if I hit the daily limit?'>
+		Emails stop sending for the day.
+	</Accordion>
+	<Accordion title='Do I need to warm up a domain I already use somewhere else?'>
+		Yes and highly recommended. Sending from a new platform is treated as a new signal, so a warmup
+		on AutoSend is still recommended.
+	</Accordion>
+	<Accordion title='Can I add more domains to send more in total?'>
+		You can, but it's not a workaround for warmup. Each new domain still starts at 300/day and needs
+		its own warmup. Splitting sends across multiple cold domains can actually hurt your overall
+		deliverability, since none of them get to build reputation properly. Warm up one domain well
+		before adding another.
+
+    	But you can definitely use two different domains for different purposes, like one for marketing and one for transactional, as long as both are warmed up properly.
+    </Accordion>
+
+</AccordionGroup>

@@ -349,6 +349,15 @@
 				]
 			},
 			{
+				"tab": "Wiki",
+				"groups": [
+					{
+						"group": "Deliverability",
+						"pages": ["wiki/daily-sending-limit"]
+					}
+				]
+			},
+			{
 				"tab": "Changelog",
 				"hidden": false,
 				"groups": [
