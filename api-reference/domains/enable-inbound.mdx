@@ -1,0 +1,242 @@
+---
+title: 'Enable Inbound'
+description: 'Enable inbound email receiving on a verified custom domain using the AutoSend API.'
+sidebarTitle: 'Enable Inbound'
+openapi: 'POST /domains/{domainId}/inbound/enable'
+---
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111/inbound/enable \
+  --header 'Authorization: Bearer <token>'
+```
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111/inbound/enable"
+
+headers = {"Authorization": "Bearer <token>"}
+
+response = requests.post(url, headers=headers)
+
+print(response.json())
+```
+```javascript JavaScript
+const response = await fetch(
+  "https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111/inbound/enable",
+  {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer <token>",
+    },
+  }
+);
+
+const data = await response.json();
+console.log(data);
+```
+```php PHP
+<?php
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+  CURLOPT_URL => "https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111/inbound/enable",
+  CURLOPT_CUSTOMREQUEST => "POST",
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_HTTPHEADER => [
+    "Authorization: Bearer <token>",
+  ],
+]);
+
+$response = curl_exec($curl);
+curl_close($curl);
+
+echo $response;
+```
+```go Go
+package main
+
+import (
+  "fmt"
+  "io"
+  "net/http"
+)
+
+func main() {
+  req, _ := http.NewRequest("POST", "https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111/inbound/enable", nil)
+  req.Header.Set("Authorization", "Bearer <token>")
+
+  client := &http.Client{}
+  resp, _ := client.Do(req)
+  defer resp.Body.Close()
+
+  body, _ := io.ReadAll(resp.Body)
+  fmt.Println(string(body))
+}
+```
+```java Java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+HttpClient client = HttpClient.newHttpClient();
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111/inbound/enable"))
+    .header("Authorization", "Bearer <token>")
+    .POST(HttpRequest.BodyPublishers.noBody())
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+System.out.println(response.body());
+```
+```ruby Ruby
+require "net/http"
+require "uri"
+
+uri = URI.parse("https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111/inbound/enable")
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(uri.request_uri)
+request["Authorization"] = "Bearer <token>"
+
+response = http.request(request)
+puts response.body
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "id": "60d5ec49f1b2c72d9c8b1111",
+    "domainName": "example.com",
+    "verificationStatus": "VERIFIED",
+    "ownershipVerified": true,
+    "dkimEnabled": true,
+    "mailFromEnabled": true,
+    "dmarcEnabled": true,
+    "dnsRecords": {
+      "inboundMx": {
+        "name": "example.com",
+        "value": "inbound-smtp.us-east-1.amazonaws.com",
+        "type": "MX",
+        "purpose": "inbound",
+        "priority": 10
+      }
+    },
+    "createdAt": "2026-01-05T10:00:00.000Z",
+    "lastCheckedAt": "2026-03-10T14:20:00.000Z",
+    "verifiedAt": "2026-01-05T12:00:00.000Z",
+    "regionKey": "us-east-1",
+    "verificationInProgress": false,
+    "inboundEnabledAt": "2026-03-10T14:25:00.000Z",
+    "inboundDomainVerifiedAt": null
+  }
+}
+```
+
+</ResponseExample>
+
+Enable inbound email receiving on a custom domain that has already been verified.
+
+Calling this endpoint stamps the domain as inbound-enabled and returns the inbound MX
+record you must publish in your DNS. Once that MX record is detected in DNS during the
+next verification check, AutoSend wires up the SES receipt rule and inbound becomes live
+for the domain (at which point `inboundDomainVerifiedAt` is set).
+
+### Authorizations
+<ParamField path="Authorization" type="string | header" required>
+  Bearer authentication header of the form `Bearer <token>`, where `<token>` is your API key.
+</ParamField>
+
+#### Path Parameters
+<ParamField path="domainId" type="string" required>
+  The id of the domain on which to enable inbound receiving.
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  Indicates whether the request was successful.
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The updated domain object.
+
+  <Expandable title="Domain object">
+    <ResponseField name="id" type="string">
+      Unique identifier for the domain (id).
+    </ResponseField>
+    <ResponseField name="domainName" type="string">
+      The domain name (e.g. `example.com`).
+    </ResponseField>
+    <ResponseField name="verificationStatus" type="string">
+      Overall domain verification status. One of `PENDING_CONFIGURATION`, `PENDING`, or `VERIFIED`.
+    </ResponseField>
+    <ResponseField name="ownershipVerified" type="boolean">
+      Whether the TXT ownership record has been verified.
+    </ResponseField>
+    <ResponseField name="dkimEnabled" type="boolean">
+      Whether DKIM records have been verified.
+    </ResponseField>
+    <ResponseField name="mailFromEnabled" type="boolean">
+      Whether the MAIL FROM MX/TXT records have been verified.
+    </ResponseField>
+    <ResponseField name="dmarcEnabled" type="boolean">
+      Whether a DMARC TXT record has been detected.
+    </ResponseField>
+    <ResponseField name="dnsRecords" type="object">
+      DNS records for the domain. After enabling inbound, this includes the `inboundMx`
+      record you must publish.
+
+      <Expandable title="DNS Records object">
+        <ResponseField name="inboundMx" type="object">
+          The MX record to publish so AutoSend can receive mail for this domain. Contains
+          `name`, `value`, `type`, `purpose`, and `priority` fields.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="createdAt" type="string">
+      ISO 8601 timestamp of when the domain was added.
+    </ResponseField>
+    <ResponseField name="lastCheckedAt" type="string">
+      ISO 8601 timestamp of the last DNS verification check.
+    </ResponseField>
+    <ResponseField name="verifiedAt" type="string">
+      ISO 8601 timestamp of when the domain was verified. Only present for verified domains.
+    </ResponseField>
+    <ResponseField name="regionKey" type="string">
+      The AutoSend region key where the domain is configured (e.g. `us-east-1`).
+    </ResponseField>
+    <ResponseField name="verificationInProgress" type="boolean">
+      Whether a DNS verification check is currently in progress.
+    </ResponseField>
+    <ResponseField name="inboundEnabledAt" type="string">
+      ISO 8601 timestamp of when inbound receiving was enabled on the domain.
+    </ResponseField>
+    <ResponseField name="inboundDomainVerifiedAt" type="string">
+      ISO 8601 timestamp of when the inbound MX record was detected and the domain was
+      added to the SES receipt rule — i.e. inbound is verified and live. `null` until the
+      MX record is detected in DNS.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+#### Errors
+
+<ResponseField name="404" type="object">
+  Returned when no domain with the given `domainId` exists in the project.
+</ResponseField>
+
+<ResponseField name="500" type="object">
+  Returned when inbound receiving could not be enabled on the domain.
+</ResponseField>

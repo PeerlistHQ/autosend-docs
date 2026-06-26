@@ -224,6 +224,8 @@
 							"api-reference/domains/get",
 							"api-reference/domains/add",
 							"api-reference/domains/verify",
+							"api-reference/domains/enable-inbound",
+							"api-reference/domains/disable-inbound",
 							"api-reference/domains/delete"
 						]
 					},

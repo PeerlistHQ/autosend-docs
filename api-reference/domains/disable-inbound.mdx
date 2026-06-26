@@ -1,0 +1,224 @@
+---
+title: 'Disable Inbound'
+description: 'Disable inbound email receiving on a custom domain using the AutoSend API.'
+sidebarTitle: 'Disable Inbound'
+openapi: 'POST /domains/{domainId}/inbound/disable'
+---
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111/inbound/disable \
+  --header 'Authorization: Bearer <token>'
+```
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111/inbound/disable"
+
+headers = {"Authorization": "Bearer <token>"}
+
+response = requests.post(url, headers=headers)
+
+print(response.json())
+```
+```javascript JavaScript
+const response = await fetch(
+  "https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111/inbound/disable",
+  {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer <token>",
+    },
+  }
+);
+
+const data = await response.json();
+console.log(data);
+```
+```php PHP
+<?php
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+  CURLOPT_URL => "https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111/inbound/disable",
+  CURLOPT_CUSTOMREQUEST => "POST",
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_HTTPHEADER => [
+    "Authorization: Bearer <token>",
+  ],
+]);
+
+$response = curl_exec($curl);
+curl_close($curl);
+
+echo $response;
+```
+```go Go
+package main
+
+import (
+  "fmt"
+  "io"
+  "net/http"
+)
+
+func main() {
+  req, _ := http.NewRequest("POST", "https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111/inbound/disable", nil)
+  req.Header.Set("Authorization", "Bearer <token>")
+
+  client := &http.Client{}
+  resp, _ := client.Do(req)
+  defer resp.Body.Close()
+
+  body, _ := io.ReadAll(resp.Body)
+  fmt.Println(string(body))
+}
+```
+```java Java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+HttpClient client = HttpClient.newHttpClient();
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111/inbound/disable"))
+    .header("Authorization", "Bearer <token>")
+    .POST(HttpRequest.BodyPublishers.noBody())
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+System.out.println(response.body());
+```
+```ruby Ruby
+require "net/http"
+require "uri"
+
+uri = URI.parse("https://api.autosend.com/v1/domains/60d5ec49f1b2c72d9c8b1111/inbound/disable")
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Post.new(uri.request_uri)
+request["Authorization"] = "Bearer <token>"
+
+response = http.request(request)
+puts response.body
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "id": "60d5ec49f1b2c72d9c8b1111",
+    "domainName": "example.com",
+    "verificationStatus": "VERIFIED",
+    "ownershipVerified": true,
+    "dkimEnabled": true,
+    "mailFromEnabled": true,
+    "dmarcEnabled": true,
+    "dnsRecords": {},
+    "createdAt": "2026-01-05T10:00:00.000Z",
+    "lastCheckedAt": "2026-03-10T14:20:00.000Z",
+    "verifiedAt": "2026-01-05T12:00:00.000Z",
+    "regionKey": "us-east-1",
+    "verificationInProgress": false,
+    "inboundEnabledAt": null,
+    "inboundDomainVerifiedAt": null
+  }
+}
+```
+
+</ResponseExample>
+
+Disable inbound email receiving on a custom domain.
+
+Calling this endpoint clears the domain's inbound state and removes the inbound MX
+record from the returned DNS records. If the domain had been added to the SES receipt
+rule, its recipient condition is removed so SES stops accepting its mail. You can safely
+remove the inbound MX record from your DNS afterwards.
+
+### Authorizations
+<ParamField path="Authorization" type="string | header" required>
+  Bearer authentication header of the form `Bearer <token>`, where `<token>` is your API key.
+</ParamField>
+
+#### Path Parameters
+<ParamField path="domainId" type="string" required>
+  The id of the domain on which to disable inbound receiving.
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  Indicates whether the request was successful.
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The updated domain object.
+
+  <Expandable title="Domain object">
+    <ResponseField name="id" type="string">
+      Unique identifier for the domain (id).
+    </ResponseField>
+    <ResponseField name="domainName" type="string">
+      The domain name (e.g. `example.com`).
+    </ResponseField>
+    <ResponseField name="verificationStatus" type="string">
+      Overall domain verification status. One of `PENDING_CONFIGURATION`, `PENDING`, or `VERIFIED`.
+    </ResponseField>
+    <ResponseField name="ownershipVerified" type="boolean">
+      Whether the TXT ownership record has been verified.
+    </ResponseField>
+    <ResponseField name="dkimEnabled" type="boolean">
+      Whether DKIM records have been verified.
+    </ResponseField>
+    <ResponseField name="mailFromEnabled" type="boolean">
+      Whether the MAIL FROM MX/TXT records have been verified.
+    </ResponseField>
+    <ResponseField name="dmarcEnabled" type="boolean">
+      Whether a DMARC TXT record has been detected.
+    </ResponseField>
+    <ResponseField name="dnsRecords" type="object">
+      DNS records for the domain. The `inboundMx` record is removed after inbound is disabled.
+    </ResponseField>
+    <ResponseField name="createdAt" type="string">
+      ISO 8601 timestamp of when the domain was added.
+    </ResponseField>
+    <ResponseField name="lastCheckedAt" type="string">
+      ISO 8601 timestamp of the last DNS verification check.
+    </ResponseField>
+    <ResponseField name="verifiedAt" type="string">
+      ISO 8601 timestamp of when the domain was verified. Only present for verified domains.
+    </ResponseField>
+    <ResponseField name="regionKey" type="string">
+      The AutoSend region key where the domain is configured (e.g. `us-east-1`).
+    </ResponseField>
+    <ResponseField name="verificationInProgress" type="boolean">
+      Whether a DNS verification check is currently in progress.
+    </ResponseField>
+    <ResponseField name="inboundEnabledAt" type="string">
+      ISO 8601 timestamp of when inbound receiving was enabled. `null` after inbound is disabled.
+    </ResponseField>
+    <ResponseField name="inboundDomainVerifiedAt" type="string">
+      ISO 8601 timestamp of when inbound was verified and live. `null` after inbound is disabled.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+#### Errors
+
+<ResponseField name="404" type="object">
+  Returned when no domain with the given `domainId` exists in the project.
+</ResponseField>
+
+<ResponseField name="500" type="object">
+  Returned when inbound receiving could not be disabled on the domain.
+</ResponseField>
