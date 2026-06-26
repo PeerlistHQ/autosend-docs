@@ -27,6 +27,10 @@
       }
     },
     "/account/projects/{projectId}": {
+      "get": {
+        "summary": "Get Project",
+        "description": "Retrieves a single project by its ID. The project must belong to the organization. Requires an organization admin API key (ASA_ prefix)."
+      },
       "delete": {
         "summary": "Delete Project",
         "description": "Deletes a project by its ID. The project must belong to the organization. Requires an organization admin API key (ASA_ prefix). No OTP verification is required for admin API key callers."

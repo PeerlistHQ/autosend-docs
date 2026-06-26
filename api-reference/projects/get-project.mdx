@@ -1,0 +1,309 @@
+---
+title: 'Get Project'
+sidebarTitle: 'Get Project'
+openapi: 'GET /account/projects/{projectId}'
+---
+
+<Note>
+  This endpoint requires an **organization admin API key** (`ASA_` prefix). Standard project API keys cannot access this endpoint.
+</Note>
+
+<RequestExample>
+
+
+
+```bash cURL
+curl --request GET \
+  --url https://api.autosend.com/v1/account/projects/60d5ec49f1b2c72d9c8b1234 \
+  --header 'Authorization: Bearer ASA_your-admin-api-key'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/account/projects/60d5ec49f1b2c72d9c8b1234"
+
+headers = {
+    "Authorization": "Bearer ASA_your-admin-api-key"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/account/projects/60d5ec49f1b2c72d9c8b1234', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer ASA_your-admin-api-key'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/account/projects/60d5ec49f1b2c72d9c8b1234';
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer ASA_your-admin-api-key'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/account/projects/60d5ec49f1b2c72d9c8b1234"
+
+    req, _ := http.NewRequest("GET", url, nil)
+    req.Header.Set("Authorization", "Bearer ASA_your-admin-api-key")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class GetProject {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/account/projects/60d5ec49f1b2c72d9c8b1234");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Authorization", "Bearer ASA_your-admin-api-key");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+            con.disconnect();
+
+            System.out.println(content.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/account/projects/60d5ec49f1b2c72d9c8b1234')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Get.new(uri)
+request['Authorization'] = 'Bearer ASA_your-admin-api-key'
+
+response = http.request(request)
+puts response.body
+```
+
+
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "id": "60d5ec49f1b2c72d9c8b1234",
+    "name": "Production App",
+    "domain": "example.com",
+    "domains": [
+      {
+        "id": "60d5ec49f1b2c72d9c8b5678",
+        "domainName": "example.com",
+        "verificationStatus": "VERIFIED",
+        "regionKey": "us-east-1"
+      }
+    ],
+    "createdAt": "2024-01-15T10:30:00.000Z",
+    "trackingOpen": true,
+    "trackingClick": true,
+    "inboundEmailDomain": "token.autosend.email"
+  }
+}
+```
+
+</ResponseExample>
+
+---
+#### Authorizations
+<ParamField path="Authorizations" type="string | header" required>
+  Organization admin API key header of the form Bearer `ASA_<key>`. Standard project API keys (`AS_` prefix) will receive a `403` error.
+</ParamField>
+
+#### Path Parameters
+<ParamField path="projectId" type="string" required>
+  The project's unique ID. Must be a valid Mongo ObjectId.
+</ParamField>
+
+#### Response
+
+<span className='text-sm'>Project retrieved successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The project object
+
+  <Expandable title="child attributes">
+  <ResponseField name="id" type="string">
+    Unique project identifier
+
+    Example: `"60d5ec49f1b2c72d9c8b1234"`
+  </ResponseField>
+
+  <ResponseField name="name" type="string">
+    Project name
+
+    Example: `"Production App"`
+  </ResponseField>
+
+  <ResponseField name="domain" type="string | null">
+    Primary domain associated with the project
+
+    Example: `"example.com"`
+  </ResponseField>
+
+  <ResponseField name="domains" type="object[]">
+    List of email domains configured for the project
+
+    <Expandable title="child attributes">
+    <ResponseField name="id" type="string">
+      Domain identifier
+    </ResponseField>
+
+    <ResponseField name="domainName" type="string">
+      Domain name
+
+      Example: `"example.com"`
+    </ResponseField>
+
+    <ResponseField name="verificationStatus" type="string">
+      Domain verification status: `PENDING_CONFIGURATION`, `PENDING`, or `VERIFIED`
+    </ResponseField>
+
+    <ResponseField name="regionKey" type="string">
+      Account region for the project. One of `us-east-1`, `us-east-2`, `ap-south-1`, or `eu-central-1`
+    </ResponseField>
+    </Expandable>
+  </ResponseField>
+
+  <ResponseField name="createdAt" type="string">
+    ISO 8601 timestamp of when the project was created
+
+    Example: `"2024-01-15T10:30:00.000Z"`
+  </ResponseField>
+
+  <ResponseField name="trackingOpen" type="boolean">
+    Whether open tracking is enabled
+
+    Example: `true`
+  </ResponseField>
+
+  <ResponseField name="trackingClick" type="boolean">
+    Whether click tracking is enabled
+
+    Example: `true`
+  </ResponseField>
+
+  <ResponseField name="inboundEmailDomain" type="string | null">
+    The project's inbound receiving domain. Present only when inbound is configured.
+
+    Example: `"token.autosend.email"`
+  </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<Note>
+  The response intentionally contains no secrets. It never includes API keys or credentials, SES tokens, or DKIM keys.
+</Note>
+
+#### Error Responses
+
+<ResponseField name="400 - Invalid project ID" type="object">
+  Returned when the supplied `projectId` is not a valid Mongo ObjectId.
+
+   ```json
+  {
+    "success": false,
+    "error":{
+      "code":"VALIDATION_ERROR",
+      "message":"Invalid project ID"
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="403 - Not an admin key" type="object">
+  Returned when using a standard project API key instead of an organization admin API key.
+
+   ```json
+  {
+    "success": false,
+    "error":{
+      "message":"This endpoint requires an organization admin API key (ASA_ prefix)"
+    }
+  }
+  ```
+</ResponseField>
+
+<ResponseField name="404 - Project not found" type="object">
+  Returned when no project with that ID exists in the organization. This is also returned when the project belongs to a different organization.
+
+   ```json
+  {
+    "success": false,
+    "error":{
+      "code":"PROJECT_NOT_FOUND",
+      "message":"Project not found"
+    }
+  }
+  ```
+</ResponseField>

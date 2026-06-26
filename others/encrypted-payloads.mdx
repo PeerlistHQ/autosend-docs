@@ -1,0 +1,285 @@
+---
+title: 'Encrypted Payloads (JWE)'
+description: 'Encrypt your API request bodies end-to-end with JWE before sending them to AutoSend. Encryption is fully opt-in, per request.'
+sidebarTitle: 'Encrypted Payloads'
+icon: 'lock'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+AutoSend optionally accepts **JWE-encrypted request bodies** on the public API. You encrypt your JSON payload with AutoSend's public key, and the backend decrypts it transparently. Your business logic and the API response are unchanged.
+
+Plaintext requests keep working exactly as before, so encryption is fully opt-in, per request.
+
+<Note>
+	Transport is already protected by HTTPS/TLS. JWE adds an **application-layer** of protection so the payload stays encrypted end-to-end (for example, through logs, proxies, or intermediaries) until it reaches AutoSend.
+</Note>
+
+---
+
+## How it works
+
+<Steps>
+	<Step title='Fetch the public key' titleSize='h3'>
+		Get AutoSend's public key from the JWKS endpoint and cache it. The recommended (active) key is always listed first.
+	</Step>
+	<Step title='Encrypt your payload' titleSize='h3'>
+		Encrypt the complete JSON body into a JWE compact string using `RSA-OAEP-256` for key management and `A256GCM` for content encryption.
+	</Step>
+	<Step title='Send the encrypted request' titleSize='h3'>
+		POST `{ "encryptedData": "<JWE>" }` to any public endpoint with the `X-Payload-Encryption: jwe` and `X-Key-Id` headers.
+	</Step>
+</Steps>
+
+---
+
+## Encryption standard
+
+| Field                      | Value          |
+| -------------------------- | -------------- |
+| Key management (`alg`)     | `RSA-OAEP-256` |
+| Content encryption (`enc`) | `A256GCM`      |
+| Serialization              | JWE Compact    |
+| Key size                   | RSA 2048-bit   |
+
+---
+
+## Public key endpoint (JWKS)
+
+Fetch AutoSend's public key from the JWKS endpoint:
+
+```http
+GET https://api.autosend.com/v1/jwks.json
+```
+
+```json
+{
+	"keys": [
+		{
+			"kty": "RSA",
+			"n": "…",
+			"e": "AQAB",
+			"kid": "key_2026_06",
+			"alg": "RSA-OAEP-256",
+			"use": "enc"
+		}
+	]
+}
+```
+
+<Tip>
+	Fetch the JWKS periodically and cache it. Use the `kid` of the key you encrypt with. AutoSend supports multiple keys at once so keys can rotate without breaking in-flight requests.
+</Tip>
+
+---
+
+## Node.js example
+
+This example fetches the public key, encrypts a contact payload, and calls the contacts API. It uses the [`jose`](https://github.com/panva/jose) library.
+
+<CodeGroup>
+
+```bash Install
+npm install jose
+```
+
+```js encrypt-and-send.js expandable
+import { importJWK, CompactEncrypt } from 'jose';
+
+const API_BASE = 'https://api.autosend.com';
+const API_KEY = 'AS_xxx.yyy'; // your AutoSend API key
+
+const JWE_ALG = 'RSA-OAEP-256';
+const JWE_ENC = 'A256GCM';
+
+// 1. Fetch AutoSend's public key from the JWKS endpoint.
+async function fetchPublicKey() {
+	const res = await fetch(`${API_BASE}/v1/jwks.json`);
+	if (!res.ok) throw new Error(`Failed to fetch JWKS: ${res.status}`);
+
+	const { keys } = await res.json();
+	const jwk = keys[0]; // the active key is listed first
+
+	const publicKey = await importJWK(jwk, JWE_ALG);
+	return { publicKey, kid: jwk.kid };
+}
+
+// 2. Encrypt the JSON payload into a JWE compact string.
+async function encryptPayload(payload, publicKey, kid) {
+	const data = new TextEncoder().encode(JSON.stringify(payload));
+	return new CompactEncrypt(data)
+		.setProtectedHeader({ alg: JWE_ALG, enc: JWE_ENC, kid })
+		.encrypt(publicKey);
+}
+
+// 3. Send the encrypted request to the contacts API.
+async function createEncryptedContact(contact) {
+	const { publicKey, kid } = await fetchPublicKey();
+	const encryptedData = await encryptPayload(contact, publicKey, kid);
+
+	const res = await fetch(`${API_BASE}/v1/contacts/email`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${API_KEY}`,
+			'X-Payload-Encryption': 'jwe',
+			'X-Key-Id': kid,
+		},
+		body: JSON.stringify({ encryptedData }),
+	});
+
+	return res.json();
+}
+
+// Usage
+const result = await createEncryptedContact({
+	email: 'john@example.com',
+	firstName: 'John',
+	lastName: 'Doe',
+	customFields: {
+		isVerified: false,
+		industry: 'Telecommunications',
+	},
+});
+
+console.log(result);
+```
+
+</CodeGroup>
+
+<Info>
+	Any language with a JWE library works. Equivalent libraries exist for Python
+	(`jwcrypto` / `python-jose`), Go, Java, Ruby, and more. Always use `alg =
+	RSA-OAEP-256` and `enc = A256GCM`.
+</Info>
+
+---
+
+## Request format
+
+Send the JWE as `encryptedData`, with the encryption headers:
+
+<CodeGroup>
+
+```http Encrypted
+POST /v1/contacts/email
+Authorization: Bearer AS_xxx.yyy
+Content-Type: application/json
+X-Payload-Encryption: jwe
+X-Key-Id: key_2026_06
+
+{ "encryptedData": "eyJhbGciOiJSU0EtT0FFUC0yNTYi..." }
+```
+
+```http Plaintext (default)
+POST /v1/contacts/email
+Authorization: Bearer AS_xxx.yyy
+Content-Type: application/json
+
+{ "email": "john@example.com", "firstName": "John" }
+```
+
+</CodeGroup>
+
+<ParamField path='X-Payload-Encryption' type='string'>
+	Set to `jwe` for encrypted requests. Omit (or use `none`) for plaintext.
+</ParamField>
+
+<ParamField path='X-Key-Id' type='string'>
+	The `kid` of the public key you encrypted with. If omitted, AutoSend reads the `kid` from the JWE protected header.
+</ParamField>
+
+<ParamField path='encryptedData' type='string' required>
+	The JWE compact string containing your complete JSON payload.
+</ParamField>
+
+---
+
+## Works with any public endpoint
+
+The encrypted request format is the same for every `/v1` endpoint. Just put the JWE inside `{ "encryptedData": "…" }` and add the headers. For example, to send an email:
+
+```http
+POST /v1/mails/send
+Authorization: Bearer AS_xxx.yyy
+Content-Type: application/json
+X-Payload-Encryption: jwe
+X-Key-Id: key_2026_06
+
+{ "encryptedData": "eyJhbGciOiJSU0EtT0FFUC0yNTYi..." }
+```
+
+---
+
+## Error handling
+
+If the encrypted payload is malformed, the key id is unknown, or decryption fails, the API responds with **HTTP 400**:
+
+```json
+{
+	"success": false,
+	"error": {
+		"message": "Invalid encrypted payload",
+		"code": "INVALID_ENCRYPTED_PAYLOAD",
+		"status": 400
+	}
+}
+```
+
+<AccordionGroup>
+	<Accordion title='Malformed JWE'>
+		The `encryptedData` value is not a valid JWE compact string. Re-encrypt the payload with the public key from the JWKS endpoint.
+	</Accordion>
+	<Accordion title='Unknown or missing key id'>
+		The `kid` doesn't match any active AutoSend key. Refresh the JWKS and use the `kid` from the returned key.
+	</Accordion>
+	<Accordion title='Decryption failure'>
+		The payload was encrypted with the wrong key or a different algorithm. Use `RSA-OAEP-256` + `A256GCM` and AutoSend's current public key.
+	</Accordion>
+</AccordionGroup>
+
+---
+
+## FAQ
+
+<AccordionGroup>
+	<Accordion title='Is encryption required?'>
+		No. It's optional and per request. Endpoints accept plaintext bodies exactly as before. Only requests with the `jwe` header or an `encryptedData` field are decrypted.
+	</Accordion>
+	<Accordion title='How often should I fetch the public key?'>
+		Cache it and refresh periodically (for example, daily or weekly). AutoSend supports key rotation, so always encrypt with the `kid` from the latest JWKS.
+	</Accordion>
+	<Accordion title='Which languages are supported?'>
+		Any language with a JWE library. The example uses Node.js with `jose`; equivalent libraries exist for Python (`jwcrypto` / `python-jose`), Go, Java, Ruby, and more. Use `alg = RSA-OAEP-256` and `enc = A256GCM`.
+	</Accordion>
+	<Accordion title='Do I still need HTTPS?'>
+		Yes. JWE complements transport security, it does not replace it. Always call AutoSend over HTTPS and add JWE on top when you need application-layer encryption.
+	</Accordion>
+</AccordionGroup>
+
+---
+
+## Related Resources
+
+<Columns cols={2}>
+	<Card title='API Keys' icon='/icons/api-key.svg' href={APP_PATHS.apiKeys}>
+		Create and manage the API keys you authenticate requests with.
+	</Card>
+	<Card
+		title='API Reference'
+		icon='/icons/api.svg'
+		href={APP_PATHS.apiReferenceIntroduction}
+	>
+		Explore every public endpoint you can send encrypted payloads to.
+	</Card>
+	<Card
+		title='Upsert Contact'
+		icon='/icons/contacts.svg'
+		href={APP_PATHS.upsertContactApiRef}
+	>
+		The contacts endpoint used in the encryption example above.
+	</Card>
+	<Card title='Send Email' icon='/icons/email-activity.svg' href={APP_PATHS.sendEmail}>
+		Send transactional emails, with or without an encrypted body.
+	</Card>
+</Columns>

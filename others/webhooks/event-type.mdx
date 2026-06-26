@@ -739,7 +739,8 @@ Triggered when an inbound email is received on one of your project's receiving d
   "type": "email.received",
   "createdAt": "2026-06-24T10:30:00.000Z",
   "data": {
-    "messageId": "64f1a2b3c4d5e6f7g8h9i0j1",
+    "inboundEmailId": "64f1a2b3c4d5e6f7g8h9i0j1",
+    "messageId": "<CAOY3BGQ@mail.gmail.com>",
     "from": {
       "email": "customer@example.com",
       "name": "Jane Customer"
@@ -752,8 +753,7 @@ Triggered when an inbound email is received on one of your project's receiving d
     ],
     "subject": "Question about my order",
     "receivedAt": "2026-06-24T10:30:00.000Z",
-    "domain": "inbox.autosend.email",
-    "hasAttachments": false,
+    "attachmentCount": 0,
     "threadId": "64f1a2b3c4d5e6f7g8h9i0j2"
   }
 }
@@ -761,7 +761,8 @@ Triggered when an inbound email is received on one of your project's receiving d
 
 **Data Fields:**
 
-- `messageId` - Unique identifier for the inbound message
+- `inboundEmailId` - Unique identifier for the inbound message
+- `messageId` - Unique email message Id
 - `from` - Sender object with email and name
 - `to` - Array of recipient objects with email and name
 - `subject` - Email subject line

@@ -95,6 +95,7 @@
 						"pages": [
 							"others/suppressions",
 							"others/unsubscribe-groups",
+							"others/encrypted-payloads",
 							{
 								"group": "Webhooks",
 								"icon": "/icons/webhook.svg",
@@ -223,6 +224,8 @@
 							"api-reference/domains/get",
 							"api-reference/domains/add",
 							"api-reference/domains/verify",
+							"api-reference/domains/enable-inbound",
+							"api-reference/domains/disable-inbound",
 							"api-reference/domains/delete"
 						]
 					},
@@ -255,6 +258,7 @@
 						"group": "Projects",
 						"pages": [
 							"api-reference/projects/list-projects",
+							"api-reference/projects/get-project",
 							"api-reference/projects/create-project",
 							"api-reference/projects/delete-project"
 						]
