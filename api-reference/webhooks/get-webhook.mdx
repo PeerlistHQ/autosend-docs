@@ -149,17 +149,21 @@ puts response.body
 {
   "success": true,
   "data": {
-    "webhook": {
-      "id": "60d5ec49f1b2c72d9c8b1234",
-      "organizationId": "60d5ec49f1b2c72d9c8b0000",
-      "projectId": "60d5ec49f1b2c72d9c8b1111",
-      "url": "https://example.com/webhooks/autosend",
-      "secret": "***hidden***",
-      "events": ["email.delivered", "email.bounced"],
-      "isActive": true,
-      "createdAt": "2026-06-01T09:00:00.000Z",
-      "updatedAt": "2026-06-12T10:15:00.000Z"
-    }
+    "id": "60d5ec49f1b2c72d9c8b1234",
+    "organizationId": "60d5ec49f1b2c72d9c8b0000",
+    "projectId": "60d5ec49f1b2c72d9c8b1111",
+    "url": "https://example.com/webhooks/autosend",
+    "secret": "***hidden***",
+    "events": ["email.delivered", "email.bounced"],
+    "isActive": true,
+    "status": "active",
+    "failureCount": 0,
+    "lastFailedAt": null,
+    "lastSuccessAt": "2026-06-12T10:00:00.000Z",
+    "lastDeliveredAt": "2026-06-12T10:00:00.000Z",
+    "metadata": { "team": "growth" },
+    "createdAt": "2026-06-01T09:00:00.000Z",
+    "updatedAt": "2026-06-12T10:15:00.000Z"
   }
 }
 ```
@@ -189,7 +193,69 @@ puts response.body
 </ResponseField>
 
 <ResponseField name="data" type="object">
-  Wrapper containing the webhook object (secret masked as `***hidden***`)
+  The webhook object. The signing secret is masked as `***hidden***`.
+
+  <Expandable title="child attributes">
+  <ResponseField name="data.id" type="string">
+    Unique webhook identifier
+  </ResponseField>
+
+  <ResponseField name="data.organizationId" type="string">
+    Organization the webhook belongs to
+  </ResponseField>
+
+  <ResponseField name="data.projectId" type="string">
+    Project the webhook is scoped to
+  </ResponseField>
+
+  <ResponseField name="data.url" type="string">
+    The destination URL events are delivered to
+  </ResponseField>
+
+  <ResponseField name="data.secret" type="string">
+    HMAC signing secret, always masked as `***hidden***` in this endpoint. Use [Reveal Webhook Secret](/webhooks/reveal-webhook-secret) to retrieve the actual value.
+  </ResponseField>
+
+  <ResponseField name="data.events" type="string[]">
+    The subscribed event types
+  </ResponseField>
+
+  <ResponseField name="data.isActive" type="boolean">
+    Whether the webhook is currently active
+  </ResponseField>
+
+  <ResponseField name="data.status" type="string">
+    Delivery status. One of `active`, `inactive`, or `disabled` (disabled due to too many failures)
+  </ResponseField>
+
+  <ResponseField name="data.failureCount" type="integer">
+    Number of consecutive delivery failures
+  </ResponseField>
+
+  <ResponseField name="data.lastFailedAt" type="string | null">
+    Timestamp of the most recent failed delivery (ISO 8601), or `null`
+  </ResponseField>
+
+  <ResponseField name="data.lastSuccessAt" type="string | null">
+    Timestamp of the most recent successful delivery (ISO 8601), or `null`
+  </ResponseField>
+
+  <ResponseField name="data.lastDeliveredAt" type="string | null">
+    Timestamp of the most recent delivery attempt (ISO 8601), or `null`
+  </ResponseField>
+
+  <ResponseField name="data.metadata" type="object | null">
+    Arbitrary key-value metadata attached to the webhook
+  </ResponseField>
+
+  <ResponseField name="data.createdAt" type="string">
+    ISO 8601 creation timestamp
+  </ResponseField>
+
+  <ResponseField name="data.updatedAt" type="string">
+    ISO 8601 last-updated timestamp
+  </ResponseField>
+  </Expandable>
 </ResponseField>
 
 #### Error Responses
