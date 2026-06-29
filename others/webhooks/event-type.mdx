@@ -786,7 +786,7 @@ Triggered when an inbound email is received on one of your project's receiving d
 - `inReplyToEmailActivityId` - ID of the outbound email this message is a reply to, if matched (optional)
 - `inReplyToInboundEmailId` - ID of a previously received inbound message this is a reply to, if matched (optional)
 
-**Note:** The message body (text/HTML) and full headers are not included in the webhook payload. To access those, call `GET /v1/inbound/messages/{inboundEmailId}` using the `inboundEmailId` from this event as the path parameter. The `messageId` field in the Get Message response is the RFC 5322 email header (e.g. `<abc@mail.gmail.com>`) - a different value entirely, not a database ID.
+**Note:** This payload contains metadata only. To access the full message body, headers, attachments, and verdicts, call the [Get Message](/api-reference/inbound-emails/get-message) endpoint with the `messageId`.
 
 **Use Cases:**
 
