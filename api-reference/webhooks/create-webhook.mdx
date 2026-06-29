@@ -203,6 +203,12 @@ puts response.body
       "secret": "whsec_8f3a1c2d4e5b6a7c8d9e0f1a2b3c4d5e",
       "events": ["email.delivered", "email.bounced"],
       "isActive": true,
+      "status": "active",
+      "failureCount": 0,
+      "lastFailedAt": null,
+      "lastSuccessAt": null,
+      "lastDeliveredAt": null,
+      "metadata": { "team": "growth" },
       "createdAt": "2026-06-12T10:15:00.000Z",
       "updatedAt": "2026-06-12T10:15:00.000Z"
     }
@@ -270,8 +276,32 @@ puts response.body
     Delivery status. One of `active`, `inactive`, or `disabled`
   </ResponseField>
 
+  <ResponseField name="data.webhook.failureCount" type="integer">
+    Number of consecutive delivery failures. Starts at `0` on creation.
+  </ResponseField>
+
+  <ResponseField name="data.webhook.lastFailedAt" type="string | null">
+    Timestamp of the most recent failed delivery (ISO 8601), or `null`
+  </ResponseField>
+
+  <ResponseField name="data.webhook.lastSuccessAt" type="string | null">
+    Timestamp of the most recent successful delivery (ISO 8601), or `null`
+  </ResponseField>
+
+  <ResponseField name="data.webhook.lastDeliveredAt" type="string | null">
+    Timestamp of the most recent delivery attempt (ISO 8601), or `null`
+  </ResponseField>
+
+  <ResponseField name="data.webhook.metadata" type="object | null">
+    Arbitrary key-value metadata attached to the webhook
+  </ResponseField>
+
   <ResponseField name="data.webhook.createdAt" type="string">
     ISO 8601 creation timestamp
+  </ResponseField>
+
+  <ResponseField name="data.webhook.updatedAt" type="string">
+    ISO 8601 last-updated timestamp
   </ResponseField>
   </Expandable>
 </ResponseField>

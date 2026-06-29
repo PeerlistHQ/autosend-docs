@@ -210,10 +210,12 @@ puts response.body
 ```json 202 Response
 {
   "success": true,
+  "message": "Reply queued",
   "data": {
-    "emailId": "698afb75ff4bc5466e3a797a",
-		"message": "Email queued successfully.",
-		"totalRecipients": 1
+    "emailId": "0102018f-0000-0000-0000-000000000000",
+    "message": "Email queued successfully.",
+    "status": "QUEUED",
+    "totalRecipients": 1
   }
 }
 ```
@@ -349,7 +351,27 @@ puts response.body
 </ResponseField>
 
 <ResponseField name="data" type="object">
-  Result of queuing the reply through the sending pipeline (shape mirrors the standard send endpoint, e.g. the queued message identifier and status).
+  Result of queuing the reply through the sending pipeline.
+
+  <Expandable title="child attributes">
+  <ResponseField name="data.emailId" type="string">
+    Unique identifier of the queued outbound email (email activity ID).
+  </ResponseField>
+
+  <ResponseField name="data.message" type="string">
+    Queue confirmation message.
+
+    Example: `"Email queued successfully."`
+  </ResponseField>
+
+  <ResponseField name="data.status" type="string">
+    Initial status of the queued email. Always `QUEUED` on success.
+  </ResponseField>
+
+  <ResponseField name="data.totalRecipients" type="integer">
+    Total number of recipients the reply was queued for (TO + CC + BCC).
+  </ResponseField>
+  </Expandable>
 </ResponseField>
 
 #### Error Responses

@@ -149,7 +149,6 @@ puts response.body
   "success": true,
   "data": {
     "id": "60d5ec49f1b2c72d9c8b1234",
-    "providerMessageId": "abc123def456",
     "messageId": "<CADxyz@mail.gmail.com>",
     "domainName": "support.example.com",
     "from": {
@@ -228,11 +227,7 @@ puts response.body
 
   <Expandable title="child attributes">
   <ResponseField name="data.id" type="string">
-    Unique inbound message identifier
-  </ResponseField>
-
-  <ResponseField name="data.providerMessageId" type="string">
-    Provider (SES) message ID — the idempotency key for the message
+    Unique inbound message identifier (MongoDB ID). This is the same value sent as `inboundEmailId` in the `email.received` webhook event - use it as the `{id}` path parameter to fetch this message.
   </ResponseField>
 
   <ResponseField name="data.messageId" type="string">

@@ -729,7 +729,7 @@ For a conceptual overview of receiving emails on AutoSend, see the [Inbound Emai
 
 ### `email.received`
 
-Triggered when an inbound email is received on one of your project's receiving domains. Use the message ID in the payload to fetch the full structured message via the [Get Message](/api-reference/inbound-emails/get-message) endpoint.
+Triggered when an inbound email is received on one of your project's receiving domains. Use `inboundEmailId` from the payload to fetch the full structured message via the [Get Message](/api-reference/inbound-emails/get-message) endpoint.
 
 <Accordion title="Payload and use case">
   **Sample Payload:**
@@ -740,7 +740,6 @@ Triggered when an inbound email is received on one of your project's receiving d
   "createdAt": "2026-06-24T10:30:00.000Z",
   "data": {
     "inboundEmailId": "64f1a2b3c4d5e6f7g8h9i0j1",
-    "messageId": "<CAOY3BGQ@mail.gmail.com>",
     "from": {
       "email": "customer@example.com",
       "name": "Jane Customer"
@@ -751,25 +750,41 @@ Triggered when an inbound email is received on one of your project's receiving d
         "name": null
       }
     ],
+    "cc": [],
     "subject": "Question about my order",
+    "attachments": [
+      {
+        "attachmentId": "64f1a2b3c4d5e6f7g8h9i0k1",
+        "attachmentIndex": 0,
+        "filename": "receipt.pdf",
+        "contentType": "application/pdf",
+        "size": 20480
+      }
+    ],
+    "spamVerdict": "PASS",
+    "virusVerdict": "PASS",
     "receivedAt": "2026-06-24T10:30:00.000Z",
-    "attachmentCount": 0,
-    "threadId": "64f1a2b3c4d5e6f7g8h9i0j2"
+    "threadId": "64f1a2b3c4d5e6f7g8h9i0j2",
+    "inReplyToEmailActivityId": "64f1a2b3c4d5e6f7g8h9i0j3",
+    "inReplyToInboundEmailId": null
   }
 }
 ```
 
 **Data Fields:**
 
-- `inboundEmailId` - Unique identifier for the inbound message
-- `messageId` - Unique email message Id
+- `inboundEmailId` - The database ID of the inbound message (this is the `id` field in the Get Message API response — use it as the `{id}` path parameter)
 - `from` - Sender object with email and name
 - `to` - Array of recipient objects with email and name
+- `cc` - Array of CC recipient objects with email and name (empty array if none)
 - `subject` - Email subject line
+- `attachments` - Array of attachment metadata objects (empty array if none). Each entry includes `attachmentId`, `attachmentIndex`, `filename`, `contentType`, and `size`
+- `spamVerdict` - SES spam check verdict (e.g. `PASS`, `FAIL`)
+- `virusVerdict` - SES virus check verdict (e.g. `PASS`, `FAIL`)
 - `receivedAt` - ISO 8601 timestamp when the message was received
-- `domain` - The receiving domain the message was sent to
-- `hasAttachments` - Boolean indicating whether the message has attachments
-- `threadId` - Thread identifier for grouping related messages (optional)
+- `threadId` - Thread identifier for grouping related messages (optional - only present when a thread was matched)
+- `inReplyToEmailActivityId` - ID of the outbound email this message is a reply to, if matched (optional)
+- `inReplyToInboundEmailId` - ID of a previously received inbound message this is a reply to, if matched (optional)
 
 **Note:** This payload contains metadata only. To access the full message body, headers, attachments, and verdicts, call the [Get Message](/api-reference/inbound-emails/get-message) endpoint with the `messageId`.
 
