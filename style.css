@@ -138,6 +138,11 @@ div.size-6 > img {
 	font-weight: 500 !important;
 }
 
+.dark :not(pre) > code {
+	background-color: #292524;
+	color: #e7e5e4;
+}
+
 /* Overlay scrollbar - matching Claude platform docs */
 * {
 	scrollbar-width: thin;
