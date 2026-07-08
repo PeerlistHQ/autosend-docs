@@ -1,28 +1,22 @@
 ---
-title: 'Get Custom Field by Name'
-description: "Retrieve a specific custom field's details by its name using the AutoSend API."
-sidebarTitle: 'Get Custom Field by Name'
-openapi: 'GET /custom-fields/fieldName/{customFieldName}'
+title: 'Get Contact Property by Name'
+description: "Retrieve a specific contact property's details by its name using the AutoSend API."
+sidebarTitle: 'Get Contact Property by Name'
+openapi: 'GET /contact-properties/name/{propertyName}'
 ---
-
-import { APP_PATHS } from '/snippets/appPaths.mdx';
-
-<Warning>
-  **Deprecated.** Custom fields are now called contact properties. This `/custom-fields` endpoint still works as an alias, but new integrations should use <a href={APP_PATHS.getContactPropertyApiRef}>Get Contact Property by Name</a>.
-</Warning>
 
 <RequestExample>
 
 ```bash cURL
 curl --request GET \
-  --url https://api.autosend.com/v1/custom-fields/fieldName/planTier \
+  --url https://api.autosend.com/v1/contact-properties/name/planTier \
   --header 'Authorization: Bearer <token>'
 ```
 
 ```python Python
 import requests
 
-url = "https://api.autosend.com/v1/custom-fields/fieldName/planTier"
+url = "https://api.autosend.com/v1/contact-properties/name/planTier"
 
 headers = {
     "Authorization": "Bearer <token>"
@@ -34,7 +28,7 @@ print(response.json())
 
 ```javascript JavaScript
 const response = await fetch(
-  "https://api.autosend.com/v1/custom-fields/fieldName/planTier",
+  "https://api.autosend.com/v1/contact-properties/name/planTier",
   {
     method: "GET",
     headers: {
@@ -52,7 +46,7 @@ console.log(data);
 $curl = curl_init();
 
 curl_setopt_array($curl, [
-  CURLOPT_URL => "https://api.autosend.com/v1/custom-fields/fieldName/planTier",
+  CURLOPT_URL => "https://api.autosend.com/v1/contact-properties/name/planTier",
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_HTTPHEADER => [
     "Authorization: Bearer <token>",
@@ -75,7 +69,7 @@ import (
 )
 
 func main() {
-  req, _ := http.NewRequest("GET", "https://api.autosend.com/v1/custom-fields/fieldName/planTier", nil)
+  req, _ := http.NewRequest("GET", "https://api.autosend.com/v1/contact-properties/name/planTier", nil)
   req.Header.Set("Authorization", "Bearer <token>")
 
   client := &http.Client{}
@@ -98,7 +92,7 @@ public class Main {
     HttpClient client = HttpClient.newHttpClient();
 
     HttpRequest request = HttpRequest.newBuilder()
-      .uri(URI.create("https://api.autosend.com/v1/custom-fields/fieldName/planTier"))
+      .uri(URI.create("https://api.autosend.com/v1/contact-properties/name/planTier"))
       .header("Authorization", "Bearer <token>")
       .GET()
       .build();
@@ -113,7 +107,7 @@ public class Main {
 require "net/http"
 require "uri"
 
-uri = URI.parse("https://api.autosend.com/v1/custom-fields/fieldName/planTier")
+uri = URI.parse("https://api.autosend.com/v1/contact-properties/name/planTier")
 http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true
 
@@ -131,9 +125,11 @@ puts response.body
 ```json Response
 {
   "success": true,
-  "message": "Custom field retrieved successfully",
+  "message": "Contact property retrieved successfully",
   "data": {
     "id": "69c258bae3e715c0521153fb",
+    "name": "isVerified",
+    "type": "boolean",
     "fieldName": "isVerified",
     "fieldType": "boolean",
     "createdAt": "2026-03-24T09:26:18.826Z",
@@ -151,13 +147,13 @@ puts response.body
 </ParamField>
 
 #### Path Parameters
-<ParamField path="customFieldName" type="string" required>
-  The `fieldName` of the custom field to retrieve.
+<ParamField path="propertyName" type="string" required>
+  The `name` of the contact property to retrieve.
 </ParamField>
 
 ### Response
 
-<span className='text-sm'>Custom field retrieved successfully</span>
+<span className='text-sm'>Contact property retrieved successfully</span>
 
 <ResponseField name="success" type="boolean">
   Indicates whether the request was successful.
@@ -166,27 +162,33 @@ puts response.body
 <ResponseField name="message" type="string">
   Confirmation message.
 
-  Example: `"Custom field retrieved successfully"`
+  Example: `"Contact property retrieved successfully"`
 </ResponseField>
 
 <ResponseField name="data" type="object">
-  The custom field object.
+  The contact property object.
 
   <Expandable title="data">
     <ResponseField name="data.id" type="string">
-      Unique identifier of the custom field.
+      Unique identifier of the contact property.
     </ResponseField>
-    <ResponseField name="data.fieldName" type="string">
-      The programmatic name of the custom field.
+    <ResponseField name="data.name" type="string">
+      The programmatic name of the contact property.
     </ResponseField>
-    <ResponseField name="data.fieldType" type="string">
+    <ResponseField name="data.type" type="string">
       The data type: `string`, `number`, `boolean`, or `date`.
     </ResponseField>
+    <ResponseField name="data.fieldName" type="string">
+      Legacy alias of `name`, returned for backward compatibility.
+    </ResponseField>
+    <ResponseField name="data.fieldType" type="string">
+      Legacy alias of `type`, returned for backward compatibility.
+    </ResponseField>
     <ResponseField name="data.createdAt" type="string">
-      ISO 8601 timestamp when the field was created.
+      ISO 8601 timestamp when the property was created.
     </ResponseField>
     <ResponseField name="data.updatedAt" type="string">
-      ISO 8601 timestamp when the field was last updated.
+      ISO 8601 timestamp when the property was last updated.
     </ResponseField>
   </Expandable>
 </ResponseField>

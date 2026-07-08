@@ -76,7 +76,7 @@
 									"marketing-emails/contacts/import-csv",
 									"marketing-emails/contacts/lists",
 									"marketing-emails/contacts/segments",
-									"marketing-emails/contacts/custom-fields"
+									"marketing-emails/contacts/contact-properties"
 								]
 							},
 							"marketing-emails/domain-warmup"
@@ -154,12 +154,12 @@
 						]
 					},
 					{
-						"group": "Custom Fields",
+						"group": "Contact Properties",
 						"pages": [
-							"api-reference/custom-fields/list",
-							"api-reference/custom-fields/get-by-name",
-							"api-reference/custom-fields/create",
-							"api-reference/custom-fields/delete"
+							"api-reference/contact-properties/list",
+							"api-reference/contact-properties/get-by-name",
+							"api-reference/contact-properties/create",
+							"api-reference/contact-properties/delete"
 						]
 					},
 					{
@@ -284,6 +284,16 @@
 							"api-reference/inbound-emails/download-attachment",
 							"api-reference/inbound-emails/reply-to-message"
 						]
+					},
+					{
+						"group": "Custom Fields",
+						"tag": "Deprecated",
+						"pages": [
+							"api-reference/custom-fields/list",
+							"api-reference/custom-fields/get-by-name",
+							"api-reference/custom-fields/create",
+							"api-reference/custom-fields/delete"
+						]
 					}
 				]
 			},
@@ -402,6 +412,10 @@
 		{
 			"source": "/guides/ai-tools/lovable",
 			"destination": "/ai/integrations/lovable"
+		},
+		{
+			"source": "/marketing-emails/contacts/custom-fields",
+			"destination": "/marketing-emails/contacts/contact-properties"
 		}
 	],
 	"footer": {

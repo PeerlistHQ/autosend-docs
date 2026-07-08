@@ -100,11 +100,12 @@ AutoSend MCP exposes 34 tools across 10 categories. Your AI assistant automatica
 | `get_lists_and_segments` | Fetch your contact lists and segments for targeting |
 | `create_contact_list`    | Create a new contact list                           |
 
-### Custom Fields
+### Contact Properties
 
-| Tool                 | Description                                           |
-| -------------------- | ----------------------------------------------------- |
-| `list_custom_fields` | List custom contact fields with their names and types |
+| Tool                       | Description                                                                  |
+| -------------------------- | --------------------------------------------------------------------------- |
+| `list_contact_properties`  | List contact properties with their names and types                          |
+| `list_custom_fields`       | Deprecated alias of `list_contact_properties`, kept for backward compatibility |
 
 ### Templates
 
@@ -179,10 +180,10 @@ Email automations are multi-step workflows that send sequences of emails trigger
 A few preconditions to keep in mind:
 
 - Every email step must reference an automation-type template. Call `create_template` with `templateType: "automation"` first, then pass the returned `templateId` into the step.
-- Before referencing a contact field in a filter, call `list_custom_fields` so you use the exact bare field name.
+- Before referencing a contact field in a filter, call `list_contact_properties` so you use the exact bare property name.
 - For event-triggered automations or event-property branches, call `list_event_definitions` (or `get_event_definition` for a single event) to discover the available property keys.
 
-Learn more about <a href={APP_PATHS.automations}>Email Automations</a>, <a href={APP_PATHS.events}>Events</a>, and <a href={APP_PATHS.contactsCustomFields}>Custom Fields</a>.
+Learn more about <a href={APP_PATHS.automations}>Email Automations</a>, <a href={APP_PATHS.events}>Events</a>, and <a href={APP_PATHS.contactsContactProperties}>Contact Properties</a>.
 
 ## Guided Workflows
 
