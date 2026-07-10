@@ -37,7 +37,7 @@
     "/inbound/messages/{id}/attachments/{idx}": {
       "get": {
         "summary": "Download Attachment",
-        "description": "Downloads a single attachment from an inbound message by its zero-based index. Returns the binary attachment content with the appropriate Content-Type and Content-Disposition headers."
+        "description": "Retrieves a single attachment from an inbound message, referenced by its attachmentId or zero-based index. By default returns JSON metadata with a short-lived pre-signed download URL; pass download=true to stream the raw attachment bytes with the appropriate Content-Type and Content-Disposition headers."
       }
     },
     "/inbound/messages/{id}/reply": {
