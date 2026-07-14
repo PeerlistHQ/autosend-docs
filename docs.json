@@ -439,5 +439,8 @@
 			"light": "#FAFAF9",
 			"dark": "#0C0A09"
 		}
-	}
+  },
+  "seo": {
+    "indexing": "all"
+  }
 }
