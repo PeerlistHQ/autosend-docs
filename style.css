@@ -114,9 +114,11 @@ li[data-active='true'] .sidebar-group a.group {
 	background-color: #e7e5e4;
 }
 
+/* Sidebar group expand/collapse chevron (group icons are <img>, so this
+   only matches the chevron svg) */
 .sidebar-group button.group svg {
-	width: 20px !important;
-	height: 20px !important;
+	width: 12px !important;
+	height: 12px !important;
 }
 
 /* Mintlify Card icon wrapper gets squeezed by its flex parent when it
