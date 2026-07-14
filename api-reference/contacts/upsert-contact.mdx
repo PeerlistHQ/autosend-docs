@@ -20,6 +20,7 @@ curl --request POST \
   "firstName": "John",
   "lastName": "Doe",
   "userId": "user_12345",
+  "mobile": "+14155552671",
   "customFields": {
     "company": "Acme Corp",
     "role": "Developer",
@@ -43,6 +44,7 @@ payload = {
     "firstName": "John",
     "lastName": "Doe",
     "userId": "user_12345",
+    "mobile": "+14155552671",
     "customFields": {
         "company": "Acme Corp",
         "role": "Developer",
@@ -66,6 +68,7 @@ fetch('https://api.autosend.com/v1/contacts/email', {
     firstName: 'John',
     lastName: 'Doe',
     userId: 'user_12345',
+    mobile: '+14155552671',
     customFields: {
       company: 'Acme Corp',
       role: 'Developer',
@@ -88,6 +91,7 @@ $data = [
     'firstName' => 'John',
     'lastName' => 'Doe',
     'userId' => 'user_12345',
+    'mobile' => '+14155552671',
     'customFields' => [
         'company' => 'Acme Corp',
         'role' => 'Developer',
@@ -129,6 +133,7 @@ func main() {
         "firstName": "John",
         "lastName": "Doe",
         "userId":    "user_12345",
+        "mobile":    "+14155552671",
         "customFields": map[string]string{
             "company": "Acme Corp",
             "role":    "Developer",
@@ -176,6 +181,7 @@ public class UpsertContact {
                 "  \"firstName\": \"John\",\n" +
                 "  \"lastName\": \"Doe\",\n" +
                 "  \"userId\": \"user_12345\",\n" +
+                "  \"mobile\": \"+14155552671\",\n" +
                 "  \"customFields\": {\n" +
                 "    \"company\": \"Acme Corp\",\n" +
                 "    \"role\": \"Developer\",\n" +
@@ -217,6 +223,7 @@ request.body = {
   firstName: 'John',
   lastName: 'Doe',
   userId: 'user_12345',
+  mobile: '+14155552671',
   customFields: {
     company: 'Acme Corp',
     role: 'Developer',
@@ -243,6 +250,7 @@ puts response.body
     "firstName": "John",
     "lastName": "Doe",
     "userId": "user_12345",
+    "mobile": "+14155552671",
     "customFields": {
       "company": "Acme Corp",
       "role": "Developer",
@@ -272,28 +280,46 @@ puts response.body
 ### Body
 Contact information to create or update
 
+<Note>
+  For the optional fields `firstName`, `lastName`, `userId`, and `mobile`, sending an empty string (`""`) clears the stored value on an existing contact. Sending `null` or omitting the field leaves the current value unchanged.
+</Note>
+
 <ParamField path="email" type="string<email>"  required>
   Valid email address (automatically normalized to lowercase)
 
   Example: `"john.doe@example.com"`
 </ParamField>
 
-<ParamField path="firstName" type="string" >
+<ParamField path="firstName" type="string | null" >
   Contact's first name
+
+  Send an empty string (`""`) to clear this field on an existing contact. Sending `null` or omitting it leaves the current value unchanged.
 
   Example: `"John"`
 </ParamField>
 
-<ParamField path="lastName" type="string" >
+<ParamField path="lastName" type="string | null" >
   Contact's last name
+
+  Send an empty string (`""`) to clear this field on an existing contact. Sending `null` or omitting it leaves the current value unchanged.
 
   Example: `"Doe"`
 </ParamField>
 
-<ParamField path="userId" type="string" >
+<ParamField path="userId" type="string | null" >
   An optional reference field to store your application's user ID. Use this to map your internal users to AutoSend contacts.
 
+  Send an empty string (`""`) to clear this field on an existing contact. Sending `null` or omitting it leaves the current value unchanged.
+
   Example: `"user_12345"`
+</ParamField>
+
+<ParamField path="mobile" type="string | null" >
+  Contact's mobile number in E.164 format.
+
+  Send an empty string (`""`) to clear this field on an existing contact. Sending `null` or omitting it leaves the current value unchanged.
+
+  Example: `"+14155552671"`
 </ParamField>
 <ParamField path="listIds" type="array">
   IDs of the contact lists to add this contact to. You can find list IDs in your <a href={AUTOSEND_PATHS.contactsPage} target='_blank' title='AutoSend Dashboard'>AutoSend Dashboard</a>.
@@ -362,6 +388,12 @@ Contact information to create or update
     Your application's user identifier
     
     Example: `"user_12345"`
+  </ResponseField>
+  
+  <ResponseField name="data.mobile" type="string">
+    Contact's mobile number in E.164 format
+    
+    Example: `"+14155552671"`
   </ResponseField>
   
   <ResponseField name="data.customFields" type="object">
