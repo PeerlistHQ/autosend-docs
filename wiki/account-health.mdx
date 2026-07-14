@@ -1,0 +1,115 @@
+---
+title: 'How is my AutoSend account health measured?'
+description: 'Learn how AutoSend uses your bounce rate and complaint rate to determine account health, what each health stage means, and how to keep your account in good standing.'
+sidebarTitle: 'Account health'
+keywords:
+  [
+    'account health',
+    'bounce rate',
+    'complaint rate',
+    'spam complaints',
+    'account suspension',
+    'sender reputation',
+    'email deliverability',
+  ]
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+
+AutoSend continuously monitors the health of your account using two signals: your **bounce rate** and your **complaint rate**. Both are measured across all projects in your account, so a problem in one project affects the health of the whole account.
+
+Keeping both rates low protects your sender reputation with mailbox providers like Gmail, Outlook, and Yahoo. It also protects the shared AutoSend sending infrastructure that every customer relies on.
+
+## The two signals
+
+- **Bounce rate.** The percentage of your emails that mailbox providers reject. Hard bounces usually mean the address is invalid or no longer exists. A high bounce rate tells providers your list is stale or was never verified.
+- **Complaint rate.** The percentage of recipients who mark your email as spam. Even a tiny complaint rate has an outsized impact, because mailbox providers treat spam reports as the strongest negative signal a recipient can send.
+
+## Bounce rate thresholds
+
+| Bounce rate | Account health | What it means                                                               |
+| ----------- | -------------- | ---------------------------------------------------------------------------- |
+| Under 2%    | **Healthy**    | Your list quality is good. No action needed.                                 |
+| 2% to 3%    | **Warning**    | Your bounce rate is elevated. Review your lists and recent sends.            |
+| 3% to 5%    | **Flagged**    | Your account is at risk. Pause sending and clean your lists immediately.     |
+| 5% to 6%    | **Critical**   | Your account is one step from suspension. Stop sending and fix your lists.   |
+| Above 6%    | **Suspended**  | Sending is stopped to protect your domain and the AutoSend infrastructure.   |
+
+## Complaint rate thresholds
+
+| Complaint rate | Account health | What it means                                                              |
+| -------------- | -------------- | --------------------------------------------------------------------------- |
+| Under 0.05%    | **Healthy**    | Recipients want your email. No action needed.                               |
+| 0.05% to 0.08% | **Warning**    | Complaints are creeping up. Review your content, audience, and frequency.   |
+| 0.08% to 0.1%  | **Flagged**    | Your account is at risk. Stop sending to unengaged contacts immediately.    |
+| At 0.1%        | **Critical**   | Your account is one step from suspension. Stop sending immediately.         |
+| Above 0.1%     | **Suspended**  | Sending is stopped. The suspension may not be removed.                      |
+
+<Warning>
+	A suspension triggered by a complaint rate above 0.1% is the most serious state your account can
+	be in. Spam complaints signal that recipients never wanted your email, and this kind of
+	suspension may be permanent.
+</Warning>
+
+## What happens at each stage
+
+- **Healthy.** Everything works normally. Your daily sending limits continue to grow as your domains warm up.
+- **Warning.** You'll be notified so you can act before the problem grows. Treat a warning as an early signal, not background noise. Accounts that respond at this stage almost never get flagged.
+- **Flagged.** Your account is at serious risk. Pause your campaigns, identify the source of bounces or complaints, and clean your lists before resuming.
+- **Critical.** This is your last chance to act before suspension. Stop all sending, remove invalid and unengaged contacts, and don't resume until you've found the root cause.
+- **Suspended.** Sending is disabled across your account. Bounce-related suspensions can be reviewed and lifted once you've fixed the underlying issue. Complaint-related suspensions above 0.1% may not be removed.
+
+If your account is suspended, open the **in-app support chat** from your AutoSend dashboard. Share what caused the spike and what you've changed, and our team will review your account.
+
+## How to keep your rates under control
+
+### Do's
+
+- **Use double opt-in.** Confirmed subscribers bounce less and almost never mark your email as spam.
+- **Clean your lists regularly.** Remove addresses that hard bounced and contacts who haven't engaged in months. AutoSend automatically adds hard bounces to your <a href={APP_PATHS.suppressions}>suppression list</a>, so never work around it.
+- **Send to engaged segments.** Use <a href={APP_PATHS.contactsSegments}>segments</a> to target contacts who have opened or clicked recently instead of blasting your entire list.
+- **Warm up new domains.** Follow the <a href={APP_PATHS.domainWarmup}>domain warmup</a> process so mailbox providers learn to trust your domain gradually.
+- **Make unsubscribing easy.** A visible one-click unsubscribe link is your friend. A recipient who unsubscribes doesn't hurt you. A recipient who can't find the link marks you as spam instead.
+- **Set expectations at signup.** Tell people what you'll send and how often, then stick to it.
+- **Monitor your metrics after every send.** Check your bounce and complaint rates in <a href={APP_PATHS.emailActivity}>email activity</a> and campaign analytics so you catch problems while they're small.
+
+### Don'ts
+
+- **Don't buy, rent, or scrape email lists.** Purchased lists are the fastest route to both high bounces and high complaints, and they violate AutoSend's terms.
+- **Don't email old lists without re-permission.** A list that hasn't been mailed in over a year is full of dead addresses and people who forgot they subscribed. Run a re-permission campaign first.
+- **Don't hide or bury the unsubscribe link.** It doesn't reduce unsubscribes. It converts them into spam complaints.
+- **Don't spike your sending volume suddenly.** Sharp volume jumps from any domain look suspicious to mailbox providers and amplify the damage of any list problem.
+- **Don't ignore warnings.** The warning stage exists to give you time to fix things. Waiting until your account is flagged leaves you very little room.
+- **Don't keep sending to non-openers indefinitely.** Unengaged contacts are where complaints come from. Sunset them after a defined period of inactivity.
+- **Don't use misleading subject lines or sender names.** Recipients who feel tricked into opening report the email as spam.
+
+## Frequently asked questions
+
+<AccordionGroup>
+	<Accordion title='Are the rates measured per project or per account?'>
+		Account health is measured across all projects in your account combined. A high bounce or
+		complaint rate in one project affects the health status of your entire account, including
+		projects that are sending cleanly.
+	</Accordion>
+	<Accordion title='Do transactional emails count toward these rates?'>
+		Yes. All email sent from your account, both transactional and marketing, counts toward your
+		bounce and complaint rates. Mailbox providers don't distinguish between the two when judging
+		your reputation, so we don't either.
+	</Accordion>
+	<Accordion title='How do I check my current bounce and complaint rates?'>
+		You can see delivery, bounce, and complaint data in your email activity feed and in the
+		analytics for each campaign. Reviewing these after every significant send is the easiest way to
+		stay in the healthy range.
+	</Accordion>
+	<Accordion title='Can a suspended account be restored?'>
+		Bounce-related suspensions can usually be lifted once you've cleaned your lists and fixed the
+		source of the bounces. Reach out through the in-app support chat with details of what changed.
+		Complaint-related suspensions above 0.1% are more serious and may not be removed.
+	</Accordion>
+	<Accordion title='Why is the complaint threshold so much lower than the bounce threshold?'>
+		Mailbox providers weigh spam complaints far more heavily than bounces. Gmail, for example,
+		recommends staying below 0.1% and enforces action above 0.3%. AutoSend's thresholds are aligned
+		with those limits so your account is protected before mailbox providers start penalizing your
+		domain.
+	</Accordion>
+</AccordionGroup>

@@ -367,7 +367,7 @@
 				"groups": [
 					{
 						"group": "Deliverability",
-						"pages": ["wiki/daily-sending-limit"]
+						"pages": ["wiki/daily-sending-limit", "wiki/account-health"]
 					}
 				]
 			},
