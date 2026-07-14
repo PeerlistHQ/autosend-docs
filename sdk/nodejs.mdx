@@ -123,6 +123,33 @@ await autosend.emails.send({
 	Templates](/transactional-emails/email-templates) documentation.
 </Note>
 
+### React Email
+
+Pass a [React Email](https://react.email) component to the `react` option and the SDK renders it to HTML for you before sending:
+
+```tsx
+import { WelcomeEmail } from './emails/welcome';
+
+await autosend.emails.send({
+	from: { email: 'hello@yourdomain.com' },
+	to: { email: 'user@example.com' },
+	subject: 'Welcome',
+	react: <WelcomeEmail name="Ada" />,
+});
+```
+
+<Note>
+	Rendering React components requires the optional `@react-email/render` peer dependency. Install it
+	(along with `react` and your `@react-email/components`) with `npm install @react-email/render`. If
+	it is missing when you pass `react`, the SDK throws an error.
+</Note>
+
+<Tip>
+	The `react` option also works with `autosend.emails.bulk`, and `{{...}}` dynamic-data placeholders
+	still work for per-recipient personalization. If you provide both `html` and `react`, the explicit
+	`html` takes precedence.
+</Tip>
+
 ## Bulk Emails
 
 Send multiple emails in a single API call:
@@ -140,6 +167,76 @@ await autosend.emails.bulk({
 	Bulk sending is more efficient than sending emails individually. Use it when you need to send the
 	same or similar emails to multiple recipients.
 </Tip>
+
+## Receiving Emails (Inbound)
+
+The `inboundEmails` module lets you work with emails received on your inbound-enabled domain. You can list and read messages, download their attachments, and reply to them directly from your code.
+
+### List Messages
+
+Retrieve received messages with optional filters and pagination. The response returns matching items along with pagination metadata.
+
+```typescript
+const result = await autosend.inboundEmails.list({
+	from: 'sender@example.com',
+	search: 'invoice',
+	page: 1,
+	limit: 25,
+});
+
+console.log(result.data.items); // matched messages
+console.log(result.data.pagination); // { page, limit, total, pages }
+```
+
+Supported filters: `from`, `to`, `threadId`, `search`, `dateFrom`, `dateTo`, `page`, and `limit`.
+
+### Get a Message
+
+Fetch a single message by its ID. This returns the full message, including its `text` and `html` body, `attachments`, `headers`, thread details, and spam, SPF, DKIM, and DMARC verdicts.
+
+```typescript
+const message = await autosend.inboundEmails.get('60d5ec49f1b2c72d9c8b1234');
+console.log(message.data);
+```
+
+### Download an Attachment
+
+Generate a signed, time-limited URL to download an attachment. The `attachmentRef` can be a numeric index or the stable `attachmentId` from the message.
+
+```typescript
+const attachment = await autosend.inboundEmails.getAttachmentDownloadUrl(
+	'60d5ec49f1b2c72d9c8b1234',
+	0,
+);
+
+console.log(attachment.data.downloadUrl); // signed URL
+console.log(attachment.data.expiresIn); // seconds until it expires
+console.log(attachment.data.filename);
+```
+
+### Reply to a Message
+
+Send a reply to a received message. The reply is threaded to the original message automatically.
+
+```typescript
+const reply = await autosend.inboundEmails.reply('60d5ec49f1b2c72d9c8b1234', {
+	from: { email: 'support@yourdomain.com', name: 'Support' },
+	subject: 'Re: Hello',
+	html: '<p>Thanks for reaching out!</p>',
+});
+
+console.log(reply.data.emailId);
+console.log(reply.data.status); // 'QUEUED'
+console.log(reply.data.totalRecipients);
+```
+
+<Note>
+	Learn more in the <a href={APP_PATHS.inboundIntroduction}>Inbound Email</a> guide and the API
+	reference for <a href={APP_PATHS.listInboundMessagesApi}>listing</a>,{' '}
+	<a href={APP_PATHS.getInboundMessageApi}>retrieving</a>,{' '}
+	<a href={APP_PATHS.downloadInboundAttachmentApi}>downloading attachments from</a>, and{' '}
+	<a href={APP_PATHS.replyToInboundMessageApi}>replying to</a> inbound messages.
+</Note>
 
 ## Sync user data to Contacts on AutoSend
 
