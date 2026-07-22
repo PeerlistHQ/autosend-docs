@@ -1,0 +1,173 @@
+---
+title: 'Sync Tally form submissions with AutoSend'
+sidebarTitle: 'Tally Forms'
+description: 'Learn how to connect Tally Forms with AutoSend to automatically sync form submissions with your contact lists.'
+icon: '/icons/brand-tally.png'
+---
+
+import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+
+<Frame>
+	<img src='/images/integrations/tally/autosendxtally.jpg' alt='AutoSend and Tally Forms integration' />
+</Frame>
+
+## Overview
+
+[Tally](https://tally.so) is a form builder for creating signup forms, waitlists, surveys, and lead capture forms. AutoSend has a native Tally Forms integration that automatically syncs your form submissions with contacts in AutoSend, with no code required.
+
+Once synced, you can use those contacts to send <a href={APP_PATHS.campaigns}>campaigns</a>, trigger <a href={APP_PATHS.automations}>automations</a> like a welcome sequence, or build <a href={APP_PATHS.contactsSegments}>segments</a> based on their form answers.
+
+## How it works
+
+1. You connect your Tally account to AutoSend with your Tally API key.
+2. You pick a Tally form and the <a href={APP_PATHS.contactsLists}>contact list</a> its submissions should be saved to.
+3. You map the form fields to <a href={APP_PATHS.contactsContactProperties}>contact properties</a> in AutoSend.
+4. From then on, every new submission is automatically saved as a contact in the selected list. If a contact with the same email already exists, it is updated instead of duplicated.
+
+<Note>
+	Email is a mandatory field for a contact to be stored in AutoSend. Make sure your Tally form
+	includes an email field, and that it is mapped to the contact's email property.
+</Note>
+
+## Prerequisites
+
+Before you begin, make sure you have:
+
+- An [AutoSend account](https://autosend.com/)
+- A [Tally](https://tally.so) account with at least one form that collects an email address
+
+## Connect Tally Forms with AutoSend
+
+<Steps>
+	<Step title='Open the Integrations page' titleSize='h3'>
+		Go to [Integrations](https://autosend.com/integrations) in your AutoSend dashboard and click
+		**Connect** on the **Tally Forms** card.
+
+    <Frame>
+    	<img
+    		src='/images/integrations/tally/1-connect-tally-forms-with-autosend.png'
+    		alt='AutoSend Integrations page with the Connect button on the Tally Forms card'
+    	/>
+    </Frame>
+
+	</Step>
+	<Step title='Enter your Tally API key' titleSize='h3'>
+		In the modal that opens, enter your Tally API key. You can create one from [Tally's API keys
+		settings](https://tally.so/settings/api-keys). The key starts with `tly-`.
+
+    <Frame>
+    	<img
+    		src='/images/integrations/tally/2-connect-tally-forms-with-autosend.png'
+    		alt='Connect with Tally Forms modal asking for the Tally Forms API key'
+    	/>
+    </Frame>
+
+	</Step>
+	<Step title='Connect' titleSize='h3'>
+		Click **Connect**. Tally Forms is now connected to AutoSend, and you will see it marked as
+		**Connected**.
+
+    <Frame>
+    	<img
+    		src='/images/integrations/tally/3-connect-tally-forms-with-autosend.png'
+    		alt='Tally Forms integration page showing the Connected status'
+    	/>
+    </Frame>
+
+	</Step>
+</Steps>
+
+## Sync a form with a contact list
+
+Next, connect a specific Tally form to a contact list in AutoSend.
+
+<Steps>
+  <Step title="Add a form" titleSize="h3">
+    On the Tally Forms integration page, click **Add Form**.
+
+    <Frame>
+    	<img
+    		src='/images/integrations/tally/1-sync-form.png'
+    		alt='Tally Forms integration page with the Add Form button'
+    	/>
+    </Frame>
+
+  </Step>
+  <Step title="Select the form and contact list" titleSize="h3">
+    Select the Tally form whose submissions you want to sync, and choose the AutoSend contact list to save contacts in.
+
+    Contacts are saved to **All Contacts** by default. Choosing a specific <a href={APP_PATHS.contactsLists}>list</a> also triggers any live <a href={APP_PATHS.automations}>automations</a> attached to that list, which is useful for sending a welcome email to new signups.
+
+    <Frame>
+    	<img
+    		src='/images/integrations/tally/2-sync-form.png'
+    		alt='Connect Form screen with dropdowns to select a Tally form and the contact list to save in'
+    	/>
+    </Frame>
+
+  </Step>
+  <Step title="Map the form fields" titleSize="h3">
+    Match each Tally form field to the correct <a href={APP_PATHS.contactsContactProperties}>contact property</a> in AutoSend. The email field is required, and other answers can be mapped to properties like first name, last name, or your own custom properties.
+
+    <Frame>
+    	<img
+    		src='/images/integrations/tally/3-sync-form.png'
+    		alt='Field mapping table matching Tally form fields to AutoSend contact properties'
+    	/>
+    </Frame>
+
+    <Note>
+    	A contact is only stored in AutoSend if the submission includes an email address. Fields you
+    	leave unmapped are not synced.
+    </Note>
+
+  </Step>
+  <Step title="Done" titleSize="h3">
+    Save the connection. From now on, every new submission to this form is synced as a contact in AutoSend.
+
+    You can repeat these steps to sync multiple forms, each with its own contact list and field mapping. The integration page shows all connected forms along with the list they save to and their sync status.
+
+    <Frame>
+    	<img
+    		src='/images/integrations/tally/4-sync-form.png'
+    		alt='Tally Forms integration page listing a connected form with its contact list and active status'
+    	/>
+    </Frame>
+
+  </Step>
+</Steps>
+
+## Test the integration
+
+Submit a test response to your Tally form, then check the <a href={AUTOSEND_PATHS.contactsPage} target='_blank'>Contacts ↗</a> page in your AutoSend dashboard. The respondent should appear as a contact in the selected list within a few seconds.
+
+## Troubleshooting
+
+### Contacts are not appearing in AutoSend
+
+- Make sure the submission includes an email address. Submissions without an email are not stored as contacts.
+- Check that the form's status on the Tally Forms integration page is active.
+- Confirm your Tally API key is still valid. If you revoked it in Tally, reconnect the integration with a new key.
+
+### Form answers are missing on the contact
+
+- Only mapped fields are synced. Open the form's field mapping and make sure each answer you want stored is mapped to a contact property.
+- To store answers that don't match a built-in property, map them to <a href={APP_PATHS.contactsContactProperties}>custom contact properties</a>.
+
+## Next steps
+
+<Columns cols={2}>
+	<Card title='Contact Lists' icon='list' href='/marketing-emails/contacts/lists'>
+		Organize synced respondents into lists for targeted campaigns.
+	</Card>
+	<Card title='Email Automations' icon='arrow-progress' href='/automations'>
+		Trigger a welcome sequence when a contact joins a list.
+	</Card>
+	<Card title='Segments' icon='filter' href='/marketing-emails/contacts/segments'>
+		Build segments from form answers stored as contact properties.
+	</Card>
+	<Card title='Campaigns' icon='envelope' href='/marketing-emails/campaigns'>
+		Send one-off marketing emails to your synced contacts.
+	</Card>
+</Columns>

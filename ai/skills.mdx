@@ -250,7 +250,7 @@ Send to up to 100 recipients in a single API call.
 | `lastName`     | string | No       | Contact last name                                    |
 | `userId`       | string | No       | External user ID                                     |
 | `listIds`      | array  | No       | Lists to add contact to — `["list_abc", "list_xyz"]` |
-| `customFields` | object | No       | Custom field values                                  |
+| `customFields` | object | No       | Contact property values                              |
 
 **Response:**
 
@@ -289,7 +289,7 @@ Creates a new contact or updates an existing one by email address. If the contac
 | `lastName`     | string | No       | Contact last name       |
 | `userId`       | string | No       | External user ID        |
 | `listIds`      | array  | No       | Lists to add contact to |
-| `customFields` | object | No       | Custom field values     |
+| `customFields` | object | No       | Contact property values |
 
 **Response:** Returns the full contact object (same shape as Create Contact response).
 

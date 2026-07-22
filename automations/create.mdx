@@ -13,7 +13,7 @@ import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
 Before creating an automation, make sure you have the following ready based on your trigger type:
 
 - **For list/segment triggers:** <a href={APP_PATHS.contactsLists}>Create a contact list</a> or <a href={APP_PATHS.contactsSegments}>segment</a> that represents your trigger condition.
-- **For property-based triggers:** Ensure your contacts have the relevant <a href={APP_PATHS.contactsCustomFields}>custom fields</a> set up. The automation will evaluate these properties to determine when to trigger.
+- **For property-based triggers:** Ensure your contacts have the relevant <a href={APP_PATHS.contactsContactProperties}>contact properties</a> set up. The automation will evaluate these properties to determine when to trigger.
 
 ## How to Create an Email Automation
 
@@ -33,7 +33,7 @@ Before creating an automation, make sure you have the following ready based on y
 
     Select a <a href={APP_PATHS.contactsLists}>contact list</a> or <a href={APP_PATHS.contactsSegments}>segment</a>. When a contact joins this list or segment, they automatically enter the automation.
 
-    **Example:** Create a segment called "Pro Plan Members" with the custom field `plan: pro`. When a user purchases a Pro plan and enters this segment, the automation triggers.
+    **Example:** Create a segment called "Pro Plan Members" with the contact property `plan: pro`. When a user purchases a Pro plan and enters this segment, the automation triggers.
 
     <Frame>
       <img src='/images/email-automations/trigger-contact-added.png' alt="Trigger: New contact is added to a list or segment" />

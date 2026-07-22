@@ -244,7 +244,7 @@ The SDK lets you create, retrieve, update, and delete contacts directly from you
 
 ### Create a Contact
 
-Add a new contact to your AutoSend account. You can assign them to one or more lists and include custom fields for segmentation.
+Add a new contact to your AutoSend account. You can assign them to one or more lists and include contact properties for segmentation.
 
 ```typescript
 await autosend.contacts.create({
@@ -261,7 +261,7 @@ await autosend.contacts.create({
 
 ### Get a Contact
 
-Retrieve a contact's details by their ID. This returns their email, name, list memberships, custom fields, and subscription status.
+Retrieve a contact's details by their ID. This returns their email, name, list memberships, contact properties, and subscription status.
 
 ```typescript
 const contact = await autosend.contacts.get('contact_id');
@@ -291,7 +291,7 @@ await autosend.contacts.delete('contact_id');
 ```
 
 <Note>
-	Learn more about lists, segments, and custom fields in the
+	Learn more about lists, segments, and contact properties in the
 	[Contacts](/marketing-emails/contacts/introduction) documentation.
 </Note>
 

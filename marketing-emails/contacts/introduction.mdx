@@ -1,7 +1,7 @@
 ---
-title: "Contacts"
-description: "Manage your email contacts, organize them into lists and segments, and personalize your emails."
-sidebarTitle: "Introduction"
+title: 'Contacts'
+description: 'Manage your email contacts, organize them into lists and segments, and personalize your emails.'
+sidebarTitle: 'Introduction'
 icon: '/icons/introduction.svg'
 ---
 
@@ -13,27 +13,19 @@ Contacts are the people you send emails to in AutoSend. Each contact has a uniqu
 Contacts can be organized using **Lists** or **Segments** for better targeting.
 
 <Frame>
-  <img 
-  src={IMAGES.contacts}
-  alt="Contacts"
-  
-/>
+	<img src={IMAGES.contacts} alt='Contacts' />
 </Frame>
-
 
 ## All Contacts
 
 The **All Contacts** list shows every contact you’ve ever added to your account.
+
 <Frame>
-  <img 
-  src={IMAGES.allContacts}
-  alt="All Contacts"
- 
-/>
+	<img src={IMAGES.allContacts} alt='All Contacts' />
 </Frame>
 
-
 Contacts can come from:
+
 - Manual additions
 - Imported via CSV
 - API integrations
@@ -41,25 +33,18 @@ Contacts can come from:
 
 You can filter and search contacts, and view detailed insights for each.
 
-
 ## Contact Details
 
 Clicking on any contact opens their **Contact Details** page, where you can view:
 
 <Frame>
-  <img 
-  src={IMAGES.contactDetails}
-  alt="Contact Details"
-  
-/>
+	<img src={IMAGES.contactDetails} alt='Contact Details' />
 </Frame>
 
-
-- **Details**: Basic information (email, name, etc.), Reserved and Custom Fields.
+- **Details**: Basic information (email, name, etc.), Reserved Fields and Contact Properties.
 - **Lists & Segments**: All the lists and segments the contact belongs to
 - **Unsubscribes:** The kind of emails a particular user has unsubscribed from.
 - **Email Activity**: The email history of a particular user.
-
 
 ### Reserved Fields
 
@@ -90,11 +75,26 @@ Reserved fields are system-defined fields that AutoSend uses to store core conta
 | zip                     | The contact's postal or ZIP code.                                                          |
 | country                 | The contact's country.                                                                     |
 
+### Contact Properties
 
-### Custom Fields
+<a href={APP_PATHS.contactsContactProperties} title='Contact properties'>
+	Contact properties
+</a>
+let you store additional information beyond the reserved fields - for example, “Company,” “Plan Type,”
+or “Signup Date.”
 
-<a href={APP_PATHS.contactsCustomFields} title='Custom fields'>Custom fields</a> let you store additional information beyond the reserved ones — for example, “Company,” “Plan Type,” or “Signup Date.”
+They can be text, number, boolean, or date properties.
 
-They can be text, number, or date fields
+You can use these in both **marketing campaigns** and **transactional emails** to personalize your content using variables like `{{property_name}}`.
 
-You can use these in both **marketing campaigns** and **transactional emails** to personalize your content using variables like `{{custom_field_name}}`.
+---
+
+## Integrations
+
+If you collect signups or leads through other tools, you can use integrations to automatically store them as contacts in AutoSend, with no code required.
+
+<Columns cols={2}>
+	<Card title='Tally Forms' icon='/icons/brand-tally.png' href='/others/integrations/tally-forms'>
+		Sync your Tally form submissions with contacts in AutoSend.
+	</Card>
+</Columns>

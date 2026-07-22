@@ -113,7 +113,9 @@ li[data-active='true'] .sidebar-group a.group {
 	color: #1c1917;
 	background-color: #e7e5e4;
 }
-
+h1#page-title {
+	line-height: 1.2;
+}
 /* Sidebar group expand/collapse chevron (group icons are <img>, so this
    only matches the chevron svg) */
 .sidebar-group button.group svg {

@@ -118,6 +118,10 @@
 						]
 					},
 					{
+						"group": "Integrations",
+						"pages": ["others/integrations/tally-forms"]
+					},
+					{
 						"group": "Migration",
 						"pages": ["migration/sendgrid", "migration/resend"]
 					}
