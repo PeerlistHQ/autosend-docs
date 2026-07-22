@@ -14,7 +14,7 @@ curl --request POST \
   --header 'Content-Type: application/json' \
   --data '{
     "groupId": "AB12C3",
-    "reason": "unsubscribed",
+    "reason": "UNSUBSCRIBE",
     "page": 1,
     "limit": 20,
     "startDate": "2026-01-01T00:00:00.000Z",
@@ -33,7 +33,7 @@ response = requests.post(
     },
     json={
         "groupId": "AB12C3",
-        "reason": "unsubscribed",
+        "reason": "UNSUBSCRIBE",
         "page": 1,
         "limit": 20,
         "startDate": "2026-01-01T00:00:00.000Z",
@@ -54,7 +54,7 @@ const response = await fetch(
     },
     body: JSON.stringify({
       groupId: "AB12C3",
-      reason: "unsubscribed",
+      reason: "UNSUBSCRIBE",
       page: 1,
       limit: 20,
       startDate: "2026-01-01T00:00:00.000Z",
@@ -74,7 +74,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
     "groupId"   => "AB12C3",
-    "reason"    => "unsubscribed",
+    "reason"    => "UNSUBSCRIBE",
     "page"      => 1,
     "limit"     => 20,
     "startDate" => "2026-01-01T00:00:00.000Z",
@@ -103,7 +103,7 @@ import (
 func main() {
     payload, _ := json.Marshal(map[string]interface{}{
         "groupId":   "AB12C3",
-        "reason":    "unsubscribed",
+        "reason":    "UNSUBSCRIBE",
         "page":      1,
         "limit":     20,
         "startDate": "2026-01-01T00:00:00.000Z",
@@ -132,7 +132,7 @@ public class Main {
         String body = """
             {
               "groupId": "AB12C3",
-              "reason": "unsubscribed",
+              "reason": "UNSUBSCRIBE",
               "page": 1,
               "limit": 20,
               "startDate": "2026-01-01T00:00:00.000Z",
@@ -165,7 +165,7 @@ req["Authorization"] = "Bearer <token>"
 req["Content-Type"] = "application/json"
 req.body = {
   groupId:   "AB12C3",
-  reason:    "unsubscribed",
+  reason:    "UNSUBSCRIBE",
   page:      1,
   limit:     20,
   startDate: "2026-01-01T00:00:00.000Z",
@@ -224,8 +224,8 @@ puts response.body
   Filter entries to a specific suppression group ID.
 </ParamField>
 
-<ParamField body="reason" type="string">
-  Filter entries by suppression reason (e.g. `unsubscribed`, `bounced`, `spam_complaint`).
+<ParamField body="reason" type="enum<string>">
+  Filter entries by suppression reason. One of `UNSUBSCRIBE`, `BOUNCE`, `COMPLAINT`, or `MANUAL`.
 </ParamField>
 
 <ParamField body="page" type="integer">
@@ -280,7 +280,7 @@ puts response.body
           ID of the suppression group this entry belongs to.
         </ResponseField>
         <ResponseField name="reason" type="string">
-          Reason for suppression (e.g. `BOUNCE`, `UNSUBSCRIBE`, `SPAM`).
+          Reason for suppression. One of `UNSUBSCRIBE`, `BOUNCE`, `COMPLAINT`, or `MANUAL`.
         </ResponseField>
         <ResponseField name="createdAt" type="string">
           ISO 8601 creation timestamp.
