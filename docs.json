@@ -119,7 +119,7 @@
 					},
 					{
 						"group": "Integrations",
-						"pages": ["others/integrations/tally-forms"]
+						"pages": ["integrations/tally-forms"]
 					},
 					{
 						"group": "Migration",
