@@ -21,7 +21,7 @@ curl --request POST \
   "lastName": "Doe",
   "userId": "user_12345",
   "mobile": "+14155552671",
-  "customFields": {
+  "contactProperties": {
     "company": "Acme Corp",
     "role": "Developer",
     "plan": "premium"
@@ -45,7 +45,7 @@ payload = {
     "lastName": "Doe",
     "userId": "user_12345",
     "mobile": "+14155552671",
-    "customFields": {
+    "contactProperties": {
         "company": "Acme Corp",
         "role": "Developer",
         "plan": "premium"
@@ -69,7 +69,7 @@ fetch('https://api.autosend.com/v1/contacts/email', {
     lastName: 'Doe',
     userId: 'user_12345',
     mobile: '+14155552671',
-    customFields: {
+    contactProperties: {
       company: 'Acme Corp',
       role: 'Developer',
       plan: 'premium'
@@ -92,7 +92,7 @@ $data = [
     'lastName' => 'Doe',
     'userId' => 'user_12345',
     'mobile' => '+14155552671',
-    'customFields' => [
+    'contactProperties' => [
         'company' => 'Acme Corp',
         'role' => 'Developer',
         'plan' => 'premium'
@@ -134,7 +134,7 @@ func main() {
         "lastName": "Doe",
         "userId":    "user_12345",
         "mobile":    "+14155552671",
-        "customFields": map[string]string{
+        "contactProperties": map[string]string{
             "company": "Acme Corp",
             "role":    "Developer",
             "plan":    "premium",
@@ -182,7 +182,7 @@ public class UpsertContact {
                 "  \"lastName\": \"Doe\",\n" +
                 "  \"userId\": \"user_12345\",\n" +
                 "  \"mobile\": \"+14155552671\",\n" +
-                "  \"customFields\": {\n" +
+                "  \"contactProperties\": {\n" +
                 "    \"company\": \"Acme Corp\",\n" +
                 "    \"role\": \"Developer\",\n" +
                 "    \"plan\": \"premium\"\n" +
@@ -224,7 +224,7 @@ request.body = {
   lastName: 'Doe',
   userId: 'user_12345',
   mobile: '+14155552671',
-  customFields: {
+  contactProperties: {
     company: 'Acme Corp',
     role: 'Developer',
     plan: 'premium'
@@ -251,7 +251,7 @@ puts response.body
     "lastName": "Doe",
     "userId": "user_12345",
     "mobile": "+14155552671",
-    "customFields": {
+    "contactProperties": {
       "company": "Acme Corp",
       "role": "Developer",
       "plan": "premium"
@@ -328,18 +328,18 @@ Contact information to create or update
 
   Example: `["507f1f77bcf86cd799439011"]`
 </ParamField>
-<ParamField path="customFields" type="object" >
+<ParamField path="contactProperties" type="object" >
 
   Key-value pairs for custom contact attributes. There are four supported value types: `string`, `number`, `boolean`, and `date`. Learn more about <a href={APP_PATHS.contactsContactProperties} target='_blank' title='Contact Properties'>contact properties</a>.
 
    <Expandable title="child attributes">
 
-  <ResponseField name="customFields.{key}" type="string" />
+  <ResponseField name="contactProperties.{key}" type="string" />
   </Expandable>
 
   Example:
   ```jsx
-  customFields: {
+  contactProperties: {
     "company": "Acme Corp",
     "isPremium": true,
     "loginCount": 42,
@@ -396,16 +396,16 @@ Contact information to create or update
     Example: `"+14155552671"`
   </ResponseField>
   
-  <ResponseField name="data.customFields" type="object">
+  <ResponseField name="data.contactProperties" type="object">
     Custom contact attributes
 
    <Expandable title="child attributes">
 
-  <ResponseField name="customFields.{key}" type="string" />
+  <ResponseField name="contactProperties.{key}" type="string" />
   </Expandable>
     Example:
     ```jsx
-    customFields: {
+    contactProperties: {
       "company": "Acme Corp",
       "role": "Developer",
       "plan": "premium"

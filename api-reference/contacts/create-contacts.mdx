@@ -20,7 +20,7 @@ curl --request POST \
   "firstName": "John",
   "lastName": "Doe",
   "userId": "user_12345",
-  "customFields": {
+  "contactProperties": {
     "company": "Acme Corp",
     "role": "Developer",
     "plan": "premium"
@@ -43,7 +43,7 @@ payload = {
     "firstName": "John",
     "lastName": "Doe",
     "userId": "user_12345",
-    "customFields": {
+    "contactProperties": {
         "company": "Acme Corp",
         "role": "Developer",
         "plan": "premium"
@@ -66,7 +66,7 @@ fetch('https://api.autosend.com/v1/contacts', {
     firstName: 'John',
     lastName: 'Doe',
     userId: 'user_12345',
-    customFields: {
+    contactProperties: {
       company: 'Acme Corp',
       role: 'Developer',
       plan: 'premium'
@@ -88,7 +88,7 @@ $data = [
     'firstName' => 'John',
     'lastName' => 'Doe',
     'userId' => 'user_12345',
-    'customFields' => [
+    'contactProperties' => [
         'company' => 'Acme Corp',
         'role' => 'Developer',
         'plan' => 'premium'
@@ -129,7 +129,7 @@ func main() {
         "firstName": "John",
         "lastName": "Doe",
         "userId":    "user_12345",
-        "customFields": map[string]string{
+        "contactProperties": map[string]string{
             "company": "Acme Corp",
             "role":    "Developer",
             "plan":    "premium",
@@ -176,7 +176,7 @@ public class CreateContact {
                 "  \"firstName\": \"John\",\n" +
                 "  \"lastName\": \"Doe\",\n" +
                 "  \"userId\": \"user_12345\",\n" +
-                "  \"customFields\": {\n" +
+                "  \"contactProperties\": {\n" +
                 "    \"company\": \"Acme Corp\",\n" +
                 "    \"role\": \"Developer\",\n" +
                 "    \"plan\": \"premium\"\n" +
@@ -217,7 +217,7 @@ request.body = {
   firstName: 'John',
   lastName: 'Doe',
   userId: 'user_12345',
-  customFields: {
+  contactProperties: {
     company: 'Acme Corp',
     role: 'Developer',
     plan: 'premium'
@@ -243,7 +243,7 @@ puts response.body
     "firstName": "John",
     "lastName": "Doe",
     "userId": "user_12345",
-    "customFields": {
+    "contactProperties": {
       "company": "Acme Corp",
       "role": "Developer",
       "plan": "premium"
@@ -301,18 +301,18 @@ Contact information to create
   
   Example: `["507f1f77bcf86cd799439011"]`
 </ParamField>
-<ParamField path="customFields" type="object" >
+<ParamField path="contactProperties" type="object" >
 
   Key-value pairs for custom contact attributes. There are four supported value types: `string`, `number`, `boolean`, and `date`. Learn more about <a href={APP_PATHS.contactsContactProperties} target='_blank' title='Contact Properties'>contact properties</a>.
   
    <Expandable title="child attributes">
 
-  <ResponseField name="customFields.{key}" type="string" />
+  <ResponseField name="contactProperties.{key}" type="string" />
   </Expandable>
 
   Example: 
   ```jsx
-  customFields: {
+  contactProperties: {
     "company": "Acme Corp",
     "isPremium": true,
     "loginCount": 42,
@@ -363,12 +363,12 @@ Contact information to create
     Example: `"user_12345"`
   </ResponseField>
   
-  <ResponseField name="data.customFields" type="object">
+  <ResponseField name="data.contactProperties" type="object">
     Custom contact attributes
       
    <Expandable title="child attributes">
 
-  <ResponseField name="customFields.{key}" type="string" />
+  <ResponseField name="contactProperties.{key}" type="string" />
   </Expandable>
     Example: 
     ```jsx

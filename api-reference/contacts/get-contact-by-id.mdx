@@ -136,7 +136,7 @@ puts response.body
     "firstName": "John",
     "lastName": "Doe",
     "userId": "user_12345",
-    "customFields": {
+    "contactProperties": {
       "company": "Acme Corp",
       "role": "Developer",
       "plan": "premium"
@@ -208,12 +208,12 @@ puts response.body
     Example: `"user_12345"`
   </ResponseField>
   
-  <ResponseField name="data.customFields" type="object">
+  <ResponseField name="data.contactProperties" type="object">
     Custom contact attributes
 
      <Expandable title="child attributes">
 
-  <ResponseField name="customFields.{key}" type="string" />
+  <ResponseField name="contactProperties.{key}" type="string" />
   </Expandable>
     
     Example: 

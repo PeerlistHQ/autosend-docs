@@ -19,7 +19,7 @@ curl --request POST \
       "firstName": "John",
       "lastName": "Doe",
       "userId": "user_12345",
-      "customFields": {
+      "contactProperties": {
         "company": "Acme Corp",
         "role": "Developer",
         "plan": "premium"
@@ -47,7 +47,7 @@ payload = {
             "firstName": "John",
             "lastName": "Doe",
             "userId": "user_12345",
-            "customFields": {
+            "contactProperties": {
                 "company": "Acme Corp",
                 "role": "Developer",
                 "plan": "premium"
@@ -75,7 +75,7 @@ fetch('https://api.autosend.com/v1/contacts/bulk-update', {
         firstName: 'John',
         lastName: 'Doe',
         userId: 'user_12345',
-        customFields: {
+        contactProperties: {
           company: 'Acme Corp',
           role: 'Developer',
           plan: 'premium'
@@ -102,7 +102,7 @@ $data = [
             'firstName' => 'John',
             'lastName' => 'Doe',
             'userId' => 'user_12345',
-            'customFields' => [
+            'contactProperties' => [
                 'company' => 'Acme Corp',
                 'role' => 'Developer',
                 'plan' => 'premium'
@@ -148,7 +148,7 @@ func main() {
                 "firstName": "John",
                 "lastName":  "Doe",
                 "userId":    "user_12345",
-                "customFields": map[string]string{
+                "contactProperties": map[string]string{
                     "company": "Acme Corp",
                     "role":    "Developer",
                     "plan":    "premium",
@@ -200,7 +200,7 @@ public class BulkUpdateContacts {
                 "      \"firstName\": \"John\",\n" +
                 "      \"lastName\": \"Doe\",\n" +
                 "      \"userId\": \"user_12345\",\n" +
-                "      \"customFields\": {\n" +
+                "      \"contactProperties\": {\n" +
                 "        \"company\": \"Acme Corp\",\n" +
                 "        \"role\": \"Developer\",\n" +
                 "        \"plan\": \"premium\"\n" +
@@ -246,7 +246,7 @@ request.body = {
       firstName: 'John',
       lastName: 'Doe',
       userId: 'user_12345',
-      customFields: {
+      contactProperties: {
         company: 'Acme Corp',
         role: 'Developer',
         plan: 'premium'
@@ -321,12 +321,12 @@ Valid email address (automatically normalized to lowercase)
     Example: `"user_12345"`
   </ResponseField>
   
-  <ResponseField name="customFields" type="object">
+  <ResponseField name="contactProperties" type="object">
     Custom contact attributes
 
      <Expandable title="child attributes">
 
-  <ResponseField name="customFields.{key}" type="string" />
+  <ResponseField name="contactProperties.{key}" type="string" />
   </Expandable>
     
     Example: 

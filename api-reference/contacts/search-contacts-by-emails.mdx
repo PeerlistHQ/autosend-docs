@@ -207,7 +207,7 @@ puts response.body
         "firstName": "John",
         "lastName": "Doe",
         "userId": "user_12345",
-        "customFields": {
+        "contactProperties": {
           "company": "Acme Corp",
           "role": "Developer",
           "plan": "premium"
@@ -287,12 +287,12 @@ Array of email addresses to search
     Example: `"user_12345"`
   </ResponseField>
   
-  <ResponseField name="customFields" type="object">
+  <ResponseField name="contactProperties" type="object">
     Custom contact attributes
 
      <Expandable title="child attributes">
 
-  <ResponseField name="customFields.{key}" type="string" />
+  <ResponseField name="contactProperties.{key}" type="string" />
   </Expandable>
     
     Example: 

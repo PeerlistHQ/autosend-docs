@@ -28,7 +28,7 @@ curl --request POST \
     "filterCriteria": {
       "logicalOperator": "AND",
       "groups": [
-        { "field": "customFields.plan", "operator": "is_not_empty", "id": "filter_1", "fieldType": "string" }
+        { "field": "contactProperties.plan", "operator": "is_not_empty", "id": "filter_1", "fieldType": "string" }
       ]
     }
   },
@@ -72,7 +72,7 @@ curl --request POST \
           "filterCriteria": {
             "logicalOperator": "AND",
             "groups": [
-              { "field": "customFields.plan", "operator": "equals", "value": "pro", "id": "filter_2", "fieldType": "string" }
+              { "field": "contactProperties.plan", "operator": "equals", "value": "pro", "id": "filter_2", "fieldType": "string" }
             ]
           },
           "nextStepId": "step_wait_pro",
@@ -86,7 +86,7 @@ curl --request POST \
           "filterCriteria": {
             "logicalOperator": "AND",
             "groups": [
-              { "field": "customFields.plan", "operator": "is_not_empty", "id": "filter_3", "fieldType": "string" }
+              { "field": "contactProperties.plan", "operator": "is_not_empty", "id": "filter_3", "fieldType": "string" }
             ]
           },
           "nextStepId": "step_wait_other"
@@ -214,7 +214,7 @@ payload = {
         "filterCriteria": {
             "logicalOperator": "AND",
             "groups": [
-                {"field": "customFields.plan", "operator": "is_not_empty", "id": "filter_1", "fieldType": "string"}
+                {"field": "contactProperties.plan", "operator": "is_not_empty", "id": "filter_1", "fieldType": "string"}
             ]
         }
     },
@@ -235,12 +235,12 @@ payload = {
             {"branchId": "br_pro", "label": "Pro plan",
              "triggerType": "contact_property_matches_with", "appliesTo": "all_branch_steps",
              "filterCriteria": {"logicalOperator": "AND", "groups": [
-                 {"field": "customFields.plan", "operator": "equals", "value": "pro", "id": "filter_2", "fieldType": "string"}]},
+                 {"field": "contactProperties.plan", "operator": "equals", "value": "pro", "id": "filter_2", "fieldType": "string"}]},
              "nextStepId": "step_wait_pro", "mergeStepId": "step_wait_merged"},
             {"branchId": "br_other", "label": "Catch-all",
              "triggerType": "contact_property_matches_with", "appliesTo": "branch_entry",
              "filterCriteria": {"logicalOperator": "AND", "groups": [
-                 {"field": "customFields.plan", "operator": "is_not_empty", "id": "filter_3", "fieldType": "string"}]},
+                 {"field": "contactProperties.plan", "operator": "is_not_empty", "id": "filter_3", "fieldType": "string"}]},
              "nextStepId": "step_wait_other"}
         ]},
         {"type": "wait", "delay": {"value": 2, "unit": "mins"}, "checkExitCriteria": True,
@@ -299,7 +299,7 @@ const payload = {
     filterCriteria: {
       logicalOperator: 'AND',
       groups: [
-        { field: 'customFields.plan', operator: 'is_not_empty', id: 'filter_1', fieldType: 'string' }
+        { field: 'contactProperties.plan', operator: 'is_not_empty', id: 'filter_1', fieldType: 'string' }
       ]
     }
   },
@@ -320,13 +320,13 @@ const payload = {
         { branchId: 'br_pro', label: 'Pro plan',
           triggerType: 'contact_property_matches_with', appliesTo: 'all_branch_steps',
           filterCriteria: { logicalOperator: 'AND', groups: [
-            { field: 'customFields.plan', operator: 'equals', value: 'pro', id: 'filter_2', fieldType: 'string' }
+            { field: 'contactProperties.plan', operator: 'equals', value: 'pro', id: 'filter_2', fieldType: 'string' }
           ]},
           nextStepId: 'step_wait_pro', mergeStepId: 'step_wait_merged' },
         { branchId: 'br_other', label: 'Catch-all',
           triggerType: 'contact_property_matches_with', appliesTo: 'branch_entry',
           filterCriteria: { logicalOperator: 'AND', groups: [
-            { field: 'customFields.plan', operator: 'is_not_empty', id: 'filter_3', fieldType: 'string' }
+            { field: 'contactProperties.plan', operator: 'is_not_empty', id: 'filter_3', fieldType: 'string' }
           ]},
           nextStepId: 'step_wait_other' }
     ]},
@@ -496,7 +496,7 @@ puts http.request(request).body
       "filterCriteria": {
         "logicalOperator": "AND",
         "groups": [
-          { "field": "customFields.plan", "operator": "is_not_empty", "id": "filter_1", "fieldType": "string" }
+          { "field": "contactProperties.plan", "operator": "is_not_empty", "id": "filter_1", "fieldType": "string" }
         ]
       }
     },
@@ -575,15 +575,14 @@ puts http.request(request).body
                 "logicalOperator": "AND",
                 "groups": [
                     {
-                        "field": "source",
-                        "operator": "contains",
-                        "value": "web",
+                        "field": "contactProperties.plan",
+                        "operator": "equals",
+                        "value": "pro",
                         "id": "filter_1"
                     }
                 ]
             }
     ```
-    source is a contact property
   </ParamField>
   </Expandable>
 </ParamField>
@@ -647,7 +646,7 @@ A `branch` step splits the workflow into multiple paths based on `filterCriteria
         "logicalOperator": "AND",
         "groups": [
           {
-            "field": "customFields.plan",
+            "field": "contactProperties.plan",
             "operator": "equals",
             "value": "pro",
             "id": "filter_2",
@@ -667,7 +666,7 @@ A `branch` step splits the workflow into multiple paths based on `filterCriteria
         "logicalOperator": "AND",
         "groups": [
           {
-            "field": "customFields.plan",
+            "field": "contactProperties.plan",
             "operator": "is_not_empty",
             "id": "filter_3",
             "fieldType": "string"
