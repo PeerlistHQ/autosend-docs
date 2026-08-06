@@ -11,6 +11,10 @@ import { IMAGES } from '/snippets/images.mdx';
 
 Email templates in AutoSend let you create reusable, personalized designs for **transactional emails** like password resets, order confirmations, or account notifications that are sent programmatically through the **Email API**.
 
+<Note>
+  You can also create and manage templates from your AI assistant. Connect the <a href={APP_PATHS.aiMcpServer}>AutoSend MCP server</a> to create, update, and search templates using natural language. Install the <a href={APP_PATHS.aiSkills}>AutoSend skill</a> to give your AI coding agent the context it needs to generate template code in your editor.
+</Note>
+
 ## Creating an Email Template in AutoSend
 
 <Frame>
@@ -147,3 +151,14 @@ Click **Send Test** above the **Email Preview**, then enter up to 10 comma-separ
 Once saved, AutoSend will generate a unique **Template ID** for your email. You can use this ID in your API calls to send transactional emails.
 
 After saving, you can continue editing your template at any time. You can also duplicate it to create variations useful for A/B testing or different use cases.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card icon='/icons/mcp-server.svg' href={APP_PATHS.aiMcpServer} title='MCP Server'>
+    Create and manage templates from your AI assistant using the AutoSend MCP server.
+  </Card>
+  <Card icon='/icons/skill.svg' href={APP_PATHS.aiSkills} title='AutoSend Skill'>
+    Install the AutoSend skill to give AI coding agents context for building templates.
+  </Card>
+</CardGroup>
