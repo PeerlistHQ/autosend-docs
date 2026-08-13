@@ -172,9 +172,63 @@ If you have any questions, we'll reach out to you at robert@example.com.
 
 ---
 
+## Default Values
+
+Not every recipient will have a value for every variable. You can use the pipe operator (`|`) to provide a default value that renders when the variable is missing.
+
+```
+Hello {{ firstName | "there" }}!
+```
+
+### What this does:
+
+- If `firstName` is `Johan` → `Hello Johan!`
+- If `firstName` is missing or empty → `Hello there!`
+
+The default value is used when the variable is:
+
+- Not included in your API payload
+- `null`
+- An empty string
+- Only whitespace
+
+Values like `0` or `false` are treated as real values and render as-is.
+
+### Rules for default values
+
+- **Wrap the default in quotes.** Both double quotes (`"`) and single quotes (`'`) work, and smart quotes added by rich-text editors are handled automatically.
+- **Use one pipe per variable.** Multiple pipes like `{{ name | "a" | "b" }}` are not supported.
+- **Whitespace is flexible.** `{{firstName|"there"}}` and `{{ firstName | "there" }}` behave the same.
+
+<Warning>
+	An unquoted default is ignored. `{{ firstName | there }}` behaves like `{{firstName}}` and
+	renders empty when the variable is missing. Always quote the default: `{{ firstName | "there" }}`.
+</Warning>
+
+Default values also work with nested variables:
+
+```
+You are currently on the {{ user.plan | "Free" }} plan.
+```
+
+### Example:
+
+```
+Subject: Welcome, {{ first_name | "friend" }}!
+
+Body:
+Hi {{ first_name | "there" }},
+
+Thanks for joining {{ company_name | "us" }}. We're glad to have you on board.
+```
+
+You can use default values anywhere variables work: subject lines, body text, links, and call-to-actions. They are supported in transactional emails, campaigns, and automation emails.
+
+---
+
 ## Using Variables with Conditions
 
-You can use simple `if/else` logic in your email templates to handle missing data. For example, if a user doesn’t have a `firstName`, you can fall back to a default like **“there”.**
+For richer conditional logic, such as showing or hiding entire blocks of content, you can use `if/else` in your email templates. For example, you can show a different message depending on whether a `firstName` is available.
 
 ```jsx
 Hello {{#if firstName}}{{firstName}}{{else}}there{{/if}}!
@@ -185,12 +239,12 @@ Hello {{#if firstName}}{{firstName}}{{else}}there{{/if}}!
 - If `firstName` exists → `Hello Johan!`
 - If it’s missing/empty → `Hello there!`
 
-This works for any variable in AutoSend, just wrap it with `{{#if}}{{else}}{{/if}}` to make your messages feel natural even when some data is unavailable.
+This works for any variable in AutoSend. For a simple fallback value, the pipe operator shown above is the shorter option; use `{{#if}}{{else}}{{/if}}` when you need to switch larger pieces of content.
 
 ## Best Practices
 
 - **Always test your templates** before sending live emails to ensure variables are replaced correctly.
-- **Provide fallback values** in your system in case a variable is missing (e.g., “Hi there” if `{{name}}` is not provided).
+- **Provide default values** with the pipe operator in case a variable is missing (e.g., `{{ name | "there" }}` renders "there" if `name` is not provided).
 - **Keep variable names descriptive** for better clarity and maintainability.
 
 ---
@@ -202,5 +256,10 @@ This works for any variable in AutoSend, just wrap it with `{{#if}}{{else}}{{/if
     - Check that your variable name in the API payload exactly matches the placeholder in your template.
     - Ensure that the variable is passed under the `"variables"` object in your API request.
     - Preview the email in your AutoSend dashboard to confirm the replacement works as expected.
+  </Accordion>
+  <Accordion title="If a default value isn't showing:">
+    - Make sure the default is wrapped in quotes: `{{ firstName | "there" }}`. An unquoted default is ignored.
+    - Check that the variable is actually empty. Values like `0` or `false` count as real values and render instead of the default.
+    - Use only one pipe per variable.
   </Accordion>
 </AccordionGroup>
