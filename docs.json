@@ -141,7 +141,11 @@
 					},
 					{
 						"group": "Sending",
-						"pages": ["api-reference/mails/send", "api-reference/mails/bulk"]
+						"pages": [
+							"api-reference/mails/send",
+							"api-reference/mails/bulk",
+							"api-reference/mails/status"
+						]
 					},
 					{
 						"group": "Contacts",

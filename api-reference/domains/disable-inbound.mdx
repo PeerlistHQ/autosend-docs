@@ -141,9 +141,7 @@ puts response.body
 Disable inbound email receiving on a custom domain.
 
 Calling this endpoint clears the domain's inbound state and removes the inbound MX
-record from the returned DNS records. If the domain had been added to the SES receipt
-rule, its recipient condition is removed so SES stops accepting its mail. You can safely
-remove the inbound MX record from your DNS afterwards.
+record from the returned DNS records.
 
 ### Authorizations
 <ParamField path="Authorization" type="string | header" required>

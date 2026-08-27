@@ -1,0 +1,288 @@
+---
+title: 'Get Email Status'
+openapi: 'GET /mails/{id}/status'
+---
+
+<Note>
+  Look up the current delivery status and lifecycle timestamps for a single email using the `emailId` returned when you sent it.
+</Note>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://api.autosend.com/v1/mails/6a8ff3dd718911ea2da57113/status \
+  --header 'Authorization: Bearer <token>'
+```
+
+```python Python
+import requests
+
+url = "https://api.autosend.com/v1/mails/6a8ff3dd718911ea2da57113/status"
+
+headers = {
+    "Authorization": "Bearer <token>"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+fetch('https://api.autosend.com/v1/mails/6a8ff3dd718911ea2da57113/status', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer <token>'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+```php PHP
+<?php
+
+$url = 'https://api.autosend.com/v1/mails/6a8ff3dd718911ea2da57113/status';
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer <token>'
+]);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+?>
+```
+
+```go Go
+package main
+
+import (
+    "fmt"
+    "io"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.autosend.com/v1/mails/6a8ff3dd718911ea2da57113/status"
+
+    req, _ := http.NewRequest("GET", url, nil)
+    req.Header.Set("Authorization", "Bearer <token>")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := io.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+
+```java Java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class GetEmailStatus {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("https://api.autosend.com/v1/mails/6a8ff3dd718911ea2da57113/status");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Authorization", "Bearer <token>");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+            con.disconnect();
+
+            System.out.println(content.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+```ruby Ruby
+require 'net/http'
+require 'uri'
+
+uri = URI('https://api.autosend.com/v1/mails/6a8ff3dd718911ea2da57113/status')
+
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+request = Net::HTTP::Get.new(uri)
+request['Authorization'] = 'Bearer <token>'
+
+response = http.request(request)
+puts response.body
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "id": "6a8ff3dd718911ea2da57113",
+    "projectId": "68e8b85deb15498144dd44e0",
+    "status": "delivered",
+    "subject": "Welcome to AutoSend",
+    "recipient": {
+      "email": "jane@example.com",
+      "name": "Jane Smith"
+    },
+    "sender": {
+      "email": "hello@yourdomain.com",
+      "name": "Your Company"
+    },
+    "sentAt": "2026-08-27T08:22:53.529Z",
+    "deliveredAt": "2026-08-27T08:22:54.519Z",
+    "openedAt": "2026-08-27T09:14:02.100Z",
+    "clickedAt": "2026-08-27T09:15:41.870Z",
+    "bouncedAt": null
+  }
+}
+```
+
+</ResponseExample>
+
+---
+
+### Authorizations
+
+<ParamField path="Authorizations" type="string | header" required>
+  Bearer authentication header of the form Bearer `<token>`, where `<token>` is your auth token.
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The email ID to look up. This is the `emailId` returned by the [send email](/api-reference/mails/send) and [bulk send email](/api-reference/mails/bulk) endpoints.
+
+  Example: `"6a8ff3dd718911ea2da57113"`
+</ParamField>
+
+### Response
+
+<span className='text-sm'>Email status retrieved successfully</span>
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+
+  Example: `true`
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  <Expandable title="child attributes">
+  <ResponseField name="data.id" type="string">
+    The email ID
+
+    Example: `"6a8ff3dd718911ea2da57113"`
+  </ResponseField>
+
+  <ResponseField name="data.projectId" type="string">
+    Project ID that the email belongs to
+
+    Example: `"68e8b85deb15498144dd44e0"`
+  </ResponseField>
+
+  <ResponseField name="data.status" type="string">
+    Current status of the email. Reflects the latest lifecycle event recorded for the message, for example `delivered`, `opened`, `clicked`, or `bounced`.
+
+    Example: `"delivered"`
+  </ResponseField>
+
+  <ResponseField name="data.subject" type="string">
+    Subject line of the email
+
+    Example: `"Welcome to AutoSend"`
+  </ResponseField>
+
+  <ResponseField name="data.recipient" type="object">
+    The recipient of the email
+
+    <Expandable title="child attributes">
+    <ResponseField name="recipient.email" type="string">
+      Recipient email address
+
+      Example: `"jane@example.com"`
+    </ResponseField>
+
+    <ResponseField name="recipient.name" type="string">
+      Recipient display name
+
+      Example: `"Jane Smith"`
+    </ResponseField>
+    </Expandable>
+  </ResponseField>
+
+  <ResponseField name="data.sender" type="object">
+    The sender of the email
+
+    <Expandable title="child attributes">
+    <ResponseField name="sender.email" type="string">
+      Sender email address
+
+      Example: `"hello@yourdomain.com"`
+    </ResponseField>
+
+    <ResponseField name="sender.name" type="string">
+      Sender display name
+
+      Example: `"Your Company"`
+    </ResponseField>
+    </Expandable>
+  </ResponseField>
+
+  <ResponseField name="data.sentAt" type="string">
+    ISO 8601 timestamp of when the email was sent
+
+    Example: `"2026-08-27T08:22:53.529Z"`
+  </ResponseField>
+
+  <ResponseField name="data.deliveredAt" type="string | null">
+    ISO 8601 timestamp of when the email was delivered. `null` if the email has not been delivered yet.
+
+    Example: `"2026-08-27T08:22:54.519Z"`
+  </ResponseField>
+
+  <ResponseField name="data.openedAt" type="string | null">
+    ISO 8601 timestamp of when the email was first opened. `null` if the email has not been opened or open tracking is disabled.
+
+    Example: `"2026-08-27T09:14:02.100Z"`
+  </ResponseField>
+
+  <ResponseField name="data.clickedAt" type="string | null">
+    ISO 8601 timestamp of when a link in the email was first clicked. `null` if no link has been clicked or click tracking is disabled.
+
+    Example: `"2026-08-27T09:15:41.870Z"`
+  </ResponseField>
+
+  <ResponseField name="data.bouncedAt" type="string | null">
+    ISO 8601 timestamp of when the email bounced. `null` if the email has not bounced.
+
+    Example: `null`
+  </ResponseField>
+  </Expandable>
+</ResponseField>
+</content>
+</invoke>
