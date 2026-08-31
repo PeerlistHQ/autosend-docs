@@ -37,6 +37,36 @@ Read <a href={APP_PATHS.inboundIntroduction}>how to setup and use the Inbound Em
 
 </Update>
 
+<Update label="June 15, 2026">
+
+## Resend Migration and Smaller Fixes
+
+Switching from Resend? Use our migration API with your Resend API key to bring your contacts, templates, and suppression lists straight into AutoSend. Follow the <a href={APP_PATHS.migrationResend}>step-by-step migration guide</a>, so you don't have to rebuild anything by hand.
+
+This release also cleans up delete API responses and fixes a handful of rough edges:
+
+1. The campaign reply-to address now saves correctly
+2. Polished email builder to remove few glitches.
+
+</Update>
+
+<Update label="June 12, 2026">
+
+## Automations for Imported Contacts
+
+When you import contacts from a CSV file, you can now drop them straight into an automation. AutoSend runs validation checks first, so only valid, sendable contacts get enrolled. This turns a plain import into the start of a live email sequence.
+
+## Webhook Management via API
+
+You can now create and manage your webhooks straight from the public API, alongside a fix that keeps scheduled gradual-send campaigns from showing a false "quota reached" warning or skipping paused days.
+
+#### Other Changes:
+
+1. Delete Your Account - You can now delete account right from the app, giving you full control over your data.
+2. Cleaner Template Copying - Copying content from a template preview now gives you clean, readable text instead of raw HTML code, ready to paste anywhere.
+
+</Update>
+
 <Update label="June 4, 2026">
 
 ## Revamped Billing and Usage with Email Credits
