@@ -27,6 +27,12 @@
           "summary": "Bulk Send Email",
           "description": "Sends the same email to multiple recipients in a single API request. This endpoint is identical to the send email endpoint, with the only difference being that `recipients` is an array of recipients instead of a single recipient. Maximum limit: 100 recipients per request."
         }
+      },
+      "/mails/{id}/status": {
+        "get": {
+          "summary": "Get Email Status",
+          "description": "Retrieves the current delivery status and lifecycle timestamps for a single email using the emailId returned when the email was sent."
+        }
       }
     }
   }

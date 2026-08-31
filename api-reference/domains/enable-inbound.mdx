@@ -145,7 +145,7 @@ Enable inbound email receiving on a custom domain that has already been verified
 
 Calling this endpoint stamps the domain as inbound-enabled and returns the inbound MX
 record you must publish in your DNS. Once that MX record is detected in DNS during the
-next verification check, AutoSend wires up the SES receipt rule and inbound becomes live
+next verification check, inbound emails becomes live
 for the domain (at which point `inboundDomainVerifiedAt` is set).
 
 ### Authorizations
@@ -204,8 +204,7 @@ for the domain (at which point `inboundDomainVerifiedAt` is set).
       ISO 8601 timestamp of when inbound receiving was enabled on the domain.
     </ResponseField>
     <ResponseField name="inboundDomainVerifiedAt" type="string">
-      ISO 8601 timestamp of when the inbound MX record was detected and the domain was
-      added to the SES receipt rule — i.e. inbound is verified and live. `null` until the
+      ISO 8601 timestamp of when the inbound MX record was detected i.e inbound is verified and live. `null` until the
       MX record is detected in DNS.
     </ResponseField>
   </Expandable>
