@@ -120,10 +120,6 @@ puts response.body
     "id": "60d5ec49f1b2c72d9c8b1111",
     "domainName": "example.com",
     "verificationStatus": "VERIFIED",
-    "ownershipVerified": true,
-    "dkimEnabled": true,
-    "mailFromEnabled": true,
-    "dmarcEnabled": true,
     "dnsRecords": {
       "inboundMx": {
         "name": "example.com",
@@ -137,7 +133,6 @@ puts response.body
     "lastCheckedAt": "2026-03-10T14:20:00.000Z",
     "verifiedAt": "2026-01-05T12:00:00.000Z",
     "regionKey": "us-east-1",
-    "verificationInProgress": false,
     "inboundEnabledAt": "2026-03-10T14:25:00.000Z",
     "inboundDomainVerifiedAt": null
   }
@@ -182,18 +177,6 @@ for the domain (at which point `inboundDomainVerifiedAt` is set).
     <ResponseField name="verificationStatus" type="string">
       Overall domain verification status. One of `PENDING_CONFIGURATION`, `PENDING`, or `VERIFIED`.
     </ResponseField>
-    <ResponseField name="ownershipVerified" type="boolean">
-      Whether the TXT ownership record has been verified.
-    </ResponseField>
-    <ResponseField name="dkimEnabled" type="boolean">
-      Whether DKIM records have been verified.
-    </ResponseField>
-    <ResponseField name="mailFromEnabled" type="boolean">
-      Whether the MAIL FROM MX/TXT records have been verified.
-    </ResponseField>
-    <ResponseField name="dmarcEnabled" type="boolean">
-      Whether a DMARC TXT record has been detected.
-    </ResponseField>
     <ResponseField name="dnsRecords" type="object">
       DNS records for the domain. After enabling inbound, this includes the `inboundMx`
       record you must publish.
@@ -216,9 +199,6 @@ for the domain (at which point `inboundDomainVerifiedAt` is set).
     </ResponseField>
     <ResponseField name="regionKey" type="string">
       The AutoSend region key where the domain is configured (e.g. `us-east-1`).
-    </ResponseField>
-    <ResponseField name="verificationInProgress" type="boolean">
-      Whether a DNS verification check is currently in progress.
     </ResponseField>
     <ResponseField name="inboundEnabledAt" type="string">
       ISO 8601 timestamp of when inbound receiving was enabled on the domain.
