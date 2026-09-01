@@ -37,6 +37,26 @@ Read <a href={APP_PATHS.inboundIntroduction}>how to setup and use the Inbound Em
 
 </Update>
 
+<Update label="June 22, 2026">
+
+## Encrypted Send Requests
+
+For teams that need an extra layer of security, AutoSend now supports encrypted email-send requests. Fetch a public key and send an encrypted payload to the send endpoint, so sensitive email content is protected in transit beyond standard HTTPS.
+
+Read the <a href={APP_PATHS.encryptedPayloads}>encrypted payloads guide</a> to learn more.
+
+#### Other changes:
+
+1. Automations got more flexible: branch steps now support a wait/delay, so different paths can pause before continuing.
+2. For gradual send, you can now change the send time even while a campaign is paused.
+3. New sending domains now warm up on their own. AutoSend automatically raises your daily send limit a little each day to build a healthy reputation, with a clear banner showing your current limit. Read the <a href={APP_PATHS.domainWarmup}>domain warmup guide</a> for details.
+4. The email builder gained margin controls for finer spacing.
+5. Contacts can now store a mobile number as a default field.
+6. Attachments and webhook events now carry stable, consistent identifiers with better validation, making it easier to reliably match events and files in your own systems.
+7. Error messages across the API (campaigns, webhooks, events, projects, suppression groups, and more) were rewritten to be clearer and more helpful.
+
+</Update>
+
 <Update label="June 15, 2026">
 
 ## Resend Migration and Smaller Fixes
@@ -64,6 +84,20 @@ You can now create and manage your webhooks straight from the public API, alongs
 
 1. Delete Your Account - You can now delete account right from the app, giving you full control over your data.
 2. Cleaner Template Copying - Copying content from a template preview now gives you clean, readable text instead of raw HTML code, ready to paste anywhere.
+
+</Update>
+
+<Update label="June 11, 2026">
+
+## AutoSend on Mobile
+
+AutoSend now works smoothly on your phone. We rebuilt the dashboard, email activity, campaigns, contacts, senders, events, account settings, automations, and webhook pages to look and work well on small screens, so you can check on your sending from anywhere.
+
+#### Other changes:
+
+1. Campaign redesign - Campaigns get a refreshed look and a clearer layout, making it easier to see what matters at a glance. Small touches include a refresh button on each campaign card and dedicated email activity for each campaign.
+2. Copying content from a template preview now gives you clean, readable text instead of raw HTML code, ready to paste anywhere.
+3. The sidebar now clearly flags any domain that isn't verified yet, so nothing slips through.
 
 </Update>
 
