@@ -266,7 +266,7 @@ puts response.body
 </Info>
 
 <ParamField path="email" type="string">
-  Email address of the contact this event belongs to.
+ Email address of the contact this event belongs to. You should send either `contactId` or `email` . Alternatively you can send both and in this case, `contactId` will take precedence.  If there is no contact with the provided email present in your contact list, a new contact will be created with this emailId and event.
 
   Example: `"jane@example.com"`
 </ParamField>
