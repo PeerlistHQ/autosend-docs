@@ -7,11 +7,88 @@ rss: true
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
 
+<Update label="August 7, 2026">
+
+## Campaign Insights
+
+<Frame>
+  ![Campaign Insights card comparing a campaign with previous
+  campaigns](/images/changelog/campaign-insights.png)
+</Frame>
+
+The Analytics tab of every sent campaign now has a **Campaign Insights** card that shows how the campaign performed compared with your recent campaigns.
+
+- **Compared with your last campaigns** - Open rate, click rate, bounce rate, unsubscribes, and complaints are compared against the average of up to 5 earlier campaigns sent from the same project. With clear up-down signals, now it is easy for you to understand how your new campaign performed.
+- **Completion time** - See how long the campaign took to reach all its recipients.
+- **Final numbers include late activity** - 10 days after a campaign is sent, AutoSend saves its final numbers, so opens and clicks that come in later still count. For gradual send campaigns, the 10 days start after the last batch.
+
+Insights appear once you've sent at least one earlier campaign to compare against.
+
+</Update>
+
+<Update label="July 31, 2026">
+
+## Campaigns, Redesigned
+
+<Frame>
+  ![Opened and True Open rates in campaign
+  analytics](/images/changelog/true-open.png)
+</Frame>
+
+Campaigns have been rebuilt from the ground up, from creating a campaign to reviewing how it performed.
+
+#### Three tabs for sent campaigns
+
+Sent campaigns now open in three tabs. Each tab has its own link, so you can share a direct view with your team.
+
+- **Analytics** - See how your campaign performed, including a new **True Open** rate that leaves out automatic opens from Apple Mail Privacy Protection, Gmail's image proxy, and security scanners. Open and click rates are now calculated from delivered emails instead of sent emails, so they're more accurate.
+- **Email Activity** - See every recipient with their status, opens, and clicks. Search by email, filter by status (including **Unsubscribed**), sort the list, and export it to work with outside AutoSend.
+- **Details** - A read-only view of the template, campaign details, and tracking settings used for the send.
+
+</Update>
+
+<Update label="July 28, 2026">
+
+## Fallback Values for Email Variables
+
+Variables can now have a fallback value for contacts whose field is empty. For example, write `Hi {{first_name | "there"}}` and a contact without a first name sees "Hi there" instead of "Hi ".
+
+#### Other changes:
+
+1. **Segment filters for empty dates** - Date properties in segments now support **is empty** and **is not empty**, so you can, for example, find contacts who have never opened an email.
+2. Your email sending limit now shows the exact time it resets, not just the date.
+3. Resuming a regular (non-gradual) campaign now asks for confirmation first.
+4. Your sending quota is no longer counted twice when a campaign is resumed or stopped.
+5. Text colors in lists now display correctly in the email builder.
+
+</Update>
+
+<Update label="July 24, 2026">
+
+## Know Where Every Contact Came From
+
+Every contact now has a **Source** property that shows how it was added: manually, through the API, by CSV import, through MCP, from a SendGrid or Resend migration, or from an integration like Tally Forms. Use it to filter contacts or build segments.
+
+## See When a Contact Last Opened Your Email
+
+Contacts also have a new **Email Last Opened At** property. It only counts real opens, not automatic ones from privacy features and security scanners, so you can build segments of people who actually read your emails.
+
+#### Other changes:
+
+1. Date fields on a contact, like Email Last Opened At, now show the time as well as the date.
+2. Email activity now shows the sender's email address when no sender name is set, instead of "undefined".
+3. **MCP:** `list_templates` now supports search, filtering by template type, and pagination, replacing the separate `search_templates` tool.
+4. **Invoices for credit top-ups** - Buying email credits now generates an invoice you can download from Billing.
+
+</Update>
+
 <Update label="July 22, 2026">
 
 ## Tally Forms Integration
 
-<Frame>![Tally Forms integration](/images/changelog/changelog-tally-integration.jpg)</Frame>
+<Frame>
+  ![Tally Forms integration](/images/changelog/changelog-tally-integration.jpg)
+</Frame>
 
 AutoSend now has a native [Tally Forms](https://tally.so) integration that automatically syncs your form submissions with contacts in AutoSend, with no code required.
 
@@ -21,11 +98,72 @@ Read the [Tally Forms integration guide](/integrations/tally-forms) to get start
 
 </Update>
 
+<Update label="July 14, 2026">
+
+## Rename Lists and Segments
+
+You can now edit the name of any list or segment after creating it.
+
+## Many Quality of Life Improvements
+
+1. **Image library in the email builder** - Open your image library straight from the builder header in campaigns, templates, and automations. You can also copy any image's URL from its menu in one click.
+2. **Filter email activity by automation** - Email Activity filters now include **Automation**, next to Template and Campaign, so you can see every email a specific automation has sent.
+3. **Clearing contact fields works as expected** - Emptying a field on a contact now actually clears it. The API also accepts `null` for optional fields when creating or updating contacts.
+4. **HTML size limit** - Email HTML is now capped at 4MB. Larger emails are rejected with a clear error instead of failing silently.
+5. **Inbound attachment downloads** - Pass `download=true` when fetching an inbound attachment to get the file directly, instead of a download URL.
+6. **Clearer Inbound API errors** - The Inbound Email API now returns more specific error messages with suggestions on how to fix them.
+7. Scheduled campaigns now show correctly in campaign counts and lists.
+
+</Update>
+
+<Update label="July 7, 2026">
+
+## Gradual Send, Made it better
+
+Gradual send campaigns are now easier to control and much easier to follow.
+
+- **Pause any time** - Pause a gradual campaign even before it starts sending, while it's still scheduled.
+- **Resume with a preview** - Resuming now shows a confirmation with the new start date, time, and increase strategy before anything goes out.
+- **See what's coming** - While a campaign is paused, the chart shows the remaining batches, contacts, and expected finish date based on your resume choice.
+- **Full pause history** - Every pause and resume is recorded, with the reason shown on the chart (for example, "Manually paused" or "Daily limit reached").
+- **Next batch time** - The campaign header shows how many contacts are done and when the next batch will go out.
+- **Always visible** - Scheduled and paused campaigns now stay at the top of your campaign list, no matter how old they are.
+
+</Update>
+
+<Update label="June 26, 2026">
+
+<Frame>
+  ![Improved Testing Email Experience](/images/changelog/test-email.png)
+</Frame>
+
+## Faster Test Emails and Contact Properties
+
+#### Improved Testing Email Experience
+
+- **Send to myself:** Testing an email no longer means typing your address every time. Pick **Send to myself** from the test email dropdown and the test goes straight to your account inbox.
+
+- **Copy as cURL:** Happy with how a test looks? Click **Copy as cURL** to get a ready-to-run command for that exact send, payload included. Run it in your terminal or drop it into your codebase.
+
+Together, these close the loop between designing an email and sending it from code.
+
+#### Custom Fields are now Contact Properties
+
+Custom Fields are now called **Contact Properties** across AutoSend. The new name matches how you actually use them.
+
+_Please note:_ This is a rename only. Everything you've already set up keeps working. The API still accepts the old Custom Fields naming, so you can switch to Contact Properties whenever it suits you.
+
+Read the <a href={APP_PATHS.contactsContactProperties}>Contact Properties docs</a> and the <a href={APP_PATHS.createContactPropertyApiRef}>API reference</a> to learn more.
+
+</Update>
+
 <Update label="June 24, 2026">
 
 ## Inbound Email API
 
-<Frame>![Official Convex component](/images/changelog/inbound-email-api.jpg)</Frame>
+<Frame>
+  ![Official Convex component](/images/changelog/inbound-email-api.jpg)
+</Frame>
 
 AutoSend now lets your application receive incoming emails. When a message lands on one of your receiving domains, AutoSend fires an `email.received` webhook with the message metadata, and your app calls a structured REST endpoint to fetch the full message including headers, plain text and HTML bodies, attachments, and verdicts.
 
@@ -47,13 +185,39 @@ Read the <a href={APP_PATHS.encryptedPayloads}>encrypted payloads guide</a> to l
 
 #### Other changes:
 
-1. Automations got more flexible: branch steps now support a wait/delay, so different paths can pause before continuing.
-2. For gradual send, you can now change the send time even while a campaign is paused.
-3. New sending domains now warm up on their own. AutoSend automatically raises your daily send limit a little each day to build a healthy reputation, with a clear banner showing your current limit. Read the <a href={APP_PATHS.domainWarmup}>domain warmup guide</a> for details.
-4. The email builder gained margin controls for finer spacing.
-5. Contacts can now store a mobile number as a default field.
-6. Attachments and webhook events now carry stable, consistent identifiers with better validation, making it easier to reliably match events and files in your own systems.
-7. Error messages across the API (campaigns, webhooks, events, projects, suppression groups, and more) were rewritten to be clearer and more helpful.
+1. For gradual send, you can now change the send time even while a campaign is paused.
+2. New sending domains now warm up on their own. AutoSend automatically raises your daily send limit a little each day to build a healthy reputation, with a clear banner showing your current limit. Read the <a href={APP_PATHS.domainWarmup}>domain warmup guide</a> for details.
+3. Contacts can now store a mobile number as a default field.
+4. Attachments and webhook events now carry stable, consistent identifiers with better validation, making it easier to reliably match events and files in your own systems.
+5. Error messages across the API (campaigns, webhooks, events, projects, suppression groups, and more) were rewritten to be clearer and more helpful.
+
+</Update>
+
+<Update label="June 19, 2026">
+
+## More Flexible Automations and Builder Margins
+
+#### Wait steps on any branch
+
+Delays used to live only on the main flow. Now you can add a wait step to any branch, so each path moves at its own pace. One branch can wait three days before a follow-up while another continues right away.
+
+#### Property triggers now catch new contacts
+
+Automations using the **Contact property matches with** trigger now also fire when a contact is created with a matching value, not only when that value changes later. New contacts enter the right journey from day one.
+
+Read the <a href={APP_PATHS.automations}>Email Automations documentation</a> to learn more.
+
+#### Margin controls in the email builder
+
+Blocks in the email builder now support margins, so you can control the space around content directly instead of stacking padding or spacer blocks.
+
+- Set margins per block for precise spacing between elements
+- Build cleaner, more consistent layouts without workaround blocks
+
+#### Fixes
+
+- Icon colors now render correctly in the builder
+- Preview spacing now matches what recipients see in their inbox
 
 </Update>
 
@@ -135,7 +299,9 @@ Read the <a href={APP_PATHS.smtpIntroduction}>SMTP quickstart</a> to learn more.
 
 ## Official Convex component
 
-<Frame>![Official Convex component](/images/changelog/autosend-convex-component.jpg)</Frame>
+<Frame>
+  ![Official Convex component](/images/changelog/autosend-convex-component.jpg)
+</Frame>
 
 We just shipped the official AutoSend Convex component, a drop-in integration for sending transactional email straight from your Convex backend. Call `sendEmail` from any mutation and the component handles queueing, idempotency, retries with backoff, webhook signature verification, and the full delivery lifecycle (`queued`, `sending`, `retrying`, `sent`, `failed`, `canceled`) for you.
 
@@ -154,7 +320,8 @@ Read the <a href={APP_PATHS.convexGuide}>Convex integration guide</a> for setup,
 Two big additions: a new trigger type that fires on events from your app, and a new sending region for EU customers.
 
 <Frame>
-	![Event-triggered automations and EU region](/images/changelog/event-triggered-automation.png)
+  ![Event-triggered automations and EU
+  region](/images/changelog/event-triggered-automation.png)
 </Frame>
 
 #### Events in Email Automations
@@ -181,7 +348,9 @@ Read the <a href={APP_PATHS.domainConfiguration}>Domain documentation</a> to lea
 
 If you've been creating separate automations just to send different emails to different segments, that's no longer necessary. Branching is now live in AutoSend. One automation, multiple paths.
 
-<Frame>![RBAC and Projects API](/images/changelog/automation-branching.jpeg)</Frame>
+<Frame>
+  ![RBAC and Projects API](/images/changelog/automation-branching.jpeg)
+</Frame>
 
 #### Branch by contact property
 
@@ -262,7 +431,9 @@ Read the <a href={APP_PATHS.projects}>Projects documentation</a> to learn more, 
 
 The API reference just got a major expansion. Seven new endpoint groups are now fully documented, covering everything from campaign management to domain configuration.
 
-<Frame>![API Reference Endpoints](/images/changelog/new-api-endpoints.gif)</Frame>
+<Frame>
+  ![API Reference Endpoints](/images/changelog/new-api-endpoints.gif)
+</Frame>
 
 #### Here's what's new:
 
@@ -621,7 +792,9 @@ Reduced payload size by stripping unnecessary data. Faster processing, less band
 
 Email automation is now live in AutoSend. Create triggered sequences with visual workflows, tracking, and unsubscribe group management.
 
-<Frame>![Email Automations in AutoSend](/images/automation-changelog.jpeg)</Frame>
+<Frame>
+  ![Email Automations in AutoSend](/images/automation-changelog.jpeg)
+</Frame>
 
 #### Visual Builder
 
@@ -709,7 +882,9 @@ Open [autosend.com/compose](https://autosend.com/compose) and start building. Wo
 
 Filter and analyze your email activity by status, templates, domain, and API key.
 
-<Frame>![Email Activity Filter Modal](/images/autosend-email-activity-changelog.jpeg)</Frame>
+<Frame>
+  ![Email Activity Filter Modal](/images/autosend-email-activity-changelog.jpeg)
+</Frame>
 
 #### Status Filters
 
