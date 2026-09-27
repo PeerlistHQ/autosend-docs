@@ -6,6 +6,152 @@ rss: true
 ---
 
 import { APP_PATHS } from '/snippets/appPaths.mdx';
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+
+<Update label="September 22, 2026">
+
+## More Room on Hobby and Starter Plans
+
+We've raised limits on our smaller marketing plans:
+
+- **Hobby** - Up to 20 contact lists and 20 segments.
+- **Starter** - Up to 10 automations, 25 contact lists, and 25 segments.
+
+#### Other changes:
+
+1. The unsubscribe preferences page now shows your subscription groups correctly.
+2. Auto-reload for email credits now charges your saved card more reliably.
+3. Deleted drafts no longer count toward the limit of 50 draft campaigns per project.
+
+</Update>
+
+<Update label="September 17, 2026">
+
+## Delete Domains That Are in Use
+
+You can now delete a sending domain even when campaigns or automations are using it. Before you confirm, we show you what will happen: senders on that domain are deleted, its scheduled and sending campaigns are stopped, and active automations using it are paused. This can't be undone.
+
+#### Other changes:
+
+1. **More domains** - Hobby plans can now add up to 3 domains, and Starter plans up to 10.
+
+</Update>
+
+<Update label="September 3, 2026">
+
+## Build Visual Templates from MCP
+
+Your AI assistant can now create and edit visual templates through the AutoSend MCP server, not just code templates. Templates made this way open in the visual builder, so you can keep editing them in the dashboard. If a template uses something MCP can't edit safely, it tells you to make that change in the dashboard instead. See the <a href={APP_PATHS.aiMcpServer}>MCP Server documentation</a> to get started.
+
+#### Other changes:
+
+1. Signing in to the AutoSend MCP server from Codex now works.
+2. **Bounce reason in webhooks** - Bounce webhook events now include the bounce reason in the `reason` field.
+
+</Update>
+
+<Update label="September 1, 2026">
+
+## Privacy Mode
+
+Org admins can now turn on **Privacy mode** for a project from **Settings > Preferences**. When it's on, no one on the project can preview the content of sent emails. Email activity still shows the status, timeline, and events for every email. Only the email body is hidden.
+
+#### Other changes:
+
+1. **Footer branding per project** - The AutoSend footer branding setting now applies to each project instead of your whole organization. If you had turned it on before, check it in **Settings > Preferences** for each project.
+2. Duplicating a campaign that uses a code template no longer copies the old preview text.
+
+</Update>
+
+<Update label="August 31, 2026">
+
+## Unsubscribe Links, Always Included
+
+If a campaign or automation email doesn't have an unsubscribe link, AutoSend now adds one to the footer for you. Every marketing email stays compliant, even if you forget the `{{unsubscribe}}` tag. Emails that already have an unsubscribe link are left as they are.
+
+#### Other changes:
+
+1. **Campaign analytics via API** - A new endpoint, `GET /campaigns/:campaignId/analytics`, returns a campaign's counts along with its delivery, success, and true open rates. It's also available through MCP.
+2. A small bug of inconsistent campaign numbers is fixed and now they match everywhere, whether you check them in the dashboard or through MCP.
+
+</Update>
+
+<Update label="August 27, 2026">
+
+## Data Processing Agreement
+
+Our Data Processing Agreement (DPA) is now available on its own page, so your legal and security teams can review how AutoSend handles your data. Read it on the <a href={AUTOSEND_PATHS.dpa}>DPA page</a>.
+
+</Update>
+
+<Update label="August 24, 2026">
+
+## See the Email You Sent
+
+Email activity now lets you preview the email a recipient got, with their variables filled in. On marketing plans, a **View contact** button also takes you straight to the recipient's contact page.
+
+## One-Click DNS Setup
+
+Setting up a sending domain no longer means copying DNS records by hand. If your DNS provider supports Domain Connect, click **Auto-configure DNS** on the domain page, approve the records at your provider, and you're sent back to AutoSend while we check them. If your provider doesn't support it, you can still add the records manually.
+
+#### Other changes:
+
+1. The unsubscribe webhook now fires when a contact unsubscribes by clicking the link in an email.
+2. **Domain status alerts** - If a verified sending domain goes back to pending, for example because a DNS record was removed, everyone on the project now gets an email so you can fix it before sends are affected.
+
+</Update>
+
+<Update label="August 17, 2026">
+
+## Block Recipient Domains
+
+You can now block entire recipient domains from **Settings > Preferences**. Emails to a blocked domain are never sent, which helps you keep throwaway or unwanted domains out of your sends.
+
+## Control AutoSend Branding
+
+On paid plans, you can now choose whether your emails show the AutoSend footer branding, right from **Settings > Preferences**.
+
+</Update>
+
+<Update label="August 14, 2026">
+
+## Export Lists and Segments
+
+You can now export any contact list or segment as a CSV file, right from its page. Use it to back up your audience, share it with your team, or work with it in a spreadsheet. Exports support up to 20,000 contacts.
+
+#### Other changes:
+
+1. **Usage alerts** - We now email you when you've used 90% and 100% of your sending quota, and when your email credits run out, so a paused send never takes you by surprise.
+
+</Update>
+
+<Update label="August 13, 2026">
+
+## Add Campaign Recipients to a List or Suppression Group
+
+From the **Email Activity** tab of a sent or paused campaign, you can now add recipients to a contact list or a suppression group in a few clicks. Filter or search the recipients first, then add only the ones you need. For example, put everyone who clicked into an "Engaged" list for your next campaign, or suppress everyone who bounced.
+
+Large campaigns are processed in the background, and you'll see the progress without leaving the page.
+
+#### Other changes:
+
+1. **Gradual send protects your reputation** - A gradual campaign now pauses on its own if its bounce rate goes above 10% (15% for the first 500 emails) or its complaint rate goes above 0.01%. This stops a bad list from hurting your sender reputation. To resume a campaign paused this way, contact support.
+2. The subject line in template preview now shows your variables as written, like `{{first_name}}`, instead of test values.
+
+</Update>
+
+<Update label="August 11, 2026">
+
+## See True Opens in Email Activity
+
+Opening an email's activity now marks each open with a **TRUE OPEN** badge when it came from a real person, not an automatic open from privacy features or security scanners. It's the same logic behind the True Open rate in campaign analytics, now visible per email.
+
+#### Other changes:
+
+1. **Re-check DNS on verified domains** - Verifying a domain again now re-checks all its DNS records, so records you add later, like MAIL FROM or DMARC, show up as verified right away.
+2. Dashboard icons now render correctly in Chrome.
+
+</Update>
 
 <Update label="August 7, 2026">
 
@@ -23,6 +169,46 @@ The Analytics tab of every sent campaign now has a **Campaign Insights** card th
 - **Final numbers include late activity** - 10 days after a campaign is sent, AutoSend saves its final numbers, so opens and clicks that come in later still count. For gradual send campaigns, the 10 days start after the last batch.
 
 Insights appear once you've sent at least one earlier campaign to compare against.
+
+#### Other changes:
+
+1. **Check an email's status via API** - A new endpoint returns the current status of any email you've sent. Read the <a href={APP_PATHS.emailStatusApiRef}>Get Email Status API reference</a> to learn more.
+2. Long bounce reasons now have a **Show more** button, so you can read the full reason.
+
+</Update>
+
+<Update label="August 6, 2026">
+
+## Auto-Abort for Long-Paused Campaigns
+
+Campaigns that stay paused for 14 days without being resumed are now aborted on their own, and we email you when it happens. This keeps old sends from going out to an outdated audience weeks later. Emails that were never sent show as **Cancelled** in email activity.
+
+#### Other changes:
+
+1. **Clearer bounce reasons** - Bounce reasons in email activity and suppressions are now cleaned up and easier to read, and they wrap instead of getting cut off in the suppression table.
+2. **Email skills in the builder** - The email builder now has a quick link to AutoSend's AI email skills.
+3. **Current plan badge** - The pricing page now marks the plan you're on.
+4. A sending domain can no longer be removed while active campaigns or automations are using it.
+
+</Update>
+
+<Update label="August 4, 2026">
+
+## Media Library
+
+All your uploaded images now live on their own **Media Library** page in the sidebar. Upload, browse, and manage images in one place, then use them in any campaign, template, or automation.
+
+## Better Domain Settings
+
+The domain details page now shows a **Verified** or **Pending** status for each DNS record, so you can see at a glance which records still need fixing.
+
+On select plans, you can also turn on **Multi-region sending** when adding a domain. Your emails are then sent through more than one region for better deliverability and performance.
+
+#### Other changes:
+
+1. **Safe buffer for scheduled campaigns** - If you schedule a campaign less than 2 minutes away, we now add a small buffer and tell you, instead of failing the send.
+2. Variables inserted in the email builder no longer get escaped and break.
+3. Paused and aborted campaigns can no longer be edited by mistake.
 
 </Update>
 
