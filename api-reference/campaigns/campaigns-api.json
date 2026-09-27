@@ -64,6 +64,12 @@
         "summary": "Resume Campaign",
         "description": "Resumes a paused campaign."
       }
+    },
+    "/campaigns/{campaignId}/analytics": {
+      "get": {
+        "summary": "Get Campaign Analytics",
+        "description": "Retrieves delivery and engagement counts and computed rates for a campaign."
+      }
     }
   }
 }

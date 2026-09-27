@@ -194,6 +194,7 @@
 						"pages": [
 							"api-reference/campaigns/list",
 							"api-reference/campaigns/get",
+							"api-reference/campaigns/analytics",
 							"api-reference/campaigns/create",
 							"api-reference/campaigns/update",
 							"api-reference/campaigns/pause",
