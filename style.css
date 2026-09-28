@@ -87,7 +87,8 @@ a.link.nav-tabs-item img {
 }
 .dark #sidebar-content img[src$='.svg'],
 .dark a.link.nav-tabs-item img[src$='.svg'],
-.dark #content-area img[src^='/icons/'][src$='.svg'] {
+.dark #content-area img[src^='/icons/'][src$='.svg'],
+.dark #content-area img[src*='/icons/'][src*='.svg?'] {
 	filter: invert(1);
 }
 .sidebar-group li,
