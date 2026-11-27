@@ -30,6 +30,8 @@
 									"guides/auth0-custom-action",
 									"guides/better-auth",
 									"guides/convex",
+									"guides/neon",
+									"guides/neon-functions",
 									"guides/QStash",
 									"guides/supabase-edge-functions"
 								]
@@ -47,6 +49,7 @@
 									"guides/smtp/auth0",
 									"guides/smtp/customerio",
 									"guides/smtp/descope",
+									"guides/smtp/neon",
 									"guides/smtp/nodemailer",
 									"guides/smtp/supabase",
 									"guides/smtp/wordpress"
@@ -354,7 +357,7 @@
 						"pages": [
 							{
 								"group": "REST API",
-								"pages": ["guides/better-auth", "guides/auth0-custom-action", "guides/supabase-edge-functions"]
+								"pages": ["guides/better-auth", "guides/auth0-custom-action", "guides/supabase-edge-functions", "guides/neon", "guides/neon-functions"]
 							},
 							{
 								"group": "SMTP",
@@ -362,6 +365,7 @@
 									"guides/smtp/auth0",
 									"guides/smtp/customerio",
 									"guides/smtp/descope",
+									"guides/smtp/neon",
 									"guides/smtp/nodemailer",
 									"guides/smtp/supabase",
 									"guides/smtp/wordpress"

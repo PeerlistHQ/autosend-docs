@@ -1,0 +1,116 @@
+---
+title: 'How to send emails from Managed Better Auth with SMTP'
+description: 'Configure Managed Better Auth to send authentication emails through AutoSend SMTP.'
+sidebarTitle: 'Neon'
+icon: '/icons/brand-neon.png'
+---
+
+import { AUTOSEND_PATHS } from '/snippets/autosendPaths.mdx';
+
+<Frame>![AutoSend x Neon](/images/smtp/autosendxneon.jpg)</Frame>
+
+[Managed Better Auth](https://neon.com/docs/auth/overview) is Neon's hosted version of [Better Auth](https://better-auth.com). It sends emails such as verification codes and password reset codes. By default, it sends them from a shared Neon address, which is rate-limited and meant for development. For production apps, you can configure it to send the same emails from your own domain through AutoSend SMTP.
+
+## Prerequisites
+
+<CardGroup cols={2}>
+	<Card title='Verified Domain' href={AUTOSEND_PATHS.domains}>
+		Make sure you have a verified domain added in AutoSend to send emails from.
+	</Card>
+	<Card title='SMTP Key' href={AUTOSEND_PATHS.smtpKey}>
+		Create a project-specific SMTP key from the SMTP tab in Project Settings.
+	</Card>
+</CardGroup>
+
+## Configuration
+
+<Steps>
+  <Step title="Open Email Provider Settings" titleSize="h3">
+    1. Go to the [Neon Console](https://console.neon.tech)
+    2. Select your project
+    3. Navigate to **Settings** → **Better Auth**
+    4. Under **Email provider**, click **Configure email provider**
+  </Step>
+  <Step title="Select Custom SMTP Provider" titleSize="h3">
+    In the **Email provider** dropdown, select **Custom SMTP provider**.
+  </Step>
+  <Step title="Enter SMTP Credentials" titleSize="h3">
+    Fill in the following settings:
+
+    | Field | Value |
+    |-------|-------|
+    | **Host** | `smtp.autosend.com` |
+    | **Port** | `587` (STARTTLS) or `465` (TLS) |
+    | **Username** | autosend |
+    | **Password** | Your AutoSend SMTP key |
+    | **Sender email** | `auth@yourdomain.com` (must match your verified domain) |
+    | **Sender name** | Your app name (e.g., "MyApp") |
+
+    <Note>
+      The SMTP password is not your API key. Create a project-specific SMTP key from the SMTP tab in <a href={AUTOSEND_PATHS.smtpKey} target="_blank" rel="noopener noreferrer">Project Settings</a>.
+    </Note>
+  </Step>
+  <Step title="Save Settings" titleSize="h3">
+    Click **Save** to apply your SMTP configuration.
+  </Step>
+  <Step title="Test the Configuration" titleSize="h3">
+    Under **Email provider**, click **Send test email**.
+
+    Check the recipient's inbox to confirm the email arrived from your sender address. The email also appears on the AutoSend <a href={AUTOSEND_PATHS.emailActivity} target="_blank" rel="noopener noreferrer">Email Activity</a> page.
+
+    <Note>
+      Each Neon branch has its own email provider settings, and a new branch copies the settings of its parent. Configure the provider on the branch your app uses.
+    </Note>
+  </Step>
+</Steps>
+
+## Alternative: Neon CLI
+
+You can also set the SMTP provider with the [Neon CLI](https://neon.com/docs/cli/install). From a directory linked to your project, run:
+
+```bash
+neon neon-auth config email-provider update \
+  --type standard \
+  --host smtp.autosend.com \
+  --port 587 \
+  --username autosend \
+  --password "$AUTOSEND_SMTP_KEY" \
+  --sender-email auth@yourdomain.com \
+  --sender-name "MyApp"
+```
+
+Then send a test email:
+
+```bash
+neon neon-auth config email-provider test --recipient-email you@example.com
+```
+
+## Email Templates
+
+With SMTP, Managed Better Auth sends its own default email templates from your address. To design the emails in AutoSend instead, use Managed Better Auth [webhooks](https://neon.com/docs/auth/guides/webhooks): handle the `send.otp` and `send.magic_link` events and send each email with an AutoSend template.
+
+<Card title='Send emails with Neon' href='/guides/neon'>
+	All the ways to use AutoSend with Neon, including webhooks and Neon Functions.
+</Card>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Emails not being sent">
+    - Verify your SMTP credentials are correct
+    - Check that your sender email is on a domain verified in AutoSend
+    - Make sure you configured the provider on the branch your app uses
+  </Accordion>
+  <Accordion title="Emails go to a webhook instead of SMTP">
+    While a Managed Better Auth webhook subscribes to `send.otp` or `send.magic_link`, Neon sends those emails to the webhook instead of through SMTP. Remove those events from the webhook to send them through AutoSend SMTP.
+  </Accordion>
+  <Accordion title="Authentication failed">
+    - Ensure the username is `autosend` and the password is your SMTP key, not your API key
+    - Verify your SMTP key is active in the <a href={AUTOSEND_PATHS.smtpKey} target="_blank" rel="noopener noreferrer">SMTP Settings</a>
+  </Accordion>
+  <Accordion title="Emails going to spam">
+    - Ensure your domain has proper DNS records (SPF, DKIM, DMARC)
+    - Use a sender name your users recognize
+    - Check your domain reputation in AutoSend
+  </Accordion>
+</AccordionGroup>
